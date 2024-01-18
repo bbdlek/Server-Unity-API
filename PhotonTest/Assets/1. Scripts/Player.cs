@@ -40,13 +40,13 @@ public class Player : NetworkBehaviour
 
     private TMP_Text _messages;
     
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, HostMode = RpcHostMode.SourceIsHostPlayer)]
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, HostMode = RpcHostMode.SourceIsHostPlayer, Channel = RpcChannel.Reliable)]
     public void RPC_SendMessage(string message, RpcInfo info = default)
     {
         RPC_RelayMessage(message, info.Source);
     }
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All, HostMode = RpcHostMode.SourceIsServer)]
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All, HostMode = RpcHostMode.SourceIsServer, Channel = RpcChannel.Reliable)]
     public void RPC_RelayMessage(string message, PlayerRef messageSource)
     {
         if (_messages == null)
@@ -69,38 +69,51 @@ public class Player : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (GetInput(out NetworkInputData data))
+        if(Runner.GameMode == GameMode.Shared)
         {
-            data.direction.Normalize();
-            _cc.Move(5*data.direction*Runner.DeltaTime);
-            
-            if (data.direction.sqrMagnitude > 0)
-                _forward = data.direction;
-            
-            if (HasStateAuthority && delay.ExpiredOrNotRunning(Runner))
+            Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Runner.DeltaTime *
+                           2f;
+            _cc.Move(move);
+            if (move != Vector3.zero)
             {
-                if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON0))
-                {
-                    delay = TickTimer.CreateFromSeconds(Runner, 0.5f);
-                    Runner.Spawn(prefabBall,
-                        transform.position + _forward, Quaternion.LookRotation(_forward),
-                        Object.InputAuthority, (runner, o) =>
-                        {
-                            o.GetComponent<Ball>().Init();
-                        });
-                    spawned = !spawned;
-                }
-                else if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON1))
-                {
-                    delay = TickTimer.CreateFromSeconds(Runner, 0.5f);
-                    Runner.Spawn(prefabPhysxBall,
-                        transform.position + _forward, Quaternion.LookRotation(_forward),
-                        Object.InputAuthority, (runner, o) =>
-                        {
-                            o.GetComponent<PhysxBall>().Init(10 * _forward);
-                        });
-                }
+                gameObject.transform.forward = move;
             }
+        }
+        else
+        {
+            if (GetInput(out NetworkInputData data))
+            {
+                data.direction.Normalize();
+                _cc.Move(5*data.direction*Runner.DeltaTime);
+            
+                if (data.direction.sqrMagnitude > 0)
+                    _forward = data.direction;
+            
+                if (HasStateAuthority && delay.ExpiredOrNotRunning(Runner))
+                {
+                    if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON0))
+                    {
+                        delay = TickTimer.CreateFromSeconds(Runner, 0.5f);
+                        Runner.Spawn(prefabBall,
+                            transform.position + _forward, Quaternion.LookRotation(_forward),
+                            Object.InputAuthority, (runner, o) =>
+                            {
+                                o.GetComponent<Ball>().Init();
+                            });
+                        spawned = !spawned;
+                    }
+                    else if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON1))
+                    {
+                        delay = TickTimer.CreateFromSeconds(Runner, 0.5f);
+                        Runner.Spawn(prefabPhysxBall,
+                            transform.position + _forward, Quaternion.LookRotation(_forward),
+                            Object.InputAuthority, (runner, o) =>
+                            {
+                                o.GetComponent<PhysxBall>().Init(10 * _forward);
+                            });
+                    }
+                }
+            }   
         }
     }
 

@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ExitGames.Client.Photon;
 using Fusion;
 using Fusion.Addons.Physics;
+using Fusion.Photon.Realtime;
 using Fusion.Sockets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,8 +29,30 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     private void Update()
     {
-        _mouseButton0 = _mouseButton0 | Input.GetMouseButton(0);
-        _mouseButton1 = _mouseButton1 | Input.GetMouseButton(1);
+        // _mouseButton0 = _mouseButton0 | Input.GetMouseButton(0);
+        // _mouseButton1 = _mouseButton1 | Input.GetMouseButton(1);
+        
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (!hit.transform.CompareTag("Player")) return;
+                hit.transform.GetComponent<NetworkObject>().RequestStateAuthority();
+            }
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (!hit.transform.CompareTag("Player")) return;
+                hit.transform.GetComponent<NetworkObject>().ReleaseStateAuthority();
+            }
+        }
     }
 
     async void StartGame(GameMode mode)
@@ -66,6 +90,10 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             {
                 StartGame(GameMode.Client);
             }
+            if (GUI.Button(new Rect(0, 80, 200, 40), "Shared"))
+            {
+                StartGame(GameMode.Shared);
+            }
         }
     }
 
@@ -81,11 +109,23 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
+        Debug.Log(IPhotonSocket.ServerIpAddress);
         if (runner.IsServer)
         {
             Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 1, 0);
             NetworkObject networkPlayerObject = runner.Spawn(playerPrefab, spawnPosition, Quaternion.identity, player);
             _spawnedCharacters.Add(player, networkPlayerObject);
+            Debug.Log(networkPlayerObject.HasInputAuthority);
+            Debug.Log(networkPlayerObject.HasStateAuthority);
+        }
+
+        if (runner.GameMode == GameMode.Shared && player == runner.LocalPlayer)
+        {
+            Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 1, 0);
+            NetworkObject networkPlayerObject = runner.Spawn(playerPrefab, spawnPosition, Quaternion.identity, player);
+            _spawnedCharacters.Add(player, networkPlayerObject);
+            Debug.Log(networkPlayerObject.HasInputAuthority);
+            Debug.Log(networkPlayerObject.HasStateAuthority);
         }
     }
 

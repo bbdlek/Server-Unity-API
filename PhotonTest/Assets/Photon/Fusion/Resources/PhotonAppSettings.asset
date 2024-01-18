@@ -22,10 +22,10 @@ MonoBehaviour:
     Server: 
     Port: 0
     ProxyServer: 
-    Protocol: 4
+    Protocol: 0
     EnableProtocolFallback: 1
     AuthMode: 0
     EnableLobbyStatistics: 0
-    NetworkLogging: 1
+    NetworkLogging: 5
     encryptionMode: 0
     emptyRoomTtl: 0

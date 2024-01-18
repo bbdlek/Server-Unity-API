@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 3040985207058685489}
   m_Layer: 0
   m_Name: PlayerPrefab
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -198,3 +198,5 @@ MonoBehaviour:
     type: 3}
   prefabPhysxBall: {fileID: 1014584835023735801, guid: 67bbb612a808c2831be9435a1aca34b2,
     type: 3}
+  _spawned: 0
+  _material: {fileID: 0}
