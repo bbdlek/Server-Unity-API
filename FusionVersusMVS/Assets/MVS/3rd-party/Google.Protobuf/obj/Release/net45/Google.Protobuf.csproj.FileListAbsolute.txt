@@ -1,0 +1,16 @@
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/bin/Release/net45/Google.Protobuf.dll
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/bin/Release/net45/Google.Protobuf.pdb
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/bin/Release/net45/Google.Protobuf.xml
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/bin/Release/net45/System.Buffers.dll
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/bin/Release/net45/System.Memory.dll
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/bin/Release/net45/System.Runtime.CompilerServices.Unsafe.dll
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/obj/Release/net45/Google.Protobuf.csproj.AssemblyReference.cache
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/obj/Release/net45/Google.Protobuf.GeneratedMSBuildEditorConfig.editorconfig
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/obj/Release/net45/Google.Protobuf.AssemblyInfoInputs.cache
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/obj/Release/net45/Google.Protobuf.AssemblyInfo.cs
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/obj/Release/net45/Google.Protobuf.csproj.CoreCompileInputs.cache
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/obj/Release/net45/Google.Protobuf.sourcelink.json
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/obj/Release/net45/Google.Protobuf.csproj.CopyComplete
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/obj/Release/net45/Google.Protobuf.dll
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/obj/Release/net45/Google.Protobuf.xml
+/home/bdg/Downloads/protobuf-23.3/csharp/src/Google.Protobuf/obj/Release/net45/Google.Protobuf.pdb
