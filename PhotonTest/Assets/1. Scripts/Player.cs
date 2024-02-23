@@ -8,6 +8,7 @@ using UnityEngine;
 public class Player : NetworkBehaviour
 {
     private NetworkCharacterController _cc;
+    private Rigidbody _rigidbody;
     [SerializeField] private Ball prefabBall;
     [SerializeField] private PhysxBall prefabPhysxBall;
     private Vector3 _forward = Vector3.forward;
@@ -15,11 +16,14 @@ public class Player : NetworkBehaviour
     [Networked] public bool spawned { get; set; }
     public Material _material;
 
+    [SerializeField] private float speed;
+
     private ChangeDetector _changeDetector;
 
     private void Awake()
     {
-        _cc = GetComponent<NetworkCharacterController>();
+        // _cc = GetComponent<NetworkCharacterController>();
+        _rigidbody = GetComponent<Rigidbody>();
         _material = GetComponentInChildren<MeshRenderer>().material;
     }
 
@@ -71,9 +75,9 @@ public class Player : NetworkBehaviour
     {
         if(Runner.GameMode == GameMode.Shared)
         {
-            Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Runner.DeltaTime *
-                           2f;
-            _cc.Move(move);
+            Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            // _cc.Move(move);
+            _rigidbody.AddForce(move * speed);
             if (move != Vector3.zero)
             {
                 gameObject.transform.forward = move;

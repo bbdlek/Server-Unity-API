@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Google.Protobuf;
 using MVS;
+using MVS.Realtime;
 using Protocol;
 // using Enum;
 using UnityEngine;
@@ -95,24 +96,25 @@ public partial class WebSocketHandler
         var packet = S_ROOM_JOIN_OR_CREATE.Parser.ParseFrom(data);
         if (packet.Result != Result.Success)
         {
-            Debug.LogError($"packet result : {packet.Result}");
+            Listener.MVSDebug(DebugLevel.ERROR, $"packet result : {packet.Result}");
             return false;
         }
         
-        Log(packet);
-        if (
-            ConsistencyCheck(MVSRunner.Instance.appID, packet.AppID,"AppID") &&
-            ConsistencyCheck(MVSRunner.Instance.waplRoomID, packet.WaplRoomID,"WaplRoomID") &&
-            ConsistencyCheck(MVSRunner.Instance.name, packet.Name,"Name")
-        )
-        {
-            MVSRunner.Instance.isRoomJoined = true;
-            // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_GROUP_JOIN);
-            // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_GROUP_LIST);
-            return true;
-        }
+        Debug.Log(packet.Result);
+        Listener.OnEvent(EventCode.PKT_S_ROOM_JOIN_OR_CREATE);
+        // if (
+        //     ConsistencyCheck(MVSRunner.Instance.appID, packet.AppID,"AppID") &&
+        //     ConsistencyCheck(MVSRunner.Instance.waplRoomID, packet.WaplRoomID,"WaplRoomID") &&
+        //     ConsistencyCheck(MVSRunner.Instance.name, packet.Name,"Name")
+        // )
+        // {
+        //     // MVSRunner.isRoomJoined = true;
+        //     // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_GROUP_JOIN);
+        //     // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_GROUP_LIST);
+        //     return true;
+        // }
 
-        return false;
+        return true;
     }
 
     bool Handle_S_TEST_ROOM_LIST(byte[] data)
@@ -194,22 +196,22 @@ public partial class WebSocketHandler
             return false;
         }
 
-        if (ConsistencyCheck(MVSRunner.Instance.sceneNumber, packet.GroupInfo.GroupID.SceneNumber, "SceneNumber") &&
-            ConsistencyCheck(MVSRunner.Instance.channelID, packet.GroupInfo.GroupID.ChannelID, "ChannelID"))
-        {
-            // Log(packet.GroupInfo);
-            // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_PLAYER_ID);
-            // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_INITIAL_OBJECTS);
-            // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_CHAT);
-            return true;
-        }
+        // if (ConsistencyCheck(MVSRunner.Instance.sceneNumber, packet.GroupInfo.GroupID.SceneNumber, "SceneNumber") &&
+        //     ConsistencyCheck(MVSRunner.Instance.channelID, packet.GroupInfo.GroupID.ChannelID, "ChannelID"))
+        // {
+        //     // Log(packet.GroupInfo);
+        //     // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_PLAYER_ID);
+        //     // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_INITIAL_OBJECTS);
+        //     // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_CHAT);
+        //     return true;
+        // }
+        Listener.OnEvent(EventCode.PKT_S_GROUP_JOIN);
 
-        return false;
+        return true;
     }
     
     bool Handle_S_INITIAL_OBJECTS(byte[] data)
     {
-        
         var packet = S_INITIAL_OBJECTS.Parser.ParseFrom(data);
         if (packet.Result != Result.Success)
         {
@@ -233,8 +235,7 @@ public partial class WebSocketHandler
         //     Log(packet);
         //     return true;
         // }
-
-        return false;
+        return true;
     }
     
     bool Handle_S_ADD_NETWORK_OBJECTS(byte[] data)
@@ -248,6 +249,8 @@ public partial class WebSocketHandler
 
         // GlobalCore.Instance.testUser.AddObjectInfo(packet.ObjectInfos);
         Log(packet.ObjectInfos);
+        
+        Listener.OnEvent(EventCode.PKT_S_ADD_NETWORK_OBJECTS);
         
         // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_UPDATE_NETWORK_OBJECTS);
         // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_CHANGE_OBJECTS_OWNER);
@@ -314,8 +317,8 @@ public partial class WebSocketHandler
             return false;
         }
         
-        Log($"{packet.PlayerInfo.Name}:{packet.Msg}");
-
+        // Log($"{packet.PlayerInfo.Name}:{packet.Msg}");
+        Debug.Log($"{packet.PlayerInfo.Name}:{packet.Msg}");
         return true;
     }
 
@@ -379,7 +382,7 @@ public partial class WebSocketHandler
     bool Handle_C_GROUP_JOIN(byte[] data)
     {
         var packet = C_GROUP_JOIN.Parser.ParseFrom(data);
-        packet.GroupID = new GroupID();
+        // packet.GroupID = new GroupID();
         // packet.GroupID.SceneNumber = GlobalCore.Instance.testUser.sceneNumber;
         // packet.GroupID.ChannelID = GlobalCore.Instance.testUser.channelID;
         SendData(PKT_ID.PKT_C_GROUP_JOIN, packet.ToByteArray());
@@ -495,7 +498,7 @@ public partial class WebSocketHandler
     bool Handle_C_CHAT(byte[] data)
     {
         var packet = C_CHAT.Parser.ParseFrom(data);
-        packet.Msg = "UnitTest Chat Test";
+        // packet.Msg = "UnitTest Chat Test";
         SendData(PKT_ID.PKT_C_CHAT, packet.ToByteArray());
 
         return true;

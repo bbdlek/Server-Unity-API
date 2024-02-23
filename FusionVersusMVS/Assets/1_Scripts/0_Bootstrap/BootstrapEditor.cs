@@ -32,6 +32,10 @@ public class BootstrapEditor : Editor
                 }
                 break;
             case 1:
+                if (GUILayout.Button("MVS Connect"))
+                {
+                    _comp.mvsStarter.ConnectToMVS();
+                }
                 if (GUILayout.Button("MVS Start Game"))
                 {
                     _comp.mvsStarter.StartGame();

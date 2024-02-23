@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using MVS;
 using WebSocketSharp;
 using UnityEngine;
 using Protocol;
@@ -8,9 +10,11 @@ public class WebSocketConnection
 {
     private WebSocket ws;
     private WebSocketHandler wsh;
+    private MVSRunner _runner; 
 
-    public void Start(WebSocketHandler wsh)
+    public void Start(WebSocketHandler wsh, MVSRunner runner)
     {
+        _runner = runner;
         Debug.Log($"ws://{MVSAppSettings.Global.mvsURI}:{MVSAppSettings.Global.mvsPort}");
         this.wsh = wsh;
         ws = new WebSocket($"ws://{MVSAppSettings.Global.mvsURI}:{MVSAppSettings.Global.mvsPort}");
@@ -60,24 +64,14 @@ public class WebSocketConnection
     private void OnWebSocketOpen(object sender, System.EventArgs e)
     {
         Debug.Log($"[CID:{wsh.clientNum}] WebSocket connected");
-        // GlobalCore.IsConnected = true;
+        MVSRunner.isConnected = true;
+        _runner.OnConnected();
     }
 
     // run in worker thread
     private void OnWebSocketMessage(object sender, MessageEventArgs e)
     {
-        // if (GlobalCore.Instance.printRowData)
-        // {
-        //     Debug.Log($"[CID:{wsh.clientNum}] OnReceive");
-        //
-        //     string rawData = "Raw Data : ";
-        //     foreach (var b in e.RawData)
-        //     {
-        //         rawData += b.ToString("X2") + " ";
-        //     }
-        //     Debug.Log(rawData);
-        // }
-        
+        Debug.Log(e.RawData);
         try
         {
             wsh.OnReceiveData(e.RawData);
@@ -92,7 +86,9 @@ public class WebSocketConnection
     // run in worker thread
     private void OnWebSocketClose(object sender, CloseEventArgs e)
     {
-        Debug.LogError("WebSocket closed with code: " + e.Code);
+        MVSRunner.isConnected = false;
+        Debug.Log("WebSocket closed with code: " + e.Reason);
+        _runner.OnDisconnected();
     }
 
     public void Send(byte[] data)

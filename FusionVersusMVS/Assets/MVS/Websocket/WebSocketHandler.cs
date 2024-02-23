@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using MVS;
+using MVS.Realtime;
 using Protocol;
 using UnityEngine;
 using WebSocketSharp;
@@ -31,6 +33,8 @@ public partial class WebSocketHandler
     
     public Dictionary<PKT_ID, Func<byte[], int, bool>> handlerDic;
     private WebSocketConnection wsc;
+    private SocketTcp _socketTcp;
+    private IRealtimePeerListener Listener => _socketTcp.peerBase.Listener;
     public int clientNum;
     public bool isMain;
 
@@ -59,6 +63,21 @@ public partial class WebSocketHandler
 
 #endregion
 
+    public WebSocketHandler(SocketTcp socketTcp)
+    {
+        _socketTcp = socketTcp;
+        clientNum = 1;
+        isMain = clientNum == 1;
+        HeaderSize = Marshal.SizeOf<Header>();
+
+        // wsc = new WebSocketConnection();
+
+        for (int i = 0; i < 20; i++)
+        {
+            _jobPool.Push(new Job(){header = new Header(), data = new byte[MaxBufferSize]});
+        }
+    }
+
     public WebSocketHandler(int clientNum)
     {
         this.clientNum = clientNum;
@@ -74,9 +93,9 @@ public partial class WebSocketHandler
         }
     }
 
-    public void ConnectServer()
+    public void ConnectServer(MVSRunner runner)
     {
-        wsc.Start(this);
+        wsc.Start(this, runner);
     }
 
     public void Disconnect()
@@ -143,34 +162,39 @@ public partial class WebSocketHandler
     
     public void ProcessReceiveData()
     {
-        var job = DequeueJob();
-        while (job != null)
+        _socketTcp.peerBase.Listener.MVSDebug(DebugLevel.INFO, "ProcessReceiveData");
+        while(true)
         {
-            var id = job.header.id;
-            var size = job.header.size;
-
-            var result = handlerDic[(PKT_ID)id](job.data.SubArray(0, size - HeaderSize), size);
-            PoolJob(job);
-        
-            job = DequeueJob();
-
-            // if(GlobalCore.Instance.isViewMode) continue;
-        
-            // ButtonManager.SetResult((PKT_ID)id, result);
-            if (result)
+            var job = DequeueJob();
+            while (job != null)
             {
-                if((PKT_ID)id == PKT_ID.PKT_S_HEART_BEAT) continue;
-                HighLightLog((PKT_ID)id);
-            }
-            else
-            {
-                Debug.LogError($"CID[{clientNum}] : {(PKT_ID)id} packet is inconsistent");
+                var id = job.header.id;
+                var size = job.header.size;
+
+                var result = handlerDic[(PKT_ID)id](job.data.SubArray(0, size - HeaderSize), size);
+                PoolJob(job);
+
+                job = DequeueJob();
+
+                // if(GlobalCore.Instance.isViewMode) continue;
+
+                // ButtonManager.SetResult((PKT_ID)id, result);
+                if (result)
+                {
+                    if ((PKT_ID)id == PKT_ID.PKT_S_HEART_BEAT) continue;
+                    HighLightLog((PKT_ID)id);
+                }
+                else
+                {
+                    Debug.LogError($"CID[{clientNum}] : {(PKT_ID)id} packet is inconsistent");
+                }
             }
         }
     }
 
     private void SendData(PKT_ID id, byte[] data)
     {
+        _socketTcp.peerBase.Listener.MVSDebug(DebugLevel.INFO, $"SendData {id.ToString()}");
         Header header = new Header(){id = (UInt16)id, size = (UInt16)(data.Length+HeaderSize)};
         
         sendStream.SetLength(0);
@@ -184,7 +208,8 @@ public partial class WebSocketHandler
             SendLog($"Send {id} size {header.size}");
         }
         
-        wsc.Send(sendStream.ToArray());
+        // wsc.Send(sendStream.ToArray());
+        _socketTcp.SendPacket(sendStream.ToArray());
     }
     
     public bool ConsistencyCheck<T>(T left, T right, string name = "")
@@ -291,6 +316,11 @@ public partial class WebSocketHandler
             Debug.LogError($"{id} send fail");
             throw;
         }
+    }
+    
+    public void SendPacket(PKT_ID pktID, byte[] data, int size)
+    {
+        HandlePacket(pktID, ref data, ref size);
     }
 
     static class PacketHandler<PacketType>

@@ -8,9 +8,11 @@ using UnityEngine;
 [Serializable]
 public class MVSNetworkConfig : ScriptableObject
 {
-    public string mvsVersion;
-
     public static MVSNetworkConfig Global;
+    
+    public string mvsVersion;
+    
+    public MVSNetworkObjectTable NetworkObjectTable = new MVSNetworkObjectTable();
 
     private void OnEnable()
     {
