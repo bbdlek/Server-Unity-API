@@ -21,7 +21,7 @@ namespace MVS.Realtime
         public string Server = "222.122.186.49";
 
         /// <summary> Server Port for MVS Application </summary>
-        public int Port;
+        public int Port = 80;
 
         public bool IsUseNameServer;
 

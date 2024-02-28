@@ -6,6 +6,8 @@ namespace MVS.Realtime
 
         public short ReturnCode;
 
+        public byte[] Data;
+
         public string ToString()
         {
             return $"OperationCode: {OperationCode}, ReturnCode: {ReturnCode}";

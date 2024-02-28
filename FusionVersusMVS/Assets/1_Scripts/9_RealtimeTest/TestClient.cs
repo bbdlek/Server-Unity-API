@@ -10,9 +10,10 @@ public class TestClient : RealtimeClient
         base.OnStatusChanged(statusCode);
     }
 
-    public override void OnEvent(EventCode eventCode)
+    public override void OnEvent(EventData eventData)
     {
-        base.OnEvent(eventCode);
+        base.OnEvent(eventData);
+        EventCode eventCode = eventData.code;
         switch (eventCode)
         {
             case EventCode.PKT_S_ROOM_JOIN_OR_CREATE:
@@ -23,8 +24,6 @@ public class TestClient : RealtimeClient
                 break;
             case EventCode.PKT_S_ADD_NETWORK_OBJECTS:
                 Debug.Log("AddNetworkObjects");
-                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube.transform.position = Vector3.zero;
                 break;
         }
     }
@@ -47,6 +46,17 @@ public class TestClient : RealtimeClient
                 break;
             case DebugLevel.ERROR:
                 Debug.LogError(msg);
+                break;
+        }
+    }
+
+    public override void OnOperationResponse(OperationResponse operationResponse)
+    {
+        base.OnOperationResponse(operationResponse);
+        switch (operationResponse.OperationCode)
+        {
+            case OperationCode.JoinRoom:
+                Debug.Log(CurrentRoom.RoomInfo.Name);
                 break;
         }
     }

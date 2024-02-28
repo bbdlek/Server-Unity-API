@@ -9,7 +9,7 @@ namespace MVS.Realtime
     public class SocketTcp : RealtimeSocketConnection, IDisposable
     {
         private WebSocket ws;
-        private WebSocketHandler wsh;
+        public WebSocketHandler wsh;
         
         private readonly object syncer = new object();
         
@@ -129,10 +129,6 @@ namespace MVS.Realtime
             //Todo : TPeer로 옮겨야 하나
             wsh = new WebSocketHandler(this);
             wsh.Init();
-            new Thread(new ThreadStart(wsh.ProcessReceiveData))
-            {
-                IsBackground = true
-            }.Start();
         }
 
         // run in worker thread

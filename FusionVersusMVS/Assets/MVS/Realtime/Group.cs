@@ -3,23 +3,21 @@ using Protocol;
 
 namespace MVS.Realtime
 {
-    public class Room
+    public class Group
     {
         public RealtimeClient RealtimeClient { get; set; }
-        public Room(RoomInfo roomInfo)
-        {
-            RoomInfo = roomInfo;
-        }
         
-        private RoomInfo _roomInfo;
-        
-        public RoomInfo RoomInfo
-        {
-            get => _roomInfo;
-            set => _roomInfo = value;
-        }
+        public GroupInfo GroupInfo { get; set; }
 
-        private Dictionary<ulong, Player> _playerList = new Dictionary<ulong, Player>();
+        public Group(GroupInfo groupInfo, Room roomReference)
+        {
+            RoomReference = roomReference;
+            GroupInfo = groupInfo;
+        }
+        
+        public Room RoomReference { get; set; }
+        
+        private Dictionary<ulong, Player> _playerList;
 
         public Dictionary<ulong, Player> PlayerList => _playerList;
 
@@ -31,7 +29,7 @@ namespace MVS.Realtime
         public virtual Player StorePlayer(Player player)
         {
             PlayerList[player.UserId] = player;
-            player.RoomReference = this;
+            player.GroupReference = this;
 
             return player;
         }

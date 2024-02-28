@@ -3,6 +3,7 @@ namespace MVS.Realtime
     #nullable disable
     public class TPeer : PeerBase
     {
+        private SocketTcp _socketTcp;
         protected internal bool DoFraming = true;
         
         internal override bool Connect(string serverAddress, string appId, ServerConnection serverType)
@@ -16,7 +17,7 @@ namespace MVS.Realtime
 
         public override void OnConnect()
         {
-            
+            _socketTcp = (SocketTcp)realtimeSocket;
         }
 
         internal override void Disconnect()
@@ -37,6 +38,7 @@ namespace MVS.Realtime
 
         internal override bool ProcessIncomingData()
         {
+            _socketTcp.wsh.ProcessReceiveData();
             return true;
         }
 

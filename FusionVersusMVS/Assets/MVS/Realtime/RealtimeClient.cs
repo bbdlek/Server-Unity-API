@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Google.Protobuf;
 using Protocol;
+using UnityEngine;
 
 namespace MVS.Realtime
 {
@@ -41,6 +42,7 @@ namespace MVS.Realtime
         None,
         MaxCCU,
         ApplicationQuit,
+        DisconnectByClient,
         DisconnectByDisconnectReason
     }
 
@@ -156,7 +158,7 @@ namespace MVS.Realtime
         
         public event Action<ClientState, ClientState> StateChanged;
         
-        public event Action<EventCode> EventReceived;
+        public event Action<EventData> EventReceived;
         
         public event Action<OperationResponse> OpResponseReceived;
 
@@ -175,9 +177,9 @@ namespace MVS.Realtime
         
         public Player LocalPlayer { get; internal set; }
         
-        public RoomInfo CurrentRoom { get; internal set; }
+        public Room CurrentRoom { get; internal set; }
         
-        public GroupInfo CurrentGroup { get; internal set; }
+        public Group CurrentGroup { get; internal set; }
         
         private class CallbackTargetChange
         {
@@ -205,7 +207,11 @@ namespace MVS.Realtime
 
             RealtimePeer = new RealtimePeer(this, protocol);
             RealtimePeer.OnDisconnectReason += OnDisconnectMessageReceived;
-            LocalPlayer = CreatePlayer(string.Empty, -1, true, null);
+            LocalPlayer = CreatePlayer(true, new PlayerInfo
+            {
+                PlayerID = 0,
+                Name = "Player"
+            });
             
             #if SUPPORTED_UNITY
             //CustomType Register
@@ -308,7 +314,7 @@ namespace MVS.Realtime
             return connecting;
         }
 
-        public void Disconnect(DisconnectedReason disconnectedReason)
+        public void Disconnect(DisconnectedReason disconnectedReason = DisconnectedReason.DisconnectByClient)
         {
             if (State != ClientState.DisConnected)
             {
@@ -351,7 +357,22 @@ namespace MVS.Realtime
 
         public virtual void MVSDebug(DebugLevel debugLevel, string msg)
         {
-
+            if (debugLevel == DebugLevel.ERROR)
+            {
+                Debug.LogError(msg);
+            }
+            else if (debugLevel == DebugLevel.WARNING)
+            {
+                Debug.LogWarning(msg);
+            }
+            else if (debugLevel == DebugLevel.INFO)
+            {
+                Debug.Log(msg);
+            }
+            else if (debugLevel == DebugLevel.ALL)
+            {
+                Debug.Log(msg);
+            }
         }
 
         public virtual void OnStatusChanged(StatusCode statusCode)
@@ -371,6 +392,7 @@ namespace MVS.Realtime
                             break;
                         case ClientState.ConnectingToMVS:
                             MVSDebug(DebugLevel.INFO, "ConnectingToMVS");
+                            ConnectionCallbacksTarget.OnConnected();
                             break;
                     }
                     break;
@@ -397,8 +419,11 @@ namespace MVS.Realtime
             }
         }
 
-        public virtual void OnEvent(EventCode eventCode)
+        public virtual void OnEvent(EventData eventData)
         {
+            // Player player = CurrentRoom != null ? CurrentRoom.GetPlayer(eventData.Sender) : null;
+            EventCode eventCode = eventData.code;
+            
             switch (eventCode)
             {
                 case EventCode.PKT_S_CHAT:
@@ -410,7 +435,7 @@ namespace MVS.Realtime
             UpdateCallbackTargets();
             if (EventReceived != null)
             {
-                EventReceived(eventCode);
+                EventReceived(eventData);
             }
         }
         
@@ -457,7 +482,11 @@ namespace MVS.Realtime
                         
                     }
                     break;
-                case OperationCode.CreateRoom:
+                case OperationCode.JoinRoom:
+                    JoinRoom(operationResponse);
+                    break;
+                case OperationCode.JoinGroup:
+                    JoinGroup(operationResponse);
                     break;
             }
 
@@ -539,8 +568,43 @@ namespace MVS.Realtime
             }
         }
 
-        protected internal virtual Player CreatePlayer(string actorName, int actorNumber, bool isLocal,
-            PlayerInfo playerInfo)
+        private void JoinRoom(OperationResponse operationResponse)
+        {
+            var data = S_ROOM_JOIN_OR_CREATE.Parser.ParseFrom(operationResponse.Data);
+            RoomInfo newRoomInfo = new RoomInfo
+            {
+                AppID = data.AppID,
+                RoomID = data.WaplRoomID,
+                Name = data.Name
+            };
+            CurrentRoom = CreateRoom(newRoomInfo);
+            CurrentRoom.RealtimeClient = this;
+            CurrentRoom.StorePlayer(LocalPlayer);
+
+            State = ClientState.JoinedRoom;
+            MakingRoomCallbacksTarget.OnJoinedRoom();
+        }
+
+        protected internal virtual Room CreateRoom(RoomInfo roomInfo)
+        {
+            Room newRoom = new Room(roomInfo);
+            return newRoom;
+        }
+
+        private void JoinGroup(OperationResponse operationResponse)
+        {
+            var data = S_GROUP_JOIN.Parser.ParseFrom(operationResponse.Data);
+            GroupInfo groupInfo = data.GroupInfo;
+            Group newGroup = new Group(groupInfo, CurrentRoom);
+
+            CurrentGroup = newGroup;
+            CurrentGroup.RealtimeClient = this;
+
+            State = ClientState.JoinedGroup;
+            MakingGroupCallbacksTarget.OnJoinedGroup();
+        }
+
+        protected internal virtual Player CreatePlayer(bool isLocal, PlayerInfo playerInfo)
         {
             Player newPlayer = new Player(playerInfo);
             return newPlayer;
@@ -687,7 +751,7 @@ namespace MVS.Realtime
 
     public interface IOnEventCallbacks
     {
-        void OnEvent(EventCode eventCode);
+        void OnEvent(EventData eventData);
     }
 
     public interface IErrorInfoCallbacks

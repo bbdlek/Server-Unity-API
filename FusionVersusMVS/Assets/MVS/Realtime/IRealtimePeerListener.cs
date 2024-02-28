@@ -8,6 +8,6 @@ namespace MVS.Realtime
 
         void OnStatusChanged(StatusCode statusCode);
 
-        void OnEvent(EventCode eventCode);
+        void OnEvent(EventData eventData);
     }
 }

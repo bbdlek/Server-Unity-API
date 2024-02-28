@@ -20,7 +20,7 @@ public class MVSAppSettings : ScriptableObject
     {
         if (Global == null)
         {
-            Global = this;
+            Global = this;  
         }
     }
 }

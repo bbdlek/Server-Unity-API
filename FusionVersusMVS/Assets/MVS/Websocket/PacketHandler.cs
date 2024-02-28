@@ -100,8 +100,21 @@ public partial class WebSocketHandler
             return false;
         }
         
-        Debug.Log(packet.Result);
-        Listener.OnEvent(EventCode.PKT_S_ROOM_JOIN_OR_CREATE);
+        EventData eventData = new EventData
+        {
+            code = EventCode.PKT_S_ROOM_JOIN_OR_CREATE,
+            Sender = 0
+        };
+        Listener.OnEvent(eventData);
+        
+        OperationResponse res = new OperationResponse
+        {
+            OperationCode = OperationCode.JoinRoom,
+            ReturnCode = 0,
+            Data = data
+        };
+        Listener.OnOperationResponse(res);
+        
         // if (
         //     ConsistencyCheck(MVSRunner.Instance.appID, packet.AppID,"AppID") &&
         //     ConsistencyCheck(MVSRunner.Instance.waplRoomID, packet.WaplRoomID,"WaplRoomID") &&
@@ -205,7 +218,20 @@ public partial class WebSocketHandler
         //     // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_CHAT);
         //     return true;
         // }
-        Listener.OnEvent(EventCode.PKT_S_GROUP_JOIN);
+        EventData eventData = new EventData
+        {
+            code = EventCode.PKT_S_GROUP_JOIN,
+            Sender = 0
+        };
+        Listener.OnEvent(eventData);
+        
+        OperationResponse res = new OperationResponse
+        {
+            OperationCode = OperationCode.JoinGroup,
+            ReturnCode = 0,
+            Data = data
+        };
+        Listener.OnOperationResponse(res);
 
         return true;
     }
@@ -250,7 +276,13 @@ public partial class WebSocketHandler
         // GlobalCore.Instance.testUser.AddObjectInfo(packet.ObjectInfos);
         Log(packet.ObjectInfos);
         
-        Listener.OnEvent(EventCode.PKT_S_ADD_NETWORK_OBJECTS);
+        EventData eventData = new EventData
+        {
+            code = EventCode.PKT_S_ADD_NETWORK_OBJECTS,
+            Sender = 0,
+            Data = data
+        };
+        Listener.OnEvent(eventData);
         
         // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_UPDATE_NETWORK_OBJECTS);
         // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_CHANGE_OBJECTS_OWNER);
