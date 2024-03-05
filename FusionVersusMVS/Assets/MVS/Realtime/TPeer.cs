@@ -22,7 +22,9 @@ namespace MVS.Realtime
 
         internal override void Disconnect()
         {
-            
+            realtimeSocket.Disconnect();
+            Listener.MVSDebug(DebugLevel.INFO, "TPeer Disconnect()");
+            peerConnectionState = ConnectionStateValue.Disconnecting;
         }
 
         internal override void StopConnection()
@@ -38,7 +40,11 @@ namespace MVS.Realtime
 
         internal override bool ProcessIncomingData()
         {
-            _socketTcp.wsh.ProcessReceiveData();
+            if(_socketTcp != null)
+            {
+                if(_socketTcp.PollReceive)
+                    _socketTcp.wsh.ProcessReceiveData();
+            }
             return true;
         }
 

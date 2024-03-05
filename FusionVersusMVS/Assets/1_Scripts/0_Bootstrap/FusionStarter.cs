@@ -26,7 +26,7 @@ public class FusionStarter : Singleton<FusionStarter>, INetworkRunnerCallbacks
         
         await _runner.StartGame(new StartGameArgs()
         {
-            GameMode = GameMode.Shared,
+            GameMode = Bootstrap.Instance.gameMode,
             SessionName = roomName,
             Scene = scene,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()

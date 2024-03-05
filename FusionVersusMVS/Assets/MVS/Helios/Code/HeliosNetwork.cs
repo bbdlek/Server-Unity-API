@@ -105,6 +105,24 @@ namespace MVS.Helios
         }
 
         private static int sendFrequency = 33; // in milliseconds.
+        
+        public static bool IsMessageQueueRunning
+        {
+            get
+            {
+                return isMessageQueueRunning;
+            }
+
+            set
+            {
+                isMessageQueueRunning = value;
+            }
+        }
+
+        /// <summary>Backup for property IsMessageQueueRunning.</summary>
+        private static bool isMessageQueueRunning = true;
+        
+        public static float MinimalTimeScaleToDispatchInFixedUpdate = -1f;
 
         public static Room CurrentRoom => RealtimeClient == null ? null : RealtimeClient.CurrentRoom;
         
@@ -222,6 +240,7 @@ namespace MVS.Helios
             RealtimeClient.ConnectionProtocol = null;
             // RealtimeClient.AuthMode = appSettings.;
 
+            IsMessageQueueRunning = true;
             RealtimeClient.AppId = appSettings.AppId;
             AppVersion = appSettings.AppVersion;
 
@@ -270,14 +289,31 @@ namespace MVS.Helios
             return RealtimeClient.OpRaiseEvent(eventCode, pkt);
         }
 
-        public static GameObject Instantiate(string prefabName, Vector3 position, Quaternion rotation)
+        #region Instantiate
+
+        public static GameObject Instantiate(GameObject prefab, Vector3 position, Quaternion rotation)
+        {
+            if (CurrentRoom == null)
+                return null;
+            var comp = prefab.GetComponent<HeliosObject>();
+            if (comp != null)
+                return Instantiate(comp.prefabId, position, rotation);
+            else
+            {
+                Debug.LogError($"{prefab.name} does not have HeliosObject Component");
+                return null;
+            }
+
+        }
+
+        public static GameObject Instantiate(uint prefabId, Vector3 position, Quaternion rotation)
         {
             if (CurrentRoom == null)
                 return null;
 
             InstantiateParams instantiateParams = new InstantiateParams
             {
-                prefabName = prefabName,
+                prefabId = prefabId,
                 position = position,
                 rotation = rotation,
                 creator = LocalPlayer
@@ -288,11 +324,17 @@ namespace MVS.Helios
 
         private static GameObject NetworkInstantiate(ObjectInfo objectInfo)
         {
+            Debug.Log(objectInfo.NumberProps.Count);
+            var propPos = objectInfo.NumberProps.FirstOrDefault(prop => prop.Index == PropsID.Position3D).Value;
+            var propRot = objectInfo.NumberProps.FirstOrDefault(prop => prop.Index == PropsID.Rotation3D).Value;
+            Vector3 position = new Vector3((float)propPos[0], (float)propPos[1], (float)propPos[2]);
+            // Quaternion rotation = new Quaternion((float)propRot[0], (float)propRot[1], (float)propRot[2], (float)propRot[3]);
             InstantiateParams instantiateParams = new InstantiateParams
             {
-                prefabName = "Cube",
-                position = new Vector3((float)objectInfo.NumberProps[0].Value[0], (float)objectInfo.NumberProps[0].Value[1], (float)objectInfo.NumberProps[0].Value[2]),
-                rotation = new Quaternion((float)objectInfo.NumberProps[1].Value[0], (float)objectInfo.NumberProps[1].Value[1], (float)objectInfo.NumberProps[1].Value[2], (float)objectInfo.NumberProps[1].Value[3]),
+                prefabId = objectInfo.ObjectID.PrefabID,
+                instanceId = objectInfo.ObjectID.InstanceID,
+                position = position,
+                rotation = Quaternion.identity,
                 creator = CurrentRoom.GetPlayer(objectInfo.OwnerPlayerID)
             };
             return NetworkInstantiate(instantiateParams, false, true);
@@ -303,7 +345,7 @@ namespace MVS.Helios
         {
             GameObject go = null;
             
-            go = _prefabPool.Instantiate(instantiateParams.prefabName, instantiateParams.position,
+            go = _prefabPool.Instantiate(instantiateParams.prefabId, instantiateParams.position,
                 instantiateParams.rotation);
 
             if (go == null)
@@ -322,7 +364,17 @@ namespace MVS.Helios
             // TODO : IF Local Instantiate
             if (isLocalInstantiate)
             {
+                Debug.Log(instantiateParams.instanceId);
+                go.GetComponent<HeliosTransform>().IsMine = true;
                 SendInstantiate(instantiateParams, isRoomObject);
+                MyHeliosObjectQueue.Enqueue(go.GetComponent<HeliosObject>());
+            }
+            else
+            {
+                Debug.Log(instantiateParams.instanceId);
+                go.GetComponent<HeliosTransform>().IsMine = false;
+                go.GetComponent<HeliosObject>().instanceId = instantiateParams.instanceId;
+                HeliosObjectList.Add(instantiateParams.instanceId, go.GetComponent<HeliosObject>());
             }
             
             go.SetActive(true);
@@ -338,8 +390,8 @@ namespace MVS.Helios
             {
                 ObjectID = new ObjectID
                 {
-                    PrefabID = 0,
-                    InstanceID = 0
+                    PrefabID = instantiateParams.prefabId,
+                    InstanceID = instantiateParams.instanceId,
                 },
                 SyncType = ObjectSyncType.PersonalOwn,
                 OwnerPlayerID = LocalPlayer.UserId,
@@ -356,6 +408,27 @@ namespace MVS.Helios
             });
             pkt.ObjectInfos.Add(ObjectInfo);
             return SendEventInternal(EventCode.PKT_C_ADD_NETWORK_OBJECTS, pkt);
+        }
+
+        #endregion
+
+        private static void NetworkUpdateObject(uint id, ObjectInfo objectInfo)
+        {
+            var propPos = objectInfo.NumberProps.FirstOrDefault(prop => prop.Index == PropsID.Position3D).Value;
+            var propRot = objectInfo.NumberProps.FirstOrDefault(prop => prop.Index == PropsID.Rotation3D).Value;
+            Vector3 position = new Vector3((float)propPos[0], (float)propPos[1], (float)propPos[2]);
+            Quaternion rotation = new Quaternion((float)propRot[0], (float)propRot[1], (float)propRot[2], (float)propRot[3]);
+            HeliosObjectList[id].heliosTransform.networkPosition = position;
+            HeliosObjectList[id].heliosTransform.networkRotation = rotation;
+        }
+
+        private static void NetworkRemoveObject(uint id)
+        {
+            if(HeliosObjectList.TryGetValue(id, out var obj))
+            {
+                GameObject.Destroy(obj.gameObject);
+                HeliosObjectList.Remove(id);
+            }
         }
         
         private static bool SendEventInternal(EventCode eventCode, IMessage data)

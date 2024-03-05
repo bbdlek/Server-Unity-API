@@ -2,26 +2,34 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using MVS.Realtime;
+using Protocol;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 namespace MVS.Helios
 {
     public class HeliosMonoBehavior : MonoBehaviour
     {
+        protected bool isMine = false;
         
+        public bool IsMine
+        {
+            get { return isMine; }
+            set { isMine = value; }
+        }
     }
 
     public class DefaultPrefabPool : IHeliosPrefabPool
     {
-        public readonly Dictionary<string, GameObject> GOCache = new Dictionary<string, GameObject>();
+        public readonly Dictionary<uint, GameObject> GOCache = new Dictionary<uint, GameObject>();
         
-        public GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation)
+        public GameObject Instantiate(uint prefabId, Vector3 position, Quaternion rotation)
         {
             GameObject go = null;
             bool cached = GOCache.TryGetValue(prefabId, out go);
             if (!cached)
             {
-                go = Resources.Load<GameObject>(prefabId);
+                go = HeliosNetwork.HeliosSettings.NetworkPrefabs.FindPrefabByNetworkId(prefabId).gameObject;
                 if (go == null)
                 {
                     Debug.LogError($"");
@@ -43,6 +51,21 @@ namespace MVS.Helios
 
         public void Destroy(GameObject gameObject)
         {
+            // 내 것만 ?
+            var RemovePkt = new C_REMOVE_NETWORK_OBJECTS();
+            ObjectInfo objectInfo = new ObjectInfo
+            {
+                ObjectID = new ObjectID
+                {
+                    PrefabID = 0,
+                    InstanceID = gameObject.GetComponent<HeliosObject>().instanceId
+                },
+                SyncType = ObjectSyncType.PersonalOwn,
+                OwnerPlayerID = HeliosNetwork.LocalPlayer.UserId
+            };
+            RemovePkt.ObjectInfos.Add(objectInfo);
+            HeliosNetwork.RaiseEvent(EventCode.PKT_C_REMOVE_NETWORK_OBJECTS, RemovePkt);
+            HeliosNetwork.HeliosObjectList.Remove(gameObject.GetComponent<HeliosObject>().instanceId);
             GameObject.Destroy(gameObject);
         }
     }
@@ -70,6 +93,7 @@ namespace MVS.Helios
 
         public virtual void OnDisconnected()
         {
+            HeliosNetwork.RemoveMyObjects();
         }
 
         public virtual void OnCustomAuthenticationResponse(Dictionary<string, object> data)

@@ -836,7 +836,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1643932110}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: OnClickJoinRoomBtn
+        m_MethodName: OnClickJoinGroupBtn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1537,6 +1537,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab53856b4ac2c258e926cd94169b2221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabsForSpawn:
+  - {fileID: 8931026403998881570, guid: 7182995e8b9816168a367c0ea6a2d403, type: 3}
 --- !u!1 &1979484363
 GameObject:
   m_ObjectHideFlags: 0

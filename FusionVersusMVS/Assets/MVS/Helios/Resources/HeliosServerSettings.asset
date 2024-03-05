@@ -16,10 +16,18 @@ MonoBehaviour:
     AppId: 
     AppVersion: 
     FixedRegion: 
-    Server: 222.122.186.49
-    Port: 80
+    Server: 192.168.154.130
+    Port: 30080
     IsUseNameServer: 0
     IsDirectToMVS: 1
     Protocol: 3
     DebugLevel: 4
   RunInBackground: 0
+  NetworkPrefabs:
+    Prefabs:
+    - {fileID: 8508066451922919660, guid: 694a86331524cd962a3a86cbca50fa22, type: 3}
+    - {fileID: 8508066451922919660, guid: 68339f1c30bed73459da39a6323b0701, type: 3}
+    - {fileID: 8508066451922919660, guid: 5a1d038418d2a67b28e6d202882bbd2d, type: 3}
+    - {fileID: 8508066451922919660, guid: 6be15f56eff1a08e68303540e82bb061, type: 3}
+    - {fileID: 8508066451922919660, guid: 1a6a7149231017fc3b07eba052332156, type: 3}
+    - {fileID: 8508066451922919660, guid: 7182995e8b9816168a367c0ea6a2d403, type: 3}

@@ -28,7 +28,7 @@ public class Bootstrap : Singleton<Bootstrap>
     #region Fusion
 
     [Header("Fusion Config")] [SerializeField]
-    private GameMode gameMode;
+    public GameMode gameMode;
 
     public GameObject fusionPlayerPrefab;
 

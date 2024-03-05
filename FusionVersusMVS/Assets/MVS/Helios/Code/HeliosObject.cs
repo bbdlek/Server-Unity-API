@@ -1,27 +1,24 @@
+using System;
+using MVS.Realtime;
+using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace MVS.Helios
 {
     [AddComponentMenu("Helios/HeliosObject")]
-    public class HeliosObject : MonoBehaviour
+    public class HeliosObject : HeliosMonoBehavior
     {
-        // TODO : Execution Order?
-        [InitializeOnLoadMethod]
-        private static void SetExecutionOrder()
+        [SerializeField, ReadOnly]
+        public uint prefabId;
+        public uint instanceId;
+
+        public HeliosTransform heliosTransform;
+
+        private void Awake()
         {
-            int executionOrder = -16000;
-            GameObject go = new GameObject();
-            HeliosObject ho = go.AddComponent<HeliosObject>();
-            MonoScript monoScript = MonoScript.FromMonoBehaviour(ho);
-
-            if (executionOrder != MonoImporter.GetExecutionOrder(monoScript))
-            {
-                MonoImporter.SetExecutionOrder(monoScript, executionOrder);
-            }
-
-            DestroyImmediate(go);
+            heliosTransform = GetComponent<HeliosTransform>();
         }
-        
     }
 }

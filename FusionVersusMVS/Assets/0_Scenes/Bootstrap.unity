@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableFusion: 1
-  enableMvs: 1
+  enableMvs: 0
   fusionStarter: {fileID: 0}
   mvsStarter: {fileID: 0}
   gameMode: 2

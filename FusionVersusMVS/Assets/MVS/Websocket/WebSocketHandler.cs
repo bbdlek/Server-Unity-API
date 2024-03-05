@@ -162,32 +162,29 @@ public partial class WebSocketHandler
     
     public void ProcessReceiveData()
     {
-        _socketTcp.peerBase.Listener.MVSDebug(DebugLevel.INFO, "ProcessReceiveData");
-        while(true)
+        // _socketTcp.peerBase.Listener.MVSDebug(DebugLevel.INFO, "ProcessReceiveData");
+        var job = DequeueJob();
+        while (job != null)
         {
-            var job = DequeueJob();
-            while (job != null)
+            var id = job.header.id;
+            var size = job.header.size;
+
+            var result = handlerDic[(PKT_ID)id](job.data.SubArray(0, size - HeaderSize), size);
+            PoolJob(job);
+
+            job = DequeueJob();
+
+            // if(GlobalCore.Instance.isViewMode) continue;
+
+            // ButtonManager.SetResult((PKT_ID)id, result);
+            if (result)
             {
-                var id = job.header.id;
-                var size = job.header.size;
-
-                var result = handlerDic[(PKT_ID)id](job.data.SubArray(0, size - HeaderSize), size);
-                PoolJob(job);
-
-                job = DequeueJob();
-
-                // if(GlobalCore.Instance.isViewMode) continue;
-
-                // ButtonManager.SetResult((PKT_ID)id, result);
-                if (result)
-                {
-                    if ((PKT_ID)id == PKT_ID.PKT_S_HEART_BEAT) continue;
-                    HighLightLog((PKT_ID)id);
-                }
-                else
-                {
-                    Debug.LogError($"CID[{clientNum}] : {(PKT_ID)id} packet is inconsistent");
-                }
+                if ((PKT_ID)id == PKT_ID.PKT_S_HEART_BEAT) continue;
+                HighLightLog((PKT_ID)id);
+            }
+            else
+            {
+                Debug.LogError($"CID[{clientNum}] : {(PKT_ID)id} packet is inconsistent");
             }
         }
     }

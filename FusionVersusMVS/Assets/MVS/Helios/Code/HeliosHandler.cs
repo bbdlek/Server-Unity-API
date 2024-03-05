@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using MVS.Realtime;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace MVS.Helios
 {
@@ -26,7 +28,39 @@ namespace MVS.Helios
                 return instance;
             }
         }
-        
+
+
+        private void Awake()
+        {
+            if (instance == null || ReferenceEquals(this, instance))
+            {
+                instance = this;
+                base.Awake();
+            }
+            else
+            {
+                Destroy(this);
+            }
+        }
+
+        protected void FixedUpdate()
+        {
+            if (Time.timeScale > HeliosNetwork.MinimalTimeScaleToDispatchInFixedUpdate)
+            {
+                if(!HeliosNetwork.IsConnected) return;
+                
+                HeliosNetwork.RealtimeClient.RealtimePeer.ProcessIncomingData();
+            }
+        }
+
+        protected void LateUpdate()
+        {
+            if (Time.timeScale <= HeliosNetwork.MinimalTimeScaleToDispatchInFixedUpdate)
+            {
+                // this.Dispatch();
+            }
+        }
+
         public void OnConnected()
         {
             Debug.Log("OnConnected");

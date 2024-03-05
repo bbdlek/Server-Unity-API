@@ -385,13 +385,16 @@ namespace MVS.Realtime
                     switch (State)
                     {
                         case ClientState.ConnectingToNameServer:
+                            State = ClientState.ConnectedToNameServer;
                             MVSDebug(DebugLevel.INFO, "ConnectingToNameServer");
                             break;
                         case ClientState.ConnectingToMasterServer:
+                            State = ClientState.ConnectedToMasterServer;
                             MVSDebug(DebugLevel.INFO, "ConnectingToMasterServer");
                             break;
                         case ClientState.ConnectingToMVS:
                             MVSDebug(DebugLevel.INFO, "ConnectingToMVS");
+                            State = ClientState.ConnectedToMVS;
                             ConnectionCallbacksTarget.OnConnected();
                             break;
                     }
@@ -411,6 +414,7 @@ namespace MVS.Realtime
                             MVSDebug(DebugLevel.INFO, "DisconnectedFromMVS");
                             break;
                     }
+                    ConnectionCallbacksTarget.OnDisconnected();
                     break;
                 case StatusCode.Exception:
                     break;
@@ -430,6 +434,21 @@ namespace MVS.Realtime
                     break;
                 case EventCode.PKT_S_ROOM_JOIN_OR_CREATE:
                     MakingRoomCallbacksTarget.OnJoinedRoom();
+                    break;
+                case EventCode.PKT_S_GROUP_JOIN:
+                    MakingGroupCallbacksTarget.OnJoinedGroup();
+                    var pkt = new C_PLAYER_ID();
+                    OpRaiseEvent(EventCode.PKT_C_PLAYER_ID, pkt);
+                    break;
+                case EventCode.PKT_S_PLAYER_ID:
+                    var data_PlayerID = S_PLAYER_ID.Parser.ParseFrom(eventData.Data);
+                    LocalPlayer.PlayerInfo.PlayerID = data_PlayerID.PlayerID;
+                    Debug.Log(LocalPlayer.UserId);
+                    break;
+                case EventCode.PKT_S_OTHER_CLIENT_JOINED:
+                    var data = S_OTHER_CLIENT_JOINED.Parser.ParseFrom(eventData.Data);
+                    Player otherPlayer = new Player(data.PlayerInfo);
+                    InGroupCallbacksTarget.OnPlayerEnteredGroup(otherPlayer);
                     break;
             }
             UpdateCallbackTargets();

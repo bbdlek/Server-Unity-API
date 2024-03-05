@@ -2,20 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MVS.Helios;
+using MVS.Realtime;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviorHeliosCallbacks
 {
+    public GameObject[] prefabsForSpawn;
+    
     private void Awake()
     {
         HeliosNetwork.SendRate = 30;
-        HeliosNetwork.PrefabPool = new DefaultPrefabPool();
-    }
-
-    private void Update()
-    {
-        if(HeliosNetwork.IsConnected)
-            HeliosNetwork.Service();
     }
 
     public void OnClickConnectBtn()
@@ -35,7 +32,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     public void OnClickCreateObjectBrn()
     {
-        GameObject cubeObject = HeliosNetwork.Instantiate("Cube", Vector3.zero, Quaternion.identity);
+        GameObject cubeObject = HeliosNetwork.Instantiate(prefabsForSpawn[Random.Range(0, prefabsForSpawn.Length)], Vector3.zero, Quaternion.identity);
     }
 
     public override void OnConnected()
@@ -48,5 +45,17 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     {
         base.OnJoinedRoom();
         Debug.Log("JoinedRoom");
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        base.OnPlayerEnteredRoom(newPlayer);
+        Debug.Log(newPlayer.NickName);
+    }
+
+    public override void OnPlayerEnteredGroup(Player newPlayer)
+    {
+        base.OnPlayerEnteredGroup(newPlayer);
+        Debug.Log(newPlayer.NickName);
     }
 }

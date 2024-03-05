@@ -152,7 +152,7 @@ namespace MVS
             {
                 ObjectID = new ObjectID
                 {
-                    PrefabID = 0,
+                    PrefabID = 1,
                     InstanceID = 0
                 },
                 SyncType = ObjectSyncType.PersonalOwn,

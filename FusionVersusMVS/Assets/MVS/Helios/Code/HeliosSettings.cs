@@ -16,5 +16,8 @@ namespace MVS.Helios
         
         [Tooltip("Run In Background")]
         public bool RunInBackground = true;
+
+        public HeliosObjectTable NetworkPrefabs = new HeliosObjectTable();
+
     }
 }

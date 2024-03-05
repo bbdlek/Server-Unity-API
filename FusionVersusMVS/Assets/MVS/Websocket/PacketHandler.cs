@@ -174,6 +174,14 @@ public partial class WebSocketHandler
             Debug.LogError($"packet result : {packet.Result}");
             return false;
         }
+        
+        EventData eventData = new EventData
+        {
+            code = EventCode.PKT_S_PLAYER_ID,
+            Sender = 0,
+            Data = data
+        };
+        Listener.OnEvent(eventData);
 
         // GlobalCore.Instance.testUser.playerIDs.TryAdd(clientNum, packet.PlayerID);
         // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_ADD_NETWORK_OBJECTS);
@@ -218,6 +226,7 @@ public partial class WebSocketHandler
         //     // ButtonManager.SetButtonEnable(PKT_ID.PKT_C_CHAT);
         //     return true;
         // }
+        
         EventData eventData = new EventData
         {
             code = EventCode.PKT_S_GROUP_JOIN,
@@ -245,8 +254,13 @@ public partial class WebSocketHandler
             return false;
         }
 
-        // if(isMain) GlobalCore.Instance.testUser.AddObjectInfo(packet.ObjectInfos);
-        Log(packet.ObjectInfos);
+        EventData eventData = new EventData
+        {
+            code = EventCode.PKT_S_INITIAL_OBJECTS,
+            Sender = 0,
+            Data = data
+        };
+        Listener.OnEvent(eventData);
 
         return true;
     }
@@ -261,6 +275,15 @@ public partial class WebSocketHandler
         //     Log(packet);
         //     return true;
         // }
+        
+        EventData eventData = new EventData
+        {
+            code = EventCode.PKT_S_OTHER_CLIENT_JOINED,
+            Sender = 0,
+            Data = data
+        };
+        Listener.OnEvent(eventData);
+        
         return true;
     }
     
@@ -301,8 +324,13 @@ public partial class WebSocketHandler
             return false;
         }
         
-        // GlobalCore.Instance.testUser.DeleteObjectInfo(packet.ObjectInfos);
-        Log(packet.ObjectInfos);
+        EventData eventData = new EventData
+        {
+            code = EventCode.PKT_S_REMOVE_NETWORK_OBJECTS,
+            Sender = 0,
+            Data = data
+        };
+        Listener.OnEvent(eventData);
 
         return true;
     }
@@ -316,6 +344,14 @@ public partial class WebSocketHandler
             Debug.LogError($"packet result : {packet.Result}");
             return false;
         }
+        
+        EventData eventData = new EventData
+        {
+            code = EventCode.PKT_S_UPDATE_NETWORK_OBJECTS,
+            Sender = 0,
+            Data = data
+        };
+        Listener.OnEvent(eventData);
         
         // GlobalCore.Instance.testUser.UpdateObjectInfo(packet.ObjectInfos);
         Log(packet.ObjectInfos);
@@ -432,40 +468,6 @@ public partial class WebSocketHandler
     bool Handle_C_ADD_NETWORK_OBJECTS(byte[] data)
     {
         var packet = C_ADD_NETWORK_OBJECTS.Parser.ParseFrom(data);
-        var obj = new ObjectInfo();
-        obj.ObjectID = new ObjectID();
-        obj.ObjectID.PrefabID = 1;
-        // obj.ObjectID.InstanceID = TestUser.InstanceID++;
-        int rand = UnityEngine.Random.Range(1, 4);
-        switch(rand)
-        {
-            case 1:
-                obj.SyncType = ObjectSyncType.PersonalOwn;
-                break;
-            case 2:
-                obj.SyncType = ObjectSyncType.GroupOwn;
-                break;
-            case 3:
-                obj.SyncType = ObjectSyncType.RoomOwn;
-                break;
-        }
-        // obj.OwnerPlayerID = GlobalCore.Instance.testUser.playerIDs[clientNum];
-        CustomNumberProp position = new CustomNumberProp{ Index = PropsID.Position3D };
-        position.Value.Add(3);
-        position.Value.Add(2);
-        position.Value.Add(1);
-        CustomNumberProp rotation = new CustomNumberProp{ Index = PropsID.Rotation3D };
-        rotation.Value.Add(3);
-        rotation.Value.Add(2);
-        rotation.Value.Add(1);
-        CustomNumberProp scale = new CustomNumberProp{ Index = PropsID.Scale3D };
-        scale.Value.Add(3);
-        scale.Value.Add(2);
-        scale.Value.Add(1);
-        obj.NumberProps.Add(position);
-        obj.NumberProps.Add(rotation);
-        obj.NumberProps.Add(scale);
-        packet.ObjectInfos.Add(obj);
         SendData(PKT_ID.PKT_C_ADD_NETWORK_OBJECTS, packet.ToByteArray());
 
         return true;
