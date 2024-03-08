@@ -1,21 +1,47 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading;
 using MVS.Realtime;
 using Protocol;
 using UnityEngine;
+using EventCode = MVS.Realtime.EventCode;
 using Vector3 = UnityEngine.Vector3;
 
 namespace MVS.Helios
 {
     public class HeliosMonoBehavior : MonoBehaviour
     {
+        protected List<FieldInfo> NetworkedVariableList = new List<FieldInfo>();
+        
         protected bool isMine = false;
         
         public bool IsMine
         {
             get { return isMine; }
             set { isMine = value; }
+        }
+
+        private void Awake()
+        {
+            NetworkedVariableList = FindNetworkedVariables();
+        }
+        
+        public List<FieldInfo> FindNetworkedVariables()
+        {
+            List<FieldInfo> networkedVariables = new List<FieldInfo>();
+
+            FieldInfo[] fields = this.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            foreach (FieldInfo field in fields)
+            {
+                if (field.IsDefined(typeof(NetworkedAttribute), false))
+                {
+                    networkedVariables.Add(field);
+                }
+            }
+
+            return networkedVariables;
         }
     }
 

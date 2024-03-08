@@ -10,6 +10,8 @@ using Protocol;
 // using Enum;
 using UnityEngine;
 using WebSocketSharp;
+using EventCode = MVS.Realtime.EventCode;
+using OperationCode = MVS.Realtime.OperationCode;
 using Random = UnityEngine.Random;
 using Vector3 = Protocol.Vector3;
 
@@ -42,6 +44,11 @@ public partial class WebSocketHandler
         PKT_S_CHANGE_OBJECTS_OWNER = 1022,
         PKT_C_CHAT = 1023,
         PKT_S_CHAT = 1024,
+        PKT_C_EVENT = 1025,
+        PKT_C_OPERATION = 1026,
+        PKT_S_OPERATION = 1027,
+        PKT_S_EVENT_TEST = 1028,
+        PKT_S_EVENT = 1029,
     };
 
     /// <summary>
@@ -75,6 +82,11 @@ public partial class WebSocketHandler
         handlerDic[PKT_ID.PKT_S_CHANGE_OBJECTS_OWNER] = (bytes, len) => PacketHandler<S_CHANGE_OBJECTS_OWNER>.Handling(Handle_S_CHANGE_OBJECTS_OWNER, bytes, len);
         handlerDic[PKT_ID.PKT_C_CHAT] = (bytes, len) => PacketHandler<C_CHAT>.Handling(Handle_C_CHAT, bytes, len);
         handlerDic[PKT_ID.PKT_S_CHAT] = (bytes, len) => PacketHandler<S_CHAT>.Handling(Handle_S_CHAT, bytes, len);
+        handlerDic[PKT_ID.PKT_C_EVENT] = (bytes, len) => PacketHandler<C_EVENT>.Handling(Handle_C_EVENT, bytes, len);
+        handlerDic[PKT_ID.PKT_C_OPERATION] = (bytes, len) => PacketHandler<C_OPERATION>.Handling(Handle_C_OPERATION, bytes, len);
+        handlerDic[PKT_ID.PKT_S_OPERATION] = (bytes, len) => PacketHandler<S_OPERATION>.Handling(Handle_S_OPERATION, bytes, len);
+        handlerDic[PKT_ID.PKT_S_EVENT_TEST] = (bytes, len) => PacketHandler<S_EVENT_TEST>.Handling(Handle_S_EVENT_TEST, bytes, len);
+        handlerDic[PKT_ID.PKT_S_EVENT] = (bytes, len) => PacketHandler<S_EVENT>.Handling(Handle_S_EVENT, bytes, len);
     }
 
 #region RECV_Functions
@@ -390,6 +402,72 @@ public partial class WebSocketHandler
         return true;
     }
 
+    bool Handle_S_OPERATION(byte[] data)
+    {
+        var packet = S_OPERATION.Parser.ParseFrom(data);
+        if (packet.Result != Result.Success)
+        {
+            Debug.LogError($"packet result : {packet.Result}");
+            return false;
+        }
+
+        if (packet.OperationCode == Protocol.OperationCode.RaiseEvent)
+        {
+            
+        }
+        else
+        {
+            Listener.OnOperationResponse(new OperationResponse
+            {
+                OperationCode = (OperationCode)packet.OperationCode,
+                ReturnCode = 0,
+                Data = data
+            });   
+        }
+
+        return true;
+    }
+
+    bool Handle_S_EVENT_TEST(byte[] data)
+    {
+        var packet = S_EVENT_TEST.Parser.ParseFrom(data);
+        if (packet.Result != Result.Success)
+        {
+            Debug.LogError($"packet result : {packet.Result}");
+            return false;
+        }
+        
+        EventData eventData = new EventData
+        {
+            code = (EventCode)packet.EventCode,
+            Sender = packet.Sender.PlayerID,
+            Data = packet.Data[0].ToByteArray()
+        };
+        Listener.OnEvent(eventData);
+
+        return true;
+    }
+
+    bool Handle_S_EVENT(byte[] data)
+    {
+        var packet = S_EVENT.Parser.ParseFrom(data);
+        if (packet.Result != Result.Success)
+        {
+            Debug.LogError($"packet result : {packet.Result}");
+            return false;
+        }
+        
+        EventData eventData = new EventData
+        {
+            code = (EventCode)packet.EventCode,
+            Sender = packet.Sender.PlayerID,
+            Data = packet.Data[0].ToByteArray()
+        };
+        Listener.OnEvent(eventData);
+
+        return true;
+    }
+
 #endregion RECV_Functions
     
 #region REQ_Functions
@@ -534,6 +612,24 @@ public partial class WebSocketHandler
         var packet = C_CHAT.Parser.ParseFrom(data);
         // packet.Msg = "UnitTest Chat Test";
         SendData(PKT_ID.PKT_C_CHAT, packet.ToByteArray());
+
+        return true;
+    }
+
+    bool Handle_C_EVENT(byte[] data)
+    {
+        var pakcet = C_EVENT.Parser.ParseFrom(data);
+
+        SendData(PKT_ID.PKT_C_EVENT, pakcet.ToByteArray());
+
+        return true;
+    }
+
+    bool Handle_C_OPERATION(byte[] data)
+    {
+        var pakcet = C_OPERATION.Parser.ParseFrom(data);
+
+        SendData(PKT_ID.PKT_C_OPERATION, pakcet.ToByteArray());
 
         return true;
     }

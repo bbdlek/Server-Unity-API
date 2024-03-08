@@ -8,6 +8,7 @@ using MVS.Realtime;
 using Protocol;
 using UnityEditor;
 using UnityEngine;
+using EventCode = MVS.Realtime.EventCode;
 using Vector3 = UnityEngine.Vector3;
 
 namespace MVS.Helios
@@ -268,11 +269,18 @@ namespace MVS.Helios
             return true;
         }
 
-        public static bool JoinOrCreateRoom(string AuthToken, ulong AppID, ulong WaplRoomID, string Name)
+        public static bool JoinOrCreateRoom(string AuthToken, long AppID, long WaplRoomID, string Name)
         {
             // if (!IsConnectedAndReady) return false;
+            JoinRoomParams opParams = new JoinRoomParams
+            {
+                AuthToken = AuthToken,
+                AppID = AppID,
+                RoomID = WaplRoomID,
+                Name = Name
+            };
 
-            return RealtimeClient.OpCreateRoom(AuthToken, AppID, WaplRoomID, Name);
+            return RealtimeClient.OpCreateRoom(opParams);
         }
 
         public static bool JoinGroup(uint sceneNumber, uint channelID)

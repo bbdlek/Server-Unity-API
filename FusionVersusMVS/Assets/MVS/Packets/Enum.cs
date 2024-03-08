@@ -35,10 +35,23 @@ namespace Protocol {
             "TEFZRVIQGSphCgdQcm9wc0lEEhIKDk1WX1BST1BTX1NUQVJUEAASDwoLUE9T",
             "SVRJT05fM0QQARIPCgtST1RBVElPTl8zRBACEgwKCFNDQUxFXzNEEAMSEgoM",
             "TVZfUFJPUFNfRU5EEKCNBio/Cg5PYmplY3RTeW5jVHlwZRIQCgxQRVJTT05B",
-            "TF9PV04QABINCglHUk9VUF9PV04QARIMCghST09NX09XThACYgZwcm90bzM="));
+            "TF9PV04QABINCglHUk9VUF9PV04QARIMCghST09NX09XThACKqgBCg1PcGVy",
+            "YXRpb25Db2RlEg4KCkhFQVJUX0JFQVQQABIXChNST09NX0pPSU5fT1JfQ1JF",
+            "QVRFEAESDgoKUk9PTV9MRUFWRRACEg0KCVJPT01fTElTVBADEg0KCVBMQVlF",
+            "Ul9JRBAEEg4KCkdST1VQX0xJU1QQBRIOCgpHUk9VUF9KT0lOEAYSDwoLR1JP",
+            "VVBfTEVBVkUQBxIPCgtSQUlTRV9FVkVOVBAIKqQBCglFdmVudENvZGUSFwoT",
+            "T1RIRVJfQ0xJRU5UX0pPSU5FRBAAEhMKD0lOSVRJQUxfT0JKRUNUUxABEhcK",
+            "E0FERF9ORVRXT1JLX09CSkVDVFMQAhIaChZSRU1PVkVfTkVUV09SS19PQkpF",
+            "Q1RTEAMSGgoWVVBEQVRFX05FVFdPUktfT0JKRUNUUxAEEhgKFENIQU5HRV9P",
+            "QkpFQ1RTX09XTkVSEAUqywEKCVBhcmFtZXRlchINCglBVVRIVE9LRU4QABIJ",
+            "CgVBUFBJRBABEgoKBlJPT01JRBACEgwKCFJPT01OQU1FEAMSDAoIUk9PTUlO",
+            "Rk8QBBIMCghQTEFZRVJJRBAFEg0KCUdST1VQSU5GTxAGEgsKB0dST1VQSUQQ",
+            "BxIOCgpPQkpFQ1RJTkZPEAgSDgoKUExBWUVSSU5GTxAJEg0KCUVWRU5UQ09E",
+            "RRAKEhEKDU9QRVJBVElPTkNPREUQCxIQCgxDVVNUT01TVFJVQ1QQDGIGcHJv",
+            "dG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protocol.Result), typeof(global::Protocol.PropsID), typeof(global::Protocol.ObjectSyncType), }, null, null));
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protocol.Result), typeof(global::Protocol.PropsID), typeof(global::Protocol.ObjectSyncType), typeof(global::Protocol.OperationCode), typeof(global::Protocol.EventCode), typeof(global::Protocol.Parameter), }, null, null));
     }
     #endregion
 
@@ -98,6 +111,43 @@ namespace Protocol {
     /// </summary>
     [pbr::OriginalName("GROUP_OWN")] GroupOwn = 1,
     [pbr::OriginalName("ROOM_OWN")] RoomOwn = 2,
+  }
+
+  public enum OperationCode {
+    [pbr::OriginalName("HEART_BEAT")] HeartBeat = 0,
+    [pbr::OriginalName("ROOM_JOIN_OR_CREATE")] RoomJoinOrCreate = 1,
+    [pbr::OriginalName("ROOM_LEAVE")] RoomLeave = 2,
+    [pbr::OriginalName("ROOM_LIST")] RoomList = 3,
+    [pbr::OriginalName("PLAYER_ID")] PlayerId = 4,
+    [pbr::OriginalName("GROUP_LIST")] GroupList = 5,
+    [pbr::OriginalName("GROUP_JOIN")] GroupJoin = 6,
+    [pbr::OriginalName("GROUP_LEAVE")] GroupLeave = 7,
+    [pbr::OriginalName("RAISE_EVENT")] RaiseEvent = 8,
+  }
+
+  public enum EventCode {
+    [pbr::OriginalName("OTHER_CLIENT_JOINED")] OtherClientJoined = 0,
+    [pbr::OriginalName("INITIAL_OBJECTS")] InitialObjects = 1,
+    [pbr::OriginalName("ADD_NETWORK_OBJECTS")] AddNetworkObjects = 2,
+    [pbr::OriginalName("REMOVE_NETWORK_OBJECTS")] RemoveNetworkObjects = 3,
+    [pbr::OriginalName("UPDATE_NETWORK_OBJECTS")] UpdateNetworkObjects = 4,
+    [pbr::OriginalName("CHANGE_OBJECTS_OWNER")] ChangeObjectsOwner = 5,
+  }
+
+  public enum Parameter {
+    [pbr::OriginalName("AUTHTOKEN")] Authtoken = 0,
+    [pbr::OriginalName("APPID")] Appid = 1,
+    [pbr::OriginalName("ROOMID")] Roomid = 2,
+    [pbr::OriginalName("ROOMNAME")] Roomname = 3,
+    [pbr::OriginalName("ROOMINFO")] Roominfo = 4,
+    [pbr::OriginalName("PLAYERID")] Playerid = 5,
+    [pbr::OriginalName("GROUPINFO")] Groupinfo = 6,
+    [pbr::OriginalName("GROUPID")] Groupid = 7,
+    [pbr::OriginalName("OBJECTINFO")] Objectinfo = 8,
+    [pbr::OriginalName("PLAYERINFO")] Playerinfo = 9,
+    [pbr::OriginalName("EVENTCODE")] Eventcode = 10,
+    [pbr::OriginalName("OPERATIONCODE")] Operationcode = 11,
+    [pbr::OriginalName("CUSTOMSTRUCT")] Customstruct = 12,
   }
 
   #endregion

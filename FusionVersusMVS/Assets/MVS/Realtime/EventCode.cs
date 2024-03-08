@@ -27,5 +27,10 @@ namespace MVS.Realtime
         PKT_S_CHANGE_OBJECTS_OWNER = 1022,
         PKT_C_CHAT = 1023,
         PKT_S_CHAT = 1024,
+        PKT_C_EVENT = 1025,
+        PKT_C_OPERATION = 1026,
+        PKT_S_OPERATION = 1027,
+        PKT_S_EVENT_TEST = 1028,
+        PKT_S_EVENT = 1029,
     }
 }

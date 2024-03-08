@@ -2,11 +2,20 @@ namespace MVS.Realtime
 {
     public enum OperationCode
     {
-        Authenticate = 0,
-        CreateRoom = 1,
-        JoinRoom = 2,
-        CreateGroup = 3,
-        JoinGroup = 4,
+        HEART_BEAT = 0,
+        ROOM_JOIN_OR_CREATE = 1,
+        ROOM_LEAVE = 2,
+        ROOM_LIST = 3,
+        PLAYER_ID = 4,
+        GROUP_LIST = 5,
+        GROUP_JOIN = 6,
+        GROUP_LEAVE = 7,
+        RAISE_EVENT = 8,
+        Authenticate = 10,
+        CreateRoom = 11,
+        JoinRoom = 12,
+        CreateGroup = 13,
+        JoinGroup = 14,
         
         //
         GetRoomList = 10,

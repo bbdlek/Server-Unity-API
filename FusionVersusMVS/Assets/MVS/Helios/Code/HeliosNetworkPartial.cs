@@ -3,6 +3,7 @@ using System.Linq;
 using MVS.Realtime;
 using Protocol;
 using UnityEngine;
+using EventCode = MVS.Realtime.EventCode;
 using Vector3 = UnityEngine.Vector3;
 
 namespace MVS.Helios

@@ -1,8 +1,9 @@
-
-
-using System;
+using System.Collections.Generic;
 using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using Protocol;
+using UnityEngine;
+using Type = System.Type;
 
 namespace MVS.Realtime
 {
@@ -38,10 +39,25 @@ namespace MVS.Realtime
             }
         }
 
-        public virtual bool OpCreateRoom(C_ROOM_JOIN_OR_CREATE roomJoinOrCreatePkt)
+        public virtual bool OpCreateRoom(JoinRoomParams opParams)
         {
-            return SendEvent(EventCode.PKT_C_ROOM_JOIN_OR_CREATE, roomJoinOrCreatePkt.ToByteArray(),
-                roomJoinOrCreatePkt.CalculateSize());
+            Dictionary<Parameter, object> parameter = new Dictionary<Parameter, object>();
+
+            if (!string.IsNullOrEmpty(opParams.AuthToken))
+            {
+                parameter[Parameter.Authtoken] = opParams.AuthToken;
+            }
+
+            parameter[Parameter.Appid] = opParams.AppID;
+
+            parameter[Parameter.Roomid] = opParams.RoomID;
+
+            if (!string.IsNullOrEmpty(opParams.Name))
+            {
+                parameter[Parameter.Roomname] = opParams.Name;
+            }
+            
+            return SendOperation(Protocol.OperationCode.RoomJoinOrCreate, parameter);
         }
 
         public virtual bool OpJoinGroup(C_GROUP_JOIN groupJoinPkt)
@@ -62,6 +78,14 @@ namespace MVS.Realtime
             return true;
         }
 
+    }
+
+    public class JoinRoomParams
+    {
+        public string AuthToken;
+        public long AppID;
+        public long RoomID;
+        public string Name;
     }
     
     public enum AuthModeOption { None, Auth }

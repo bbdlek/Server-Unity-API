@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using Protocol;
 using UnityEngine;
 
@@ -414,6 +415,8 @@ namespace MVS.Realtime
                             MVSDebug(DebugLevel.INFO, "DisconnectedFromMVS");
                             break;
                     }
+
+                    State = ClientState.DisConnected;
                     ConnectionCallbacksTarget.OnDisconnected();
                     break;
                 case StatusCode.Exception:
@@ -500,6 +503,9 @@ namespace MVS.Realtime
                     {
                         
                     }
+                    break;
+                case OperationCode.ROOM_JOIN_OR_CREATE:
+                    JoinRoom(operationResponse);
                     break;
                 case OperationCode.JoinRoom:
                     JoinRoom(operationResponse);
@@ -589,12 +595,13 @@ namespace MVS.Realtime
 
         private void JoinRoom(OperationResponse operationResponse)
         {
-            var data = S_ROOM_JOIN_OR_CREATE.Parser.ParseFrom(operationResponse.Data);
+            var data = S_OPERATION.Parser.ParseFrom(operationResponse.Data);
+            
             RoomInfo newRoomInfo = new RoomInfo
             {
-                AppID = data.AppID,
-                RoomID = data.WaplRoomID,
-                Name = data.Name
+                AppID = (ulong)data.DataDic[(int)Parameter.Appid].Unpack<Int64Value>().Value,
+                RoomID = (ulong)data.DataDic[(int)Parameter.Roomid].Unpack<Int64Value>().Value,
+                Name = data.DataDic[(int)Parameter.Roomname].Unpack<StringValue>().Value
             };
             CurrentRoom = CreateRoom(newRoomInfo);
             CurrentRoom.RealtimeClient = this;
@@ -641,21 +648,14 @@ namespace MVS.Realtime
         }
         
         //Functions
-        public bool OpCreateRoom(string AuthToken, ulong AppID, ulong WaplRoomID, string Name)
+        public bool OpCreateRoom(JoinRoomParams joinRoomParams)
         {
-            var CreateRoomPkt = new C_ROOM_JOIN_OR_CREATE
-            {
-                AuthToken = AuthToken,
-                AppID = AppID,
-                WaplRoomID = WaplRoomID,
-                Name = Name
-            };
             if (!CheckOpCanBeSent((byte)OperationCode.CreateRoom, Server, "CreateRoom"))
             {
                 return false;
             }
 
-            bool sent = RealtimePeer.OpCreateRoom(CreateRoomPkt);
+            bool sent = RealtimePeer.OpCreateRoom(joinRoomParams);
 
             return sent;
         }
@@ -704,7 +704,7 @@ namespace MVS.Realtime
         {
             var data = pkt.ToByteArray();
             var size = pkt.CalculateSize();
-            if (!CheckOpCanBeSent((byte)OperationCode.RaiseEvent, Server, "RaiseEvent"))
+            if (!CheckOpCanBeSent((byte)OperationCode.RAISE_EVENT, Server, "RaiseEvent"))
             {
                 return false;
             }

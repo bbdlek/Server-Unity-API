@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
+using Protocol;
+using Type = System.Type;
 
 namespace MVS.Realtime
 {
@@ -142,6 +146,16 @@ namespace MVS.Realtime
             peerBase.SendPacket(eventCode, data, size);
             return true;
         }
-        
+
+        public virtual bool SendOperation(
+            Protocol.OperationCode operationCode,
+            Dictionary<Parameter, object> parameters
+        )
+        {
+            (byte[] data, int size) = peerBase.SerializeOperationToPacket(operationCode, parameters);
+            peerBase.SendPacket(EventCode.PKT_C_OPERATION, data, size);
+            return true;
+        }
+
     }
 }

@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     public void OnClickJoinRoomBtn()
     {
-        HeliosNetwork.JoinOrCreateRoom("auth", 0, 1, "NewRoom");
+        HeliosNetwork.JoinOrCreateRoom("auth", 1, 1, "NewRoom");
     }
     
     public void OnClickJoinGroupBtn()
