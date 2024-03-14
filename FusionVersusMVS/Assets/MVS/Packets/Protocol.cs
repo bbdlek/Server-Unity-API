@@ -65,30 +65,55 @@ namespace Protocol {
             "LlByb3RvY29sLk9iamVjdEluZm8SIAoGcmVzdWx0GAIgASgOMhAuUHJvdG9j",
             "b2wuUmVzdWx0IhUKBkNfQ0hBVBILCgNtc2cYASABKAkiYQoGU19DSEFUEigK",
             "CnBsYXllckluZm8YASABKAsyFC5Qcm90b2NvbC5QbGF5ZXJJbmZvEgsKA21z",
-            "ZxgCIAEoCRIgCgZyZXN1bHQYAyABKA4yEC5Qcm90b2NvbC5SZXN1bHQiwgEK",
-            "B0NfRVZFTlQSEQoJZXZlbnRDb2RlGAEgASgFEjUKCnBhcmFtZXRlcnMYAiAD",
-            "KAsyIS5Qcm90b2NvbC5DX0VWRU5ULlBhcmFtZXRlcnNFbnRyeRIkCgRkYXRh",
-            "GAMgAygLMhYuUHJvdG9jb2wuQ3VzdG9tU3RydWN0GkcKD1BhcmFtZXRlcnNF",
-            "bnRyeRILCgNrZXkYASABKAUSIwoFdmFsdWUYAiABKAsyFC5nb29nbGUucHJv",
-            "dG9idWYuQW55OgI4ASLeAQoLQ19PUEVSQVRJT04SLgoNb3BlcmF0aW9uQ29k",
-            "ZRgBIAEoDjIXLlByb3RvY29sLk9wZXJhdGlvbkNvZGUSMwoHZGF0YURpYxgC",
-            "IAMoCzIiLlByb3RvY29sLkNfT1BFUkFUSU9OLkRhdGFEaWNFbnRyeRIkCgRk",
-            "YXRhGAMgAygLMhYuUHJvdG9jb2wuQ3VzdG9tU3RydWN0GkQKDERhdGFEaWNF",
-            "bnRyeRILCgNrZXkYASABKAUSIwoFdmFsdWUYAiABKAsyFC5nb29nbGUucHJv",
-            "dG9idWYuQW55OgI4ASKmAgoLU19PUEVSQVRJT04SLgoNb3BlcmF0aW9uQ29k",
-            "ZRgBIAEoDjIXLlByb3RvY29sLk9wZXJhdGlvbkNvZGUSJAoGc2VuZGVyGAIg",
-            "ASgLMhQuUHJvdG9jb2wuUGxheWVySW5mbxIzCgdkYXRhRGljGAMgAygLMiIu",
-            "UHJvdG9jb2wuU19PUEVSQVRJT04uRGF0YURpY0VudHJ5EiQKBGRhdGEYBCAD",
-            "KAsyFi5Qcm90b2NvbC5DdXN0b21TdHJ1Y3QSIAoGcmVzdWx0GAUgASgOMhAu",
-            "UHJvdG9jb2wuUmVzdWx0GkQKDERhdGFEaWNFbnRyeRILCgNrZXkYASABKAUS",
-            "IwoFdmFsdWUYAiABKAsyFC5nb29nbGUucHJvdG9idWYuQW55OgI4ASKkAQoM",
-            "U19FVkVOVF9URVNUEiQKBnNlbmRlchgBIAEoCzIULlByb3RvY29sLlBsYXll",
-            "ckluZm8SJgoJZXZlbnRDb2RlGAIgASgOMhMuUHJvdG9jb2wuRXZlbnRDb2Rl",
-            "EiQKBGRhdGEYAyADKAsyFi5Qcm90b2NvbC5DdXN0b21TdHJ1Y3QSIAoGcmVz",
-            "dWx0GAQgASgOMhAuUHJvdG9jb2wuUmVzdWx0IooBCgdTX0VWRU5UEiQKBnNl",
-            "bmRlchgBIAEoCzIULlByb3RvY29sLlBsYXllckluZm8SEQoJZXZlbnRDb2Rl",
-            "GAIgASgFEiQKBGRhdGEYAyADKAsyFi5Qcm90b2NvbC5DdXN0b21TdHJ1Y3QS",
-            "IAoGcmVzdWx0GAQgASgOMhAuUHJvdG9jb2wuUmVzdWx0YgZwcm90bzM="));
+            "ZxgCIAEoCRIgCgZyZXN1bHQYAyABKA4yEC5Qcm90b2NvbC5SZXN1bHQibAoH",
+            "Q19FVkVOVBIRCglldmVudENvZGUYASABKAUSIgoJZml4ZWREYXRhGAIgASgL",
+            "Mg8uUHJvdG9jb2wuUGFja3MSKgoKY3VzdG9tRGF0YRgDIAMoCzIWLlByb3Rv",
+            "Y29sLkN1c3RvbVN0cnVjdCKyCwoFUGFja3MSLgoMY19oZWFydF9iZWF0GAEg",
+            "ASgLMhYuUHJvdG9jb2wuQ19IRUFSVF9CRUFUSAASLgoMc19oZWFydF9iZWF0",
+            "GAIgASgLMhYuUHJvdG9jb2wuU19IRUFSVF9CRUFUSAASQAoVY19yb29tX2pv",
+            "aW5fb3JfY3JlYXRlGAMgASgLMh8uUHJvdG9jb2wuQ19ST09NX0pPSU5fT1Jf",
+            "Q1JFQVRFSAASQAoVc19yb29tX2pvaW5fb3JfY3JlYXRlGAQgASgLMh8uUHJv",
+            "dG9jb2wuU19ST09NX0pPSU5fT1JfQ1JFQVRFSAASMQoLY19yb29tX2xpc3QY",
+            "BSABKAsyGi5Qcm90b2NvbC5DX1RFU1RfUk9PTV9MSVNUSAASMQoLc19yb29t",
+            "X2xpc3QYBiABKAsyGi5Qcm90b2NvbC5TX1RFU1RfUk9PTV9MSVNUSAASLAoL",
+            "Y19wbGF5ZXJfaWQYByABKAsyFS5Qcm90b2NvbC5DX1BMQVlFUl9JREgAEiwK",
+            "C3NfcGxheWVyX2lkGAggASgLMhUuUHJvdG9jb2wuU19QTEFZRVJfSURIABIu",
+            "CgxjX2dyb3VwX2xpc3QYCSABKAsyFi5Qcm90b2NvbC5DX0dST1VQX0xJU1RI",
+            "ABIuCgxzX2dyb3VwX2xpc3QYCiABKAsyFi5Qcm90b2NvbC5TX0dST1VQX0xJ",
+            "U1RIABIuCgxjX2dyb3VwX2pvaW4YCyABKAsyFi5Qcm90b2NvbC5DX0dST1VQ",
+            "X0pPSU5IABIuCgxzX2dyb3VwX2pvaW4YDCABKAsyFi5Qcm90b2NvbC5TX0dS",
+            "T1VQX0pPSU5IABI4ChFjX2luaXRpYWxfb2JqZWN0cxgNIAEoCzIbLlByb3Rv",
+            "Y29sLkNfSU5JVElBTF9PQkpFQ1RTSAASOAoRc19pbml0aWFsX29iamVjdHMY",
+            "DiABKAsyGy5Qcm90b2NvbC5TX0lOSVRJQUxfT0JKRUNUU0gAEkAKFXNfb3Ro",
+            "ZXJfY2xpZW50X2pvaW5lZBgPIAEoCzIfLlByb3RvY29sLlNfT1RIRVJfQ0xJ",
+            "RU5UX0pPSU5FREgAEkAKFWNfYWRkX25ldHdvcmtfb2JqZWN0cxgQIAEoCzIf",
+            "LlByb3RvY29sLkNfQUREX05FVFdPUktfT0JKRUNUU0gAEkAKFXNfYWRkX25l",
+            "dHdvcmtfb2JqZWN0cxgRIAEoCzIfLlByb3RvY29sLlNfQUREX05FVFdPUktf",
+            "T0JKRUNUU0gAEkYKGGNfcmVtb3ZlX25ldHdvcmtfb2JqZWN0cxgSIAEoCzIi",
+            "LlByb3RvY29sLkNfUkVNT1ZFX05FVFdPUktfT0JKRUNUU0gAEkYKGHNfcmVt",
+            "b3ZlX25ldHdvcmtfb2JqZWN0cxgTIAEoCzIiLlByb3RvY29sLlNfUkVNT1ZF",
+            "X05FVFdPUktfT0JKRUNUU0gAEkYKGGNfdXBkYXRlX25ldHdvcmtfb2JqZWN0",
+            "cxgUIAEoCzIiLlByb3RvY29sLkNfVVBEQVRFX05FVFdPUktfT0JKRUNUU0gA",
+            "EkYKGHNfdXBkYXRlX25ldHdvcmtfb2JqZWN0cxgVIAEoCzIiLlByb3RvY29s",
+            "LlNfVVBEQVRFX05FVFdPUktfT0JKRUNUU0gAEkIKFmNfY2hhbmdlX29iamVj",
+            "dHNfb3duZXIYFiABKAsyIC5Qcm90b2NvbC5DX0NIQU5HRV9PQkpFQ1RTX09X",
+            "TkVSSAASQgoWc19jaGFuZ2Vfb2JqZWN0c19vd25lchgXIAEoCzIgLlByb3Rv",
+            "Y29sLlNfQ0hBTkdFX09CSkVDVFNfT1dORVJIABIkCgdjX2V2ZW50GBggASgL",
+            "MhEuUHJvdG9jb2wuQ19FVkVOVEgAEjIKDmhlbGlvc1ZhcmlhYmxlGBkgASgL",
+            "MhguUHJvdG9jb2wuSGVsaW9zVmFyaWFibGVIAEIHCgV2YWx1ZSKNAQoLQ19P",
+            "UEVSQVRJT04SLgoNb3BlcmF0aW9uQ29kZRgBIAEoDjIXLlByb3RvY29sLk9w",
+            "ZXJhdGlvbkNvZGUSIgoJZml4ZWREYXRhGAIgASgLMg8uUHJvdG9jb2wuUGFj",
+            "a3MSKgoKY3VzdG9tRGF0YRgDIAMoCzIWLlByb3RvY29sLkN1c3RvbVN0cnVj",
+            "dCLVAQoLU19PUEVSQVRJT04SLgoNb3BlcmF0aW9uQ29kZRgBIAEoDjIXLlBy",
+            "b3RvY29sLk9wZXJhdGlvbkNvZGUSJAoGc2VuZGVyGAIgASgLMhQuUHJvdG9j",
+            "b2wuUGxheWVySW5mbxIiCglmaXhlZERhdGEYAyABKAsyDy5Qcm90b2NvbC5Q",
+            "YWNrcxIqCgpjdXN0b21EYXRhGAQgAygLMhYuUHJvdG9jb2wuQ3VzdG9tU3Ry",
+            "dWN0EiAKBnJlc3VsdBgFIAEoDjIQLlByb3RvY29sLlJlc3VsdCK0AQoHU19F",
+            "VkVOVBIkCgZzZW5kZXIYASABKAsyFC5Qcm90b2NvbC5QbGF5ZXJJbmZvEhEK",
+            "CWV2ZW50Q29kZRgCIAEoBRIiCglmaXhlZERhdGEYAyABKAsyDy5Qcm90b2Nv",
+            "bC5QYWNrcxIqCgpDdXN0b21EYXRhGAQgAygLMhYuUHJvdG9jb2wuQ3VzdG9t",
+            "U3RydWN0EiAKBnJlc3VsdBgFIAEoDjIQLlByb3RvY29sLlJlc3VsdGIGcHJv",
+            "dG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protocol.EnumReflection.Descriptor, global::Protocol.StructReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.AnyReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -117,11 +142,11 @@ namespace Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.S_CHANGE_OBJECTS_OWNER), global::Protocol.S_CHANGE_OBJECTS_OWNER.Parser, new[]{ "ObjectInfos", "Result" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C_CHAT), global::Protocol.C_CHAT.Parser, new[]{ "Msg" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.S_CHAT), global::Protocol.S_CHAT.Parser, new[]{ "PlayerInfo", "Msg", "Result" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C_EVENT), global::Protocol.C_EVENT.Parser, new[]{ "EventCode", "Parameters", "Data" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C_OPERATION), global::Protocol.C_OPERATION.Parser, new[]{ "OperationCode", "DataDic", "Data" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.S_OPERATION), global::Protocol.S_OPERATION.Parser, new[]{ "OperationCode", "Sender", "DataDic", "Data", "Result" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.S_EVENT_TEST), global::Protocol.S_EVENT_TEST.Parser, new[]{ "Sender", "EventCode", "Data", "Result" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.S_EVENT), global::Protocol.S_EVENT.Parser, new[]{ "Sender", "EventCode", "Data", "Result" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C_EVENT), global::Protocol.C_EVENT.Parser, new[]{ "EventCode", "FixedData", "CustomData" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.Packs), global::Protocol.Packs.Parser, new[]{ "CHeartBeat", "SHeartBeat", "CRoomJoinOrCreate", "SRoomJoinOrCreate", "CRoomList", "SRoomList", "CPlayerId", "SPlayerId", "CGroupList", "SGroupList", "CGroupJoin", "SGroupJoin", "CInitialObjects", "SInitialObjects", "SOtherClientJoined", "CAddNetworkObjects", "SAddNetworkObjects", "CRemoveNetworkObjects", "SRemoveNetworkObjects", "CUpdateNetworkObjects", "SUpdateNetworkObjects", "CChangeObjectsOwner", "SChangeObjectsOwner", "CEvent", "HeliosVariable" }, new[]{ "Value" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C_OPERATION), global::Protocol.C_OPERATION.Parser, new[]{ "OperationCode", "FixedData", "CustomData" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.S_OPERATION), global::Protocol.S_OPERATION.Parser, new[]{ "OperationCode", "Sender", "FixedData", "CustomData", "Result" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.S_EVENT), global::Protocol.S_EVENT.Parser, new[]{ "Sender", "EventCode", "FixedData", "CustomData", "Result" }, null, null, null, null)
           }));
     }
     #endregion
@@ -5339,8 +5364,8 @@ namespace Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public C_EVENT(C_EVENT other) : this() {
       eventCode_ = other.eventCode_;
-      parameters_ = other.parameters_.Clone();
-      data_ = other.data_.Clone();
+      fixedData_ = other.fixedData_ != null ? other.fixedData_.Clone() : null;
+      customData_ = other.customData_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -5362,26 +5387,27 @@ namespace Protocol {
       }
     }
 
-    /// <summary>Field number for the "parameters" field.</summary>
-    public const int ParametersFieldNumber = 2;
-    private static readonly pbc::MapField<int, global::Google.Protobuf.WellKnownTypes.Any>.Codec _map_parameters_codec
-        = new pbc::MapField<int, global::Google.Protobuf.WellKnownTypes.Any>.Codec(pb::FieldCodec.ForInt32(8, 0), pb::FieldCodec.ForMessage(18, global::Google.Protobuf.WellKnownTypes.Any.Parser), 18);
-    private readonly pbc::MapField<int, global::Google.Protobuf.WellKnownTypes.Any> parameters_ = new pbc::MapField<int, global::Google.Protobuf.WellKnownTypes.Any>();
+    /// <summary>Field number for the "fixedData" field.</summary>
+    public const int FixedDataFieldNumber = 2;
+    private global::Protocol.Packs fixedData_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::MapField<int, global::Google.Protobuf.WellKnownTypes.Any> Parameters {
-      get { return parameters_; }
+    public global::Protocol.Packs FixedData {
+      get { return fixedData_; }
+      set {
+        fixedData_ = value;
+      }
     }
 
-    /// <summary>Field number for the "data" field.</summary>
-    public const int DataFieldNumber = 3;
-    private static readonly pb::FieldCodec<global::Protocol.CustomStruct> _repeated_data_codec
+    /// <summary>Field number for the "customData" field.</summary>
+    public const int CustomDataFieldNumber = 3;
+    private static readonly pb::FieldCodec<global::Protocol.CustomStruct> _repeated_customData_codec
         = pb::FieldCodec.ForMessage(26, global::Protocol.CustomStruct.Parser);
-    private readonly pbc::RepeatedField<global::Protocol.CustomStruct> data_ = new pbc::RepeatedField<global::Protocol.CustomStruct>();
+    private readonly pbc::RepeatedField<global::Protocol.CustomStruct> customData_ = new pbc::RepeatedField<global::Protocol.CustomStruct>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Protocol.CustomStruct> Data {
-      get { return data_; }
+    public pbc::RepeatedField<global::Protocol.CustomStruct> CustomData {
+      get { return customData_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5400,8 +5426,8 @@ namespace Protocol {
         return true;
       }
       if (EventCode != other.EventCode) return false;
-      if (!Parameters.Equals(other.Parameters)) return false;
-      if(!data_.Equals(other.data_)) return false;
+      if (!object.Equals(FixedData, other.FixedData)) return false;
+      if(!customData_.Equals(other.customData_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -5410,8 +5436,8 @@ namespace Protocol {
     public override int GetHashCode() {
       int hash = 1;
       if (EventCode != 0) hash ^= EventCode.GetHashCode();
-      hash ^= Parameters.GetHashCode();
-      hash ^= data_.GetHashCode();
+      if (fixedData_ != null) hash ^= FixedData.GetHashCode();
+      hash ^= customData_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -5434,8 +5460,11 @@ namespace Protocol {
         output.WriteRawTag(8);
         output.WriteInt32(EventCode);
       }
-      parameters_.WriteTo(output, _map_parameters_codec);
-      data_.WriteTo(output, _repeated_data_codec);
+      if (fixedData_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(FixedData);
+      }
+      customData_.WriteTo(output, _repeated_customData_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -5450,8 +5479,11 @@ namespace Protocol {
         output.WriteRawTag(8);
         output.WriteInt32(EventCode);
       }
-      parameters_.WriteTo(ref output, _map_parameters_codec);
-      data_.WriteTo(ref output, _repeated_data_codec);
+      if (fixedData_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(FixedData);
+      }
+      customData_.WriteTo(ref output, _repeated_customData_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -5465,8 +5497,10 @@ namespace Protocol {
       if (EventCode != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(EventCode);
       }
-      size += parameters_.CalculateSize(_map_parameters_codec);
-      size += data_.CalculateSize(_repeated_data_codec);
+      if (fixedData_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(FixedData);
+      }
+      size += customData_.CalculateSize(_repeated_customData_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -5482,8 +5516,13 @@ namespace Protocol {
       if (other.EventCode != 0) {
         EventCode = other.EventCode;
       }
-      parameters_.Add(other.parameters_);
-      data_.Add(other.data_);
+      if (other.fixedData_ != null) {
+        if (fixedData_ == null) {
+          FixedData = new global::Protocol.Packs();
+        }
+        FixedData.MergeFrom(other.FixedData);
+      }
+      customData_.Add(other.customData_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -5504,11 +5543,14 @@ namespace Protocol {
             break;
           }
           case 18: {
-            parameters_.AddEntriesFrom(input, _map_parameters_codec);
+            if (fixedData_ == null) {
+              FixedData = new global::Protocol.Packs();
+            }
+            input.ReadMessage(FixedData);
             break;
           }
           case 26: {
-            data_.AddEntriesFrom(input, _repeated_data_codec);
+            customData_.AddEntriesFrom(input, _repeated_customData_codec);
             break;
           }
         }
@@ -5531,11 +5573,1518 @@ namespace Protocol {
             break;
           }
           case 18: {
-            parameters_.AddEntriesFrom(ref input, _map_parameters_codec);
+            if (fixedData_ == null) {
+              FixedData = new global::Protocol.Packs();
+            }
+            input.ReadMessage(FixedData);
             break;
           }
           case 26: {
-            data_.AddEntriesFrom(ref input, _repeated_data_codec);
+            customData_.AddEntriesFrom(ref input, _repeated_customData_codec);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class Packs : pb::IMessage<Packs>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<Packs> _parser = new pb::MessageParser<Packs>(() => new Packs());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<Packs> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protocol.ProtocolReflection.Descriptor.MessageTypes[26]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public Packs() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public Packs(Packs other) : this() {
+      switch (other.ValueCase) {
+        case ValueOneofCase.CHeartBeat:
+          CHeartBeat = other.CHeartBeat.Clone();
+          break;
+        case ValueOneofCase.SHeartBeat:
+          SHeartBeat = other.SHeartBeat.Clone();
+          break;
+        case ValueOneofCase.CRoomJoinOrCreate:
+          CRoomJoinOrCreate = other.CRoomJoinOrCreate.Clone();
+          break;
+        case ValueOneofCase.SRoomJoinOrCreate:
+          SRoomJoinOrCreate = other.SRoomJoinOrCreate.Clone();
+          break;
+        case ValueOneofCase.CRoomList:
+          CRoomList = other.CRoomList.Clone();
+          break;
+        case ValueOneofCase.SRoomList:
+          SRoomList = other.SRoomList.Clone();
+          break;
+        case ValueOneofCase.CPlayerId:
+          CPlayerId = other.CPlayerId.Clone();
+          break;
+        case ValueOneofCase.SPlayerId:
+          SPlayerId = other.SPlayerId.Clone();
+          break;
+        case ValueOneofCase.CGroupList:
+          CGroupList = other.CGroupList.Clone();
+          break;
+        case ValueOneofCase.SGroupList:
+          SGroupList = other.SGroupList.Clone();
+          break;
+        case ValueOneofCase.CGroupJoin:
+          CGroupJoin = other.CGroupJoin.Clone();
+          break;
+        case ValueOneofCase.SGroupJoin:
+          SGroupJoin = other.SGroupJoin.Clone();
+          break;
+        case ValueOneofCase.CInitialObjects:
+          CInitialObjects = other.CInitialObjects.Clone();
+          break;
+        case ValueOneofCase.SInitialObjects:
+          SInitialObjects = other.SInitialObjects.Clone();
+          break;
+        case ValueOneofCase.SOtherClientJoined:
+          SOtherClientJoined = other.SOtherClientJoined.Clone();
+          break;
+        case ValueOneofCase.CAddNetworkObjects:
+          CAddNetworkObjects = other.CAddNetworkObjects.Clone();
+          break;
+        case ValueOneofCase.SAddNetworkObjects:
+          SAddNetworkObjects = other.SAddNetworkObjects.Clone();
+          break;
+        case ValueOneofCase.CRemoveNetworkObjects:
+          CRemoveNetworkObjects = other.CRemoveNetworkObjects.Clone();
+          break;
+        case ValueOneofCase.SRemoveNetworkObjects:
+          SRemoveNetworkObjects = other.SRemoveNetworkObjects.Clone();
+          break;
+        case ValueOneofCase.CUpdateNetworkObjects:
+          CUpdateNetworkObjects = other.CUpdateNetworkObjects.Clone();
+          break;
+        case ValueOneofCase.SUpdateNetworkObjects:
+          SUpdateNetworkObjects = other.SUpdateNetworkObjects.Clone();
+          break;
+        case ValueOneofCase.CChangeObjectsOwner:
+          CChangeObjectsOwner = other.CChangeObjectsOwner.Clone();
+          break;
+        case ValueOneofCase.SChangeObjectsOwner:
+          SChangeObjectsOwner = other.SChangeObjectsOwner.Clone();
+          break;
+        case ValueOneofCase.CEvent:
+          CEvent = other.CEvent.Clone();
+          break;
+        case ValueOneofCase.HeliosVariable:
+          HeliosVariable = other.HeliosVariable.Clone();
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public Packs Clone() {
+      return new Packs(this);
+    }
+
+    /// <summary>Field number for the "c_heart_beat" field.</summary>
+    public const int CHeartBeatFieldNumber = 1;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.C_HEART_BEAT CHeartBeat {
+      get { return valueCase_ == ValueOneofCase.CHeartBeat ? (global::Protocol.C_HEART_BEAT) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.CHeartBeat;
+      }
+    }
+
+    /// <summary>Field number for the "s_heart_beat" field.</summary>
+    public const int SHeartBeatFieldNumber = 2;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.S_HEART_BEAT SHeartBeat {
+      get { return valueCase_ == ValueOneofCase.SHeartBeat ? (global::Protocol.S_HEART_BEAT) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.SHeartBeat;
+      }
+    }
+
+    /// <summary>Field number for the "c_room_join_or_create" field.</summary>
+    public const int CRoomJoinOrCreateFieldNumber = 3;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.C_ROOM_JOIN_OR_CREATE CRoomJoinOrCreate {
+      get { return valueCase_ == ValueOneofCase.CRoomJoinOrCreate ? (global::Protocol.C_ROOM_JOIN_OR_CREATE) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.CRoomJoinOrCreate;
+      }
+    }
+
+    /// <summary>Field number for the "s_room_join_or_create" field.</summary>
+    public const int SRoomJoinOrCreateFieldNumber = 4;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.S_ROOM_JOIN_OR_CREATE SRoomJoinOrCreate {
+      get { return valueCase_ == ValueOneofCase.SRoomJoinOrCreate ? (global::Protocol.S_ROOM_JOIN_OR_CREATE) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.SRoomJoinOrCreate;
+      }
+    }
+
+    /// <summary>Field number for the "c_room_list" field.</summary>
+    public const int CRoomListFieldNumber = 5;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.C_TEST_ROOM_LIST CRoomList {
+      get { return valueCase_ == ValueOneofCase.CRoomList ? (global::Protocol.C_TEST_ROOM_LIST) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.CRoomList;
+      }
+    }
+
+    /// <summary>Field number for the "s_room_list" field.</summary>
+    public const int SRoomListFieldNumber = 6;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.S_TEST_ROOM_LIST SRoomList {
+      get { return valueCase_ == ValueOneofCase.SRoomList ? (global::Protocol.S_TEST_ROOM_LIST) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.SRoomList;
+      }
+    }
+
+    /// <summary>Field number for the "c_player_id" field.</summary>
+    public const int CPlayerIdFieldNumber = 7;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.C_PLAYER_ID CPlayerId {
+      get { return valueCase_ == ValueOneofCase.CPlayerId ? (global::Protocol.C_PLAYER_ID) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.CPlayerId;
+      }
+    }
+
+    /// <summary>Field number for the "s_player_id" field.</summary>
+    public const int SPlayerIdFieldNumber = 8;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.S_PLAYER_ID SPlayerId {
+      get { return valueCase_ == ValueOneofCase.SPlayerId ? (global::Protocol.S_PLAYER_ID) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.SPlayerId;
+      }
+    }
+
+    /// <summary>Field number for the "c_group_list" field.</summary>
+    public const int CGroupListFieldNumber = 9;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.C_GROUP_LIST CGroupList {
+      get { return valueCase_ == ValueOneofCase.CGroupList ? (global::Protocol.C_GROUP_LIST) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.CGroupList;
+      }
+    }
+
+    /// <summary>Field number for the "s_group_list" field.</summary>
+    public const int SGroupListFieldNumber = 10;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.S_GROUP_LIST SGroupList {
+      get { return valueCase_ == ValueOneofCase.SGroupList ? (global::Protocol.S_GROUP_LIST) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.SGroupList;
+      }
+    }
+
+    /// <summary>Field number for the "c_group_join" field.</summary>
+    public const int CGroupJoinFieldNumber = 11;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.C_GROUP_JOIN CGroupJoin {
+      get { return valueCase_ == ValueOneofCase.CGroupJoin ? (global::Protocol.C_GROUP_JOIN) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.CGroupJoin;
+      }
+    }
+
+    /// <summary>Field number for the "s_group_join" field.</summary>
+    public const int SGroupJoinFieldNumber = 12;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.S_GROUP_JOIN SGroupJoin {
+      get { return valueCase_ == ValueOneofCase.SGroupJoin ? (global::Protocol.S_GROUP_JOIN) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.SGroupJoin;
+      }
+    }
+
+    /// <summary>Field number for the "c_initial_objects" field.</summary>
+    public const int CInitialObjectsFieldNumber = 13;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.C_INITIAL_OBJECTS CInitialObjects {
+      get { return valueCase_ == ValueOneofCase.CInitialObjects ? (global::Protocol.C_INITIAL_OBJECTS) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.CInitialObjects;
+      }
+    }
+
+    /// <summary>Field number for the "s_initial_objects" field.</summary>
+    public const int SInitialObjectsFieldNumber = 14;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.S_INITIAL_OBJECTS SInitialObjects {
+      get { return valueCase_ == ValueOneofCase.SInitialObjects ? (global::Protocol.S_INITIAL_OBJECTS) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.SInitialObjects;
+      }
+    }
+
+    /// <summary>Field number for the "s_other_client_joined" field.</summary>
+    public const int SOtherClientJoinedFieldNumber = 15;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.S_OTHER_CLIENT_JOINED SOtherClientJoined {
+      get { return valueCase_ == ValueOneofCase.SOtherClientJoined ? (global::Protocol.S_OTHER_CLIENT_JOINED) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.SOtherClientJoined;
+      }
+    }
+
+    /// <summary>Field number for the "c_add_network_objects" field.</summary>
+    public const int CAddNetworkObjectsFieldNumber = 16;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.C_ADD_NETWORK_OBJECTS CAddNetworkObjects {
+      get { return valueCase_ == ValueOneofCase.CAddNetworkObjects ? (global::Protocol.C_ADD_NETWORK_OBJECTS) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.CAddNetworkObjects;
+      }
+    }
+
+    /// <summary>Field number for the "s_add_network_objects" field.</summary>
+    public const int SAddNetworkObjectsFieldNumber = 17;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.S_ADD_NETWORK_OBJECTS SAddNetworkObjects {
+      get { return valueCase_ == ValueOneofCase.SAddNetworkObjects ? (global::Protocol.S_ADD_NETWORK_OBJECTS) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.SAddNetworkObjects;
+      }
+    }
+
+    /// <summary>Field number for the "c_remove_network_objects" field.</summary>
+    public const int CRemoveNetworkObjectsFieldNumber = 18;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.C_REMOVE_NETWORK_OBJECTS CRemoveNetworkObjects {
+      get { return valueCase_ == ValueOneofCase.CRemoveNetworkObjects ? (global::Protocol.C_REMOVE_NETWORK_OBJECTS) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.CRemoveNetworkObjects;
+      }
+    }
+
+    /// <summary>Field number for the "s_remove_network_objects" field.</summary>
+    public const int SRemoveNetworkObjectsFieldNumber = 19;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.S_REMOVE_NETWORK_OBJECTS SRemoveNetworkObjects {
+      get { return valueCase_ == ValueOneofCase.SRemoveNetworkObjects ? (global::Protocol.S_REMOVE_NETWORK_OBJECTS) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.SRemoveNetworkObjects;
+      }
+    }
+
+    /// <summary>Field number for the "c_update_network_objects" field.</summary>
+    public const int CUpdateNetworkObjectsFieldNumber = 20;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.C_UPDATE_NETWORK_OBJECTS CUpdateNetworkObjects {
+      get { return valueCase_ == ValueOneofCase.CUpdateNetworkObjects ? (global::Protocol.C_UPDATE_NETWORK_OBJECTS) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.CUpdateNetworkObjects;
+      }
+    }
+
+    /// <summary>Field number for the "s_update_network_objects" field.</summary>
+    public const int SUpdateNetworkObjectsFieldNumber = 21;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.S_UPDATE_NETWORK_OBJECTS SUpdateNetworkObjects {
+      get { return valueCase_ == ValueOneofCase.SUpdateNetworkObjects ? (global::Protocol.S_UPDATE_NETWORK_OBJECTS) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.SUpdateNetworkObjects;
+      }
+    }
+
+    /// <summary>Field number for the "c_change_objects_owner" field.</summary>
+    public const int CChangeObjectsOwnerFieldNumber = 22;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.C_CHANGE_OBJECTS_OWNER CChangeObjectsOwner {
+      get { return valueCase_ == ValueOneofCase.CChangeObjectsOwner ? (global::Protocol.C_CHANGE_OBJECTS_OWNER) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.CChangeObjectsOwner;
+      }
+    }
+
+    /// <summary>Field number for the "s_change_objects_owner" field.</summary>
+    public const int SChangeObjectsOwnerFieldNumber = 23;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.S_CHANGE_OBJECTS_OWNER SChangeObjectsOwner {
+      get { return valueCase_ == ValueOneofCase.SChangeObjectsOwner ? (global::Protocol.S_CHANGE_OBJECTS_OWNER) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.SChangeObjectsOwner;
+      }
+    }
+
+    /// <summary>Field number for the "c_event" field.</summary>
+    public const int CEventFieldNumber = 24;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.C_EVENT CEvent {
+      get { return valueCase_ == ValueOneofCase.CEvent ? (global::Protocol.C_EVENT) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.CEvent;
+      }
+    }
+
+    /// <summary>Field number for the "heliosVariable" field.</summary>
+    public const int HeliosVariableFieldNumber = 25;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Protocol.HeliosVariable HeliosVariable {
+      get { return valueCase_ == ValueOneofCase.HeliosVariable ? (global::Protocol.HeliosVariable) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.HeliosVariable;
+      }
+    }
+
+    private object value_;
+    /// <summary>Enum of possible cases for the "value" oneof.</summary>
+    public enum ValueOneofCase {
+      None = 0,
+      CHeartBeat = 1,
+      SHeartBeat = 2,
+      CRoomJoinOrCreate = 3,
+      SRoomJoinOrCreate = 4,
+      CRoomList = 5,
+      SRoomList = 6,
+      CPlayerId = 7,
+      SPlayerId = 8,
+      CGroupList = 9,
+      SGroupList = 10,
+      CGroupJoin = 11,
+      SGroupJoin = 12,
+      CInitialObjects = 13,
+      SInitialObjects = 14,
+      SOtherClientJoined = 15,
+      CAddNetworkObjects = 16,
+      SAddNetworkObjects = 17,
+      CRemoveNetworkObjects = 18,
+      SRemoveNetworkObjects = 19,
+      CUpdateNetworkObjects = 20,
+      SUpdateNetworkObjects = 21,
+      CChangeObjectsOwner = 22,
+      SChangeObjectsOwner = 23,
+      CEvent = 24,
+      HeliosVariable = 25,
+    }
+    private ValueOneofCase valueCase_ = ValueOneofCase.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ValueOneofCase ValueCase {
+      get { return valueCase_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearValue() {
+      valueCase_ = ValueOneofCase.None;
+      value_ = null;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as Packs);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(Packs other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(CHeartBeat, other.CHeartBeat)) return false;
+      if (!object.Equals(SHeartBeat, other.SHeartBeat)) return false;
+      if (!object.Equals(CRoomJoinOrCreate, other.CRoomJoinOrCreate)) return false;
+      if (!object.Equals(SRoomJoinOrCreate, other.SRoomJoinOrCreate)) return false;
+      if (!object.Equals(CRoomList, other.CRoomList)) return false;
+      if (!object.Equals(SRoomList, other.SRoomList)) return false;
+      if (!object.Equals(CPlayerId, other.CPlayerId)) return false;
+      if (!object.Equals(SPlayerId, other.SPlayerId)) return false;
+      if (!object.Equals(CGroupList, other.CGroupList)) return false;
+      if (!object.Equals(SGroupList, other.SGroupList)) return false;
+      if (!object.Equals(CGroupJoin, other.CGroupJoin)) return false;
+      if (!object.Equals(SGroupJoin, other.SGroupJoin)) return false;
+      if (!object.Equals(CInitialObjects, other.CInitialObjects)) return false;
+      if (!object.Equals(SInitialObjects, other.SInitialObjects)) return false;
+      if (!object.Equals(SOtherClientJoined, other.SOtherClientJoined)) return false;
+      if (!object.Equals(CAddNetworkObjects, other.CAddNetworkObjects)) return false;
+      if (!object.Equals(SAddNetworkObjects, other.SAddNetworkObjects)) return false;
+      if (!object.Equals(CRemoveNetworkObjects, other.CRemoveNetworkObjects)) return false;
+      if (!object.Equals(SRemoveNetworkObjects, other.SRemoveNetworkObjects)) return false;
+      if (!object.Equals(CUpdateNetworkObjects, other.CUpdateNetworkObjects)) return false;
+      if (!object.Equals(SUpdateNetworkObjects, other.SUpdateNetworkObjects)) return false;
+      if (!object.Equals(CChangeObjectsOwner, other.CChangeObjectsOwner)) return false;
+      if (!object.Equals(SChangeObjectsOwner, other.SChangeObjectsOwner)) return false;
+      if (!object.Equals(CEvent, other.CEvent)) return false;
+      if (!object.Equals(HeliosVariable, other.HeliosVariable)) return false;
+      if (ValueCase != other.ValueCase) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (valueCase_ == ValueOneofCase.CHeartBeat) hash ^= CHeartBeat.GetHashCode();
+      if (valueCase_ == ValueOneofCase.SHeartBeat) hash ^= SHeartBeat.GetHashCode();
+      if (valueCase_ == ValueOneofCase.CRoomJoinOrCreate) hash ^= CRoomJoinOrCreate.GetHashCode();
+      if (valueCase_ == ValueOneofCase.SRoomJoinOrCreate) hash ^= SRoomJoinOrCreate.GetHashCode();
+      if (valueCase_ == ValueOneofCase.CRoomList) hash ^= CRoomList.GetHashCode();
+      if (valueCase_ == ValueOneofCase.SRoomList) hash ^= SRoomList.GetHashCode();
+      if (valueCase_ == ValueOneofCase.CPlayerId) hash ^= CPlayerId.GetHashCode();
+      if (valueCase_ == ValueOneofCase.SPlayerId) hash ^= SPlayerId.GetHashCode();
+      if (valueCase_ == ValueOneofCase.CGroupList) hash ^= CGroupList.GetHashCode();
+      if (valueCase_ == ValueOneofCase.SGroupList) hash ^= SGroupList.GetHashCode();
+      if (valueCase_ == ValueOneofCase.CGroupJoin) hash ^= CGroupJoin.GetHashCode();
+      if (valueCase_ == ValueOneofCase.SGroupJoin) hash ^= SGroupJoin.GetHashCode();
+      if (valueCase_ == ValueOneofCase.CInitialObjects) hash ^= CInitialObjects.GetHashCode();
+      if (valueCase_ == ValueOneofCase.SInitialObjects) hash ^= SInitialObjects.GetHashCode();
+      if (valueCase_ == ValueOneofCase.SOtherClientJoined) hash ^= SOtherClientJoined.GetHashCode();
+      if (valueCase_ == ValueOneofCase.CAddNetworkObjects) hash ^= CAddNetworkObjects.GetHashCode();
+      if (valueCase_ == ValueOneofCase.SAddNetworkObjects) hash ^= SAddNetworkObjects.GetHashCode();
+      if (valueCase_ == ValueOneofCase.CRemoveNetworkObjects) hash ^= CRemoveNetworkObjects.GetHashCode();
+      if (valueCase_ == ValueOneofCase.SRemoveNetworkObjects) hash ^= SRemoveNetworkObjects.GetHashCode();
+      if (valueCase_ == ValueOneofCase.CUpdateNetworkObjects) hash ^= CUpdateNetworkObjects.GetHashCode();
+      if (valueCase_ == ValueOneofCase.SUpdateNetworkObjects) hash ^= SUpdateNetworkObjects.GetHashCode();
+      if (valueCase_ == ValueOneofCase.CChangeObjectsOwner) hash ^= CChangeObjectsOwner.GetHashCode();
+      if (valueCase_ == ValueOneofCase.SChangeObjectsOwner) hash ^= SChangeObjectsOwner.GetHashCode();
+      if (valueCase_ == ValueOneofCase.CEvent) hash ^= CEvent.GetHashCode();
+      if (valueCase_ == ValueOneofCase.HeliosVariable) hash ^= HeliosVariable.GetHashCode();
+      hash ^= (int) valueCase_;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (valueCase_ == ValueOneofCase.CHeartBeat) {
+        output.WriteRawTag(10);
+        output.WriteMessage(CHeartBeat);
+      }
+      if (valueCase_ == ValueOneofCase.SHeartBeat) {
+        output.WriteRawTag(18);
+        output.WriteMessage(SHeartBeat);
+      }
+      if (valueCase_ == ValueOneofCase.CRoomJoinOrCreate) {
+        output.WriteRawTag(26);
+        output.WriteMessage(CRoomJoinOrCreate);
+      }
+      if (valueCase_ == ValueOneofCase.SRoomJoinOrCreate) {
+        output.WriteRawTag(34);
+        output.WriteMessage(SRoomJoinOrCreate);
+      }
+      if (valueCase_ == ValueOneofCase.CRoomList) {
+        output.WriteRawTag(42);
+        output.WriteMessage(CRoomList);
+      }
+      if (valueCase_ == ValueOneofCase.SRoomList) {
+        output.WriteRawTag(50);
+        output.WriteMessage(SRoomList);
+      }
+      if (valueCase_ == ValueOneofCase.CPlayerId) {
+        output.WriteRawTag(58);
+        output.WriteMessage(CPlayerId);
+      }
+      if (valueCase_ == ValueOneofCase.SPlayerId) {
+        output.WriteRawTag(66);
+        output.WriteMessage(SPlayerId);
+      }
+      if (valueCase_ == ValueOneofCase.CGroupList) {
+        output.WriteRawTag(74);
+        output.WriteMessage(CGroupList);
+      }
+      if (valueCase_ == ValueOneofCase.SGroupList) {
+        output.WriteRawTag(82);
+        output.WriteMessage(SGroupList);
+      }
+      if (valueCase_ == ValueOneofCase.CGroupJoin) {
+        output.WriteRawTag(90);
+        output.WriteMessage(CGroupJoin);
+      }
+      if (valueCase_ == ValueOneofCase.SGroupJoin) {
+        output.WriteRawTag(98);
+        output.WriteMessage(SGroupJoin);
+      }
+      if (valueCase_ == ValueOneofCase.CInitialObjects) {
+        output.WriteRawTag(106);
+        output.WriteMessage(CInitialObjects);
+      }
+      if (valueCase_ == ValueOneofCase.SInitialObjects) {
+        output.WriteRawTag(114);
+        output.WriteMessage(SInitialObjects);
+      }
+      if (valueCase_ == ValueOneofCase.SOtherClientJoined) {
+        output.WriteRawTag(122);
+        output.WriteMessage(SOtherClientJoined);
+      }
+      if (valueCase_ == ValueOneofCase.CAddNetworkObjects) {
+        output.WriteRawTag(130, 1);
+        output.WriteMessage(CAddNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.SAddNetworkObjects) {
+        output.WriteRawTag(138, 1);
+        output.WriteMessage(SAddNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.CRemoveNetworkObjects) {
+        output.WriteRawTag(146, 1);
+        output.WriteMessage(CRemoveNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.SRemoveNetworkObjects) {
+        output.WriteRawTag(154, 1);
+        output.WriteMessage(SRemoveNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.CUpdateNetworkObjects) {
+        output.WriteRawTag(162, 1);
+        output.WriteMessage(CUpdateNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.SUpdateNetworkObjects) {
+        output.WriteRawTag(170, 1);
+        output.WriteMessage(SUpdateNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.CChangeObjectsOwner) {
+        output.WriteRawTag(178, 1);
+        output.WriteMessage(CChangeObjectsOwner);
+      }
+      if (valueCase_ == ValueOneofCase.SChangeObjectsOwner) {
+        output.WriteRawTag(186, 1);
+        output.WriteMessage(SChangeObjectsOwner);
+      }
+      if (valueCase_ == ValueOneofCase.CEvent) {
+        output.WriteRawTag(194, 1);
+        output.WriteMessage(CEvent);
+      }
+      if (valueCase_ == ValueOneofCase.HeliosVariable) {
+        output.WriteRawTag(202, 1);
+        output.WriteMessage(HeliosVariable);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (valueCase_ == ValueOneofCase.CHeartBeat) {
+        output.WriteRawTag(10);
+        output.WriteMessage(CHeartBeat);
+      }
+      if (valueCase_ == ValueOneofCase.SHeartBeat) {
+        output.WriteRawTag(18);
+        output.WriteMessage(SHeartBeat);
+      }
+      if (valueCase_ == ValueOneofCase.CRoomJoinOrCreate) {
+        output.WriteRawTag(26);
+        output.WriteMessage(CRoomJoinOrCreate);
+      }
+      if (valueCase_ == ValueOneofCase.SRoomJoinOrCreate) {
+        output.WriteRawTag(34);
+        output.WriteMessage(SRoomJoinOrCreate);
+      }
+      if (valueCase_ == ValueOneofCase.CRoomList) {
+        output.WriteRawTag(42);
+        output.WriteMessage(CRoomList);
+      }
+      if (valueCase_ == ValueOneofCase.SRoomList) {
+        output.WriteRawTag(50);
+        output.WriteMessage(SRoomList);
+      }
+      if (valueCase_ == ValueOneofCase.CPlayerId) {
+        output.WriteRawTag(58);
+        output.WriteMessage(CPlayerId);
+      }
+      if (valueCase_ == ValueOneofCase.SPlayerId) {
+        output.WriteRawTag(66);
+        output.WriteMessage(SPlayerId);
+      }
+      if (valueCase_ == ValueOneofCase.CGroupList) {
+        output.WriteRawTag(74);
+        output.WriteMessage(CGroupList);
+      }
+      if (valueCase_ == ValueOneofCase.SGroupList) {
+        output.WriteRawTag(82);
+        output.WriteMessage(SGroupList);
+      }
+      if (valueCase_ == ValueOneofCase.CGroupJoin) {
+        output.WriteRawTag(90);
+        output.WriteMessage(CGroupJoin);
+      }
+      if (valueCase_ == ValueOneofCase.SGroupJoin) {
+        output.WriteRawTag(98);
+        output.WriteMessage(SGroupJoin);
+      }
+      if (valueCase_ == ValueOneofCase.CInitialObjects) {
+        output.WriteRawTag(106);
+        output.WriteMessage(CInitialObjects);
+      }
+      if (valueCase_ == ValueOneofCase.SInitialObjects) {
+        output.WriteRawTag(114);
+        output.WriteMessage(SInitialObjects);
+      }
+      if (valueCase_ == ValueOneofCase.SOtherClientJoined) {
+        output.WriteRawTag(122);
+        output.WriteMessage(SOtherClientJoined);
+      }
+      if (valueCase_ == ValueOneofCase.CAddNetworkObjects) {
+        output.WriteRawTag(130, 1);
+        output.WriteMessage(CAddNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.SAddNetworkObjects) {
+        output.WriteRawTag(138, 1);
+        output.WriteMessage(SAddNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.CRemoveNetworkObjects) {
+        output.WriteRawTag(146, 1);
+        output.WriteMessage(CRemoveNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.SRemoveNetworkObjects) {
+        output.WriteRawTag(154, 1);
+        output.WriteMessage(SRemoveNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.CUpdateNetworkObjects) {
+        output.WriteRawTag(162, 1);
+        output.WriteMessage(CUpdateNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.SUpdateNetworkObjects) {
+        output.WriteRawTag(170, 1);
+        output.WriteMessage(SUpdateNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.CChangeObjectsOwner) {
+        output.WriteRawTag(178, 1);
+        output.WriteMessage(CChangeObjectsOwner);
+      }
+      if (valueCase_ == ValueOneofCase.SChangeObjectsOwner) {
+        output.WriteRawTag(186, 1);
+        output.WriteMessage(SChangeObjectsOwner);
+      }
+      if (valueCase_ == ValueOneofCase.CEvent) {
+        output.WriteRawTag(194, 1);
+        output.WriteMessage(CEvent);
+      }
+      if (valueCase_ == ValueOneofCase.HeliosVariable) {
+        output.WriteRawTag(202, 1);
+        output.WriteMessage(HeliosVariable);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (valueCase_ == ValueOneofCase.CHeartBeat) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CHeartBeat);
+      }
+      if (valueCase_ == ValueOneofCase.SHeartBeat) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(SHeartBeat);
+      }
+      if (valueCase_ == ValueOneofCase.CRoomJoinOrCreate) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CRoomJoinOrCreate);
+      }
+      if (valueCase_ == ValueOneofCase.SRoomJoinOrCreate) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(SRoomJoinOrCreate);
+      }
+      if (valueCase_ == ValueOneofCase.CRoomList) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CRoomList);
+      }
+      if (valueCase_ == ValueOneofCase.SRoomList) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(SRoomList);
+      }
+      if (valueCase_ == ValueOneofCase.CPlayerId) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CPlayerId);
+      }
+      if (valueCase_ == ValueOneofCase.SPlayerId) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(SPlayerId);
+      }
+      if (valueCase_ == ValueOneofCase.CGroupList) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CGroupList);
+      }
+      if (valueCase_ == ValueOneofCase.SGroupList) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(SGroupList);
+      }
+      if (valueCase_ == ValueOneofCase.CGroupJoin) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CGroupJoin);
+      }
+      if (valueCase_ == ValueOneofCase.SGroupJoin) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(SGroupJoin);
+      }
+      if (valueCase_ == ValueOneofCase.CInitialObjects) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CInitialObjects);
+      }
+      if (valueCase_ == ValueOneofCase.SInitialObjects) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(SInitialObjects);
+      }
+      if (valueCase_ == ValueOneofCase.SOtherClientJoined) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(SOtherClientJoined);
+      }
+      if (valueCase_ == ValueOneofCase.CAddNetworkObjects) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(CAddNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.SAddNetworkObjects) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(SAddNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.CRemoveNetworkObjects) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(CRemoveNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.SRemoveNetworkObjects) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(SRemoveNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.CUpdateNetworkObjects) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(CUpdateNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.SUpdateNetworkObjects) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(SUpdateNetworkObjects);
+      }
+      if (valueCase_ == ValueOneofCase.CChangeObjectsOwner) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(CChangeObjectsOwner);
+      }
+      if (valueCase_ == ValueOneofCase.SChangeObjectsOwner) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(SChangeObjectsOwner);
+      }
+      if (valueCase_ == ValueOneofCase.CEvent) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(CEvent);
+      }
+      if (valueCase_ == ValueOneofCase.HeliosVariable) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(HeliosVariable);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(Packs other) {
+      if (other == null) {
+        return;
+      }
+      switch (other.ValueCase) {
+        case ValueOneofCase.CHeartBeat:
+          if (CHeartBeat == null) {
+            CHeartBeat = new global::Protocol.C_HEART_BEAT();
+          }
+          CHeartBeat.MergeFrom(other.CHeartBeat);
+          break;
+        case ValueOneofCase.SHeartBeat:
+          if (SHeartBeat == null) {
+            SHeartBeat = new global::Protocol.S_HEART_BEAT();
+          }
+          SHeartBeat.MergeFrom(other.SHeartBeat);
+          break;
+        case ValueOneofCase.CRoomJoinOrCreate:
+          if (CRoomJoinOrCreate == null) {
+            CRoomJoinOrCreate = new global::Protocol.C_ROOM_JOIN_OR_CREATE();
+          }
+          CRoomJoinOrCreate.MergeFrom(other.CRoomJoinOrCreate);
+          break;
+        case ValueOneofCase.SRoomJoinOrCreate:
+          if (SRoomJoinOrCreate == null) {
+            SRoomJoinOrCreate = new global::Protocol.S_ROOM_JOIN_OR_CREATE();
+          }
+          SRoomJoinOrCreate.MergeFrom(other.SRoomJoinOrCreate);
+          break;
+        case ValueOneofCase.CRoomList:
+          if (CRoomList == null) {
+            CRoomList = new global::Protocol.C_TEST_ROOM_LIST();
+          }
+          CRoomList.MergeFrom(other.CRoomList);
+          break;
+        case ValueOneofCase.SRoomList:
+          if (SRoomList == null) {
+            SRoomList = new global::Protocol.S_TEST_ROOM_LIST();
+          }
+          SRoomList.MergeFrom(other.SRoomList);
+          break;
+        case ValueOneofCase.CPlayerId:
+          if (CPlayerId == null) {
+            CPlayerId = new global::Protocol.C_PLAYER_ID();
+          }
+          CPlayerId.MergeFrom(other.CPlayerId);
+          break;
+        case ValueOneofCase.SPlayerId:
+          if (SPlayerId == null) {
+            SPlayerId = new global::Protocol.S_PLAYER_ID();
+          }
+          SPlayerId.MergeFrom(other.SPlayerId);
+          break;
+        case ValueOneofCase.CGroupList:
+          if (CGroupList == null) {
+            CGroupList = new global::Protocol.C_GROUP_LIST();
+          }
+          CGroupList.MergeFrom(other.CGroupList);
+          break;
+        case ValueOneofCase.SGroupList:
+          if (SGroupList == null) {
+            SGroupList = new global::Protocol.S_GROUP_LIST();
+          }
+          SGroupList.MergeFrom(other.SGroupList);
+          break;
+        case ValueOneofCase.CGroupJoin:
+          if (CGroupJoin == null) {
+            CGroupJoin = new global::Protocol.C_GROUP_JOIN();
+          }
+          CGroupJoin.MergeFrom(other.CGroupJoin);
+          break;
+        case ValueOneofCase.SGroupJoin:
+          if (SGroupJoin == null) {
+            SGroupJoin = new global::Protocol.S_GROUP_JOIN();
+          }
+          SGroupJoin.MergeFrom(other.SGroupJoin);
+          break;
+        case ValueOneofCase.CInitialObjects:
+          if (CInitialObjects == null) {
+            CInitialObjects = new global::Protocol.C_INITIAL_OBJECTS();
+          }
+          CInitialObjects.MergeFrom(other.CInitialObjects);
+          break;
+        case ValueOneofCase.SInitialObjects:
+          if (SInitialObjects == null) {
+            SInitialObjects = new global::Protocol.S_INITIAL_OBJECTS();
+          }
+          SInitialObjects.MergeFrom(other.SInitialObjects);
+          break;
+        case ValueOneofCase.SOtherClientJoined:
+          if (SOtherClientJoined == null) {
+            SOtherClientJoined = new global::Protocol.S_OTHER_CLIENT_JOINED();
+          }
+          SOtherClientJoined.MergeFrom(other.SOtherClientJoined);
+          break;
+        case ValueOneofCase.CAddNetworkObjects:
+          if (CAddNetworkObjects == null) {
+            CAddNetworkObjects = new global::Protocol.C_ADD_NETWORK_OBJECTS();
+          }
+          CAddNetworkObjects.MergeFrom(other.CAddNetworkObjects);
+          break;
+        case ValueOneofCase.SAddNetworkObjects:
+          if (SAddNetworkObjects == null) {
+            SAddNetworkObjects = new global::Protocol.S_ADD_NETWORK_OBJECTS();
+          }
+          SAddNetworkObjects.MergeFrom(other.SAddNetworkObjects);
+          break;
+        case ValueOneofCase.CRemoveNetworkObjects:
+          if (CRemoveNetworkObjects == null) {
+            CRemoveNetworkObjects = new global::Protocol.C_REMOVE_NETWORK_OBJECTS();
+          }
+          CRemoveNetworkObjects.MergeFrom(other.CRemoveNetworkObjects);
+          break;
+        case ValueOneofCase.SRemoveNetworkObjects:
+          if (SRemoveNetworkObjects == null) {
+            SRemoveNetworkObjects = new global::Protocol.S_REMOVE_NETWORK_OBJECTS();
+          }
+          SRemoveNetworkObjects.MergeFrom(other.SRemoveNetworkObjects);
+          break;
+        case ValueOneofCase.CUpdateNetworkObjects:
+          if (CUpdateNetworkObjects == null) {
+            CUpdateNetworkObjects = new global::Protocol.C_UPDATE_NETWORK_OBJECTS();
+          }
+          CUpdateNetworkObjects.MergeFrom(other.CUpdateNetworkObjects);
+          break;
+        case ValueOneofCase.SUpdateNetworkObjects:
+          if (SUpdateNetworkObjects == null) {
+            SUpdateNetworkObjects = new global::Protocol.S_UPDATE_NETWORK_OBJECTS();
+          }
+          SUpdateNetworkObjects.MergeFrom(other.SUpdateNetworkObjects);
+          break;
+        case ValueOneofCase.CChangeObjectsOwner:
+          if (CChangeObjectsOwner == null) {
+            CChangeObjectsOwner = new global::Protocol.C_CHANGE_OBJECTS_OWNER();
+          }
+          CChangeObjectsOwner.MergeFrom(other.CChangeObjectsOwner);
+          break;
+        case ValueOneofCase.SChangeObjectsOwner:
+          if (SChangeObjectsOwner == null) {
+            SChangeObjectsOwner = new global::Protocol.S_CHANGE_OBJECTS_OWNER();
+          }
+          SChangeObjectsOwner.MergeFrom(other.SChangeObjectsOwner);
+          break;
+        case ValueOneofCase.CEvent:
+          if (CEvent == null) {
+            CEvent = new global::Protocol.C_EVENT();
+          }
+          CEvent.MergeFrom(other.CEvent);
+          break;
+        case ValueOneofCase.HeliosVariable:
+          if (HeliosVariable == null) {
+            HeliosVariable = new global::Protocol.HeliosVariable();
+          }
+          HeliosVariable.MergeFrom(other.HeliosVariable);
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            global::Protocol.C_HEART_BEAT subBuilder = new global::Protocol.C_HEART_BEAT();
+            if (valueCase_ == ValueOneofCase.CHeartBeat) {
+              subBuilder.MergeFrom(CHeartBeat);
+            }
+            input.ReadMessage(subBuilder);
+            CHeartBeat = subBuilder;
+            break;
+          }
+          case 18: {
+            global::Protocol.S_HEART_BEAT subBuilder = new global::Protocol.S_HEART_BEAT();
+            if (valueCase_ == ValueOneofCase.SHeartBeat) {
+              subBuilder.MergeFrom(SHeartBeat);
+            }
+            input.ReadMessage(subBuilder);
+            SHeartBeat = subBuilder;
+            break;
+          }
+          case 26: {
+            global::Protocol.C_ROOM_JOIN_OR_CREATE subBuilder = new global::Protocol.C_ROOM_JOIN_OR_CREATE();
+            if (valueCase_ == ValueOneofCase.CRoomJoinOrCreate) {
+              subBuilder.MergeFrom(CRoomJoinOrCreate);
+            }
+            input.ReadMessage(subBuilder);
+            CRoomJoinOrCreate = subBuilder;
+            break;
+          }
+          case 34: {
+            global::Protocol.S_ROOM_JOIN_OR_CREATE subBuilder = new global::Protocol.S_ROOM_JOIN_OR_CREATE();
+            if (valueCase_ == ValueOneofCase.SRoomJoinOrCreate) {
+              subBuilder.MergeFrom(SRoomJoinOrCreate);
+            }
+            input.ReadMessage(subBuilder);
+            SRoomJoinOrCreate = subBuilder;
+            break;
+          }
+          case 42: {
+            global::Protocol.C_TEST_ROOM_LIST subBuilder = new global::Protocol.C_TEST_ROOM_LIST();
+            if (valueCase_ == ValueOneofCase.CRoomList) {
+              subBuilder.MergeFrom(CRoomList);
+            }
+            input.ReadMessage(subBuilder);
+            CRoomList = subBuilder;
+            break;
+          }
+          case 50: {
+            global::Protocol.S_TEST_ROOM_LIST subBuilder = new global::Protocol.S_TEST_ROOM_LIST();
+            if (valueCase_ == ValueOneofCase.SRoomList) {
+              subBuilder.MergeFrom(SRoomList);
+            }
+            input.ReadMessage(subBuilder);
+            SRoomList = subBuilder;
+            break;
+          }
+          case 58: {
+            global::Protocol.C_PLAYER_ID subBuilder = new global::Protocol.C_PLAYER_ID();
+            if (valueCase_ == ValueOneofCase.CPlayerId) {
+              subBuilder.MergeFrom(CPlayerId);
+            }
+            input.ReadMessage(subBuilder);
+            CPlayerId = subBuilder;
+            break;
+          }
+          case 66: {
+            global::Protocol.S_PLAYER_ID subBuilder = new global::Protocol.S_PLAYER_ID();
+            if (valueCase_ == ValueOneofCase.SPlayerId) {
+              subBuilder.MergeFrom(SPlayerId);
+            }
+            input.ReadMessage(subBuilder);
+            SPlayerId = subBuilder;
+            break;
+          }
+          case 74: {
+            global::Protocol.C_GROUP_LIST subBuilder = new global::Protocol.C_GROUP_LIST();
+            if (valueCase_ == ValueOneofCase.CGroupList) {
+              subBuilder.MergeFrom(CGroupList);
+            }
+            input.ReadMessage(subBuilder);
+            CGroupList = subBuilder;
+            break;
+          }
+          case 82: {
+            global::Protocol.S_GROUP_LIST subBuilder = new global::Protocol.S_GROUP_LIST();
+            if (valueCase_ == ValueOneofCase.SGroupList) {
+              subBuilder.MergeFrom(SGroupList);
+            }
+            input.ReadMessage(subBuilder);
+            SGroupList = subBuilder;
+            break;
+          }
+          case 90: {
+            global::Protocol.C_GROUP_JOIN subBuilder = new global::Protocol.C_GROUP_JOIN();
+            if (valueCase_ == ValueOneofCase.CGroupJoin) {
+              subBuilder.MergeFrom(CGroupJoin);
+            }
+            input.ReadMessage(subBuilder);
+            CGroupJoin = subBuilder;
+            break;
+          }
+          case 98: {
+            global::Protocol.S_GROUP_JOIN subBuilder = new global::Protocol.S_GROUP_JOIN();
+            if (valueCase_ == ValueOneofCase.SGroupJoin) {
+              subBuilder.MergeFrom(SGroupJoin);
+            }
+            input.ReadMessage(subBuilder);
+            SGroupJoin = subBuilder;
+            break;
+          }
+          case 106: {
+            global::Protocol.C_INITIAL_OBJECTS subBuilder = new global::Protocol.C_INITIAL_OBJECTS();
+            if (valueCase_ == ValueOneofCase.CInitialObjects) {
+              subBuilder.MergeFrom(CInitialObjects);
+            }
+            input.ReadMessage(subBuilder);
+            CInitialObjects = subBuilder;
+            break;
+          }
+          case 114: {
+            global::Protocol.S_INITIAL_OBJECTS subBuilder = new global::Protocol.S_INITIAL_OBJECTS();
+            if (valueCase_ == ValueOneofCase.SInitialObjects) {
+              subBuilder.MergeFrom(SInitialObjects);
+            }
+            input.ReadMessage(subBuilder);
+            SInitialObjects = subBuilder;
+            break;
+          }
+          case 122: {
+            global::Protocol.S_OTHER_CLIENT_JOINED subBuilder = new global::Protocol.S_OTHER_CLIENT_JOINED();
+            if (valueCase_ == ValueOneofCase.SOtherClientJoined) {
+              subBuilder.MergeFrom(SOtherClientJoined);
+            }
+            input.ReadMessage(subBuilder);
+            SOtherClientJoined = subBuilder;
+            break;
+          }
+          case 130: {
+            global::Protocol.C_ADD_NETWORK_OBJECTS subBuilder = new global::Protocol.C_ADD_NETWORK_OBJECTS();
+            if (valueCase_ == ValueOneofCase.CAddNetworkObjects) {
+              subBuilder.MergeFrom(CAddNetworkObjects);
+            }
+            input.ReadMessage(subBuilder);
+            CAddNetworkObjects = subBuilder;
+            break;
+          }
+          case 138: {
+            global::Protocol.S_ADD_NETWORK_OBJECTS subBuilder = new global::Protocol.S_ADD_NETWORK_OBJECTS();
+            if (valueCase_ == ValueOneofCase.SAddNetworkObjects) {
+              subBuilder.MergeFrom(SAddNetworkObjects);
+            }
+            input.ReadMessage(subBuilder);
+            SAddNetworkObjects = subBuilder;
+            break;
+          }
+          case 146: {
+            global::Protocol.C_REMOVE_NETWORK_OBJECTS subBuilder = new global::Protocol.C_REMOVE_NETWORK_OBJECTS();
+            if (valueCase_ == ValueOneofCase.CRemoveNetworkObjects) {
+              subBuilder.MergeFrom(CRemoveNetworkObjects);
+            }
+            input.ReadMessage(subBuilder);
+            CRemoveNetworkObjects = subBuilder;
+            break;
+          }
+          case 154: {
+            global::Protocol.S_REMOVE_NETWORK_OBJECTS subBuilder = new global::Protocol.S_REMOVE_NETWORK_OBJECTS();
+            if (valueCase_ == ValueOneofCase.SRemoveNetworkObjects) {
+              subBuilder.MergeFrom(SRemoveNetworkObjects);
+            }
+            input.ReadMessage(subBuilder);
+            SRemoveNetworkObjects = subBuilder;
+            break;
+          }
+          case 162: {
+            global::Protocol.C_UPDATE_NETWORK_OBJECTS subBuilder = new global::Protocol.C_UPDATE_NETWORK_OBJECTS();
+            if (valueCase_ == ValueOneofCase.CUpdateNetworkObjects) {
+              subBuilder.MergeFrom(CUpdateNetworkObjects);
+            }
+            input.ReadMessage(subBuilder);
+            CUpdateNetworkObjects = subBuilder;
+            break;
+          }
+          case 170: {
+            global::Protocol.S_UPDATE_NETWORK_OBJECTS subBuilder = new global::Protocol.S_UPDATE_NETWORK_OBJECTS();
+            if (valueCase_ == ValueOneofCase.SUpdateNetworkObjects) {
+              subBuilder.MergeFrom(SUpdateNetworkObjects);
+            }
+            input.ReadMessage(subBuilder);
+            SUpdateNetworkObjects = subBuilder;
+            break;
+          }
+          case 178: {
+            global::Protocol.C_CHANGE_OBJECTS_OWNER subBuilder = new global::Protocol.C_CHANGE_OBJECTS_OWNER();
+            if (valueCase_ == ValueOneofCase.CChangeObjectsOwner) {
+              subBuilder.MergeFrom(CChangeObjectsOwner);
+            }
+            input.ReadMessage(subBuilder);
+            CChangeObjectsOwner = subBuilder;
+            break;
+          }
+          case 186: {
+            global::Protocol.S_CHANGE_OBJECTS_OWNER subBuilder = new global::Protocol.S_CHANGE_OBJECTS_OWNER();
+            if (valueCase_ == ValueOneofCase.SChangeObjectsOwner) {
+              subBuilder.MergeFrom(SChangeObjectsOwner);
+            }
+            input.ReadMessage(subBuilder);
+            SChangeObjectsOwner = subBuilder;
+            break;
+          }
+          case 194: {
+            global::Protocol.C_EVENT subBuilder = new global::Protocol.C_EVENT();
+            if (valueCase_ == ValueOneofCase.CEvent) {
+              subBuilder.MergeFrom(CEvent);
+            }
+            input.ReadMessage(subBuilder);
+            CEvent = subBuilder;
+            break;
+          }
+          case 202: {
+            global::Protocol.HeliosVariable subBuilder = new global::Protocol.HeliosVariable();
+            if (valueCase_ == ValueOneofCase.HeliosVariable) {
+              subBuilder.MergeFrom(HeliosVariable);
+            }
+            input.ReadMessage(subBuilder);
+            HeliosVariable = subBuilder;
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            global::Protocol.C_HEART_BEAT subBuilder = new global::Protocol.C_HEART_BEAT();
+            if (valueCase_ == ValueOneofCase.CHeartBeat) {
+              subBuilder.MergeFrom(CHeartBeat);
+            }
+            input.ReadMessage(subBuilder);
+            CHeartBeat = subBuilder;
+            break;
+          }
+          case 18: {
+            global::Protocol.S_HEART_BEAT subBuilder = new global::Protocol.S_HEART_BEAT();
+            if (valueCase_ == ValueOneofCase.SHeartBeat) {
+              subBuilder.MergeFrom(SHeartBeat);
+            }
+            input.ReadMessage(subBuilder);
+            SHeartBeat = subBuilder;
+            break;
+          }
+          case 26: {
+            global::Protocol.C_ROOM_JOIN_OR_CREATE subBuilder = new global::Protocol.C_ROOM_JOIN_OR_CREATE();
+            if (valueCase_ == ValueOneofCase.CRoomJoinOrCreate) {
+              subBuilder.MergeFrom(CRoomJoinOrCreate);
+            }
+            input.ReadMessage(subBuilder);
+            CRoomJoinOrCreate = subBuilder;
+            break;
+          }
+          case 34: {
+            global::Protocol.S_ROOM_JOIN_OR_CREATE subBuilder = new global::Protocol.S_ROOM_JOIN_OR_CREATE();
+            if (valueCase_ == ValueOneofCase.SRoomJoinOrCreate) {
+              subBuilder.MergeFrom(SRoomJoinOrCreate);
+            }
+            input.ReadMessage(subBuilder);
+            SRoomJoinOrCreate = subBuilder;
+            break;
+          }
+          case 42: {
+            global::Protocol.C_TEST_ROOM_LIST subBuilder = new global::Protocol.C_TEST_ROOM_LIST();
+            if (valueCase_ == ValueOneofCase.CRoomList) {
+              subBuilder.MergeFrom(CRoomList);
+            }
+            input.ReadMessage(subBuilder);
+            CRoomList = subBuilder;
+            break;
+          }
+          case 50: {
+            global::Protocol.S_TEST_ROOM_LIST subBuilder = new global::Protocol.S_TEST_ROOM_LIST();
+            if (valueCase_ == ValueOneofCase.SRoomList) {
+              subBuilder.MergeFrom(SRoomList);
+            }
+            input.ReadMessage(subBuilder);
+            SRoomList = subBuilder;
+            break;
+          }
+          case 58: {
+            global::Protocol.C_PLAYER_ID subBuilder = new global::Protocol.C_PLAYER_ID();
+            if (valueCase_ == ValueOneofCase.CPlayerId) {
+              subBuilder.MergeFrom(CPlayerId);
+            }
+            input.ReadMessage(subBuilder);
+            CPlayerId = subBuilder;
+            break;
+          }
+          case 66: {
+            global::Protocol.S_PLAYER_ID subBuilder = new global::Protocol.S_PLAYER_ID();
+            if (valueCase_ == ValueOneofCase.SPlayerId) {
+              subBuilder.MergeFrom(SPlayerId);
+            }
+            input.ReadMessage(subBuilder);
+            SPlayerId = subBuilder;
+            break;
+          }
+          case 74: {
+            global::Protocol.C_GROUP_LIST subBuilder = new global::Protocol.C_GROUP_LIST();
+            if (valueCase_ == ValueOneofCase.CGroupList) {
+              subBuilder.MergeFrom(CGroupList);
+            }
+            input.ReadMessage(subBuilder);
+            CGroupList = subBuilder;
+            break;
+          }
+          case 82: {
+            global::Protocol.S_GROUP_LIST subBuilder = new global::Protocol.S_GROUP_LIST();
+            if (valueCase_ == ValueOneofCase.SGroupList) {
+              subBuilder.MergeFrom(SGroupList);
+            }
+            input.ReadMessage(subBuilder);
+            SGroupList = subBuilder;
+            break;
+          }
+          case 90: {
+            global::Protocol.C_GROUP_JOIN subBuilder = new global::Protocol.C_GROUP_JOIN();
+            if (valueCase_ == ValueOneofCase.CGroupJoin) {
+              subBuilder.MergeFrom(CGroupJoin);
+            }
+            input.ReadMessage(subBuilder);
+            CGroupJoin = subBuilder;
+            break;
+          }
+          case 98: {
+            global::Protocol.S_GROUP_JOIN subBuilder = new global::Protocol.S_GROUP_JOIN();
+            if (valueCase_ == ValueOneofCase.SGroupJoin) {
+              subBuilder.MergeFrom(SGroupJoin);
+            }
+            input.ReadMessage(subBuilder);
+            SGroupJoin = subBuilder;
+            break;
+          }
+          case 106: {
+            global::Protocol.C_INITIAL_OBJECTS subBuilder = new global::Protocol.C_INITIAL_OBJECTS();
+            if (valueCase_ == ValueOneofCase.CInitialObjects) {
+              subBuilder.MergeFrom(CInitialObjects);
+            }
+            input.ReadMessage(subBuilder);
+            CInitialObjects = subBuilder;
+            break;
+          }
+          case 114: {
+            global::Protocol.S_INITIAL_OBJECTS subBuilder = new global::Protocol.S_INITIAL_OBJECTS();
+            if (valueCase_ == ValueOneofCase.SInitialObjects) {
+              subBuilder.MergeFrom(SInitialObjects);
+            }
+            input.ReadMessage(subBuilder);
+            SInitialObjects = subBuilder;
+            break;
+          }
+          case 122: {
+            global::Protocol.S_OTHER_CLIENT_JOINED subBuilder = new global::Protocol.S_OTHER_CLIENT_JOINED();
+            if (valueCase_ == ValueOneofCase.SOtherClientJoined) {
+              subBuilder.MergeFrom(SOtherClientJoined);
+            }
+            input.ReadMessage(subBuilder);
+            SOtherClientJoined = subBuilder;
+            break;
+          }
+          case 130: {
+            global::Protocol.C_ADD_NETWORK_OBJECTS subBuilder = new global::Protocol.C_ADD_NETWORK_OBJECTS();
+            if (valueCase_ == ValueOneofCase.CAddNetworkObjects) {
+              subBuilder.MergeFrom(CAddNetworkObjects);
+            }
+            input.ReadMessage(subBuilder);
+            CAddNetworkObjects = subBuilder;
+            break;
+          }
+          case 138: {
+            global::Protocol.S_ADD_NETWORK_OBJECTS subBuilder = new global::Protocol.S_ADD_NETWORK_OBJECTS();
+            if (valueCase_ == ValueOneofCase.SAddNetworkObjects) {
+              subBuilder.MergeFrom(SAddNetworkObjects);
+            }
+            input.ReadMessage(subBuilder);
+            SAddNetworkObjects = subBuilder;
+            break;
+          }
+          case 146: {
+            global::Protocol.C_REMOVE_NETWORK_OBJECTS subBuilder = new global::Protocol.C_REMOVE_NETWORK_OBJECTS();
+            if (valueCase_ == ValueOneofCase.CRemoveNetworkObjects) {
+              subBuilder.MergeFrom(CRemoveNetworkObjects);
+            }
+            input.ReadMessage(subBuilder);
+            CRemoveNetworkObjects = subBuilder;
+            break;
+          }
+          case 154: {
+            global::Protocol.S_REMOVE_NETWORK_OBJECTS subBuilder = new global::Protocol.S_REMOVE_NETWORK_OBJECTS();
+            if (valueCase_ == ValueOneofCase.SRemoveNetworkObjects) {
+              subBuilder.MergeFrom(SRemoveNetworkObjects);
+            }
+            input.ReadMessage(subBuilder);
+            SRemoveNetworkObjects = subBuilder;
+            break;
+          }
+          case 162: {
+            global::Protocol.C_UPDATE_NETWORK_OBJECTS subBuilder = new global::Protocol.C_UPDATE_NETWORK_OBJECTS();
+            if (valueCase_ == ValueOneofCase.CUpdateNetworkObjects) {
+              subBuilder.MergeFrom(CUpdateNetworkObjects);
+            }
+            input.ReadMessage(subBuilder);
+            CUpdateNetworkObjects = subBuilder;
+            break;
+          }
+          case 170: {
+            global::Protocol.S_UPDATE_NETWORK_OBJECTS subBuilder = new global::Protocol.S_UPDATE_NETWORK_OBJECTS();
+            if (valueCase_ == ValueOneofCase.SUpdateNetworkObjects) {
+              subBuilder.MergeFrom(SUpdateNetworkObjects);
+            }
+            input.ReadMessage(subBuilder);
+            SUpdateNetworkObjects = subBuilder;
+            break;
+          }
+          case 178: {
+            global::Protocol.C_CHANGE_OBJECTS_OWNER subBuilder = new global::Protocol.C_CHANGE_OBJECTS_OWNER();
+            if (valueCase_ == ValueOneofCase.CChangeObjectsOwner) {
+              subBuilder.MergeFrom(CChangeObjectsOwner);
+            }
+            input.ReadMessage(subBuilder);
+            CChangeObjectsOwner = subBuilder;
+            break;
+          }
+          case 186: {
+            global::Protocol.S_CHANGE_OBJECTS_OWNER subBuilder = new global::Protocol.S_CHANGE_OBJECTS_OWNER();
+            if (valueCase_ == ValueOneofCase.SChangeObjectsOwner) {
+              subBuilder.MergeFrom(SChangeObjectsOwner);
+            }
+            input.ReadMessage(subBuilder);
+            SChangeObjectsOwner = subBuilder;
+            break;
+          }
+          case 194: {
+            global::Protocol.C_EVENT subBuilder = new global::Protocol.C_EVENT();
+            if (valueCase_ == ValueOneofCase.CEvent) {
+              subBuilder.MergeFrom(CEvent);
+            }
+            input.ReadMessage(subBuilder);
+            CEvent = subBuilder;
+            break;
+          }
+          case 202: {
+            global::Protocol.HeliosVariable subBuilder = new global::Protocol.HeliosVariable();
+            if (valueCase_ == ValueOneofCase.HeliosVariable) {
+              subBuilder.MergeFrom(HeliosVariable);
+            }
+            input.ReadMessage(subBuilder);
+            HeliosVariable = subBuilder;
             break;
           }
         }
@@ -5559,7 +7108,7 @@ namespace Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protocol.ProtocolReflection.Descriptor.MessageTypes[26]; }
+      get { return global::Protocol.ProtocolReflection.Descriptor.MessageTypes[27]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5580,8 +7129,8 @@ namespace Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public C_OPERATION(C_OPERATION other) : this() {
       operationCode_ = other.operationCode_;
-      dataDic_ = other.dataDic_.Clone();
-      data_ = other.data_.Clone();
+      fixedData_ = other.fixedData_ != null ? other.fixedData_.Clone() : null;
+      customData_ = other.customData_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -5603,26 +7152,27 @@ namespace Protocol {
       }
     }
 
-    /// <summary>Field number for the "dataDic" field.</summary>
-    public const int DataDicFieldNumber = 2;
-    private static readonly pbc::MapField<int, global::Google.Protobuf.WellKnownTypes.Any>.Codec _map_dataDic_codec
-        = new pbc::MapField<int, global::Google.Protobuf.WellKnownTypes.Any>.Codec(pb::FieldCodec.ForInt32(8, 0), pb::FieldCodec.ForMessage(18, global::Google.Protobuf.WellKnownTypes.Any.Parser), 18);
-    private readonly pbc::MapField<int, global::Google.Protobuf.WellKnownTypes.Any> dataDic_ = new pbc::MapField<int, global::Google.Protobuf.WellKnownTypes.Any>();
+    /// <summary>Field number for the "fixedData" field.</summary>
+    public const int FixedDataFieldNumber = 2;
+    private global::Protocol.Packs fixedData_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::MapField<int, global::Google.Protobuf.WellKnownTypes.Any> DataDic {
-      get { return dataDic_; }
+    public global::Protocol.Packs FixedData {
+      get { return fixedData_; }
+      set {
+        fixedData_ = value;
+      }
     }
 
-    /// <summary>Field number for the "data" field.</summary>
-    public const int DataFieldNumber = 3;
-    private static readonly pb::FieldCodec<global::Protocol.CustomStruct> _repeated_data_codec
+    /// <summary>Field number for the "customData" field.</summary>
+    public const int CustomDataFieldNumber = 3;
+    private static readonly pb::FieldCodec<global::Protocol.CustomStruct> _repeated_customData_codec
         = pb::FieldCodec.ForMessage(26, global::Protocol.CustomStruct.Parser);
-    private readonly pbc::RepeatedField<global::Protocol.CustomStruct> data_ = new pbc::RepeatedField<global::Protocol.CustomStruct>();
+    private readonly pbc::RepeatedField<global::Protocol.CustomStruct> customData_ = new pbc::RepeatedField<global::Protocol.CustomStruct>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Protocol.CustomStruct> Data {
-      get { return data_; }
+    public pbc::RepeatedField<global::Protocol.CustomStruct> CustomData {
+      get { return customData_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5641,8 +7191,8 @@ namespace Protocol {
         return true;
       }
       if (OperationCode != other.OperationCode) return false;
-      if (!DataDic.Equals(other.DataDic)) return false;
-      if(!data_.Equals(other.data_)) return false;
+      if (!object.Equals(FixedData, other.FixedData)) return false;
+      if(!customData_.Equals(other.customData_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -5651,8 +7201,8 @@ namespace Protocol {
     public override int GetHashCode() {
       int hash = 1;
       if (OperationCode != global::Protocol.OperationCode.HeartBeat) hash ^= OperationCode.GetHashCode();
-      hash ^= DataDic.GetHashCode();
-      hash ^= data_.GetHashCode();
+      if (fixedData_ != null) hash ^= FixedData.GetHashCode();
+      hash ^= customData_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -5675,8 +7225,11 @@ namespace Protocol {
         output.WriteRawTag(8);
         output.WriteEnum((int) OperationCode);
       }
-      dataDic_.WriteTo(output, _map_dataDic_codec);
-      data_.WriteTo(output, _repeated_data_codec);
+      if (fixedData_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(FixedData);
+      }
+      customData_.WriteTo(output, _repeated_customData_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -5691,8 +7244,11 @@ namespace Protocol {
         output.WriteRawTag(8);
         output.WriteEnum((int) OperationCode);
       }
-      dataDic_.WriteTo(ref output, _map_dataDic_codec);
-      data_.WriteTo(ref output, _repeated_data_codec);
+      if (fixedData_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(FixedData);
+      }
+      customData_.WriteTo(ref output, _repeated_customData_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -5706,8 +7262,10 @@ namespace Protocol {
       if (OperationCode != global::Protocol.OperationCode.HeartBeat) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) OperationCode);
       }
-      size += dataDic_.CalculateSize(_map_dataDic_codec);
-      size += data_.CalculateSize(_repeated_data_codec);
+      if (fixedData_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(FixedData);
+      }
+      size += customData_.CalculateSize(_repeated_customData_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -5723,8 +7281,13 @@ namespace Protocol {
       if (other.OperationCode != global::Protocol.OperationCode.HeartBeat) {
         OperationCode = other.OperationCode;
       }
-      dataDic_.Add(other.dataDic_);
-      data_.Add(other.data_);
+      if (other.fixedData_ != null) {
+        if (fixedData_ == null) {
+          FixedData = new global::Protocol.Packs();
+        }
+        FixedData.MergeFrom(other.FixedData);
+      }
+      customData_.Add(other.customData_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -5745,11 +7308,14 @@ namespace Protocol {
             break;
           }
           case 18: {
-            dataDic_.AddEntriesFrom(input, _map_dataDic_codec);
+            if (fixedData_ == null) {
+              FixedData = new global::Protocol.Packs();
+            }
+            input.ReadMessage(FixedData);
             break;
           }
           case 26: {
-            data_.AddEntriesFrom(input, _repeated_data_codec);
+            customData_.AddEntriesFrom(input, _repeated_customData_codec);
             break;
           }
         }
@@ -5772,11 +7338,14 @@ namespace Protocol {
             break;
           }
           case 18: {
-            dataDic_.AddEntriesFrom(ref input, _map_dataDic_codec);
+            if (fixedData_ == null) {
+              FixedData = new global::Protocol.Packs();
+            }
+            input.ReadMessage(FixedData);
             break;
           }
           case 26: {
-            data_.AddEntriesFrom(ref input, _repeated_data_codec);
+            customData_.AddEntriesFrom(ref input, _repeated_customData_codec);
             break;
           }
         }
@@ -5800,7 +7369,7 @@ namespace Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protocol.ProtocolReflection.Descriptor.MessageTypes[27]; }
+      get { return global::Protocol.ProtocolReflection.Descriptor.MessageTypes[28]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5822,8 +7391,8 @@ namespace Protocol {
     public S_OPERATION(S_OPERATION other) : this() {
       operationCode_ = other.operationCode_;
       sender_ = other.sender_ != null ? other.sender_.Clone() : null;
-      dataDic_ = other.dataDic_.Clone();
-      data_ = other.data_.Clone();
+      fixedData_ = other.fixedData_ != null ? other.fixedData_.Clone() : null;
+      customData_ = other.customData_.Clone();
       result_ = other.result_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -5858,26 +7427,27 @@ namespace Protocol {
       }
     }
 
-    /// <summary>Field number for the "dataDic" field.</summary>
-    public const int DataDicFieldNumber = 3;
-    private static readonly pbc::MapField<int, global::Google.Protobuf.WellKnownTypes.Any>.Codec _map_dataDic_codec
-        = new pbc::MapField<int, global::Google.Protobuf.WellKnownTypes.Any>.Codec(pb::FieldCodec.ForInt32(8, 0), pb::FieldCodec.ForMessage(18, global::Google.Protobuf.WellKnownTypes.Any.Parser), 26);
-    private readonly pbc::MapField<int, global::Google.Protobuf.WellKnownTypes.Any> dataDic_ = new pbc::MapField<int, global::Google.Protobuf.WellKnownTypes.Any>();
+    /// <summary>Field number for the "fixedData" field.</summary>
+    public const int FixedDataFieldNumber = 3;
+    private global::Protocol.Packs fixedData_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::MapField<int, global::Google.Protobuf.WellKnownTypes.Any> DataDic {
-      get { return dataDic_; }
+    public global::Protocol.Packs FixedData {
+      get { return fixedData_; }
+      set {
+        fixedData_ = value;
+      }
     }
 
-    /// <summary>Field number for the "data" field.</summary>
-    public const int DataFieldNumber = 4;
-    private static readonly pb::FieldCodec<global::Protocol.CustomStruct> _repeated_data_codec
+    /// <summary>Field number for the "customData" field.</summary>
+    public const int CustomDataFieldNumber = 4;
+    private static readonly pb::FieldCodec<global::Protocol.CustomStruct> _repeated_customData_codec
         = pb::FieldCodec.ForMessage(34, global::Protocol.CustomStruct.Parser);
-    private readonly pbc::RepeatedField<global::Protocol.CustomStruct> data_ = new pbc::RepeatedField<global::Protocol.CustomStruct>();
+    private readonly pbc::RepeatedField<global::Protocol.CustomStruct> customData_ = new pbc::RepeatedField<global::Protocol.CustomStruct>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Protocol.CustomStruct> Data {
-      get { return data_; }
+    public pbc::RepeatedField<global::Protocol.CustomStruct> CustomData {
+      get { return customData_; }
     }
 
     /// <summary>Field number for the "result" field.</summary>
@@ -5909,8 +7479,8 @@ namespace Protocol {
       }
       if (OperationCode != other.OperationCode) return false;
       if (!object.Equals(Sender, other.Sender)) return false;
-      if (!DataDic.Equals(other.DataDic)) return false;
-      if(!data_.Equals(other.data_)) return false;
+      if (!object.Equals(FixedData, other.FixedData)) return false;
+      if(!customData_.Equals(other.customData_)) return false;
       if (Result != other.Result) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -5921,8 +7491,8 @@ namespace Protocol {
       int hash = 1;
       if (OperationCode != global::Protocol.OperationCode.HeartBeat) hash ^= OperationCode.GetHashCode();
       if (sender_ != null) hash ^= Sender.GetHashCode();
-      hash ^= DataDic.GetHashCode();
-      hash ^= data_.GetHashCode();
+      if (fixedData_ != null) hash ^= FixedData.GetHashCode();
+      hash ^= customData_.GetHashCode();
       if (Result != global::Protocol.Result.Success) hash ^= Result.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -5950,8 +7520,11 @@ namespace Protocol {
         output.WriteRawTag(18);
         output.WriteMessage(Sender);
       }
-      dataDic_.WriteTo(output, _map_dataDic_codec);
-      data_.WriteTo(output, _repeated_data_codec);
+      if (fixedData_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(FixedData);
+      }
+      customData_.WriteTo(output, _repeated_customData_codec);
       if (Result != global::Protocol.Result.Success) {
         output.WriteRawTag(40);
         output.WriteEnum((int) Result);
@@ -5974,8 +7547,11 @@ namespace Protocol {
         output.WriteRawTag(18);
         output.WriteMessage(Sender);
       }
-      dataDic_.WriteTo(ref output, _map_dataDic_codec);
-      data_.WriteTo(ref output, _repeated_data_codec);
+      if (fixedData_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(FixedData);
+      }
+      customData_.WriteTo(ref output, _repeated_customData_codec);
       if (Result != global::Protocol.Result.Success) {
         output.WriteRawTag(40);
         output.WriteEnum((int) Result);
@@ -5996,8 +7572,10 @@ namespace Protocol {
       if (sender_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Sender);
       }
-      size += dataDic_.CalculateSize(_map_dataDic_codec);
-      size += data_.CalculateSize(_repeated_data_codec);
+      if (fixedData_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(FixedData);
+      }
+      size += customData_.CalculateSize(_repeated_customData_codec);
       if (Result != global::Protocol.Result.Success) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
       }
@@ -6022,8 +7600,13 @@ namespace Protocol {
         }
         Sender.MergeFrom(other.Sender);
       }
-      dataDic_.Add(other.dataDic_);
-      data_.Add(other.data_);
+      if (other.fixedData_ != null) {
+        if (fixedData_ == null) {
+          FixedData = new global::Protocol.Packs();
+        }
+        FixedData.MergeFrom(other.FixedData);
+      }
+      customData_.Add(other.customData_);
       if (other.Result != global::Protocol.Result.Success) {
         Result = other.Result;
       }
@@ -6054,11 +7637,14 @@ namespace Protocol {
             break;
           }
           case 26: {
-            dataDic_.AddEntriesFrom(input, _map_dataDic_codec);
+            if (fixedData_ == null) {
+              FixedData = new global::Protocol.Packs();
+            }
+            input.ReadMessage(FixedData);
             break;
           }
           case 34: {
-            data_.AddEntriesFrom(input, _repeated_data_codec);
+            customData_.AddEntriesFrom(input, _repeated_customData_codec);
             break;
           }
           case 40: {
@@ -6092,312 +7678,17 @@ namespace Protocol {
             break;
           }
           case 26: {
-            dataDic_.AddEntriesFrom(ref input, _map_dataDic_codec);
+            if (fixedData_ == null) {
+              FixedData = new global::Protocol.Packs();
+            }
+            input.ReadMessage(FixedData);
             break;
           }
           case 34: {
-            data_.AddEntriesFrom(ref input, _repeated_data_codec);
+            customData_.AddEntriesFrom(ref input, _repeated_customData_codec);
             break;
           }
           case 40: {
-            Result = (global::Protocol.Result) input.ReadEnum();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  public sealed partial class S_EVENT_TEST : pb::IMessage<S_EVENT_TEST>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<S_EVENT_TEST> _parser = new pb::MessageParser<S_EVENT_TEST>(() => new S_EVENT_TEST());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<S_EVENT_TEST> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protocol.ProtocolReflection.Descriptor.MessageTypes[28]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public S_EVENT_TEST() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public S_EVENT_TEST(S_EVENT_TEST other) : this() {
-      sender_ = other.sender_ != null ? other.sender_.Clone() : null;
-      eventCode_ = other.eventCode_;
-      data_ = other.data_.Clone();
-      result_ = other.result_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public S_EVENT_TEST Clone() {
-      return new S_EVENT_TEST(this);
-    }
-
-    /// <summary>Field number for the "sender" field.</summary>
-    public const int SenderFieldNumber = 1;
-    private global::Protocol.PlayerInfo sender_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Protocol.PlayerInfo Sender {
-      get { return sender_; }
-      set {
-        sender_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "eventCode" field.</summary>
-    public const int EventCodeFieldNumber = 2;
-    private global::Protocol.EventCode eventCode_ = global::Protocol.EventCode.OtherClientJoined;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Protocol.EventCode EventCode {
-      get { return eventCode_; }
-      set {
-        eventCode_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "data" field.</summary>
-    public const int DataFieldNumber = 3;
-    private static readonly pb::FieldCodec<global::Protocol.CustomStruct> _repeated_data_codec
-        = pb::FieldCodec.ForMessage(26, global::Protocol.CustomStruct.Parser);
-    private readonly pbc::RepeatedField<global::Protocol.CustomStruct> data_ = new pbc::RepeatedField<global::Protocol.CustomStruct>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Protocol.CustomStruct> Data {
-      get { return data_; }
-    }
-
-    /// <summary>Field number for the "result" field.</summary>
-    public const int ResultFieldNumber = 4;
-    private global::Protocol.Result result_ = global::Protocol.Result.Success;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Protocol.Result Result {
-      get { return result_; }
-      set {
-        result_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as S_EVENT_TEST);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(S_EVENT_TEST other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (!object.Equals(Sender, other.Sender)) return false;
-      if (EventCode != other.EventCode) return false;
-      if(!data_.Equals(other.data_)) return false;
-      if (Result != other.Result) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (sender_ != null) hash ^= Sender.GetHashCode();
-      if (EventCode != global::Protocol.EventCode.OtherClientJoined) hash ^= EventCode.GetHashCode();
-      hash ^= data_.GetHashCode();
-      if (Result != global::Protocol.Result.Success) hash ^= Result.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (sender_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(Sender);
-      }
-      if (EventCode != global::Protocol.EventCode.OtherClientJoined) {
-        output.WriteRawTag(16);
-        output.WriteEnum((int) EventCode);
-      }
-      data_.WriteTo(output, _repeated_data_codec);
-      if (Result != global::Protocol.Result.Success) {
-        output.WriteRawTag(32);
-        output.WriteEnum((int) Result);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (sender_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(Sender);
-      }
-      if (EventCode != global::Protocol.EventCode.OtherClientJoined) {
-        output.WriteRawTag(16);
-        output.WriteEnum((int) EventCode);
-      }
-      data_.WriteTo(ref output, _repeated_data_codec);
-      if (Result != global::Protocol.Result.Success) {
-        output.WriteRawTag(32);
-        output.WriteEnum((int) Result);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (sender_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Sender);
-      }
-      if (EventCode != global::Protocol.EventCode.OtherClientJoined) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) EventCode);
-      }
-      size += data_.CalculateSize(_repeated_data_codec);
-      if (Result != global::Protocol.Result.Success) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(S_EVENT_TEST other) {
-      if (other == null) {
-        return;
-      }
-      if (other.sender_ != null) {
-        if (sender_ == null) {
-          Sender = new global::Protocol.PlayerInfo();
-        }
-        Sender.MergeFrom(other.Sender);
-      }
-      if (other.EventCode != global::Protocol.EventCode.OtherClientJoined) {
-        EventCode = other.EventCode;
-      }
-      data_.Add(other.data_);
-      if (other.Result != global::Protocol.Result.Success) {
-        Result = other.Result;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            if (sender_ == null) {
-              Sender = new global::Protocol.PlayerInfo();
-            }
-            input.ReadMessage(Sender);
-            break;
-          }
-          case 16: {
-            EventCode = (global::Protocol.EventCode) input.ReadEnum();
-            break;
-          }
-          case 26: {
-            data_.AddEntriesFrom(input, _repeated_data_codec);
-            break;
-          }
-          case 32: {
-            Result = (global::Protocol.Result) input.ReadEnum();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 10: {
-            if (sender_ == null) {
-              Sender = new global::Protocol.PlayerInfo();
-            }
-            input.ReadMessage(Sender);
-            break;
-          }
-          case 16: {
-            EventCode = (global::Protocol.EventCode) input.ReadEnum();
-            break;
-          }
-          case 26: {
-            data_.AddEntriesFrom(ref input, _repeated_data_codec);
-            break;
-          }
-          case 32: {
             Result = (global::Protocol.Result) input.ReadEnum();
             break;
           }
@@ -6444,7 +7735,8 @@ namespace Protocol {
     public S_EVENT(S_EVENT other) : this() {
       sender_ = other.sender_ != null ? other.sender_.Clone() : null;
       eventCode_ = other.eventCode_;
-      data_ = other.data_.Clone();
+      fixedData_ = other.fixedData_ != null ? other.fixedData_.Clone() : null;
+      customData_ = other.customData_.Clone();
       result_ = other.result_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -6479,19 +7771,31 @@ namespace Protocol {
       }
     }
 
-    /// <summary>Field number for the "data" field.</summary>
-    public const int DataFieldNumber = 3;
-    private static readonly pb::FieldCodec<global::Protocol.CustomStruct> _repeated_data_codec
-        = pb::FieldCodec.ForMessage(26, global::Protocol.CustomStruct.Parser);
-    private readonly pbc::RepeatedField<global::Protocol.CustomStruct> data_ = new pbc::RepeatedField<global::Protocol.CustomStruct>();
+    /// <summary>Field number for the "fixedData" field.</summary>
+    public const int FixedDataFieldNumber = 3;
+    private global::Protocol.Packs fixedData_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Protocol.CustomStruct> Data {
-      get { return data_; }
+    public global::Protocol.Packs FixedData {
+      get { return fixedData_; }
+      set {
+        fixedData_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "CustomData" field.</summary>
+    public const int CustomDataFieldNumber = 4;
+    private static readonly pb::FieldCodec<global::Protocol.CustomStruct> _repeated_customData_codec
+        = pb::FieldCodec.ForMessage(34, global::Protocol.CustomStruct.Parser);
+    private readonly pbc::RepeatedField<global::Protocol.CustomStruct> customData_ = new pbc::RepeatedField<global::Protocol.CustomStruct>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::Protocol.CustomStruct> CustomData {
+      get { return customData_; }
     }
 
     /// <summary>Field number for the "result" field.</summary>
-    public const int ResultFieldNumber = 4;
+    public const int ResultFieldNumber = 5;
     private global::Protocol.Result result_ = global::Protocol.Result.Success;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -6519,7 +7823,8 @@ namespace Protocol {
       }
       if (!object.Equals(Sender, other.Sender)) return false;
       if (EventCode != other.EventCode) return false;
-      if(!data_.Equals(other.data_)) return false;
+      if (!object.Equals(FixedData, other.FixedData)) return false;
+      if(!customData_.Equals(other.customData_)) return false;
       if (Result != other.Result) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -6530,7 +7835,8 @@ namespace Protocol {
       int hash = 1;
       if (sender_ != null) hash ^= Sender.GetHashCode();
       if (EventCode != 0) hash ^= EventCode.GetHashCode();
-      hash ^= data_.GetHashCode();
+      if (fixedData_ != null) hash ^= FixedData.GetHashCode();
+      hash ^= customData_.GetHashCode();
       if (Result != global::Protocol.Result.Success) hash ^= Result.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -6558,9 +7864,13 @@ namespace Protocol {
         output.WriteRawTag(16);
         output.WriteInt32(EventCode);
       }
-      data_.WriteTo(output, _repeated_data_codec);
+      if (fixedData_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(FixedData);
+      }
+      customData_.WriteTo(output, _repeated_customData_codec);
       if (Result != global::Protocol.Result.Success) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(40);
         output.WriteEnum((int) Result);
       }
       if (_unknownFields != null) {
@@ -6581,9 +7891,13 @@ namespace Protocol {
         output.WriteRawTag(16);
         output.WriteInt32(EventCode);
       }
-      data_.WriteTo(ref output, _repeated_data_codec);
+      if (fixedData_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(FixedData);
+      }
+      customData_.WriteTo(ref output, _repeated_customData_codec);
       if (Result != global::Protocol.Result.Success) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(40);
         output.WriteEnum((int) Result);
       }
       if (_unknownFields != null) {
@@ -6602,7 +7916,10 @@ namespace Protocol {
       if (EventCode != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(EventCode);
       }
-      size += data_.CalculateSize(_repeated_data_codec);
+      if (fixedData_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(FixedData);
+      }
+      size += customData_.CalculateSize(_repeated_customData_codec);
       if (Result != global::Protocol.Result.Success) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
       }
@@ -6627,7 +7944,13 @@ namespace Protocol {
       if (other.EventCode != 0) {
         EventCode = other.EventCode;
       }
-      data_.Add(other.data_);
+      if (other.fixedData_ != null) {
+        if (fixedData_ == null) {
+          FixedData = new global::Protocol.Packs();
+        }
+        FixedData.MergeFrom(other.FixedData);
+      }
+      customData_.Add(other.customData_);
       if (other.Result != global::Protocol.Result.Success) {
         Result = other.Result;
       }
@@ -6658,10 +7981,17 @@ namespace Protocol {
             break;
           }
           case 26: {
-            data_.AddEntriesFrom(input, _repeated_data_codec);
+            if (fixedData_ == null) {
+              FixedData = new global::Protocol.Packs();
+            }
+            input.ReadMessage(FixedData);
             break;
           }
-          case 32: {
+          case 34: {
+            customData_.AddEntriesFrom(input, _repeated_customData_codec);
+            break;
+          }
+          case 40: {
             Result = (global::Protocol.Result) input.ReadEnum();
             break;
           }
@@ -6692,10 +8022,17 @@ namespace Protocol {
             break;
           }
           case 26: {
-            data_.AddEntriesFrom(ref input, _repeated_data_codec);
+            if (fixedData_ == null) {
+              FixedData = new global::Protocol.Packs();
+            }
+            input.ReadMessage(FixedData);
             break;
           }
-          case 32: {
+          case 34: {
+            customData_.AddEntriesFrom(ref input, _repeated_customData_codec);
+            break;
+          }
+          case 40: {
             Result = (global::Protocol.Result) input.ReadEnum();
             break;
           }

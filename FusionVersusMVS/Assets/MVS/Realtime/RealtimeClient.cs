@@ -351,9 +351,9 @@ namespace MVS.Realtime
             }
         }
         
-        public virtual bool SendEvent(EventCode eventCode, byte[] data, int size)
+        public virtual bool SendEvent(int eventCode, IMessage fixedData, CustomStruct[] customData = null)
         {
-            return this.RealtimePeer.SendEvent(eventCode, data, size);
+            return this.RealtimePeer.SendEvent(eventCode, fixedData, customData);
         }
 
         public virtual void MVSDebug(DebugLevel debugLevel, string msg)
@@ -429,27 +429,11 @@ namespace MVS.Realtime
         public virtual void OnEvent(EventData eventData)
         {
             // Player player = CurrentRoom != null ? CurrentRoom.GetPlayer(eventData.Sender) : null;
-            EventCode eventCode = eventData.code;
             
-            switch (eventCode)
+            switch (eventData.code)
             {
-                case EventCode.PKT_S_CHAT:
-                    break;
-                case EventCode.PKT_S_ROOM_JOIN_OR_CREATE:
-                    MakingRoomCallbacksTarget.OnJoinedRoom();
-                    break;
-                case EventCode.PKT_S_GROUP_JOIN:
-                    MakingGroupCallbacksTarget.OnJoinedGroup();
-                    var pkt = new C_PLAYER_ID();
-                    OpRaiseEvent(EventCode.PKT_C_PLAYER_ID, pkt);
-                    break;
-                case EventCode.PKT_S_PLAYER_ID:
-                    var data_PlayerID = S_PLAYER_ID.Parser.ParseFrom(eventData.Data);
-                    LocalPlayer.PlayerInfo.PlayerID = data_PlayerID.PlayerID;
-                    Debug.Log(LocalPlayer.UserId);
-                    break;
                 case EventCode.PKT_S_OTHER_CLIENT_JOINED:
-                    var data = S_OTHER_CLIENT_JOINED.Parser.ParseFrom(eventData.Data);
+                    var data = Packs.Parser.ParseFrom(eventData.FixedData).SOtherClientJoined;
                     Player otherPlayer = new Player(data.PlayerInfo);
                     InGroupCallbacksTarget.OnPlayerEnteredGroup(otherPlayer);
                     break;
@@ -477,7 +461,7 @@ namespace MVS.Realtime
 
             switch (operationResponse.OperationCode)
             {
-                case OperationCode.Authenticate:
+                case OperationCode.AUTHENTICATE:
                     if (operationResponse.ReturnCode != 0)
                     {
                         MVSDebug(DebugLevel.ERROR, operationResponse.ToString());
@@ -507,11 +491,13 @@ namespace MVS.Realtime
                 case OperationCode.ROOM_JOIN_OR_CREATE:
                     JoinRoom(operationResponse);
                     break;
-                case OperationCode.JoinRoom:
-                    JoinRoom(operationResponse);
-                    break;
-                case OperationCode.JoinGroup:
+                case OperationCode.GROUP_JOIN:
                     JoinGroup(operationResponse);
+                    break;
+                case OperationCode.PLAYER_ID:
+                    var dataPlayerID = Packs.Parser.ParseFrom(operationResponse.FixedData).SPlayerId;
+                    LocalPlayer.PlayerInfo.PlayerID = dataPlayerID.PlayerID;
+                    Debug.Log(LocalPlayer.UserId);
                     break;
             }
 
@@ -595,13 +581,13 @@ namespace MVS.Realtime
 
         private void JoinRoom(OperationResponse operationResponse)
         {
-            var data = S_OPERATION.Parser.ParseFrom(operationResponse.Data);
+            var data = Packs.Parser.ParseFrom(operationResponse.FixedData).SRoomJoinOrCreate;
             
             RoomInfo newRoomInfo = new RoomInfo
             {
-                AppID = (ulong)data.DataDic[(int)Parameter.Appid].Unpack<Int64Value>().Value,
-                RoomID = (ulong)data.DataDic[(int)Parameter.Roomid].Unpack<Int64Value>().Value,
-                Name = data.DataDic[(int)Parameter.Roomname].Unpack<StringValue>().Value
+                AppID = data.AppID,
+                RoomID = data.WaplRoomID,
+                Name = data.Name
             };
             CurrentRoom = CreateRoom(newRoomInfo);
             CurrentRoom.RealtimeClient = this;
@@ -619,7 +605,11 @@ namespace MVS.Realtime
 
         private void JoinGroup(OperationResponse operationResponse)
         {
-            var data = S_GROUP_JOIN.Parser.ParseFrom(operationResponse.Data);
+            MakingGroupCallbacksTarget.OnJoinedGroup();
+            var pkt = new C_PLAYER_ID();
+            RealtimePeer.SendOperation(Protocol.OperationCode.PlayerId, pkt);
+            
+            var data = Packs.Parser.ParseFrom(operationResponse.FixedData).SGroupJoin;
             GroupInfo groupInfo = data.GroupInfo;
             Group newGroup = new Group(groupInfo, CurrentRoom);
 
@@ -650,7 +640,7 @@ namespace MVS.Realtime
         //Functions
         public bool OpCreateRoom(JoinRoomParams joinRoomParams)
         {
-            if (!CheckOpCanBeSent((byte)OperationCode.CreateRoom, Server, "CreateRoom"))
+            if (!CheckOpCanBeSent((byte)OperationCode.ROOM_JOIN_OR_CREATE, Server, "CreateRoom"))
             {
                 return false;
             }
@@ -670,7 +660,7 @@ namespace MVS.Realtime
                     ChannelID = channelID
                 }
             };
-            if (!CheckOpCanBeSent((byte)OperationCode.JoinGroup, Server, "JoinGroup"))
+            if (!CheckOpCanBeSent((byte)OperationCode.GROUP_JOIN, Server, "JoinGroup"))
             {
                 return false;
             }
@@ -700,16 +690,14 @@ namespace MVS.Realtime
             return sent;
         }
         
-        public virtual bool OpRaiseEvent(EventCode EventCode, IMessage pkt)
+        public virtual bool OpRaiseEvent(int EventCode, IMessage pkt = null, CustomStruct[] customData = null)
         {
-            var data = pkt.ToByteArray();
-            var size = pkt.CalculateSize();
             if (!CheckOpCanBeSent((byte)OperationCode.RAISE_EVENT, Server, "RaiseEvent"))
             {
                 return false;
             }
 
-            return RealtimePeer.SendEvent(EventCode, data, size);
+            return RealtimePeer.SendEvent(EventCode, pkt, customData);
         }
     }
 

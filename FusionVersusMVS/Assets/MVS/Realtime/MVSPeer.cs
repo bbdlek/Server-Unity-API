@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using _1_Scripts._8_HeliosTest;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Protocol;
@@ -141,19 +142,49 @@ namespace MVS.Realtime
             return peerBase.ProcessOutgoingData();
         }
 
-        public virtual bool SendEvent(EventCode eventCode, byte[] data, int size)
+        public virtual bool SendEvent(int eventCode, IMessage fixedData = null, CustomStruct[] customData = null)
         {
-            peerBase.SendPacket(eventCode, data, size);
+            var packs = new Packs();
+            var pkt = new C_EVENT
+            {
+                EventCode = eventCode,
+            };
+            switch (eventCode)
+            {
+                case EventCode.PKT_C_INITIAL_OBJECTS:
+                    packs.CInitialObjects = fixedData as C_INITIAL_OBJECTS;
+                    break;
+                case EventCode.PKT_C_ADD_NETWORK_OBJECTS:
+                    packs.CAddNetworkObjects = fixedData as C_ADD_NETWORK_OBJECTS;
+                    break;
+                case EventCode.PKT_C_UPDATE_NETWORK_OBJECTS:
+                    packs.CUpdateNetworkObjects = fixedData as C_UPDATE_NETWORK_OBJECTS;
+                    break;
+                case EventCode.PKT_C_REMOVE_NETWORK_OBJECTS:
+                    packs.CRemoveNetworkObjects = fixedData as C_REMOVE_NETWORK_OBJECTS;
+                    break;
+                case EventCode.PKT_C_CHANGE_OBJECTS_OWNER:
+                    packs.CChangeObjectsOwner = fixedData as C_CHANGE_OBJECTS_OWNER;
+                    break;
+                case CustomEventCode.Variable:
+                    packs.HeliosVariable = fixedData as Protocol.HeliosVariable;
+                    break;
+            }
+            if(fixedData != null)
+                pkt.FixedData = packs;
+            
+            SendOperation(Protocol.OperationCode.RaiseEvent, pkt, customData);
             return true;
         }
 
         public virtual bool SendOperation(
             Protocol.OperationCode operationCode,
-            Dictionary<Parameter, object> parameters
+            IMessage fixedData,
+            CustomStruct[] customData = null
         )
         {
-            (byte[] data, int size) = peerBase.SerializeOperationToPacket(operationCode, parameters);
-            peerBase.SendPacket(EventCode.PKT_C_OPERATION, data, size);
+            (byte[] data, int size) = peerBase.SerializeOperationToPacket(operationCode, fixedData, customData);
+            peerBase.SendPacket(data, size);
             return true;
         }
 

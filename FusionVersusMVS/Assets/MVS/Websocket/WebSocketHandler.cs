@@ -9,6 +9,7 @@ using MVS.Realtime;
 using Protocol;
 using UnityEngine;
 using WebSocketSharp;
+using UInt64 = System.UInt64;
 
 public partial class WebSocketHandler
 {

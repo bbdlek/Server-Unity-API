@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using _1_Scripts._8_HeliosTest;
 using MVS.Realtime;
 using Protocol;
 using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
+using OperationCode = MVS.Realtime.OperationCode;
 using Vector3 = UnityEngine.Vector3;
 
 namespace MVS.Helios
@@ -46,23 +48,17 @@ namespace MVS.Helios
 
         private static void OnEvent(EventData eventData)
         {
-            Debug.Log(eventData.code);
             switch (eventData.code)
             {
-                case EventCode.PKT_S_GROUP_JOIN:
-                    var InitialObjPkt = new C_INITIAL_OBJECTS();
-                    RaiseEvent(EventCode.PKT_C_INITIAL_OBJECTS, InitialObjPkt);
-                    break;
                 case EventCode.PKT_S_INITIAL_OBJECTS:
-                    var InitData = S_INITIAL_OBJECTS.Parser.ParseFrom(eventData.Data);
+                    var InitData = Packs.Parser.ParseFrom(eventData.FixedData).SInitialObjects;
                     foreach (var objectInfo in InitData.ObjectInfos)
                     {
                         NetworkInstantiate(objectInfo);
                     }
                     break;
                 case EventCode.PKT_S_ADD_NETWORK_OBJECTS:
-                    var data = S_ADD_NETWORK_OBJECTS.Parser.ParseFrom(eventData.Data);
-                    Debug.Log(data.ObjectInfos.Count);
+                    var data = Packs.Parser.ParseFrom(eventData.FixedData).SAddNetworkObjects;
                     foreach (var objectInfo in data.ObjectInfos)
                     {
                         if(objectInfo.OwnerPlayerID != LocalPlayer.UserId)
@@ -79,7 +75,8 @@ namespace MVS.Helios
                     }
                     break;
                 case EventCode.PKT_S_UPDATE_NETWORK_OBJECTS:
-                    var dataUpdate = S_UPDATE_NETWORK_OBJECTS.Parser.ParseFrom(eventData.Data);
+                    var dataUpdate = Packs.Parser.ParseFrom(eventData.FixedData).SUpdateNetworkObjects;
+                    Debug.Log(dataUpdate.ObjectInfos.Count);
                     foreach (var objectInfo in dataUpdate.ObjectInfos)
                     {
                         var id = objectInfo.ObjectID.InstanceID;
@@ -88,19 +85,33 @@ namespace MVS.Helios
                     }
                     break;
                 case EventCode.PKT_S_REMOVE_NETWORK_OBJECTS:
-                    var dataRemove = S_REMOVE_NETWORK_OBJECTS.Parser.ParseFrom(eventData.Data);
+                    var dataRemove = Packs.Parser.ParseFrom(eventData.FixedData).SRemoveNetworkObjects;
                     foreach (var objectInfo in dataRemove.ObjectInfos)
                     {
                         var id = objectInfo.ObjectID.InstanceID;
                         NetworkRemoveObject(id);
                     }
                     break;
+                
+                case CustomEventCode.Variable:
+                    var variable = Packs.Parser.ParseFrom(eventData.FixedData).HeliosVariable;
+                    Debug.Log(variable.NInt32);
+                    break;
             }
         }
 
-        private static void OnOperation(OperationResponse obj)
+        private static void OnOperation(OperationResponse opRes)
         {
-            
+            Debug.Log(opRes.OperationCode);
+            switch (opRes.OperationCode)
+            {
+                case OperationCode.HEART_BEAT:
+                    break;
+                case OperationCode.ROOM_JOIN_OR_CREATE:
+                    break;
+                case OperationCode.GROUP_JOIN:
+                    break;
+            }
         }
 
         private static void OnClientStateChanged(ClientState arg1, ClientState arg2)

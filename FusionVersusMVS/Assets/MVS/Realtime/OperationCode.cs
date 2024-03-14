@@ -2,7 +2,7 @@ namespace MVS.Realtime
 {
     public enum OperationCode
     {
-        HEART_BEAT = 0,
+        HEART_BEAT = Protocol.OperationCode.HeartBeat,
         ROOM_JOIN_OR_CREATE = 1,
         ROOM_LEAVE = 2,
         ROOM_LIST = 3,
@@ -11,17 +11,6 @@ namespace MVS.Realtime
         GROUP_JOIN = 6,
         GROUP_LEAVE = 7,
         RAISE_EVENT = 8,
-        Authenticate = 10,
-        CreateRoom = 11,
-        JoinRoom = 12,
-        CreateGroup = 13,
-        JoinGroup = 14,
-        
-        //
-        GetRoomList = 10,
-        
-        //
-        RaiseEvent = 20,
-
+        AUTHENTICATE = 10,
     }
 }

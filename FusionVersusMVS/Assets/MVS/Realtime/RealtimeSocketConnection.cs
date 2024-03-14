@@ -50,7 +50,7 @@ namespace MVS.Realtime
         
         public abstract bool Disconnect();
 
-        public abstract bool Send(EventCode eventCode, byte[] data, int size);
+        public abstract bool Send(byte[] data, int size);
         
         public abstract bool Receive(EventCode eventCode, byte[] data, int size);
 

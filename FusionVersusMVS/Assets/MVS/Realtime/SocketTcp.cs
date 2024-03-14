@@ -84,9 +84,9 @@ namespace MVS.Realtime
             return true;
         }
 
-        public override bool Send(EventCode eventCode, byte[] data, int size)
+        public override bool Send(byte[] data, int size)
         {
-            wsh.SendPacket((WebSocketHandler.PKT_ID)eventCode, data, size);
+            wsh.SendPacket(WebSocketHandler.PKT_ID.PKT_C_OPERATION, data, size);
             return true;
         }
 

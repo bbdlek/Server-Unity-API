@@ -38,7 +38,7 @@ namespace MVS.Helios
             if ((tr.localPosition != _storedPosition || tr.localRotation != _storedRotation) && isMine)
             {
                 //Send?
-                var pkt = new C_UPDATE_NETWORK_OBJECTS();
+                var fixedData = new C_UPDATE_NETWORK_OBJECTS();
                 var objectInfo = new ObjectInfo
                 {
                     ObjectID = new ObjectID
@@ -59,8 +59,8 @@ namespace MVS.Helios
                     Index = PropsID.Rotation3D,
                     Value = { tr.localRotation.x, tr.localRotation.y, tr.localRotation.z, tr.localRotation.w }
                 });
-                pkt.ObjectInfos.Add(objectInfo);
-                HeliosNetwork.RaiseEvent(EventCode.PKT_C_UPDATE_NETWORK_OBJECTS, pkt);
+                fixedData.ObjectInfos.Add(objectInfo);
+                HeliosNetwork.RaiseEvent(EventCode.PKT_C_UPDATE_NETWORK_OBJECTS, fixedData);
                 _storedPosition = tr.localPosition;
                 networkPosition = _storedPosition;
             }

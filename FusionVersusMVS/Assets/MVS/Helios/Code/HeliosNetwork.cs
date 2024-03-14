@@ -9,6 +9,7 @@ using Protocol;
 using UnityEditor;
 using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
+using HeliosVariable = MVS.Realtime.HeliosVariable;
 using Vector3 = UnityEngine.Vector3;
 
 namespace MVS.Helios
@@ -120,7 +121,8 @@ namespace MVS.Helios
             }
         }
 
-        /// <summary>Backup for property IsMessageQueueRunning.</summary>
+        public static List<HeliosVariable> HeliosVariables = new List<HeliosVariable>();
+        
         private static bool isMessageQueueRunning = true;
         
         public static float MinimalTimeScaleToDispatchInFixedUpdate = -1f;
@@ -190,6 +192,7 @@ namespace MVS.Helios
         private static void StaticReInitialize()
         {
             if(!EditorApplication.isPlayingOrWillChangePlaymode) return;
+            if (HeliosVariables == null) HeliosVariables = new List<HeliosVariable>();
 
             ConnectionProtocol protocol = HeliosSettings.AppSettings.Protocol;
             RealtimeClient = new RealtimeClient(protocol);
@@ -290,11 +293,11 @@ namespace MVS.Helios
             return RealtimeClient.OpJoinGroup(sceneNumber, channelID);
         }
 
-        public static bool RaiseEvent(EventCode eventCode, IMessage pkt)
+        public static bool RaiseEvent(int eventCode, IMessage fixedData = null, CustomStruct[] customStructs = null)
         {
-            if (!InGroup) return false;
+            // if (!InGroup) return false;
 
-            return RealtimeClient.OpRaiseEvent(eventCode, pkt);
+            return RealtimeClient.OpRaiseEvent(eventCode, fixedData, customStructs);
         }
 
         #region Instantiate
@@ -439,7 +442,7 @@ namespace MVS.Helios
             }
         }
         
-        private static bool SendEventInternal(EventCode eventCode, IMessage data)
+        private static bool SendEventInternal(int eventCode, IMessage data, CustomStruct[] customData = null)
         {
             // if (!InRoom)
             // {
@@ -447,7 +450,7 @@ namespace MVS.Helios
             //     return false;
             // }
 
-            return RealtimeClient.OpRaiseEvent(eventCode, data);
+            return RealtimeClient.OpRaiseEvent(eventCode, data, customData);
         }
         
 

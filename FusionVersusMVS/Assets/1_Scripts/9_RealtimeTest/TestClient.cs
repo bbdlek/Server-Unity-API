@@ -13,18 +13,17 @@ public class TestClient : RealtimeClient
     public override void OnEvent(EventData eventData)
     {
         base.OnEvent(eventData);
-        EventCode eventCode = eventData.code;
-        switch (eventCode)
+        switch (eventData.code)
         {
-            case EventCode.PKT_S_ROOM_JOIN_OR_CREATE:
-                Debug.Log("RoomJoined");
-                break;
-            case EventCode.PKT_S_GROUP_JOIN:
-                Debug.Log("GroupJoined");
-                break;
-            case EventCode.PKT_S_ADD_NETWORK_OBJECTS:
-                Debug.Log("AddNetworkObjects");
-                break;
+            // case EventCode.PKT_S_ROOM_JOIN_OR_CREATE:
+            //     Debug.Log("RoomJoined");
+            //     break;
+            // case EventCode.PKT_S_GROUP_JOIN:
+            //     Debug.Log("GroupJoined");
+            //     break;
+            // case EventCode.PKT_S_ADD_NETWORK_OBJECTS:
+            //     Debug.Log("AddNetworkObjects");
+            //     break;
         }
     }
 
@@ -55,7 +54,7 @@ public class TestClient : RealtimeClient
         base.OnOperationResponse(operationResponse);
         switch (operationResponse.OperationCode)
         {
-            case OperationCode.JoinRoom:
+            case OperationCode.ROOM_JOIN_OR_CREATE:
                 Debug.Log(CurrentRoom.RoomInfo.Name);
                 break;
         }

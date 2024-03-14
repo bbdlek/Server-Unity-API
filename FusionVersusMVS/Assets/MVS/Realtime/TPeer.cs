@@ -32,9 +32,9 @@ namespace MVS.Realtime
             
         }
 
-        internal override bool SendPacket(EventCode eventCode, byte[] data, int size)
+        internal override bool SendPacket(byte[] data, int size)
         {
-            realtimeSocket.Send(eventCode, data, size);
+            realtimeSocket.Send(data, size);
             return true;
         }
 

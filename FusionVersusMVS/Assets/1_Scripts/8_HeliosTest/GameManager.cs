@@ -9,9 +9,12 @@ using Random = UnityEngine.Random;
 public class GameManager : MonoBehaviorHeliosCallbacks
 {
     public GameObject[] prefabsForSpawn;
+
+    private HNInt score = new HNInt(0);
     
     private void Awake()
     {
+        score = 3;
         HeliosNetwork.SendRate = 30;
     }
 
@@ -57,5 +60,13 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     {
         base.OnPlayerEnteredGroup(newPlayer);
         Debug.Log(newPlayer.NickName);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            score++;
+        }
     }
 }

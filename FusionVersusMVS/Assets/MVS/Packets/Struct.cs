@@ -46,7 +46,10 @@ namespace Protocol {
             "UHJvdG9jb2wuUHJvcHNJRBINCgV2YWx1ZRgCIAMoASJDChBDdXN0b21TdHJp",
             "bmdQcm9wEiAKBWluZGV4GAEgASgOMhEuUHJvdG9jb2wuUHJvcHNJRBINCgV2",
             "YWx1ZRgCIAMoCSJFCgxDdXN0b21TdHJ1Y3QSEQoJdHlwZUluZGV4GAEgASgF",
-            "EiIKBGRhdGEYAiADKAsyFC5nb29nbGUucHJvdG9idWYuQW55YgZwcm90bzM="));
+            "EiIKBGRhdGEYAiADKAsyFC5nb29nbGUucHJvdG9idWYuQW55InUKDkhlbGlv",
+            "c1ZhcmlhYmxlEhEKB05TdHJpbmcYASABKAlIABIQCgZOSW50MzIYAiABKAVI",
+            "ABIQCgZOSW50NjQYAyABKANIABIQCgZORmxvYXQYBCABKAJIABIRCgdORG91",
+            "YmxlGAUgASgBSABCBwoFdmFsdWViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protocol.EnumReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.AnyReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -60,7 +63,8 @@ namespace Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.ObjectInfo), global::Protocol.ObjectInfo.Parser, new[]{ "ObjectID", "SyncType", "OwnerPlayerID", "NumberProps", "StringProps" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.CustomNumberProp), global::Protocol.CustomNumberProp.Parser, new[]{ "Index", "Value" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.CustomStringProp), global::Protocol.CustomStringProp.Parser, new[]{ "Index", "Value" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.CustomStruct), global::Protocol.CustomStruct.Parser, new[]{ "TypeIndex", "Data" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.CustomStruct), global::Protocol.CustomStruct.Parser, new[]{ "TypeIndex", "Data" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.HeliosVariable), global::Protocol.HeliosVariable.Parser, new[]{ "NString", "NInt32", "NInt64", "NFloat", "NDouble" }, new[]{ "Value" }, null, null, null)
           }));
     }
     #endregion
@@ -2773,6 +2777,385 @@ namespace Protocol {
           }
           case 18: {
             data_.AddEntriesFrom(ref input, _repeated_data_codec);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class HeliosVariable : pb::IMessage<HeliosVariable>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<HeliosVariable> _parser = new pb::MessageParser<HeliosVariable>(() => new HeliosVariable());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<HeliosVariable> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protocol.StructReflection.Descriptor.MessageTypes[11]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public HeliosVariable() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public HeliosVariable(HeliosVariable other) : this() {
+      switch (other.ValueCase) {
+        case ValueOneofCase.NString:
+          NString = other.NString;
+          break;
+        case ValueOneofCase.NInt32:
+          NInt32 = other.NInt32;
+          break;
+        case ValueOneofCase.NInt64:
+          NInt64 = other.NInt64;
+          break;
+        case ValueOneofCase.NFloat:
+          NFloat = other.NFloat;
+          break;
+        case ValueOneofCase.NDouble:
+          NDouble = other.NDouble;
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public HeliosVariable Clone() {
+      return new HeliosVariable(this);
+    }
+
+    /// <summary>Field number for the "NString" field.</summary>
+    public const int NStringFieldNumber = 1;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string NString {
+      get { return valueCase_ == ValueOneofCase.NString ? (string) value_ : ""; }
+      set {
+        value_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        valueCase_ = ValueOneofCase.NString;
+      }
+    }
+
+    /// <summary>Field number for the "NInt32" field.</summary>
+    public const int NInt32FieldNumber = 2;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int NInt32 {
+      get { return valueCase_ == ValueOneofCase.NInt32 ? (int) value_ : 0; }
+      set {
+        value_ = value;
+        valueCase_ = ValueOneofCase.NInt32;
+      }
+    }
+
+    /// <summary>Field number for the "NInt64" field.</summary>
+    public const int NInt64FieldNumber = 3;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long NInt64 {
+      get { return valueCase_ == ValueOneofCase.NInt64 ? (long) value_ : 0L; }
+      set {
+        value_ = value;
+        valueCase_ = ValueOneofCase.NInt64;
+      }
+    }
+
+    /// <summary>Field number for the "NFloat" field.</summary>
+    public const int NFloatFieldNumber = 4;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public float NFloat {
+      get { return valueCase_ == ValueOneofCase.NFloat ? (float) value_ : 0F; }
+      set {
+        value_ = value;
+        valueCase_ = ValueOneofCase.NFloat;
+      }
+    }
+
+    /// <summary>Field number for the "NDouble" field.</summary>
+    public const int NDoubleFieldNumber = 5;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public double NDouble {
+      get { return valueCase_ == ValueOneofCase.NDouble ? (double) value_ : 0D; }
+      set {
+        value_ = value;
+        valueCase_ = ValueOneofCase.NDouble;
+      }
+    }
+
+    private object value_;
+    /// <summary>Enum of possible cases for the "value" oneof.</summary>
+    public enum ValueOneofCase {
+      None = 0,
+      NString = 1,
+      NInt32 = 2,
+      NInt64 = 3,
+      NFloat = 4,
+      NDouble = 5,
+    }
+    private ValueOneofCase valueCase_ = ValueOneofCase.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ValueOneofCase ValueCase {
+      get { return valueCase_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearValue() {
+      valueCase_ = ValueOneofCase.None;
+      value_ = null;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as HeliosVariable);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(HeliosVariable other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (NString != other.NString) return false;
+      if (NInt32 != other.NInt32) return false;
+      if (NInt64 != other.NInt64) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(NFloat, other.NFloat)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(NDouble, other.NDouble)) return false;
+      if (ValueCase != other.ValueCase) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (valueCase_ == ValueOneofCase.NString) hash ^= NString.GetHashCode();
+      if (valueCase_ == ValueOneofCase.NInt32) hash ^= NInt32.GetHashCode();
+      if (valueCase_ == ValueOneofCase.NInt64) hash ^= NInt64.GetHashCode();
+      if (valueCase_ == ValueOneofCase.NFloat) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(NFloat);
+      if (valueCase_ == ValueOneofCase.NDouble) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(NDouble);
+      hash ^= (int) valueCase_;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (valueCase_ == ValueOneofCase.NString) {
+        output.WriteRawTag(10);
+        output.WriteString(NString);
+      }
+      if (valueCase_ == ValueOneofCase.NInt32) {
+        output.WriteRawTag(16);
+        output.WriteInt32(NInt32);
+      }
+      if (valueCase_ == ValueOneofCase.NInt64) {
+        output.WriteRawTag(24);
+        output.WriteInt64(NInt64);
+      }
+      if (valueCase_ == ValueOneofCase.NFloat) {
+        output.WriteRawTag(37);
+        output.WriteFloat(NFloat);
+      }
+      if (valueCase_ == ValueOneofCase.NDouble) {
+        output.WriteRawTag(41);
+        output.WriteDouble(NDouble);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (valueCase_ == ValueOneofCase.NString) {
+        output.WriteRawTag(10);
+        output.WriteString(NString);
+      }
+      if (valueCase_ == ValueOneofCase.NInt32) {
+        output.WriteRawTag(16);
+        output.WriteInt32(NInt32);
+      }
+      if (valueCase_ == ValueOneofCase.NInt64) {
+        output.WriteRawTag(24);
+        output.WriteInt64(NInt64);
+      }
+      if (valueCase_ == ValueOneofCase.NFloat) {
+        output.WriteRawTag(37);
+        output.WriteFloat(NFloat);
+      }
+      if (valueCase_ == ValueOneofCase.NDouble) {
+        output.WriteRawTag(41);
+        output.WriteDouble(NDouble);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (valueCase_ == ValueOneofCase.NString) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(NString);
+      }
+      if (valueCase_ == ValueOneofCase.NInt32) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(NInt32);
+      }
+      if (valueCase_ == ValueOneofCase.NInt64) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(NInt64);
+      }
+      if (valueCase_ == ValueOneofCase.NFloat) {
+        size += 1 + 4;
+      }
+      if (valueCase_ == ValueOneofCase.NDouble) {
+        size += 1 + 8;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(HeliosVariable other) {
+      if (other == null) {
+        return;
+      }
+      switch (other.ValueCase) {
+        case ValueOneofCase.NString:
+          NString = other.NString;
+          break;
+        case ValueOneofCase.NInt32:
+          NInt32 = other.NInt32;
+          break;
+        case ValueOneofCase.NInt64:
+          NInt64 = other.NInt64;
+          break;
+        case ValueOneofCase.NFloat:
+          NFloat = other.NFloat;
+          break;
+        case ValueOneofCase.NDouble:
+          NDouble = other.NDouble;
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            NString = input.ReadString();
+            break;
+          }
+          case 16: {
+            NInt32 = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            NInt64 = input.ReadInt64();
+            break;
+          }
+          case 37: {
+            NFloat = input.ReadFloat();
+            break;
+          }
+          case 41: {
+            NDouble = input.ReadDouble();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            NString = input.ReadString();
+            break;
+          }
+          case 16: {
+            NInt32 = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            NInt64 = input.ReadInt64();
+            break;
+          }
+          case 37: {
+            NFloat = input.ReadFloat();
+            break;
+          }
+          case 41: {
+            NDouble = input.ReadDouble();
             break;
           }
         }

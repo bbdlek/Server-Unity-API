@@ -1,13 +1,17 @@
 #nullable disable
+using System.Collections.Generic;
+
 namespace MVS.Realtime
 {
     public class EventData
     {
-        public EventCode code;
+        public int code;
 
         private ulong _sender;
         
-        public byte[] Data;
+        public byte[] FixedData;
+
+        public List<byte[]> CustomData;
 
         public ulong Sender
         {

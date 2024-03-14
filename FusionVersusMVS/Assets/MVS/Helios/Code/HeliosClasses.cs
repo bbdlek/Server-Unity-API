@@ -12,8 +12,6 @@ namespace MVS.Helios
 {
     public class HeliosMonoBehavior : MonoBehaviour
     {
-        protected List<FieldInfo> NetworkedVariableList = new List<FieldInfo>();
-        
         protected bool isMine = false;
         
         public bool IsMine
@@ -24,7 +22,7 @@ namespace MVS.Helios
 
         private void Awake()
         {
-            NetworkedVariableList = FindNetworkedVariables();
+            // NetworkedVariableList = FindNetworkedVariables();
         }
         
         public List<FieldInfo> FindNetworkedVariables()

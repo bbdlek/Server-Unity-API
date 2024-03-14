@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using MVS.Realtime;
 using UnityEngine;
 
 namespace MVS.Helios
@@ -6,7 +8,7 @@ namespace MVS.Helios
     {
         void OnHeliosSerializeView();
     }
-    
+
     public interface IHeliosPrefabPool
     {
         GameObject Instantiate(uint prefabId, Vector3 position, Quaternion rotation);

@@ -41,40 +41,29 @@ namespace MVS.Realtime
 
         public virtual bool OpCreateRoom(JoinRoomParams opParams)
         {
-            Dictionary<Parameter, object> parameter = new Dictionary<Parameter, object>();
-
-            if (!string.IsNullOrEmpty(opParams.AuthToken))
+            var fixedData = new C_ROOM_JOIN_OR_CREATE
             {
-                parameter[Parameter.Authtoken] = opParams.AuthToken;
-            }
-
-            parameter[Parameter.Appid] = opParams.AppID;
-
-            parameter[Parameter.Roomid] = opParams.RoomID;
-
-            if (!string.IsNullOrEmpty(opParams.Name))
-            {
-                parameter[Parameter.Roomname] = opParams.Name;
-            }
-            
-            return SendOperation(Protocol.OperationCode.RoomJoinOrCreate, parameter);
+                AuthToken = opParams.AuthToken,
+                AppID = (ulong)opParams.AppID,
+                WaplRoomID = (ulong)opParams.RoomID,
+                Name = opParams.Name
+            };
+            return SendOperation(Protocol.OperationCode.RoomJoinOrCreate, fixedData);
         }
 
         public virtual bool OpJoinGroup(C_GROUP_JOIN groupJoinPkt)
         {
-            return SendEvent(EventCode.PKT_C_GROUP_JOIN, groupJoinPkt.ToByteArray(), 
-                groupJoinPkt.CalculateSize());
+            return SendOperation(Protocol.OperationCode.GroupJoin, groupJoinPkt);
         }
 
         public virtual bool OpAddNetworkObject(C_ADD_NETWORK_OBJECTS addNetworkObjectsPkt)
         {
-            return SendEvent(EventCode.PKT_C_ADD_NETWORK_OBJECTS, addNetworkObjectsPkt.ToByteArray(),
-                addNetworkObjectsPkt.CalculateSize());
+            return SendEvent(EventCode.PKT_C_ADD_NETWORK_OBJECTS, addNetworkObjectsPkt);
         }
 
-        public override bool SendEvent(EventCode eventCode, byte[] data, int size)
+        public override bool SendEvent(int eventCode, IMessage fixedData = null, CustomStruct[] customData = null)
         {
-            base.SendEvent(eventCode, data, size);
+            base.SendEvent(eventCode, fixedData, customData);
             return true;
         }
 
