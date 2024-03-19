@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata minClientVersion="2.12">
+    <id>PostSharp</id>
+    <version>2024.0.6</version>
+    <title>PostSharp</title>
+    <authors>PostSharp Technologies</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="file">LICENSE.md</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <icon>icon.png</icon>
+    <projectUrl>https://www.postsharp.net/links/nuget-home</projectUrl>
+    <description>The #1 pattern-aware extension to C# and VB.</description>
+    <summary>The #1 pattern-aware extension to C# and VB. Allows developers to eradicate boilerplate by offloading repeating work from humans to machines. PostSharp contains ready-made implementations of the most common patterns and gives you the tools to build automation for your own patterns.</summary>
+    <language>en-US</language>
+    <tags>postsharp post-compiler postcompiler aop aspect dynamic interceptor interception unity instrumentation logging tracing design pattern weaver</tags>
+    <dependencies>
+      <dependency id="PostSharp.Redist" version="2024.0.6" />
+    </dependencies>
+  </metadata>
+</package>

@@ -1,48 +1,79 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using _1_Scripts._8_HeliosTest;
-using Google.Protobuf.WellKnownTypes;
 using MVS.Helios;
-using Protocol;
 using UnityEngine;
 
 namespace MVS.Realtime
 {
-    [Serializable]
+    
+    
+    [AttributeUsage(AttributeTargets.Property)]
+    public class LogOnChangeAttribute : Attribute
+    {
+        public string Message { get; }
+
+        public LogOnChangeAttribute(string message)
+        {
+            Message = message;
+        }
+    }
+    
+    
+    
     public class HeliosVariable
     {
+        protected bool IsUpdate;
+
+        protected Protocol.HeliosVariable _value;
+        
+        //Owner
+        
+        //Index
+        
         public HeliosVariable()
         {
+            _value = new Protocol.HeliosVariable();
             if(!HeliosNetwork.HeliosVariables.Contains(this))
                 HeliosNetwork.HeliosVariables.Add(this);
         }
     }
     
-    [Serializable]
     public class HNInt : HeliosVariable
     {
-        private int _value;
-        
         public int Value
         {
-            get { return _value; }
+            get
+            {
+                Debug.Log("Get");
+                return _value.NInt32;
+            }
             set
             {
-                if(_value != value && HeliosNetwork.IsConnected)
-                {
-                    Debug.Log($"{_value} to {value}");
-                    // TODO : SendQueue, Flag?
-                    this._value = value;
-                    Protocol.HeliosVariable netVariable = new Protocol.HeliosVariable();
-                    netVariable.NInt32 = value;
-                    Debug.Log(netVariable.NInt32);
-                    HeliosNetwork.RaiseEvent(CustomEventCode.Variable, netVariable);
-                }
+                //Send
+                Debug.Log("Set");
+                _value.NInt32 = value;
             }
         }
+        
 
         public HNInt(int value)
         {
             Value = value;
+        }
+
+        public static implicit operator HNInt(int value)
+        {
+            Debug.Log("A");
+            return new HNInt(value);
+        }
+
+        public static implicit operator int(HNInt hnInt)
+        {
+            Debug.Log("B");
+            return hnInt.Value;
         }
 
         public static HNInt operator +(HNInt a, HNInt b)
@@ -65,16 +96,6 @@ namespace MVS.Realtime
         {
             a.Value--;
             return a;
-        }
-
-        public static implicit operator int(HNInt HNInt)
-        {
-            return HNInt.Value;
-        }
-        
-        public static implicit operator HNInt(int value)
-        {
-            return new HNInt(value);
         }
 
         public override string ToString()

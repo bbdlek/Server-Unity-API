@@ -12,7 +12,7 @@ public class FusionStarter : Singleton<FusionStarter>, INetworkRunnerCallbacks
 {
     private NetworkRunner _runner;
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
-
+    
     public async void StartGame(string roomName)
     {
         _runner = gameObject.AddComponent<NetworkRunner>();

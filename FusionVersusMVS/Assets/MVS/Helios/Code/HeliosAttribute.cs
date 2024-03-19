@@ -1,24 +1,34 @@
 using System;
+using PostSharp.Aspects;
+using PostSharp.Serialization;
 using UnityEngine;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class NetworkedAttribute : Attribute
 {
-    public void OnBeforeSetValue(object value)
+}
+
+[PSerializable]
+public class NetworkedAspect : OnMethodBoundaryAspect
+{
+    public override void OnEntry(MethodExecutionArgs args)
     {
-        Debug.Log($"Setting value: {value}");
+        Debug.Log("Method entry: " + args.Method.Name);
     }
 
-    public void OnAfterGetValue(object value)
+    public override void OnExit(MethodExecutionArgs args)
     {
-        Debug.Log($"Getting value: {value}");
+        Debug.Log("Method exit: " + args.Method.Name);
     }
 }
 
 public class HeliosAttribute : MonoBehaviour
 {
-    [Networked] 
-    public int Age { get; set; }
+    [SerializeField]
+    private int age;
+    
+    [NetworkedAspect] 
+    public int Age { get => age; set => age = value; }
 
     private void Start()
     {
@@ -27,5 +37,13 @@ public class HeliosAttribute : MonoBehaviour
 
         // 값을 가져올 때 로그 출력
         int ageValue = Age; // Getting value: 3
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Age++;
+        }
     }
 }
