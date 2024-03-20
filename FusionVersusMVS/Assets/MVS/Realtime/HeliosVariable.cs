@@ -8,99 +8,64 @@ using UnityEngine;
 
 namespace MVS.Realtime
 {
-    
-    
-    [AttributeUsage(AttributeTargets.Property)]
-    public class LogOnChangeAttribute : Attribute
-    {
-        public string Message { get; }
-
-        public LogOnChangeAttribute(string message)
-        {
-            Message = message;
-        }
-    }
-    
-    
-    
     public class HeliosVariable
     {
-        protected bool IsUpdate;
+        public bool IsUpdate;
 
         protected Protocol.HeliosVariable _value;
         
         //Owner
         
         //Index
+        [HideInInspector]
+        public int Index;
         
         public HeliosVariable()
         {
             _value = new Protocol.HeliosVariable();
             if(!HeliosNetwork.HeliosVariables.Contains(this))
+            {
                 HeliosNetwork.HeliosVariables.Add(this);
+                Index = HeliosNetwork.HeliosVariables.IndexOf(this);
+            }
+        }
+
+        public virtual void SetFlag(bool flag)
+        {
+            IsUpdate = flag;
         }
     }
     
+    [Serializable]
     public class HNInt : HeliosVariable
     {
-        public int Value
+        [SerializeField]
+        private int _value;
+        
+        public int Value 
         {
             get
             {
                 Debug.Log("Get");
-                return _value.NInt32;
+                return base._value.NInt32;
             }
             set
             {
-                //Send
-                Debug.Log("Set");
-                _value.NInt32 = value;
+                Debug.Log($"Set {Index}");
+                SetFlag(true);
+                // base._value.NInt32 = value;
+                // _value = value;
             }
         }
         
-
         public HNInt(int value)
         {
             Value = value;
         }
 
-        public static implicit operator HNInt(int value)
+        public override void SetFlag(bool flag)
         {
-            Debug.Log("A");
-            return new HNInt(value);
-        }
-
-        public static implicit operator int(HNInt hnInt)
-        {
-            Debug.Log("B");
-            return hnInt.Value;
-        }
-
-        public static HNInt operator +(HNInt a, HNInt b)
-        {
-            return new HNInt(a.Value + b.Value);
-        }
-
-        public static HNInt operator ++(HNInt a)
-        {
-            a.Value++;
-            return a;
-        }
-        
-        public static HNInt operator -(HNInt a, HNInt b)
-        {
-            return new HNInt(a.Value - b.Value);
-        }
-
-        public static HNInt operator --(HNInt a)
-        {
-            a.Value--;
-            return a;
-        }
-
-        public override string ToString()
-        {
-            return Value.ToString();
+            base.SetFlag(flag);
         }
     }
 
