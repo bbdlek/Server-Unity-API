@@ -277,7 +277,7 @@ MonoBehaviour:
   enableMvs: 0
   fusionStarter: {fileID: 0}
   mvsStarter: {fileID: 0}
-  gameMode: 2
+  gameMode: 6
   fusionPlayerPrefab: {fileID: 3984456494517459671, guid: 7c5212f28d0c5f077918519fcca35fb8,
     type: 3}
 --- !u!1 &330585543

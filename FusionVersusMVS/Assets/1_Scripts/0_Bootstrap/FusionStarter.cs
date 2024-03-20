@@ -46,7 +46,7 @@ public class FusionStarter : Singleton<FusionStarter>, INetworkRunnerCallbacks
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         Debug.Log(IPhotonSocket.ServerIpAddress);
-        if (runner.GameMode == GameMode.Shared && player == runner.LocalPlayer)
+        if (player == runner.LocalPlayer)
         {
             Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 1, 0);
             NetworkObject networkPlayerObject = runner.Spawn(Bootstrap.Instance.fusionPlayerPrefab, spawnPosition, Quaternion.identity, player);
