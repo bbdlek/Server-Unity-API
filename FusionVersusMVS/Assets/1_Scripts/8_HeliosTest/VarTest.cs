@@ -22,19 +22,7 @@ namespace _1_Scripts._8_HeliosTest
         {
             if(Input.GetKeyDown(KeyCode.L))
             {
-                score.Value = 3; 
-            }
-
-            foreach (var VARIABLE in HeliosNetwork.HeliosVariables)
-            {
-                if (VARIABLE.IsUpdate)
-                {
-                    if (VARIABLE is HNInt hnInt)
-                    {
-                        hnInt.Value++;
-                        hnInt.SetFlag(false);
-                    }
-                }
+                score.Value++;
             }
         }
     }

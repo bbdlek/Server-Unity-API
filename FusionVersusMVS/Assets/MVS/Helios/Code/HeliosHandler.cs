@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using _1_Scripts._8_HeliosTest;
 using MVS.Realtime;
+using Protocol;
 using UnityEngine;
 using UnityEngine.Profiling;
+using HeliosVariable = Protocol.HeliosVariable;
 
 namespace MVS.Helios
 {
@@ -52,13 +56,54 @@ namespace MVS.Helios
                 HeliosNetwork.RealtimeClient.RealtimePeer.ProcessIncomingData();
             }
         }
+        
+        private float _elapsedTime = 0f;
 
         protected void LateUpdate()
         {
-            if (Time.timeScale <= HeliosNetwork.MinimalTimeScaleToDispatchInFixedUpdate)
+            _elapsedTime += Time.deltaTime;
+
+            if (_elapsedTime >= 1f / HeliosNetwork.SendRate)
             {
-                // this.Dispatch();
+                CheckAndUpdateVariables();
             }
+        }
+
+        private void CheckAndUpdateVariables()
+        {
+            foreach (var pair in HeliosNetwork.HeliosVariableDic)
+            {
+                var variable = pair.Value;
+                Debug.Log($"{pair.Key}key, {pair.Value.Index} idx, {variable.IsUpdate}");
+                if (variable.IsUpdate)
+                {
+                    //Send
+                    Debug.Log($"SEND VARIABLE {variable.Index}");
+                    var data = new C_VARIABLE
+                    {
+                        Index = (ulong)HeliosNetwork.HeliosVariableDic.FirstOrDefault(x => x.Value == variable).Key,
+                        HeliosVariable = variable.GetValue()
+                    };
+                    HeliosNetwork.RaiseEvent(CustomEventCode.Variable, data);
+                    variable.SetFlag(false);
+                }
+            }
+            //
+            // foreach (var variable in HeliosNetwork.HeliosVariables)
+            // {
+            //     if (variable.IsUpdate)
+            //     {
+            //         //Send
+            //         Debug.Log("SEND VARIABLE");
+            //         var data = new C_VARIABLE
+            //         {
+            //             Index = (ulong)HeliosNetwork.HeliosVariables.IndexOf(variable),
+            //             HeliosVariable = variable.GetValue()
+            //         };
+            //         HeliosNetwork.RaiseEvent(CustomEventCode.Variable, data);
+            //         variable.SetFlag(false);
+            //     }
+            // }
         }
 
         public void OnConnected()

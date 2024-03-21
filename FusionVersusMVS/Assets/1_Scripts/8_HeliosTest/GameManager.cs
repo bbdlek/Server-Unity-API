@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     private void Awake()
     {
         // score = 3;
-        HeliosNetwork.SendRate = 30;
+        HeliosNetwork.SendRate = 1;
     }
 
     public void OnClickConnectBtn()

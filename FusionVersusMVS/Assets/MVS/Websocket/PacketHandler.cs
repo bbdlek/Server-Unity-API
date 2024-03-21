@@ -46,9 +46,10 @@ public partial class WebSocketHandler
         PKT_C_CHAT = 1023,
         PKT_S_CHAT = 1024,
         PKT_C_EVENT = 1025,
-        PKT_C_OPERATION = 1026,
-        PKT_S_OPERATION = 1027,
-        PKT_S_EVENT = 1028,
+        PKT_C_VARIABLE = 1026,
+        PKT_C_OPERATION = 1027,
+        PKT_S_OPERATION = 1028,
+        PKT_S_EVENT = 1029,
     };
 
     /// <summary>

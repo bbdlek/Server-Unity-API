@@ -1,17 +1,22 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
+using _1_Scripts._8_HeliosTest;
 using MVS.Realtime;
 using Protocol;
 using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
+using HeliosVariable = MVS.Realtime.HeliosVariable;
 using Vector3 = UnityEngine.Vector3;
 
 namespace MVS.Helios
 {
     public class HeliosMonoBehavior : MonoBehaviour
     {
+        public List<HeliosVariable> HeliosVariableTable = new List<HeliosVariable>();
+        
         protected bool isMine = false;
         
         public bool IsMine
@@ -20,26 +25,57 @@ namespace MVS.Helios
             set { isMine = value; }
         }
 
-        private void Awake()
+        public virtual void Awake()
         {
-            // NetworkedVariableList = FindNetworkedVariables();
-        }
-        
-        public List<FieldInfo> FindNetworkedVariables()
-        {
-            List<FieldInfo> networkedVariables = new List<FieldInfo>();
-
-            FieldInfo[] fields = this.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
-            foreach (FieldInfo field in fields)
+            Debug.Log("MONO");
+            if(!GetComponentInChildren<HeliosObject>())
             {
-                if (field.IsDefined(typeof(NetworkedAttribute), false))
+                FindHeliosVariable();
+                SetHeliosVariableIndex();
+            }
+        }
+
+        public void FindHeliosVariable()
+        {
+            var fields = this.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            foreach (var field in fields)
+            {
+                if (typeof(HeliosVariable).IsAssignableFrom(field.FieldType))
                 {
-                    networkedVariables.Add(field);
+                    HeliosVariable heliosVariable = (HeliosVariable)field.GetValue(this);
+                    HeliosVariableTable.Add(heliosVariable);
                 }
             }
+        }
 
-            return networkedVariables;
+        private static int idx = 0;
+
+        public void SetHeliosVariableIndex()
+        {
+            Debug.Log("SetVIndex");
+            if (GetComponent<HeliosObject>())
+            {
+                Debug.Log("isHO");
+                Debug.Log(HeliosVariableTable.Count);
+                foreach (var heliosVariable in HeliosVariableTable)
+                {
+                    HeliosObject ho = GetComponent<HeliosObject>();
+                    heliosVariable.SetIndex((int)(idx + ho.instanceId * 100000));
+                    Debug.Log(heliosVariable.Index);
+                    HeliosNetwork.HeliosVariableDic.Add((int)(idx + ho.instanceId * 100000), heliosVariable);
+                    idx++;
+                }
+            }
+            else
+            {
+                Debug.Log("!isHO");
+                foreach (var heliosVariable in HeliosVariableTable)
+                {
+                    heliosVariable.SetIndex(idx);
+                    HeliosNetwork.HeliosVariableDic.Add(idx, heliosVariable);
+                    idx++;
+                }
+            }
         }
     }
 

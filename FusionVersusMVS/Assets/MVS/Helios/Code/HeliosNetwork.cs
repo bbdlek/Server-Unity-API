@@ -93,20 +93,23 @@ namespace MVS.Helios
         
         //Auth
         
-        public static int SendRate
+        public static float SendRate
         {
             get
             {
-                return 1000 / sendFrequency;
+                return 1000f / sendFrequency;
             }
 
             set
             {
-                sendFrequency = 1000 / value;
+                sendFrequency = 1000f / value;
             }
         }
 
-        private static int sendFrequency = 33; // in milliseconds.
+        private static float sendFrequency = 33f; // in milliseconds.
+
+        public static List<HeliosVariable> HeliosVariables = new List<HeliosVariable>();
+        public static Dictionary<int, HeliosVariable> HeliosVariableDic = new Dictionary<int, HeliosVariable>();
         
         public static bool IsMessageQueueRunning
         {
@@ -120,8 +123,6 @@ namespace MVS.Helios
                 isMessageQueueRunning = value;
             }
         }
-
-        public static List<HeliosVariable> HeliosVariables = new List<HeliosVariable>();
         
         private static bool isMessageQueueRunning = true;
         
@@ -192,7 +193,6 @@ namespace MVS.Helios
         private static void StaticReInitialize()
         {
             if(!EditorApplication.isPlayingOrWillChangePlaymode) return;
-            if (HeliosVariables == null) HeliosVariables = new List<HeliosVariable>();
 
             ConnectionProtocol protocol = HeliosSettings.AppSettings.Protocol;
             RealtimeClient = new RealtimeClient(protocol);
@@ -376,15 +376,24 @@ namespace MVS.Helios
             if (isLocalInstantiate)
             {
                 Debug.Log(instantiateParams.instanceId);
-                go.GetComponent<HeliosTransform>().IsMine = true;
+                foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
+                {
+                    heliosMonoBehavior.IsMine = true;
+                }
                 SendInstantiate(instantiateParams, isRoomObject);
                 MyHeliosObjectQueue.Enqueue(go.GetComponent<HeliosObject>());
             }
             else
             {
                 Debug.Log(instantiateParams.instanceId);
-                go.GetComponent<HeliosTransform>().IsMine = false;
                 go.GetComponent<HeliosObject>().instanceId = instantiateParams.instanceId;
+                Debug.Log(go.GetComponentsInChildren<HeliosMonoBehavior>().Length);
+                foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
+                {
+                    heliosMonoBehavior.IsMine = false;
+                    heliosMonoBehavior.FindHeliosVariable();
+                    heliosMonoBehavior.SetHeliosVariableIndex();
+                }
                 HeliosObjectList.Add(instantiateParams.instanceId, go.GetComponent<HeliosObject>());
             }
             

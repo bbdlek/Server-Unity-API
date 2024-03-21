@@ -16,9 +16,11 @@ namespace MVS.Helios
 
         public HeliosTransform heliosTransform;
 
-        private void Awake()
+
+        public override void Awake()
         {
             heliosTransform = GetComponent<HeliosTransform>();
         }
+        
     }
 }

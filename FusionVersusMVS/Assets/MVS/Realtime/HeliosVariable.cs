@@ -10,24 +10,45 @@ namespace MVS.Realtime
 {
     public class HeliosVariable
     {
-        public bool IsUpdate;
+        public bool IsUpdate = false;
 
         protected Protocol.HeliosVariable _value;
         
         //Owner
+        private HeliosMonoBehavior _owner;
         
         //Index
-        [HideInInspector]
+        // [HideInInspector]
         public int Index;
-        
-        public HeliosVariable()
+
+        public void Initialize(HeliosMonoBehavior heliosMonoBehavior)
         {
-            _value = new Protocol.HeliosVariable();
+            _owner = heliosMonoBehavior;
             if(!HeliosNetwork.HeliosVariables.Contains(this))
             {
                 HeliosNetwork.HeliosVariables.Add(this);
                 Index = HeliosNetwork.HeliosVariables.IndexOf(this);
             }
+        }
+
+        public HeliosMonoBehavior GetMonoBehavior()
+        {
+            return _owner;
+        }
+
+        public void SetIndex(int idx)
+        {
+            Index = idx;
+        }
+        
+        public HeliosVariable()
+        {
+            _value = new Protocol.HeliosVariable();
+        }
+
+        public Protocol.HeliosVariable GetValue()
+        {
+            return _value;
         }
 
         public virtual void SetFlag(bool flag)
@@ -51,16 +72,21 @@ namespace MVS.Realtime
             }
             set
             {
-                Debug.Log($"Set {Index}");
-                SetFlag(true);
-                // base._value.NInt32 = value;
-                // _value = value;
+                if(_value != value)
+                {
+                    Debug.Log($"Set {Index}");
+                    SetFlag(true);
+                    base._value.NInt32 = value;
+                    _value = value;
+                }
             }
         }
         
         public HNInt(int value)
         {
-            Value = value;
+            IsUpdate = false;
+            base._value.NInt32 = value;
+            _value = value;
         }
 
         public override void SetFlag(bool flag)

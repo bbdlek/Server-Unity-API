@@ -3,8 +3,10 @@ using System.Linq;
 using _1_Scripts._8_HeliosTest;
 using MVS.Realtime;
 using Protocol;
+using Unity.VisualScripting;
 using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
+using HeliosVariable = Protocol.HeliosVariable;
 using OperationCode = MVS.Realtime.OperationCode;
 using Vector3 = UnityEngine.Vector3;
 
@@ -48,6 +50,7 @@ namespace MVS.Helios
 
         private static void OnEvent(EventData eventData)
         {
+            Debug.Log(eventData.code);
             switch (eventData.code)
             {
                 case EventCode.PKT_S_INITIAL_OBJECTS:
@@ -70,6 +73,11 @@ namespace MVS.Helios
                             var obj = MyHeliosObjectQueue.Dequeue();
                             obj.instanceId = objectInfo.ObjectID.InstanceID;
                             HeliosObjectList[obj.instanceId] = obj;
+                            foreach (var heliosMonoBehavior in obj.GetComponentsInChildren<HeliosMonoBehavior>())
+                            {
+                                heliosMonoBehavior.FindHeliosVariable();
+                                heliosMonoBehavior.SetHeliosVariableIndex();
+                            }
                             Debug.Log(HeliosObjectList[obj.instanceId].GetComponent<HeliosObject>().instanceId);
                         }
                     }
@@ -94,8 +102,11 @@ namespace MVS.Helios
                     break;
                 
                 case CustomEventCode.Variable:
-                    var variable = Packs.Parser.ParseFrom(eventData.FixedData).HeliosVariable;
-                    Debug.Log(variable.NInt32);
+                    var variable = Packs.Parser.ParseFrom(eventData.FixedData).CVariable;
+                    Debug.Log(variable.Index);
+                    Debug.Log(variable.HeliosVariable.NInt32);
+                    if (variable.HeliosVariable.ValueCase is HeliosVariable.ValueOneofCase.NInt32)
+                        HeliosVariableDic[(int)variable.Index].ConvertTo<HNInt>().Value = variable.HeliosVariable.NInt32;
                     break;
             }
         }

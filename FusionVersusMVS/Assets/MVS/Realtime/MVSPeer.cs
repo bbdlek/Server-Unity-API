@@ -167,7 +167,7 @@ namespace MVS.Realtime
                     packs.CChangeObjectsOwner = fixedData as C_CHANGE_OBJECTS_OWNER;
                     break;
                 case CustomEventCode.Variable:
-                    packs.HeliosVariable = fixedData as Protocol.HeliosVariable;
+                    packs.CVariable = fixedData as C_VARIABLE;
                     break;
             }
             if(fixedData != null)
