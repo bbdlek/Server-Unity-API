@@ -212,6 +212,7 @@ namespace MVS.Helios
             PrefabPool = new DefaultPrefabPool();
 
             // TODO : Register CustomType?
+            CustomVariablesUnity.Register();
 
         }
         
@@ -293,11 +294,11 @@ namespace MVS.Helios
             return RealtimeClient.OpJoinGroup(sceneNumber, channelID);
         }
 
-        public static bool RaiseEvent(int eventCode, IMessage fixedData = null, CustomStruct[] customStructs = null)
+        public static bool RaiseEvent(int eventCode, IMessage fixedData = null, CustomDic customData = null)
         {
             // if (!InGroup) return false;
 
-            return RealtimeClient.OpRaiseEvent(eventCode, fixedData, customStructs);
+            return RealtimeClient.OpRaiseEvent(eventCode, fixedData, customData);
         }
 
         #region Instantiate
@@ -335,17 +336,20 @@ namespace MVS.Helios
 
         private static GameObject NetworkInstantiate(ObjectInfo objectInfo)
         {
-            Debug.Log(objectInfo.NumberProps.Count);
-            var propPos = objectInfo.NumberProps.FirstOrDefault(prop => prop.Index == PropsID.Position3D).Value;
-            var propRot = objectInfo.NumberProps.FirstOrDefault(prop => prop.Index == PropsID.Rotation3D).Value;
-            Vector3 position = new Vector3((float)propPos[0], (float)propPos[1], (float)propPos[2]);
+            // var propPos = objectInfo.NumberProps.FirstOrDefault(prop => prop.Index == PropsID.Position3D).Value;
+            // var propRot = objectInfo.NumberProps.FirstOrDefault(prop => prop.Index == PropsID.Rotation3D).Value;
+            var propPos = objectInfo.CustomValues.Params["Position"].NVector;
+            var propRot = objectInfo.CustomValues.Params["Rotation"].NVector;
+            Vector3 position = new Vector3((float)propPos.X, (float)propPos.Y, (float)propPos.Z);
+            Vector3 rotationV3 = new Vector3((float)propRot.X, (float)propRot.Y, (float)propRot.Z);
+            Quaternion rotation = Quaternion.Euler(rotationV3);
             // Quaternion rotation = new Quaternion((float)propRot[0], (float)propRot[1], (float)propRot[2], (float)propRot[3]);
             InstantiateParams instantiateParams = new InstantiateParams
             {
                 prefabId = objectInfo.ObjectID.PrefabID,
                 instanceId = objectInfo.ObjectID.InstanceID,
                 position = position,
-                rotation = Quaternion.identity,
+                rotation = rotation,
                 creator = CurrentRoom.GetPlayer(objectInfo.OwnerPlayerID)
             };
             return NetworkInstantiate(instantiateParams, false, true);
@@ -416,16 +420,34 @@ namespace MVS.Helios
                 SyncType = ObjectSyncType.PersonalOwn,
                 OwnerPlayerID = LocalPlayer.UserId,
             };
-            ObjectInfo.NumberProps.Add(new CustomNumberProp
+            var paramDic = new CustomDic();
+            paramDic.Params.Add("Position", new Protocol.HeliosVariable()
             {
-                Index = PropsID.Position3D,
-                Value = { instantiateParams.position.x, instantiateParams.position.y, instantiateParams.position.z }
+                NVector = new Protocol.Vector3
+                {
+                    X = instantiateParams.position.x,
+                    Y = instantiateParams.position.y,
+                    Z = instantiateParams.position.z
+                }
             });
-            ObjectInfo.NumberProps.Add(new CustomNumberProp
+            Quaternion rot = new Quaternion
             {
-                Index = PropsID.Rotation3D,
-                Value = { instantiateParams.rotation.x, instantiateParams.rotation.y, instantiateParams.rotation.z, instantiateParams.rotation.w }
+                x = instantiateParams.rotation.x,
+                y = instantiateParams.rotation.y,
+                z = instantiateParams.rotation.z,
+                w = instantiateParams.rotation.w,
+            };
+            Vector3 rotation = rot.eulerAngles;
+            paramDic.Params.Add("Rotation", new Protocol.HeliosVariable
+            {
+                NVector = new Protocol.Vector3
+                {
+                    X = rotation.x,
+                    Y = rotation.y,
+                    Z = rotation.z
+                }
             });
+            ObjectInfo.CustomValues = paramDic;
             pkt.ObjectInfos.Add(ObjectInfo);
             return SendEventInternal(EventCode.PKT_C_ADD_NETWORK_OBJECTS, pkt);
         }
@@ -434,24 +456,41 @@ namespace MVS.Helios
 
         private static void NetworkUpdateObject(uint id, ObjectInfo objectInfo)
         {
-            var propPos = objectInfo.NumberProps.FirstOrDefault(prop => prop.Index == PropsID.Position3D).Value;
-            var propRot = objectInfo.NumberProps.FirstOrDefault(prop => prop.Index == PropsID.Rotation3D).Value;
-            Vector3 position = new Vector3((float)propPos[0], (float)propPos[1], (float)propPos[2]);
-            Quaternion rotation = new Quaternion((float)propRot[0], (float)propRot[1], (float)propRot[2], (float)propRot[3]);
-            HeliosObjectList[id].heliosTransform.networkPosition = position;
-            HeliosObjectList[id].heliosTransform.networkRotation = rotation;
+            // Version 1
+            var propPos = objectInfo.CustomValues.Params["Position"].NVector;
+            var propRot = objectInfo.CustomValues.Params["Rotation"].NVector;
+            Vector3 position = new Vector3((float)propPos.X, (float)propPos.Y, (float)propPos.Z);
+            Vector3 rotationV3 = new Vector3((float)propRot.X, (float)propRot.Y, (float)propRot.Z);
+            Quaternion rotation = Quaternion.Euler(rotationV3);
+            
+            // Version 2
+            var propPos2 = objectInfo.TestValues.FirstOrDefault(variable => variable.Key == CustomVariables.GetKeyByName("position"))?.NVector;
+            var propRot2 = objectInfo.TestValues.FirstOrDefault(variable => variable.Key == CustomVariables.GetKeyByName("rotation"))?.NVector;
+            Vector3 position2 = new Vector3((float)propPos2.X, (float)propPos2.Y, (float)propPos2.Z);
+            Vector3 rotation2V3 = new Vector3((float)propRot2.X, (float)propRot2.Y, (float)propRot2.Z);
+            Quaternion rotation2 = Quaternion.Euler(rotation2V3);
+            
+            HeliosObjectList[id].heliosTransform.networkPosition = position2;
+            HeliosObjectList[id].heliosTransform.networkRotation = rotation2;
         }
 
         private static void NetworkRemoveObject(uint id)
         {
             if(HeliosObjectList.TryGetValue(id, out var obj))
             {
+                foreach (var heliosMonoBehavior in obj.GetComponentsInChildren<HeliosMonoBehavior>())
+                {
+                    foreach (var heliosVariable in heliosMonoBehavior.HeliosVariableTable)
+                    {
+                        HeliosVariableDic.Remove(heliosVariable.Index);
+                    }
+                }
                 GameObject.Destroy(obj.gameObject);
                 HeliosObjectList.Remove(id);
             }
         }
         
-        private static bool SendEventInternal(int eventCode, IMessage data, CustomStruct[] customData = null)
+        private static bool SendEventInternal(int eventCode, IMessage data, CustomDic customData = null)
         {
             // if (!InRoom)
             // {

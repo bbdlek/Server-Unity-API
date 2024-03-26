@@ -142,7 +142,7 @@ namespace MVS.Realtime
             return peerBase.ProcessOutgoingData();
         }
 
-        public virtual bool SendEvent(int eventCode, IMessage fixedData = null, CustomStruct[] customData = null)
+        public virtual bool SendEvent(int eventCode, IMessage fixedData = null, CustomDic customData = null)
         {
             var packs = new Packs();
             var pkt = new C_EVENT
@@ -180,7 +180,7 @@ namespace MVS.Realtime
         public virtual bool SendOperation(
             Protocol.OperationCode operationCode,
             IMessage fixedData,
-            CustomStruct[] customData = null
+            CustomDic customData = null
         )
         {
             (byte[] data, int size) = peerBase.SerializeOperationToPacket(operationCode, fixedData, customData);

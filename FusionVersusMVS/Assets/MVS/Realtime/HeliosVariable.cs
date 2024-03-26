@@ -18,23 +18,8 @@ namespace MVS.Realtime
         private HeliosMonoBehavior _owner;
         
         //Index
-        // [HideInInspector]
+        [HideInInspector]
         public int Index;
-
-        public void Initialize(HeliosMonoBehavior heliosMonoBehavior)
-        {
-            _owner = heliosMonoBehavior;
-            if(!HeliosNetwork.HeliosVariables.Contains(this))
-            {
-                HeliosNetwork.HeliosVariables.Add(this);
-                Index = HeliosNetwork.HeliosVariables.IndexOf(this);
-            }
-        }
-
-        public HeliosMonoBehavior GetMonoBehavior()
-        {
-            return _owner;
-        }
 
         public void SetIndex(int idx)
         {
@@ -86,6 +71,158 @@ namespace MVS.Realtime
         {
             IsUpdate = false;
             base._value.NInt32 = value;
+            _value = value;
+        }
+
+        public override void SetFlag(bool flag)
+        {
+            base.SetFlag(flag);
+        }
+    }
+    
+    [Serializable]
+    public class HNLong : HeliosVariable
+    {
+        [SerializeField]
+        private long _value;
+        
+        public long Value 
+        {
+            get
+            {
+                Debug.Log("Get");
+                return base._value.NInt64;
+            }
+            set
+            {
+                if(_value != value)
+                {
+                    Debug.Log($"Set {Index}");
+                    SetFlag(true);
+                    base._value.NInt64 = value;
+                    _value = value;
+                }
+            }
+        }
+        
+        public HNLong(long value)
+        {
+            IsUpdate = false;
+            base._value.NInt64 = value;
+            _value = value;
+        }
+
+        public override void SetFlag(bool flag)
+        {
+            base.SetFlag(flag);
+        }
+    }
+    
+    [Serializable]
+    public class HNFloat : HeliosVariable
+    {
+        [SerializeField]
+        private float _value;
+        
+        public float Value 
+        {
+            get
+            {
+                Debug.Log("Get");
+                return base._value.NFloat;
+            }
+            set
+            {
+                if(_value != value)
+                {
+                    Debug.Log($"Set {Index}");
+                    SetFlag(true);
+                    base._value.NFloat = value;
+                    _value = value;
+                }
+            }
+        }
+        
+        public HNFloat(float value)
+        {
+            IsUpdate = false;
+            base._value.NFloat = value;
+            _value = value;
+        }
+
+        public override void SetFlag(bool flag)
+        {
+            base.SetFlag(flag);
+        }
+    }
+    
+    [Serializable]
+    public class HNDouble : HeliosVariable
+    {
+        [SerializeField]
+        private double _value;
+        
+        public double Value 
+        {
+            get
+            {
+                Debug.Log("Get");
+                return base._value.NInt32;
+            }
+            set
+            {
+                if(_value != value)
+                {
+                    Debug.Log($"Set {Index}");
+                    SetFlag(true);
+                    base._value.NDouble = value;
+                    _value = value;
+                }
+            }
+        }
+        
+        public HNDouble(double value)
+        {
+            IsUpdate = false;
+            base._value.NDouble = value;
+            _value = value;
+        }
+
+        public override void SetFlag(bool flag)
+        {
+            base.SetFlag(flag);
+        }
+    }
+    
+    [Serializable]
+    public class HNString : HeliosVariable
+    {
+        [SerializeField]
+        private string _value;
+        
+        public string Value 
+        {
+            get
+            {
+                Debug.Log("Get");
+                return base._value.NString;
+            }
+            set
+            {
+                if(_value != value)
+                {
+                    Debug.Log($"Set {Index}");
+                    SetFlag(true);
+                    base._value.NString = value;
+                    _value = value;
+                }
+            }
+        }
+        
+        public HNString(string value)
+        {
+            IsUpdate = false;
+            base._value.NString = value;
             _value = value;
         }
 

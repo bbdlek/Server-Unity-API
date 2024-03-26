@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Protocol;
 
 namespace MVS.Realtime
 {
@@ -12,7 +13,7 @@ namespace MVS.Realtime
 
         public byte[] FixedData;
         
-        public List<byte[]> CustomData;
+        public CustomDic CustomData;
 
         public string ToString()
         {

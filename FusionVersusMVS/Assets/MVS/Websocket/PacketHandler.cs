@@ -79,11 +79,7 @@ public partial class WebSocketHandler
             ReturnCode = 0,
             FixedData = packet.FixedData.ToByteArray()
         };
-        opData.CustomData = new List<byte[]>();
-        foreach (var customStruct in packet.CustomData)
-        {
-            opData.CustomData.Add(customStruct.ToByteArray());
-        }
+        opData.CustomData = packet.CustomData;
         Listener.OnOperationResponse(opData);
 
         return true;
@@ -103,11 +99,7 @@ public partial class WebSocketHandler
             Sender = packet.Sender.PlayerID,
             FixedData = packet.FixedData.ToByteArray()
         };
-        eventData.CustomData = new List<byte[]>();
-        foreach (var customStruct in packet.CustomData)
-        {
-            eventData.CustomData.Add(customStruct.ToByteArray());
-        }
+        eventData.CustomData = packet.CustomData;
         Listener.OnEvent(eventData);
 
         return true;

@@ -214,9 +214,9 @@ namespace MVS.Realtime
                 Name = "Player"
             });
             
-            #if SUPPORTED_UNITY
-            //CustomType Register
-            #endif
+            // #if SUPPORTED_UNITY
+            CustomVariables.Register();
+            // #endif
             
             State = ClientState.Created;
             MVSDebug(DebugLevel.INFO, "PeerCreate");
@@ -351,7 +351,7 @@ namespace MVS.Realtime
             }
         }
         
-        public virtual bool SendEvent(int eventCode, IMessage fixedData, CustomStruct[] customData = null)
+        public virtual bool SendEvent(int eventCode, IMessage fixedData, CustomDic customData = null)
         {
             return this.RealtimePeer.SendEvent(eventCode, fixedData, customData);
         }
@@ -397,6 +397,8 @@ namespace MVS.Realtime
                             MVSDebug(DebugLevel.INFO, "ConnectingToMVS");
                             State = ClientState.ConnectedToMVS;
                             ConnectionCallbacksTarget.OnConnected();
+                            //INIT VARIABLES
+                            OpInitVariables();
                             break;
                     }
                     break;
@@ -689,8 +691,21 @@ namespace MVS.Realtime
 
             return sent;
         }
+
+        public bool OpInitVariables()
+        {
+            var InitVariablesPkt = new C_INIT_VARIABLES();
+            foreach (var pair in CustomVariables.VarDic)
+            {
+                InitVariablesPkt.Variables.Add(pair.Key, pair.Value);
+            }
+
+            bool sent = RealtimePeer.OpInitVariables(InitVariablesPkt);
+
+            return sent;
+        }
         
-        public virtual bool OpRaiseEvent(int EventCode, IMessage pkt = null, CustomStruct[] customData = null)
+        public virtual bool OpRaiseEvent(int EventCode, IMessage pkt = null, CustomDic customData = null)
         {
             if (!CheckOpCanBeSent((byte)OperationCode.RAISE_EVENT, Server, "RaiseEvent"))
             {

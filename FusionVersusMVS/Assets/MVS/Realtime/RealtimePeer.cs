@@ -61,7 +61,12 @@ namespace MVS.Realtime
             return SendEvent(EventCode.PKT_C_ADD_NETWORK_OBJECTS, addNetworkObjectsPkt);
         }
 
-        public override bool SendEvent(int eventCode, IMessage fixedData = null, CustomStruct[] customData = null)
+        public virtual bool OpInitVariables(C_INIT_VARIABLES initVariablesPkt)
+        {
+            return SendOperation(Protocol.OperationCode.InitVariables, initVariablesPkt);
+        }
+
+        public override bool SendEvent(int eventCode, IMessage fixedData = null, CustomDic customData = null)
         {
             base.SendEvent(eventCode, fixedData, customData);
             return true;

@@ -7,6 +7,7 @@ using UnityEngine;
 public class CubeManager : HeliosMonoBehavior
 {
     public HNInt score = new HNInt(1);
+    public HNInt score2 = new HNInt(3);
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +19,8 @@ public class CubeManager : HeliosMonoBehavior
     {
         if (Input.GetKeyDown(KeyCode.L) && IsMine)
         {
-            Debug.Log(IsMine);
+            Debug.Log(CustomVariables.GetNameByKey(1));
+            
             score.Value++;
         }
     }

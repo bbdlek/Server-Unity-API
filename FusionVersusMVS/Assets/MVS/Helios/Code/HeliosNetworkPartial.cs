@@ -8,7 +8,6 @@ using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
 using HeliosVariable = Protocol.HeliosVariable;
 using OperationCode = MVS.Realtime.OperationCode;
-using Vector3 = UnityEngine.Vector3;
 
 namespace MVS.Helios
 {
@@ -103,10 +102,24 @@ namespace MVS.Helios
                 
                 case CustomEventCode.Variable:
                     var variable = Packs.Parser.ParseFrom(eventData.FixedData).CVariable;
-                    Debug.Log(variable.Index);
-                    Debug.Log(variable.HeliosVariable.NInt32);
-                    if (variable.HeliosVariable.ValueCase is HeliosVariable.ValueOneofCase.NInt32)
-                        HeliosVariableDic[(int)variable.Index].ConvertTo<HNInt>().Value = variable.HeliosVariable.NInt32;
+                    switch (variable.HeliosVariable.ValueCase)
+                    {
+                        case HeliosVariable.ValueOneofCase.NInt32:
+                            HeliosVariableDic[(int)variable.Index].ConvertTo<HNInt>().Value = variable.HeliosVariable.NInt32;
+                            break;
+                        case HeliosVariable.ValueOneofCase.NInt64:
+                            HeliosVariableDic[(int)variable.Index].ConvertTo<HNLong>().Value = variable.HeliosVariable.NInt64;
+                            break;
+                        case HeliosVariable.ValueOneofCase.NFloat:
+                            HeliosVariableDic[(int)variable.Index].ConvertTo<HNFloat>().Value = variable.HeliosVariable.NFloat;
+                            break;
+                        case HeliosVariable.ValueOneofCase.NDouble:
+                            HeliosVariableDic[(int)variable.Index].ConvertTo<HNDouble>().Value = variable.HeliosVariable.NDouble;
+                            break;
+                        case HeliosVariable.ValueOneofCase.NString:
+                            HeliosVariableDic[(int)variable.Index].ConvertTo<HNString>().Value = variable.HeliosVariable.NString;
+                            break;
+                    }
                     break;
             }
         }

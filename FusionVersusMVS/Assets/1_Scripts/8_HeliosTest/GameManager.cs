@@ -66,7 +66,8 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            // score++;
+            Debug.Log(CustomVariables.GetNameByKey(1));
+            Debug.Log(CustomVariables.GetNameByKey(2));
         }
     }
 }

@@ -88,22 +88,6 @@ namespace MVS.Helios
                     variable.SetFlag(false);
                 }
             }
-            //
-            // foreach (var variable in HeliosNetwork.HeliosVariables)
-            // {
-            //     if (variable.IsUpdate)
-            //     {
-            //         //Send
-            //         Debug.Log("SEND VARIABLE");
-            //         var data = new C_VARIABLE
-            //         {
-            //             Index = (ulong)HeliosNetwork.HeliosVariables.IndexOf(variable),
-            //             HeliosVariable = variable.GetValue()
-            //         };
-            //         HeliosNetwork.RaiseEvent(CustomEventCode.Variable, data);
-            //         variable.SetFlag(false);
-            //     }
-            // }
         }
 
         public void OnConnected()

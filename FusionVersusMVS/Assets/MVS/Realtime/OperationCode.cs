@@ -11,6 +11,7 @@ namespace MVS.Realtime
         GROUP_JOIN = 6,
         GROUP_LEAVE = 7,
         RAISE_EVENT = 8,
-        AUTHENTICATE = 10,
+        INIT_VARIABLES = 9,
+        AUTHENTICATE = 100,
     }
 }

@@ -70,7 +70,7 @@ namespace MVS.Realtime
         internal (byte[], int) SerializeOperationToPacket(
             Protocol.OperationCode operationCode,
             IMessage fixedData,
-            CustomStruct[] customStructs = null)
+            CustomDic customData = null)
         {
             var pkt = new C_OPERATION
             {
@@ -91,11 +91,8 @@ namespace MVS.Realtime
                 };
             }
 
-            if (customStructs != null)
-                foreach (var customStruct in customStructs)
-                {
-                    pkt.CustomData.Add(customStruct);
-                }
+            if (customData != null)
+                pkt.CustomData = customData;
 
             return (pkt.ToByteArray(), pkt.CalculateSize());
         }

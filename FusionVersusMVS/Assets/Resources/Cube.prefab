@@ -183,3 +183,7 @@ MonoBehaviour:
     IsUpdate: 0
     Index: 0
     _value: 1
+  score2:
+    IsUpdate: 0
+    Index: 0
+    _value: 3

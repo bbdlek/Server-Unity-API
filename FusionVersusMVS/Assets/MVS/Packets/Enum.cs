@@ -35,23 +35,20 @@ namespace Protocol {
             "TEFZRVIQGSphCgdQcm9wc0lEEhIKDk1WX1BST1BTX1NUQVJUEAASDwoLUE9T",
             "SVRJT05fM0QQARIPCgtST1RBVElPTl8zRBACEgwKCFNDQUxFXzNEEAMSEgoM",
             "TVZfUFJPUFNfRU5EEKCNBio/Cg5PYmplY3RTeW5jVHlwZRIQCgxQRVJTT05B",
-            "TF9PV04QABINCglHUk9VUF9PV04QARIMCghST09NX09XThACKqgBCg1PcGVy",
+            "TF9PV04QABINCglHUk9VUF9PV04QARIMCghST09NX09XThACKrwBCg1PcGVy",
             "YXRpb25Db2RlEg4KCkhFQVJUX0JFQVQQABIXChNST09NX0pPSU5fT1JfQ1JF",
             "QVRFEAESDgoKUk9PTV9MRUFWRRACEg0KCVJPT01fTElTVBADEg0KCVBMQVlF",
             "Ul9JRBAEEg4KCkdST1VQX0xJU1QQBRIOCgpHUk9VUF9KT0lOEAYSDwoLR1JP",
-            "VVBfTEVBVkUQBxIPCgtSQUlTRV9FVkVOVBAIKqQBCglFdmVudENvZGUSFwoT",
-            "T1RIRVJfQ0xJRU5UX0pPSU5FRBAAEhMKD0lOSVRJQUxfT0JKRUNUUxABEhcK",
-            "E0FERF9ORVRXT1JLX09CSkVDVFMQAhIaChZSRU1PVkVfTkVUV09SS19PQkpF",
-            "Q1RTEAMSGgoWVVBEQVRFX05FVFdPUktfT0JKRUNUUxAEEhgKFENIQU5HRV9P",
-            "QkpFQ1RTX09XTkVSEAUqywEKCVBhcmFtZXRlchINCglBVVRIVE9LRU4QABIJ",
-            "CgVBUFBJRBABEgoKBlJPT01JRBACEgwKCFJPT01OQU1FEAMSDAoIUk9PTUlO",
-            "Rk8QBBIMCghQTEFZRVJJRBAFEg0KCUdST1VQSU5GTxAGEgsKB0dST1VQSUQQ",
-            "BxIOCgpPQkpFQ1RJTkZPEAgSDgoKUExBWUVSSU5GTxAJEg0KCUVWRU5UQ09E",
-            "RRAKEhEKDU9QRVJBVElPTkNPREUQCxIQCgxDVVNUT01TVFJVQ1QQDGIGcHJv",
+            "VVBfTEVBVkUQBxIPCgtSQUlTRV9FVkVOVBAIEhIKDklOSVRfVkFSSUFCTEVT",
+            "EAkqpAEKCUV2ZW50Q29kZRIXChNPVEhFUl9DTElFTlRfSk9JTkVEEAASEwoP",
+            "SU5JVElBTF9PQkpFQ1RTEAESFwoTQUREX05FVFdPUktfT0JKRUNUUxACEhoK",
+            "FlJFTU9WRV9ORVRXT1JLX09CSkVDVFMQAxIaChZVUERBVEVfTkVUV09SS19P",
+            "QkpFQ1RTEAQSGAoUQ0hBTkdFX09CSkVDVFNfT1dORVIQBSoxCghQYXJhbUtl",
+            "eRIMCghQT1NJVElPThAAEgwKCFJPVEFUSU9OEAESCQoFU0NBTEUQAmIGcHJv",
             "dG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protocol.Result), typeof(global::Protocol.PropsID), typeof(global::Protocol.ObjectSyncType), typeof(global::Protocol.OperationCode), typeof(global::Protocol.EventCode), typeof(global::Protocol.Parameter), }, null, null));
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protocol.Result), typeof(global::Protocol.PropsID), typeof(global::Protocol.ObjectSyncType), typeof(global::Protocol.OperationCode), typeof(global::Protocol.EventCode), typeof(global::Protocol.ParamKey), }, null, null));
     }
     #endregion
 
@@ -123,6 +120,7 @@ namespace Protocol {
     [pbr::OriginalName("GROUP_JOIN")] GroupJoin = 6,
     [pbr::OriginalName("GROUP_LEAVE")] GroupLeave = 7,
     [pbr::OriginalName("RAISE_EVENT")] RaiseEvent = 8,
+    [pbr::OriginalName("INIT_VARIABLES")] InitVariables = 9,
   }
 
   public enum EventCode {
@@ -134,20 +132,10 @@ namespace Protocol {
     [pbr::OriginalName("CHANGE_OBJECTS_OWNER")] ChangeObjectsOwner = 5,
   }
 
-  public enum Parameter {
-    [pbr::OriginalName("AUTHTOKEN")] Authtoken = 0,
-    [pbr::OriginalName("APPID")] Appid = 1,
-    [pbr::OriginalName("ROOMID")] Roomid = 2,
-    [pbr::OriginalName("ROOMNAME")] Roomname = 3,
-    [pbr::OriginalName("ROOMINFO")] Roominfo = 4,
-    [pbr::OriginalName("PLAYERID")] Playerid = 5,
-    [pbr::OriginalName("GROUPINFO")] Groupinfo = 6,
-    [pbr::OriginalName("GROUPID")] Groupid = 7,
-    [pbr::OriginalName("OBJECTINFO")] Objectinfo = 8,
-    [pbr::OriginalName("PLAYERINFO")] Playerinfo = 9,
-    [pbr::OriginalName("EVENTCODE")] Eventcode = 10,
-    [pbr::OriginalName("OPERATIONCODE")] Operationcode = 11,
-    [pbr::OriginalName("CUSTOMSTRUCT")] Customstruct = 12,
+  public enum ParamKey {
+    [pbr::OriginalName("POSITION")] Position = 0,
+    [pbr::OriginalName("ROTATION")] Rotation = 1,
+    [pbr::OriginalName("SCALE")] Scale = 2,
   }
 
   #endregion

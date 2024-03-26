@@ -48,7 +48,7 @@ namespace MVS.Helios
             }
         }
 
-        private static int idx = 0;
+        private int idx = 0;
 
         public void SetHeliosVariableIndex()
         {
@@ -60,9 +60,9 @@ namespace MVS.Helios
                 foreach (var heliosVariable in HeliosVariableTable)
                 {
                     HeliosObject ho = GetComponent<HeliosObject>();
-                    heliosVariable.SetIndex((int)(idx + ho.instanceId * 100000));
+                    heliosVariable.SetIndex((int)(ho.instanceId * 100000 + idx));
                     Debug.Log(heliosVariable.Index);
-                    HeliosNetwork.HeliosVariableDic.Add((int)(idx + ho.instanceId * 100000), heliosVariable);
+                    HeliosNetwork.HeliosVariableDic.Add((int)(ho.instanceId * 100000 + idx), heliosVariable);
                     idx++;
                 }
             }
