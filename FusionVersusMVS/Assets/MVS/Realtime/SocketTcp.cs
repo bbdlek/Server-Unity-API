@@ -86,6 +86,11 @@ namespace MVS.Realtime
 
         public override bool Send(byte[] data, int size)
         {
+            if (wsh == null)
+            {
+                wsh = new WebSocketHandler(this);
+                wsh.Init();
+            }
             wsh.SendPacket(WebSocketHandler.PKT_ID.PKT_C_OPERATION, data, size);
             return true;
         }

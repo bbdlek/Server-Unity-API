@@ -44,8 +44,9 @@ namespace MVS.Helios
                 {
                     if(!settings.NetworkPrefabs.Prefabs.Contains(comp))
                     {
-                        comp.prefabId = (uint)settings.NetworkPrefabs.Prefabs.Count;
                         settings.NetworkPrefabs.Prefabs.Add(comp);
+                        comp.PrefabId = (uint)settings.NetworkPrefabs.FindNetworkIdByPrefab(comp);
+                        Debug.Log(comp.PrefabId);
                     }
 
                     EditorUtility.SetDirty(settings);

@@ -18,17 +18,23 @@ namespace MVS.Realtime
         private HeliosMonoBehavior _owner;
         
         //Index
-        [HideInInspector]
+        // [HideInInspector]
         public int Index;
 
         public void SetIndex(int idx)
         {
             Index = idx;
+            _value.Key = idx;
         }
         
         public HeliosVariable()
         {
             _value = new Protocol.HeliosVariable();
+        }
+
+        public void SetOwner(HeliosMonoBehavior heliosMonoBehavior)
+        {
+            _owner = heliosMonoBehavior;
         }
 
         public Protocol.HeliosVariable GetValue()
@@ -39,6 +45,8 @@ namespace MVS.Realtime
         public virtual void SetFlag(bool flag)
         {
             IsUpdate = flag;
+            if(_owner != null)
+                _owner.hasUpdate = flag;
         }
     }
     
@@ -66,10 +74,10 @@ namespace MVS.Realtime
                 }
             }
         }
-        
+
         public HNInt(int value)
         {
-            IsUpdate = false;
+            SetFlag(false);
             base._value.NInt32 = value;
             _value = value;
         }
@@ -107,7 +115,7 @@ namespace MVS.Realtime
         
         public HNLong(long value)
         {
-            IsUpdate = false;
+            SetFlag(false);
             base._value.NInt64 = value;
             _value = value;
         }
@@ -145,7 +153,7 @@ namespace MVS.Realtime
         
         public HNFloat(float value)
         {
-            IsUpdate = false;
+            SetFlag(false);
             base._value.NFloat = value;
             _value = value;
         }
@@ -183,7 +191,7 @@ namespace MVS.Realtime
         
         public HNDouble(double value)
         {
-            IsUpdate = false;
+            SetFlag(false);
             base._value.NDouble = value;
             _value = value;
         }
@@ -221,8 +229,112 @@ namespace MVS.Realtime
         
         public HNString(string value)
         {
-            IsUpdate = false;
+            SetFlag(false);
             base._value.NString = value;
+            _value = value;
+        }
+
+        public override void SetFlag(bool flag)
+        {
+            base.SetFlag(flag);
+        }
+    }
+    
+    [Serializable]
+    public class HNVector : HeliosVariable
+    {
+        [SerializeField]
+        private Vector3 _value;
+        
+        public Vector3 Value 
+        {
+            get
+            {
+                Debug.Log("Get");
+                var vec = new Vector3((float)base._value.NVector.X, (float)base._value.NVector.X, (float)base._value.NVector.X);
+                return vec;
+            }
+            set
+            {
+                if(_value != value)
+                {
+                    Debug.Log($"Set {Index}");
+                    SetFlag(true);
+                    var vec = new Protocol.Vector3
+                    {
+                        X = value.x,
+                        Y = value.y,
+                        Z = value.z
+                    };
+                    base._value.NVector = vec;
+                    _value = value;
+                }
+            }
+        }
+        
+        public HNVector(Vector3 value)
+        {
+            SetFlag(false);
+            var vec = new Protocol.Vector3
+            {
+                X = value.x,
+                Y = value.y,
+                Z = value.z
+            };
+            base._value.NVector = vec;
+            _value = value;
+        }
+
+        public override void SetFlag(bool flag)
+        {
+            base.SetFlag(flag);
+        }
+    }
+    
+    [Serializable]
+    public class HNQuaternion : HeliosVariable
+    {
+        [SerializeField]
+        private Quaternion _value;
+        
+        public Quaternion Value 
+        {
+            get
+            {
+                Debug.Log("Get");
+                var vec = new Vector3((float)base._value.NVector.X, (float)base._value.NVector.X, (float)base._value.NVector.X);
+                return Quaternion.Euler(vec);
+            }
+            set
+            {
+                if(_value != value)
+                {
+                    Debug.Log($"Set {Index}");
+                    SetFlag(true);
+                    Vector3 euler = value.eulerAngles;
+                    var vec = new Protocol.Vector3
+                    {
+                        X = euler.x,
+                        Y = euler.y,
+                        Z = euler.z
+                    };
+                    base._value.NVector = vec;
+                    _value = value;
+                }
+            }
+        }
+        
+        public HNQuaternion(Quaternion value)
+        {
+            SetFlag(false);
+            Vector3 euler = value.eulerAngles;
+            var vec = new Protocol.Vector3
+            {
+                X = euler.x,
+                Y = euler.y,
+                Z = euler.z
+            };
+            base._value.NVector = vec;
             _value = value;
         }
 

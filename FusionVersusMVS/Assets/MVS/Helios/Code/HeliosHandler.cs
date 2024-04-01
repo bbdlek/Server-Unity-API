@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using _1_Scripts._8_HeliosTest;
+using Google.Protobuf;
 using MVS.Realtime;
 using Protocol;
 using UnityEngine;
 using UnityEngine.Profiling;
+using EventCode = MVS.Realtime.EventCode;
 using HeliosVariable = Protocol.HeliosVariable;
 
 namespace MVS.Helios
@@ -61,6 +63,7 @@ namespace MVS.Helios
 
         protected void LateUpdate()
         {
+            if(!HeliosNetwork.InGroup) return;
             _elapsedTime += Time.deltaTime;
 
             if (_elapsedTime >= 1f / HeliosNetwork.SendRate)
@@ -71,22 +74,26 @@ namespace MVS.Helios
 
         private void CheckAndUpdateVariables()
         {
-            foreach (var pair in HeliosNetwork.HeliosVariableDic)
+            var data = new C_UPDATE_NETWORK_OBJECTS();
+            foreach (var ho in HeliosNetwork.HeliosObjectList.FindAll(x => x.hasUpdate))
             {
-                var variable = pair.Value;
-                Debug.Log($"{pair.Key}key, {pair.Value.Index} idx, {variable.IsUpdate}");
-                if (variable.IsUpdate)
+                Debug.Log("InstanceID :" + ho.ObjectInfo.ObjectID.InstanceID);
+                var updateObject = new ObjectInfo
                 {
-                    //Send
-                    Debug.Log($"SEND VARIABLE {variable.Index}");
-                    var data = new C_VARIABLE
-                    {
-                        Index = (ulong)HeliosNetwork.HeliosVariableDic.FirstOrDefault(x => x.Value == variable).Key,
-                        HeliosVariable = variable.GetValue()
-                    };
-                    HeliosNetwork.RaiseEvent(CustomEventCode.Variable, data);
+                    ObjectID = ho.ObjectInfo.ObjectID,
+                    SyncType = ho.ObjectInfo.SyncType,
+                    OwnerPlayerID = ho.ObjectInfo.OwnerPlayerID,
+                };
+                foreach (var variable in ho.HeliosVariableTable)
+                {
+                    Debug.Log(variable.GetValue().NInt32);
+                    updateObject.CustomData.Add(variable.GetValue().ToByteString());
+                    Debug.Log(HeliosVariable.Parser.ParseFrom(variable.GetValue().ToByteString()).NInt32);
                     variable.SetFlag(false);
                 }
+                data.ObjectInfos.Add(updateObject);
+                HeliosNetwork.RaiseEvent(EventCode.PKT_C_UPDATE_NETWORK_OBJECTS, data);
+                ho.hasUpdate = false;
             }
         }
 

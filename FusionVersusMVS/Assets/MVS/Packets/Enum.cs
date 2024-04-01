@@ -24,28 +24,30 @@ namespace Protocol {
     static EnumReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgpFbnVtLnByb3RvEghQcm90b2NvbCrWAgoGUmVzdWx0EgsKB1NVQ0NFU1MQ",
-            "ABIKCgZGQUlMRUQQARIfChtGQUlMRURfUk9PTV9OT1RfRVhJU1RTX1JPT00Q",
-            "ChIjCh9GQUlMRURfUk9PTV9BTFJFQURZX0VYSVNUU19ST09NEAsSGwoXRkFJ",
-            "TEVEX1JPT01fTk9UX0lOX1JPT00QDBIhCh1GQUlMRURfR1JPVVBfTk9UX0VY",
-            "SVNUU19HUk9VUBAUEh0KGUZBSUxFRF9HUk9VUF9OT1RfSU5fR1JPVVAQFRIl",
-            "CiFGQUlMRURfR1JPVVBfQUxSRUFEWV9FWElTVFNfR1JPVVAQFhIbChdGQUlM",
-            "RURfR1JPVVBfU0FNRV9HUk9VUBAXEiIKHkZBSUxFRF9HUk9VUF9OT1RfRVhJ",
-            "U1RTX1BMQVlFUhAYEiYKIkZBSUxFRF9HUk9VUF9BTFJFQURZX0VYSVNUU19Q",
-            "TEFZRVIQGSphCgdQcm9wc0lEEhIKDk1WX1BST1BTX1NUQVJUEAASDwoLUE9T",
-            "SVRJT05fM0QQARIPCgtST1RBVElPTl8zRBACEgwKCFNDQUxFXzNEEAMSEgoM",
-            "TVZfUFJPUFNfRU5EEKCNBio/Cg5PYmplY3RTeW5jVHlwZRIQCgxQRVJTT05B",
-            "TF9PV04QABINCglHUk9VUF9PV04QARIMCghST09NX09XThACKrwBCg1PcGVy",
-            "YXRpb25Db2RlEg4KCkhFQVJUX0JFQVQQABIXChNST09NX0pPSU5fT1JfQ1JF",
-            "QVRFEAESDgoKUk9PTV9MRUFWRRACEg0KCVJPT01fTElTVBADEg0KCVBMQVlF",
-            "Ul9JRBAEEg4KCkdST1VQX0xJU1QQBRIOCgpHUk9VUF9KT0lOEAYSDwoLR1JP",
-            "VVBfTEVBVkUQBxIPCgtSQUlTRV9FVkVOVBAIEhIKDklOSVRfVkFSSUFCTEVT",
-            "EAkqpAEKCUV2ZW50Q29kZRIXChNPVEhFUl9DTElFTlRfSk9JTkVEEAASEwoP",
-            "SU5JVElBTF9PQkpFQ1RTEAESFwoTQUREX05FVFdPUktfT0JKRUNUUxACEhoK",
-            "FlJFTU9WRV9ORVRXT1JLX09CSkVDVFMQAxIaChZVUERBVEVfTkVUV09SS19P",
-            "QkpFQ1RTEAQSGAoUQ0hBTkdFX09CSkVDVFNfT1dORVIQBSoxCghQYXJhbUtl",
-            "eRIMCghQT1NJVElPThAAEgwKCFJPVEFUSU9OEAESCQoFU0NBTEUQAmIGcHJv",
-            "dG8z"));
+            "CgpFbnVtLnByb3RvEghQcm90b2NvbCq8AwoGUmVzdWx0EgsKB1NVQ0NFU1MQ",
+            "ABIKCgZGQUlMRUQQARIXChNTVUNDRVNTX1JPT01fQ1JFQVRFEAISFwoTU1VD",
+            "Q0VTU19ST09NX0pPSU5FRBADEhgKFFNVQ0NFU1NfR1JPVVBfQ1JFQVRFEAQS",
+            "GAoUU1VDQ0VTU19HUk9VUF9KT0lORUQQBRIfChtGQUlMRURfUk9PTV9OT1Rf",
+            "RVhJU1RTX1JPT00QChIjCh9GQUlMRURfUk9PTV9BTFJFQURZX0VYSVNUU19S",
+            "T09NEAsSGwoXRkFJTEVEX1JPT01fTk9UX0lOX1JPT00QDBIhCh1GQUlMRURf",
+            "R1JPVVBfTk9UX0VYSVNUU19HUk9VUBAUEh0KGUZBSUxFRF9HUk9VUF9OT1Rf",
+            "SU5fR1JPVVAQFRIlCiFGQUlMRURfR1JPVVBfQUxSRUFEWV9FWElTVFNfR1JP",
+            "VVAQFhIbChdGQUlMRURfR1JPVVBfU0FNRV9HUk9VUBAXEiIKHkZBSUxFRF9H",
+            "Uk9VUF9OT1RfRVhJU1RTX1BMQVlFUhAYEiYKIkZBSUxFRF9HUk9VUF9BTFJF",
+            "QURZX0VYSVNUU19QTEFZRVIQGSphCgdQcm9wc0lEEhIKDk1WX1BST1BTX1NU",
+            "QVJUEAASDwoLUE9TSVRJT05fM0QQARIPCgtST1RBVElPTl8zRBACEgwKCFND",
+            "QUxFXzNEEAMSEgoMTVZfUFJPUFNfRU5EEKCNBipPCg5PYmplY3RTeW5jVHlw",
+            "ZRIQCgxQRVJTT05BTF9PV04QABINCglHUk9VUF9PV04QARIMCghST09NX09X",
+            "ThACEg4KCkdMT0JBTF9PV04QAyq8AQoNT3BlcmF0aW9uQ29kZRIOCgpIRUFS",
+            "VF9CRUFUEAASFwoTUk9PTV9KT0lOX09SX0NSRUFURRABEg4KClJPT01fTEVB",
+            "VkUQAhINCglST09NX0xJU1QQAxINCglQTEFZRVJfSUQQBBIOCgpHUk9VUF9M",
+            "SVNUEAUSDgoKR1JPVVBfSk9JThAGEg8KC0dST1VQX0xFQVZFEAcSDwoLUkFJ",
+            "U0VfRVZFTlQQCBISCg5JTklUX1ZBUklBQkxFUxAJKqQBCglFdmVudENvZGUS",
+            "FwoTT1RIRVJfQ0xJRU5UX0pPSU5FRBAAEhMKD0lOSVRJQUxfT0JKRUNUUxAB",
+            "EhcKE0FERF9ORVRXT1JLX09CSkVDVFMQAhIaChZSRU1PVkVfTkVUV09SS19P",
+            "QkpFQ1RTEAMSGgoWVVBEQVRFX05FVFdPUktfT0JKRUNUUxAEEhgKFENIQU5H",
+            "RV9PQkpFQ1RTX09XTkVSEAUqMQoIUGFyYW1LZXkSDAoIUE9TSVRJT04QABIM",
+            "CghST1RBVElPThABEgkKBVNDQUxFEAJiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protocol.Result), typeof(global::Protocol.PropsID), typeof(global::Protocol.ObjectSyncType), typeof(global::Protocol.OperationCode), typeof(global::Protocol.EventCode), typeof(global::Protocol.ParamKey), }, null, null));
@@ -61,6 +63,16 @@ namespace Protocol {
   public enum Result {
     [pbr::OriginalName("SUCCESS")] Success = 0,
     [pbr::OriginalName("FAILED")] Failed = 1,
+    /// <summary>
+    /// Room 관련 성공
+    /// </summary>
+    [pbr::OriginalName("SUCCESS_ROOM_CREATE")] SuccessRoomCreate = 2,
+    [pbr::OriginalName("SUCCESS_ROOM_JOINED")] SuccessRoomJoined = 3,
+    /// <summary>
+    /// Group 관련 성공
+    /// </summary>
+    [pbr::OriginalName("SUCCESS_GROUP_CREATE")] SuccessGroupCreate = 4,
+    [pbr::OriginalName("SUCCESS_GROUP_JOINED")] SuccessGroupJoined = 5,
     /// <summary>
     /// Room 관련 에러
     /// </summary>
@@ -108,6 +120,7 @@ namespace Protocol {
     /// </summary>
     [pbr::OriginalName("GROUP_OWN")] GroupOwn = 1,
     [pbr::OriginalName("ROOM_OWN")] RoomOwn = 2,
+    [pbr::OriginalName("GLOBAL_OWN")] GlobalOwn = 3,
   }
 
   public enum OperationCode {

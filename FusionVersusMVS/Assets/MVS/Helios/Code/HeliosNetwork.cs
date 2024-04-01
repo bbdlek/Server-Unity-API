@@ -109,7 +109,7 @@ namespace MVS.Helios
         private static float sendFrequency = 33f; // in milliseconds.
 
         public static List<HeliosVariable> HeliosVariables = new List<HeliosVariable>();
-        public static Dictionary<int, HeliosVariable> HeliosVariableDic = new Dictionary<int, HeliosVariable>();
+        // public static Dictionary<int, HeliosVariable> HeliosVariableDic = new Dictionary<int, HeliosVariable>();
         
         public static bool IsMessageQueueRunning
         {
@@ -309,7 +309,7 @@ namespace MVS.Helios
                 return null;
             var comp = prefab.GetComponent<HeliosObject>();
             if (comp != null)
-                return Instantiate(comp.prefabId, position, rotation);
+                return Instantiate(comp.PrefabId, position, rotation);
             else
             {
                 Debug.LogError($"{prefab.name} does not have HeliosObject Component");
@@ -348,6 +348,7 @@ namespace MVS.Helios
             {
                 prefabId = objectInfo.ObjectID.PrefabID,
                 instanceId = objectInfo.ObjectID.InstanceID,
+                clientInstanceID = objectInfo.ObjectID.ClientInstanceID,
                 position = position,
                 rotation = rotation,
                 creator = CurrentRoom.GetPlayer(objectInfo.OwnerPlayerID)
@@ -379,26 +380,33 @@ namespace MVS.Helios
             // TODO : IF Local Instantiate
             if (isLocalInstantiate)
             {
-                Debug.Log(instantiateParams.instanceId);
-                foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
+                foreach (var ho in go.GetComponentsInChildren<HeliosObject>())
                 {
-                    heliosMonoBehavior.IsMine = true;
+                    ho.IsMine = true;
+                    ho.FindHeliosVariable();
+                    HeliosObjectList.Add(ho);
+                    ho.ObjectInfo.ObjectID.ClientInstanceID = (uint)HeliosNetwork.HeliosObjectList.LastIndexOf(ho);
+                    ho.ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
+                    Debug.Log("ClientInstanceID: " + ho.ObjectInfo.ObjectID.ClientInstanceID);
+                    instantiateParams.clientInstanceID = ho.ObjectInfo.ObjectID.ClientInstanceID;
                 }
                 SendInstantiate(instantiateParams, isRoomObject);
-                MyHeliosObjectQueue.Enqueue(go.GetComponent<HeliosObject>());
             }
             else
             {
-                Debug.Log(instantiateParams.instanceId);
-                go.GetComponent<HeliosObject>().instanceId = instantiateParams.instanceId;
-                Debug.Log(go.GetComponentsInChildren<HeliosMonoBehavior>().Length);
-                foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
+                go.GetComponent<HeliosObject>().InstanceId = instantiateParams.instanceId;
+                foreach (var ho in go.GetComponentsInChildren<HeliosObject>())
                 {
-                    heliosMonoBehavior.IsMine = false;
-                    heliosMonoBehavior.FindHeliosVariable();
-                    heliosMonoBehavior.SetHeliosVariableIndex();
+                    ho.InstanceId = instantiateParams.instanceId;
+                    ho.IsMine = false;
+                    ho.FindHeliosVariable();
+                    HeliosObjectList.Add(ho);
+                    ho.ObjectInfo.ObjectID.ClientInstanceID = (uint)HeliosNetwork.HeliosObjectList.LastIndexOf(ho);
+                    ho.ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
+                    Debug.Log("InstanceID: " + ho.InstanceId);
+                    // heliosMonoBehavior.SetHeliosVariableIndex();
                 }
-                HeliosObjectList.Add(instantiateParams.instanceId, go.GetComponent<HeliosObject>());
+                HeliosObjectList.Add(go.GetComponent<HeliosObject>());
             }
             
             go.SetActive(true);
@@ -416,6 +424,7 @@ namespace MVS.Helios
                 {
                     PrefabID = instantiateParams.prefabId,
                     InstanceID = instantiateParams.instanceId,
+                    ClientInstanceID = instantiateParams.clientInstanceID
                 },
                 SyncType = ObjectSyncType.PersonalOwn,
                 OwnerPlayerID = LocalPlayer.UserId,
@@ -456,37 +465,75 @@ namespace MVS.Helios
 
         private static void NetworkUpdateObject(uint id, ObjectInfo objectInfo)
         {
-            // Version 1
-            var propPos = objectInfo.CustomValues.Params["Position"].NVector;
-            var propRot = objectInfo.CustomValues.Params["Rotation"].NVector;
-            Vector3 position = new Vector3((float)propPos.X, (float)propPos.Y, (float)propPos.Z);
-            Vector3 rotationV3 = new Vector3((float)propRot.X, (float)propRot.Y, (float)propRot.Z);
-            Quaternion rotation = Quaternion.Euler(rotationV3);
+            if (objectInfo.SyncType == ObjectSyncType.GlobalOwn)
+            {
+                foreach (var ho in HeliosObjectList)
+                {
+                    if (ho.ObjectInfo.ObjectID.ClientInstanceID == objectInfo.ObjectID.ClientInstanceID)
+                    {
+                        
+                    }
+                }
+            }
+            else
+            {
+                // Version 1
+                var propPos = objectInfo.CustomValues.Params["Position"].NVector;
+                var propRot = objectInfo.CustomValues.Params["Rotation"].NVector;
+                Vector3 position = new Vector3((float)propPos.X, (float)propPos.Y, (float)propPos.Z);
+                Vector3 rotationV3 = new Vector3((float)propRot.X, (float)propRot.Y, (float)propRot.Z);
+                Quaternion rotation = Quaternion.Euler(rotationV3);
             
-            // Version 2
-            var propPos2 = objectInfo.TestValues.FirstOrDefault(variable => variable.Key == CustomVariables.GetKeyByName("position"))?.NVector;
-            var propRot2 = objectInfo.TestValues.FirstOrDefault(variable => variable.Key == CustomVariables.GetKeyByName("rotation"))?.NVector;
-            Vector3 position2 = new Vector3((float)propPos2.X, (float)propPos2.Y, (float)propPos2.Z);
-            Vector3 rotation2V3 = new Vector3((float)propRot2.X, (float)propRot2.Y, (float)propRot2.Z);
-            Quaternion rotation2 = Quaternion.Euler(rotation2V3);
+                // Version 2
+                var propPos2 = objectInfo.TestValues.FirstOrDefault(variable => variable.Key == CustomVariables.GetKeyByName("position"))?.NVector;
+                var propRot2 = objectInfo.TestValues.FirstOrDefault(variable => variable.Key == CustomVariables.GetKeyByName("rotation"))?.NVector;
+                Vector3 position2 = new Vector3((float)propPos2.X, (float)propPos2.Y, (float)propPos2.Z);
+                Vector3 rotation2V3 = new Vector3((float)propRot2.X, (float)propRot2.Y, (float)propRot2.Z);
+                Quaternion rotation2 = Quaternion.Euler(rotation2V3);
+
+                var obj = FindObjectById(id);
+                obj.GetComponent<HeliosTransform>().networkPosition = position2;
+                obj.GetComponent<HeliosTransform>().networkRotation = rotation2;
+            }
             
-            HeliosObjectList[id].heliosTransform.networkPosition = position2;
-            HeliosObjectList[id].heliosTransform.networkRotation = rotation2;
+
+            // Debug.Log(objectInfo.TestValues.Count());
+            // if (objectInfo.TestValues.Count > 0)
+            // {
+            //     for (int i = 0; i < objectInfo.TestValues.Count; i++)
+            //     {
+            //         Debug.Log(objectInfo.TestValues[i].Key);
+            //         FindObjectById(id).ObjectInfo.TestValues[objectInfo.TestValues[i].Key] = objectInfo.TestValues[i];
+            //     }
+            // }
+
+            Debug.Log(objectInfo.CustomData.Count());
+            if(objectInfo.CustomData.Count > 0)
+            {
+                for (int i = 0; i < objectInfo.CustomData.Count; i++)
+                {
+                    Debug.Log("Data " + objectInfo.CustomData[i]);
+                    FindObjectById(id).ObjectInfo.CustomData[i] = objectInfo.CustomData[i];
+                    Debug.Log(FindObjectById(id).gameObject.name);
+                    FindObjectById(id).UpdateCustomData();
+                }
+            }
         }
 
         private static void NetworkRemoveObject(uint id)
         {
-            if(HeliosObjectList.TryGetValue(id, out var obj))
+            if (HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.InstanceID == id))
             {
-                foreach (var heliosMonoBehavior in obj.GetComponentsInChildren<HeliosMonoBehavior>())
-                {
-                    foreach (var heliosVariable in heliosMonoBehavior.HeliosVariableTable)
-                    {
-                        HeliosVariableDic.Remove(heliosVariable.Index);
-                    }
-                }
+                var obj = HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.InstanceID == id);
+                // foreach (var heliosMonoBehavior in obj.GetComponentsInChildren<HeliosMonoBehavior>())
+                // {
+                //     foreach (var heliosVariable in heliosMonoBehavior.HeliosVariableTable)
+                //     {
+                //         HeliosVariableDic.Remove(heliosVariable.Index);
+                //     }
+                // }
                 GameObject.Destroy(obj.gameObject);
-                HeliosObjectList.Remove(id);
+                HeliosObjectList.Remove(obj);
             }
         }
         

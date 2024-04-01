@@ -22,6 +22,7 @@ public class CubeManager : HeliosMonoBehavior
             Debug.Log(CustomVariables.GetNameByKey(1));
             
             score.Value++;
+            score2.Value++;
         }
     }
 }

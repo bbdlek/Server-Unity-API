@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 {
     public GameObject[] prefabsForSpawn;
 
-    // private HNInt score = new HNInt(0);
+    public HNInt score = new HNInt(0);
     
     private void Awake()
     {
@@ -66,8 +66,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            Debug.Log(CustomVariables.GetNameByKey(1));
-            Debug.Log(CustomVariables.GetNameByKey(2));
+            score.Value++;
         }
     }
 }

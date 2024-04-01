@@ -119,8 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30e3e9e8305b4750ba301bdfe5e2dd78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabId: 0
-  instanceId: 0
+  _prefabId: 0
+  _instanceId: 0
   heliosTransform: {fileID: 0}
 --- !u!114 &2631683146492028902
 MonoBehaviour:

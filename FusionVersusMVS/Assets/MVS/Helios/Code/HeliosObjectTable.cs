@@ -11,10 +11,15 @@ namespace MVS.Helios
         public HeliosObject FindPrefabByNetworkId(uint prefabId)
         {
             HeliosObject target;
-            if(Prefabs[(int)prefabId] != null)
-                return Prefabs[(int)prefabId];
+            if (Prefabs.Find(x => x.PrefabId == prefabId) != null)
+                return Prefabs.Find(x => x.PrefabId == prefabId);
 
             return null;
+        }
+
+        public int FindNetworkIdByPrefab(HeliosObject ho)
+        {
+            return Prefabs.LastIndexOf(ho);
         }
     }
 }

@@ -7462,6 +7462,9 @@ namespace Protocol {
     /// <summary>Field number for the "customData" field.</summary>
     public const int CustomDataFieldNumber = 3;
     private global::Protocol.CustomDic customData_;
+    /// <summary>
+    ///    repeated bytes testData = 4;
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::Protocol.CustomDic CustomData {

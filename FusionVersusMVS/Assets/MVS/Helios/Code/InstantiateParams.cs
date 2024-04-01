@@ -16,15 +16,17 @@ namespace MVS.Helios
     {
         public uint prefabId;
         public uint instanceId;
+        public uint clientInstanceID;
         public Vector3 position;
         public Quaternion rotation;
         public Player creator;
         public InstantiateState state;
         
-        public InstantiateParams(uint prefabId, uint instanceId, Vector3 position, Quaternion rotation, Player creator, InstantiateState state)
+        public InstantiateParams(uint prefabId, uint instanceId, uint clientInstanceID, Vector3 position, Quaternion rotation, Player creator, InstantiateState state)
         {
             this.prefabId = prefabId;
             this.instanceId = instanceId;
+            this.clientInstanceID = clientInstanceID;
             this.position = position;
             this.rotation = rotation;
             this.creator = creator;

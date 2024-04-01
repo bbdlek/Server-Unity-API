@@ -17,18 +17,20 @@ namespace MVS.Helios
     {
         public Vector3 networkPosition;
         private Vector3 _storedPosition;
-
-        [HideInInspector]
+        
         public Quaternion networkRotation;
         private Quaternion _storedRotation;
 
         public bool syncPosition = true;
         public bool syncRotation = true;
+
+        private bool _isMine;
         
         // TODO : Local Lossy
 
         private void Awake()
         {
+            _isMine = GetComponent<HeliosObject>().IsMine;
             _storedPosition = transform.localPosition;
             networkPosition = Vector3.zero;
 
@@ -39,7 +41,7 @@ namespace MVS.Helios
         private void Update()
         {
             var tr = transform;
-            if ((tr.localPosition != _storedPosition || tr.localRotation != _storedRotation) && isMine)
+            if ((tr.localPosition != _storedPosition || tr.localRotation != _storedRotation) && _isMine)
             {
                 //Send?
                 var fixedData = new C_UPDATE_NETWORK_OBJECTS();
@@ -47,8 +49,8 @@ namespace MVS.Helios
                 {
                     ObjectID = new ObjectID
                     {
-                        PrefabID = GetComponent<HeliosObject>().prefabId,
-                        InstanceID = GetComponent<HeliosObject>().instanceId,
+                        PrefabID = GetComponent<HeliosObject>().PrefabId,
+                        InstanceID = GetComponent<HeliosObject>().InstanceId,
                     },
                     SyncType = ObjectSyncType.PersonalOwn,
                     OwnerPlayerID = HeliosNetwork.LocalPlayer.UserId
@@ -108,7 +110,7 @@ namespace MVS.Helios
             
             
             //Read?
-            if(!isMine)
+            if(!_isMine)
             {
                 tr.localPosition = networkPosition;
                 tr.localRotation = networkRotation;

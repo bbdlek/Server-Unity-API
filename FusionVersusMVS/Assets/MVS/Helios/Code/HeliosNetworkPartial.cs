@@ -13,11 +13,12 @@ namespace MVS.Helios
 {
     public static partial class HeliosNetwork
     {
-        public static Dictionary<uint, HeliosObject> HeliosObjectList = new Dictionary<uint, HeliosObject>();
-        
-        // public static Dictionary<uint, HeliosObject> MyHeliosObjectList = new Dictionary<uint, HeliosObject>();
+        public static List<HeliosMonoBehavior> HeliosObjectList = new List<HeliosMonoBehavior>();
 
-        public static Queue<HeliosObject> MyHeliosObjectQueue = new Queue<HeliosObject>();
+        public static HeliosMonoBehavior FindObjectById(uint id)
+        {
+            return HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.InstanceID == (int)id);
+        }
         
         public static void AddCallbackTarget(object target)
         {
@@ -56,28 +57,53 @@ namespace MVS.Helios
                     var InitData = Packs.Parser.ParseFrom(eventData.FixedData).SInitialObjects;
                     foreach (var objectInfo in InitData.ObjectInfos)
                     {
-                        NetworkInstantiate(objectInfo);
+                        switch (objectInfo.SyncType)
+                        {
+                            case ObjectSyncType.PersonalOwn:
+                                NetworkInstantiate(objectInfo);
+                                break;
+                            case ObjectSyncType.GlobalOwn:
+                                var obj = HeliosObjectList.Find(x =>
+                                    x.ObjectInfo.ObjectID.ClientInstanceID ==
+                                    (int)objectInfo.ObjectID.ClientInstanceID);
+                                Debug.Log(obj.name);
+                                obj.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
+                                break;
+                        }
+                        
                     }
                     break;
                 case EventCode.PKT_S_ADD_NETWORK_OBJECTS:
                     var data = Packs.Parser.ParseFrom(eventData.FixedData).SAddNetworkObjects;
                     foreach (var objectInfo in data.ObjectInfos)
                     {
-                        if(objectInfo.OwnerPlayerID != LocalPlayer.UserId)
+                        if (objectInfo.SyncType == ObjectSyncType.GlobalOwn)
                         {
-                            NetworkInstantiate(objectInfo);
+                            var obj = HeliosObjectList.Find(x =>
+                                x.ObjectInfo.ObjectID.ClientInstanceID ==
+                                (int)objectInfo.ObjectID.ClientInstanceID);
+                            obj.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
+                            Debug.Log(obj.instanceID);
+                            break;
                         }
                         else
                         {
-                            var obj = MyHeliosObjectQueue.Dequeue();
-                            obj.instanceId = objectInfo.ObjectID.InstanceID;
-                            HeliosObjectList[obj.instanceId] = obj;
-                            foreach (var heliosMonoBehavior in obj.GetComponentsInChildren<HeliosMonoBehavior>())
+                            if(objectInfo.OwnerPlayerID != LocalPlayer.UserId)
                             {
-                                heliosMonoBehavior.FindHeliosVariable();
-                                heliosMonoBehavior.SetHeliosVariableIndex();
+                                NetworkInstantiate(objectInfo);
                             }
-                            Debug.Log(HeliosObjectList[obj.instanceId].GetComponent<HeliosObject>().instanceId);
+                            else
+                            {
+                                Debug.Log(objectInfo.ObjectID.ClientInstanceID);
+                                var obj = HeliosObjectList.Find(x =>
+                                    x.ObjectInfo.ObjectID.ClientInstanceID ==
+                                    (int)objectInfo.ObjectID.ClientInstanceID);
+                                obj.GetComponent<HeliosObject>().InstanceId = objectInfo.ObjectID.InstanceID;
+                                foreach (var heliosMonoBehavior in obj.GetComponentsInChildren<HeliosMonoBehavior>())
+                                {
+                                    heliosMonoBehavior.FindHeliosVariable();
+                                }
+                            }   
                         }
                     }
                     break;
@@ -99,28 +125,6 @@ namespace MVS.Helios
                         NetworkRemoveObject(id);
                     }
                     break;
-                
-                case CustomEventCode.Variable:
-                    var variable = Packs.Parser.ParseFrom(eventData.FixedData).CVariable;
-                    switch (variable.HeliosVariable.ValueCase)
-                    {
-                        case HeliosVariable.ValueOneofCase.NInt32:
-                            HeliosVariableDic[(int)variable.Index].ConvertTo<HNInt>().Value = variable.HeliosVariable.NInt32;
-                            break;
-                        case HeliosVariable.ValueOneofCase.NInt64:
-                            HeliosVariableDic[(int)variable.Index].ConvertTo<HNLong>().Value = variable.HeliosVariable.NInt64;
-                            break;
-                        case HeliosVariable.ValueOneofCase.NFloat:
-                            HeliosVariableDic[(int)variable.Index].ConvertTo<HNFloat>().Value = variable.HeliosVariable.NFloat;
-                            break;
-                        case HeliosVariable.ValueOneofCase.NDouble:
-                            HeliosVariableDic[(int)variable.Index].ConvertTo<HNDouble>().Value = variable.HeliosVariable.NDouble;
-                            break;
-                        case HeliosVariable.ValueOneofCase.NString:
-                            HeliosVariableDic[(int)variable.Index].ConvertTo<HNString>().Value = variable.HeliosVariable.NString;
-                            break;
-                    }
-                    break;
             }
         }
 
@@ -134,6 +138,8 @@ namespace MVS.Helios
                 case OperationCode.ROOM_JOIN_OR_CREATE:
                     break;
                 case OperationCode.GROUP_JOIN:
+                    break;
+                case OperationCode.PLAYER_ID:
                     break;
             }
         }
@@ -158,10 +164,10 @@ namespace MVS.Helios
 
         public static void RemoveMyObjects()
         {
-            foreach (var obj in HeliosObjectList.Values)
+            foreach (var obj in HeliosObjectList)
             {
                 if(obj.GetComponent<HeliosTransform>().IsMine)
-                    NetworkRemoveObject(obj.instanceId);
+                    NetworkRemoveObject(obj.ObjectInfo.ObjectID.InstanceID);
             }
         }
     }

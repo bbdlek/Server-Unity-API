@@ -397,8 +397,6 @@ namespace MVS.Realtime
                             MVSDebug(DebugLevel.INFO, "ConnectingToMVS");
                             State = ClientState.ConnectedToMVS;
                             ConnectionCallbacksTarget.OnConnected();
-                            //INIT VARIABLES
-                            OpInitVariables();
                             break;
                     }
                     break;
@@ -596,7 +594,15 @@ namespace MVS.Realtime
             CurrentRoom.StorePlayer(LocalPlayer);
 
             State = ClientState.JoinedRoom;
-            MakingRoomCallbacksTarget.OnJoinedRoom();
+            if (data.Result == Result.SuccessRoomCreate)
+            {
+                MakingRoomCallbacksTarget.OnCreatedRoom();
+                MakingRoomCallbacksTarget.OnJoinedRoom();
+            }
+            else if (data.Result == Result.SuccessRoomJoined)
+            {
+                MakingRoomCallbacksTarget.OnJoinedRoom();   
+            }
         }
 
         protected internal virtual Room CreateRoom(RoomInfo roomInfo)
@@ -607,7 +613,6 @@ namespace MVS.Realtime
 
         private void JoinGroup(OperationResponse operationResponse)
         {
-            MakingGroupCallbacksTarget.OnJoinedGroup();
             var pkt = new C_PLAYER_ID();
             RealtimePeer.SendOperation(Protocol.OperationCode.PlayerId, pkt);
             
@@ -619,7 +624,16 @@ namespace MVS.Realtime
             CurrentGroup.RealtimeClient = this;
 
             State = ClientState.JoinedGroup;
-            MakingGroupCallbacksTarget.OnJoinedGroup();
+            Debug.Log(data.Result);
+            if (data.Result == Result.SuccessGroupCreate)
+            {
+                MakingGroupCallbacksTarget.OnCreatedGroup();
+                MakingGroupCallbacksTarget.OnJoinedGroup();
+            }
+            else if(data.Result == Result.SuccessGroupJoined)
+            {
+                MakingGroupCallbacksTarget.OnJoinedGroup();
+            }
         }
 
         protected internal virtual Player CreatePlayer(bool isLocal, PlayerInfo playerInfo)

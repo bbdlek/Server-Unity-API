@@ -10,7 +10,7 @@ namespace MVS.Realtime
 
         internal static void Register()
         {
-            HeliosNetwork.RealtimeClient.MVSDebug(DebugLevel.INFO, "Register");
+            // HeliosNetwork.RealtimeClient.MVSDebug(DebugLevel.INFO, "Register");
         }
 
         public static bool TryRegisterVariable(int key, string variableName)

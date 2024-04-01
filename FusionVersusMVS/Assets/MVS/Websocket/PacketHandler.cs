@@ -50,6 +50,7 @@ public partial class WebSocketHandler
         PKT_C_OPERATION = 1027,
         PKT_S_OPERATION = 1028,
         PKT_S_EVENT = 1029,
+        PKT_C_INIT_VARIABLES = 1030,
     };
 
     /// <summary>

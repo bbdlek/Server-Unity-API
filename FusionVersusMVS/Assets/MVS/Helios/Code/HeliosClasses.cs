@@ -2,11 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using _1_Scripts._8_HeliosTest;
+using Google.Protobuf;
 using MVS.Realtime;
 using Protocol;
 using UnityEngine;
+using UnityEngine.Serialization;
 using EventCode = MVS.Realtime.EventCode;
 using HeliosVariable = MVS.Realtime.HeliosVariable;
 using Vector3 = UnityEngine.Vector3;
@@ -15,7 +18,21 @@ namespace MVS.Helios
 {
     public class HeliosMonoBehavior : MonoBehaviour
     {
+        public bool hasUpdate = false;
+        
         public List<HeliosVariable> HeliosVariableTable = new List<HeliosVariable>();
+
+        public uint instanceID;
+        
+        public uint clientInstanceID;
+        
+        public ObjectInfo ObjectInfo = new ObjectInfo
+        {
+            ObjectID = new ObjectID(),
+            SyncType = ObjectSyncType.GlobalOwn,
+            OwnerPlayerID = 0,
+            CustomValues = null
+        };
         
         protected bool isMine = false;
         
@@ -25,14 +42,55 @@ namespace MVS.Helios
             set { isMine = value; }
         }
 
-        public virtual void Awake()
+        private void FixedUpdate()
         {
-            Debug.Log("MONO");
+            instanceID = ObjectInfo.ObjectID.InstanceID;
+            clientInstanceID = ObjectInfo.ObjectID.ClientInstanceID;
+        }
+
+        public virtual void Start()
+        {
+            if(ObjectInfo == null)
+                ObjectInfo = new ObjectInfo();
+             
+            FindHeliosVariable();
+            
             if(!GetComponentInChildren<HeliosObject>())
             {
-                FindHeliosVariable();
-                SetHeliosVariableIndex();
+                HeliosNetwork.HeliosObjectList.Add(this);
+                ObjectInfo.ObjectID.ClientInstanceID = (uint)HeliosNetwork.HeliosObjectList.LastIndexOf(this);
+                Debug.Log("ClientInstanceID: " + ObjectInfo.ObjectID.ClientInstanceID);   
             }
+        }
+
+        private ByteString ObjectToBytes(object obj)
+        {
+            int iSize = Marshal.SizeOf(obj);
+
+            byte[] arr = new byte[iSize];
+
+            IntPtr ptr = Marshal.AllocHGlobal(iSize);
+            Marshal.StructureToPtr(obj, ptr, false);
+            Marshal.Copy(ptr, arr, 0, iSize);
+            Marshal.FreeHGlobal(ptr);
+            
+            return ByteString.CopyFrom(arr);
+        }
+
+        private T ByteToObject<T>(ByteString buffer)
+        {
+            int size = Marshal.SizeOf(typeof(T));
+
+            if (size > buffer.Length)
+            {
+                throw new Exception();
+            }
+
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            Marshal.Copy(buffer.ToByteArray(), 0, ptr, size);
+            T obj = (T)Marshal.PtrToStructure(ptr, typeof(T));
+            Marshal.FreeHGlobal(ptr);
+            return obj;
         }
 
         public void FindHeliosVariable()
@@ -43,38 +101,68 @@ namespace MVS.Helios
                 if (typeof(HeliosVariable).IsAssignableFrom(field.FieldType))
                 {
                     HeliosVariable heliosVariable = (HeliosVariable)field.GetValue(this);
-                    HeliosVariableTable.Add(heliosVariable);
+                    if (GetComponent<HeliosObject>())
+                    {
+                        var ho = GetComponent<HeliosObject>();
+                        ho.HeliosVariableTable.Add(heliosVariable);
+                        heliosVariable.SetOwner(ho);
+                        heliosVariable.SetIndex(ho.HeliosVariableTable.LastIndexOf(heliosVariable)); 
+                        // ho.ObjectInfo.TestValues.Add(heliosVariable.GetValue());
+                        ho.ObjectInfo.CustomData.Add(heliosVariable.GetValue().ToByteString());
+                    }
+                    else
+                    {
+                        HeliosVariableTable.Add(heliosVariable);
+                        heliosVariable.SetOwner(this);
+                        heliosVariable.SetIndex(HeliosVariableTable.LastIndexOf(heliosVariable));
+                        // ObjectInfo.TestValues.Add(heliosVariable.GetValue()); 
+                        ObjectInfo.CustomData.Add(heliosVariable.GetValue().ToByteString());
+                    }
                 }
             }
         }
 
-        private int idx = 0;
-
-        public void SetHeliosVariableIndex()
+        public void UpdateCustomData()
         {
-            Debug.Log("SetVIndex");
-            if (GetComponent<HeliosObject>())
+            for (int i = 0; i < ObjectInfo.CustomData.Count; i++)
             {
-                Debug.Log("isHO");
-                Debug.Log(HeliosVariableTable.Count);
-                foreach (var heliosVariable in HeliosVariableTable)
+                switch (Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).ValueCase)
                 {
-                    HeliosObject ho = GetComponent<HeliosObject>();
-                    heliosVariable.SetIndex((int)(ho.instanceId * 100000 + idx));
-                    Debug.Log(heliosVariable.Index);
-                    HeliosNetwork.HeliosVariableDic.Add((int)(ho.instanceId * 100000 + idx), heliosVariable);
-                    idx++;
+                    case Protocol.HeliosVariable.ValueOneofCase.NInt32:
+                        if (HeliosVariableTable[i] is HNInt hnIntVariable)
+                            hnIntVariable.Value =
+                                Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NInt32;
+                        break;
+                    case Protocol.HeliosVariable.ValueOneofCase.NInt64:
+                        if (HeliosVariableTable[i] is HNLong hnLongVariable)
+                            hnLongVariable.Value =
+                                Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NInt64;
+                        break;
+                    case Protocol.HeliosVariable.ValueOneofCase.NFloat:
+                        if (HeliosVariableTable[i] is HNFloat hnFloatVariable)
+                            hnFloatVariable.Value =
+                                Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NFloat;
+                        break;
+                    case Protocol.HeliosVariable.ValueOneofCase.NDouble:
+                        if (HeliosVariableTable[i] is HNDouble hnDoubleVariable)
+                            hnDoubleVariable.Value =
+                                Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NDouble;
+                        break;
+                    case Protocol.HeliosVariable.ValueOneofCase.NString:
+                        if (HeliosVariableTable[i] is HNString hnStringVariable)
+                            hnStringVariable.Value =
+                                Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NString;
+                        break;
+                    // case Protocol.HeliosVariable.ValueOneofCase.NVector:
+                    //     if (HeliosVariableTable[i] is HNVector hnVectorVariable)
+                    //         hnVectorVariable.Value =
+                    //             Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector;
+                    //     else if (HeliosVariableTable[i] is HNQuaternion hnQuaternionVariable)
+                    //         hnQuaternionVariable.Value =
+                    //             Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector;
+                    //     break;
                 }
-            }
-            else
-            {
-                Debug.Log("!isHO");
-                foreach (var heliosVariable in HeliosVariableTable)
-                {
-                    heliosVariable.SetIndex(idx);
-                    HeliosNetwork.HeliosVariableDic.Add(idx, heliosVariable);
-                    idx++;
-                }
+                HeliosVariableTable[i].SetFlag(false);
             }
         }
     }
@@ -118,14 +206,14 @@ namespace MVS.Helios
                 ObjectID = new ObjectID
                 {
                     PrefabID = 0,
-                    InstanceID = gameObject.GetComponent<HeliosObject>().instanceId
+                    InstanceID = gameObject.GetComponent<HeliosObject>().InstanceId
                 },
                 SyncType = ObjectSyncType.PersonalOwn,
                 OwnerPlayerID = HeliosNetwork.LocalPlayer.UserId
             };
             RemovePkt.ObjectInfos.Add(objectInfo);
             HeliosNetwork.RaiseEvent(EventCode.PKT_C_REMOVE_NETWORK_OBJECTS, RemovePkt);
-            HeliosNetwork.HeliosObjectList.Remove(gameObject.GetComponent<HeliosObject>().instanceId);
+            HeliosNetwork.HeliosObjectList.RemoveAt((int)gameObject.GetComponent<HeliosObject>().InstanceId);
             GameObject.Destroy(gameObject);
         }
     }
@@ -166,6 +254,7 @@ namespace MVS.Helios
 
         public virtual void OnCreatedRoom()
         {
+            Debug.Log("OnCreatedRoom");
         }
 
         public virtual void OnCreatedRoomFailed(short failCode, string message)
@@ -198,6 +287,14 @@ namespace MVS.Helios
 
         public virtual void OnCreatedGroup()
         {
+            foreach (var obj in HeliosNetwork.HeliosObjectList)
+            {
+                obj.ObjectInfo.SyncType = ObjectSyncType.GlobalOwn;
+                obj.ObjectInfo.OwnerPlayerID = 0;
+                var pkt = new C_ADD_NETWORK_OBJECTS();
+                pkt.ObjectInfos.Add(obj.ObjectInfo);
+                HeliosNetwork.RaiseEvent(EventCode.PKT_C_ADD_NETWORK_OBJECTS, pkt);
+            }
         }
 
         public virtual void OnCreatedGroupFailed(short failCode, string message)
