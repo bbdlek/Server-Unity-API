@@ -166,8 +166,9 @@ namespace MVS.Realtime
                 case EventCode.PKT_C_CHANGE_OBJECTS_OWNER:
                     packs.CChangeObjectsOwner = fixedData as C_CHANGE_OBJECTS_OWNER;
                     break;
-                case CustomEventCode.Variable:
-                    packs.CVariable = fixedData as C_VARIABLE;
+                case (int)Protocol.EventCode.Rpc:
+                    packs.CRpc = fixedData as C_RPC;
+                    Listener.MVSDebug(DebugLevel.INFO, packs.CRpc.InstanceID.ToString());
                     break;
             }
             if(fixedData != null)

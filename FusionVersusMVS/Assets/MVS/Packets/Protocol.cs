@@ -68,57 +68,56 @@ namespace Protocol {
             "ZxgCIAEoCRIgCgZyZXN1bHQYAyABKA4yEC5Qcm90b2NvbC5SZXN1bHQibAoH",
             "Q19FVkVOVBIRCglldmVudENvZGUYASABKAUSIgoJZml4ZWREYXRhGAIgASgL",
             "Mg8uUHJvdG9jb2wuUGFja3MSKgoKY3VzdG9tRGF0YRgDIAMoCzIWLlByb3Rv",
-            "Y29sLkN1c3RvbVN0cnVjdCJNCgpDX1ZBUklBQkxFEg0KBWluZGV4GAEgASgE",
-            "EjAKDmhlbGlvc1ZhcmlhYmxlGAIgASgLMhguUHJvdG9jb2wuSGVsaW9zVmFy",
-            "aWFibGUi3gsKBVBhY2tzEi4KDGNfaGVhcnRfYmVhdBgBIAEoCzIWLlByb3Rv",
-            "Y29sLkNfSEVBUlRfQkVBVEgAEi4KDHNfaGVhcnRfYmVhdBgCIAEoCzIWLlBy",
-            "b3RvY29sLlNfSEVBUlRfQkVBVEgAEkAKFWNfcm9vbV9qb2luX29yX2NyZWF0",
-            "ZRgDIAEoCzIfLlByb3RvY29sLkNfUk9PTV9KT0lOX09SX0NSRUFURUgAEkAK",
-            "FXNfcm9vbV9qb2luX29yX2NyZWF0ZRgEIAEoCzIfLlByb3RvY29sLlNfUk9P",
-            "TV9KT0lOX09SX0NSRUFURUgAEjEKC2Nfcm9vbV9saXN0GAUgASgLMhouUHJv",
-            "dG9jb2wuQ19URVNUX1JPT01fTElTVEgAEjEKC3Nfcm9vbV9saXN0GAYgASgL",
-            "MhouUHJvdG9jb2wuU19URVNUX1JPT01fTElTVEgAEiwKC2NfcGxheWVyX2lk",
-            "GAcgASgLMhUuUHJvdG9jb2wuQ19QTEFZRVJfSURIABIsCgtzX3BsYXllcl9p",
-            "ZBgIIAEoCzIVLlByb3RvY29sLlNfUExBWUVSX0lESAASLgoMY19ncm91cF9s",
-            "aXN0GAkgASgLMhYuUHJvdG9jb2wuQ19HUk9VUF9MSVNUSAASLgoMc19ncm91",
-            "cF9saXN0GAogASgLMhYuUHJvdG9jb2wuU19HUk9VUF9MSVNUSAASLgoMY19n",
-            "cm91cF9qb2luGAsgASgLMhYuUHJvdG9jb2wuQ19HUk9VUF9KT0lOSAASLgoM",
-            "c19ncm91cF9qb2luGAwgASgLMhYuUHJvdG9jb2wuU19HUk9VUF9KT0lOSAAS",
-            "OAoRY19pbml0aWFsX29iamVjdHMYDSABKAsyGy5Qcm90b2NvbC5DX0lOSVRJ",
-            "QUxfT0JKRUNUU0gAEjgKEXNfaW5pdGlhbF9vYmplY3RzGA4gASgLMhsuUHJv",
-            "dG9jb2wuU19JTklUSUFMX09CSkVDVFNIABJAChVzX290aGVyX2NsaWVudF9q",
-            "b2luZWQYDyABKAsyHy5Qcm90b2NvbC5TX09USEVSX0NMSUVOVF9KT0lORURI",
-            "ABJAChVjX2FkZF9uZXR3b3JrX29iamVjdHMYECABKAsyHy5Qcm90b2NvbC5D",
-            "X0FERF9ORVRXT1JLX09CSkVDVFNIABJAChVzX2FkZF9uZXR3b3JrX29iamVj",
-            "dHMYESABKAsyHy5Qcm90b2NvbC5TX0FERF9ORVRXT1JLX09CSkVDVFNIABJG",
-            "ChhjX3JlbW92ZV9uZXR3b3JrX29iamVjdHMYEiABKAsyIi5Qcm90b2NvbC5D",
-            "X1JFTU9WRV9ORVRXT1JLX09CSkVDVFNIABJGChhzX3JlbW92ZV9uZXR3b3Jr",
-            "X29iamVjdHMYEyABKAsyIi5Qcm90b2NvbC5TX1JFTU9WRV9ORVRXT1JLX09C",
-            "SkVDVFNIABJGChhjX3VwZGF0ZV9uZXR3b3JrX29iamVjdHMYFCABKAsyIi5Q",
-            "cm90b2NvbC5DX1VQREFURV9ORVRXT1JLX09CSkVDVFNIABJGChhzX3VwZGF0",
-            "ZV9uZXR3b3JrX29iamVjdHMYFSABKAsyIi5Qcm90b2NvbC5TX1VQREFURV9O",
-            "RVRXT1JLX09CSkVDVFNIABJCChZjX2NoYW5nZV9vYmplY3RzX293bmVyGBYg",
-            "ASgLMiAuUHJvdG9jb2wuQ19DSEFOR0VfT0JKRUNUU19PV05FUkgAEkIKFnNf",
-            "Y2hhbmdlX29iamVjdHNfb3duZXIYFyABKAsyIC5Qcm90b2NvbC5TX0NIQU5H",
-            "RV9PQkpFQ1RTX09XTkVSSAASJAoHY19ldmVudBgYIAEoCzIRLlByb3RvY29s",
-            "LkNfRVZFTlRIABIyCg5oZWxpb3NWYXJpYWJsZRgZIAEoCzIYLlByb3RvY29s",
-            "LkhlbGlvc1ZhcmlhYmxlSAASKgoKY192YXJpYWJsZRgaIAEoCzIULlByb3Rv",
-            "Y29sLkNfVkFSSUFCTEVIAEIHCgV2YWx1ZSKKAQoLQ19PUEVSQVRJT04SLgoN",
-            "b3BlcmF0aW9uQ29kZRgBIAEoDjIXLlByb3RvY29sLk9wZXJhdGlvbkNvZGUS",
-            "IgoJZml4ZWREYXRhGAIgASgLMg8uUHJvdG9jb2wuUGFja3MSJwoKY3VzdG9t",
-            "RGF0YRgDIAEoCzITLlByb3RvY29sLkN1c3RvbURpYyLSAQoLU19PUEVSQVRJ",
-            "T04SLgoNb3BlcmF0aW9uQ29kZRgBIAEoDjIXLlByb3RvY29sLk9wZXJhdGlv",
-            "bkNvZGUSJAoGc2VuZGVyGAIgASgLMhQuUHJvdG9jb2wuUGxheWVySW5mbxIi",
-            "CglmaXhlZERhdGEYAyABKAsyDy5Qcm90b2NvbC5QYWNrcxInCgpjdXN0b21E",
-            "YXRhGAQgASgLMhMuUHJvdG9jb2wuQ3VzdG9tRGljEiAKBnJlc3VsdBgFIAEo",
-            "DjIQLlByb3RvY29sLlJlc3VsdCKxAQoHU19FVkVOVBIkCgZzZW5kZXIYASAB",
-            "KAsyFC5Qcm90b2NvbC5QbGF5ZXJJbmZvEhEKCWV2ZW50Q29kZRgCIAEoBRIi",
-            "CglmaXhlZERhdGEYAyABKAsyDy5Qcm90b2NvbC5QYWNrcxInCgpjdXN0b21E",
-            "YXRhGAQgASgLMhMuUHJvdG9jb2wuQ3VzdG9tRGljEiAKBnJlc3VsdBgFIAEo",
-            "DjIQLlByb3RvY29sLlJlc3VsdCKCAQoQQ19JTklUX1ZBUklBQkxFUxI8Cgl2",
-            "YXJpYWJsZXMYASADKAsyKS5Qcm90b2NvbC5DX0lOSVRfVkFSSUFCTEVTLlZh",
-            "cmlhYmxlc0VudHJ5GjAKDlZhcmlhYmxlc0VudHJ5EgsKA2tleRgBIAEoBRIN",
-            "CgV2YWx1ZRgCIAEoCToCOAFiBnByb3RvMw=="));
+            "Y29sLkN1c3RvbVN0cnVjdCIvCgVDX1JQQxISCgppbnN0YW5jZUlEGAEgASgN",
+            "EhIKCm1ldGhvZE5hbWUYAiABKAki1AsKBVBhY2tzEi4KDGNfaGVhcnRfYmVh",
+            "dBgBIAEoCzIWLlByb3RvY29sLkNfSEVBUlRfQkVBVEgAEi4KDHNfaGVhcnRf",
+            "YmVhdBgCIAEoCzIWLlByb3RvY29sLlNfSEVBUlRfQkVBVEgAEkAKFWNfcm9v",
+            "bV9qb2luX29yX2NyZWF0ZRgDIAEoCzIfLlByb3RvY29sLkNfUk9PTV9KT0lO",
+            "X09SX0NSRUFURUgAEkAKFXNfcm9vbV9qb2luX29yX2NyZWF0ZRgEIAEoCzIf",
+            "LlByb3RvY29sLlNfUk9PTV9KT0lOX09SX0NSRUFURUgAEjEKC2Nfcm9vbV9s",
+            "aXN0GAUgASgLMhouUHJvdG9jb2wuQ19URVNUX1JPT01fTElTVEgAEjEKC3Nf",
+            "cm9vbV9saXN0GAYgASgLMhouUHJvdG9jb2wuU19URVNUX1JPT01fTElTVEgA",
+            "EiwKC2NfcGxheWVyX2lkGAcgASgLMhUuUHJvdG9jb2wuQ19QTEFZRVJfSURI",
+            "ABIsCgtzX3BsYXllcl9pZBgIIAEoCzIVLlByb3RvY29sLlNfUExBWUVSX0lE",
+            "SAASLgoMY19ncm91cF9saXN0GAkgASgLMhYuUHJvdG9jb2wuQ19HUk9VUF9M",
+            "SVNUSAASLgoMc19ncm91cF9saXN0GAogASgLMhYuUHJvdG9jb2wuU19HUk9V",
+            "UF9MSVNUSAASLgoMY19ncm91cF9qb2luGAsgASgLMhYuUHJvdG9jb2wuQ19H",
+            "Uk9VUF9KT0lOSAASLgoMc19ncm91cF9qb2luGAwgASgLMhYuUHJvdG9jb2wu",
+            "U19HUk9VUF9KT0lOSAASOAoRY19pbml0aWFsX29iamVjdHMYDSABKAsyGy5Q",
+            "cm90b2NvbC5DX0lOSVRJQUxfT0JKRUNUU0gAEjgKEXNfaW5pdGlhbF9vYmpl",
+            "Y3RzGA4gASgLMhsuUHJvdG9jb2wuU19JTklUSUFMX09CSkVDVFNIABJAChVz",
+            "X290aGVyX2NsaWVudF9qb2luZWQYDyABKAsyHy5Qcm90b2NvbC5TX09USEVS",
+            "X0NMSUVOVF9KT0lORURIABJAChVjX2FkZF9uZXR3b3JrX29iamVjdHMYECAB",
+            "KAsyHy5Qcm90b2NvbC5DX0FERF9ORVRXT1JLX09CSkVDVFNIABJAChVzX2Fk",
+            "ZF9uZXR3b3JrX29iamVjdHMYESABKAsyHy5Qcm90b2NvbC5TX0FERF9ORVRX",
+            "T1JLX09CSkVDVFNIABJGChhjX3JlbW92ZV9uZXR3b3JrX29iamVjdHMYEiAB",
+            "KAsyIi5Qcm90b2NvbC5DX1JFTU9WRV9ORVRXT1JLX09CSkVDVFNIABJGChhz",
+            "X3JlbW92ZV9uZXR3b3JrX29iamVjdHMYEyABKAsyIi5Qcm90b2NvbC5TX1JF",
+            "TU9WRV9ORVRXT1JLX09CSkVDVFNIABJGChhjX3VwZGF0ZV9uZXR3b3JrX29i",
+            "amVjdHMYFCABKAsyIi5Qcm90b2NvbC5DX1VQREFURV9ORVRXT1JLX09CSkVD",
+            "VFNIABJGChhzX3VwZGF0ZV9uZXR3b3JrX29iamVjdHMYFSABKAsyIi5Qcm90",
+            "b2NvbC5TX1VQREFURV9ORVRXT1JLX09CSkVDVFNIABJCChZjX2NoYW5nZV9v",
+            "YmplY3RzX293bmVyGBYgASgLMiAuUHJvdG9jb2wuQ19DSEFOR0VfT0JKRUNU",
+            "U19PV05FUkgAEkIKFnNfY2hhbmdlX29iamVjdHNfb3duZXIYFyABKAsyIC5Q",
+            "cm90b2NvbC5TX0NIQU5HRV9PQkpFQ1RTX09XTkVSSAASJAoHY19ldmVudBgY",
+            "IAEoCzIRLlByb3RvY29sLkNfRVZFTlRIABIyCg5oZWxpb3NWYXJpYWJsZRgZ",
+            "IAEoCzIYLlByb3RvY29sLkhlbGlvc1ZhcmlhYmxlSAASIAoFY19ycGMYGiAB",
+            "KAsyDy5Qcm90b2NvbC5DX1JQQ0gAQgcKBXZhbHVlIooBCgtDX09QRVJBVElP",
+            "ThIuCg1vcGVyYXRpb25Db2RlGAEgASgOMhcuUHJvdG9jb2wuT3BlcmF0aW9u",
+            "Q29kZRIiCglmaXhlZERhdGEYAiABKAsyDy5Qcm90b2NvbC5QYWNrcxInCgpj",
+            "dXN0b21EYXRhGAMgASgLMhMuUHJvdG9jb2wuQ3VzdG9tRGljItIBCgtTX09Q",
+            "RVJBVElPThIuCg1vcGVyYXRpb25Db2RlGAEgASgOMhcuUHJvdG9jb2wuT3Bl",
+            "cmF0aW9uQ29kZRIkCgZzZW5kZXIYAiABKAsyFC5Qcm90b2NvbC5QbGF5ZXJJ",
+            "bmZvEiIKCWZpeGVkRGF0YRgDIAEoCzIPLlByb3RvY29sLlBhY2tzEicKCmN1",
+            "c3RvbURhdGEYBCABKAsyEy5Qcm90b2NvbC5DdXN0b21EaWMSIAoGcmVzdWx0",
+            "GAUgASgOMhAuUHJvdG9jb2wuUmVzdWx0IrEBCgdTX0VWRU5UEiQKBnNlbmRl",
+            "chgBIAEoCzIULlByb3RvY29sLlBsYXllckluZm8SEQoJZXZlbnRDb2RlGAIg",
+            "ASgFEiIKCWZpeGVkRGF0YRgDIAEoCzIPLlByb3RvY29sLlBhY2tzEicKCmN1",
+            "c3RvbURhdGEYBCABKAsyEy5Qcm90b2NvbC5DdXN0b21EaWMSIAoGcmVzdWx0",
+            "GAUgASgOMhAuUHJvdG9jb2wuUmVzdWx0IoIBChBDX0lOSVRfVkFSSUFCTEVT",
+            "EjwKCXZhcmlhYmxlcxgBIAMoCzIpLlByb3RvY29sLkNfSU5JVF9WQVJJQUJM",
+            "RVMuVmFyaWFibGVzRW50cnkaMAoOVmFyaWFibGVzRW50cnkSCwoDa2V5GAEg",
+            "ASgFEg0KBXZhbHVlGAIgASgJOgI4AWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protocol.EnumReflection.Descriptor, global::Protocol.StructReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.AnyReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -148,8 +147,8 @@ namespace Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C_CHAT), global::Protocol.C_CHAT.Parser, new[]{ "Msg" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.S_CHAT), global::Protocol.S_CHAT.Parser, new[]{ "PlayerInfo", "Msg", "Result" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C_EVENT), global::Protocol.C_EVENT.Parser, new[]{ "EventCode", "FixedData", "CustomData" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C_VARIABLE), global::Protocol.C_VARIABLE.Parser, new[]{ "Index", "HeliosVariable" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.Packs), global::Protocol.Packs.Parser, new[]{ "CHeartBeat", "SHeartBeat", "CRoomJoinOrCreate", "SRoomJoinOrCreate", "CRoomList", "SRoomList", "CPlayerId", "SPlayerId", "CGroupList", "SGroupList", "CGroupJoin", "SGroupJoin", "CInitialObjects", "SInitialObjects", "SOtherClientJoined", "CAddNetworkObjects", "SAddNetworkObjects", "CRemoveNetworkObjects", "SRemoveNetworkObjects", "CUpdateNetworkObjects", "SUpdateNetworkObjects", "CChangeObjectsOwner", "SChangeObjectsOwner", "CEvent", "HeliosVariable", "CVariable" }, new[]{ "Value" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C_RPC), global::Protocol.C_RPC.Parser, new[]{ "InstanceID", "MethodName" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.Packs), global::Protocol.Packs.Parser, new[]{ "CHeartBeat", "SHeartBeat", "CRoomJoinOrCreate", "SRoomJoinOrCreate", "CRoomList", "SRoomList", "CPlayerId", "SPlayerId", "CGroupList", "SGroupList", "CGroupJoin", "SGroupJoin", "CInitialObjects", "SInitialObjects", "SOtherClientJoined", "CAddNetworkObjects", "SAddNetworkObjects", "CRemoveNetworkObjects", "SRemoveNetworkObjects", "CUpdateNetworkObjects", "SUpdateNetworkObjects", "CChangeObjectsOwner", "SChangeObjectsOwner", "CEvent", "HeliosVariable", "CRpc" }, new[]{ "Value" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C_OPERATION), global::Protocol.C_OPERATION.Parser, new[]{ "OperationCode", "FixedData", "CustomData" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.S_OPERATION), global::Protocol.S_OPERATION.Parser, new[]{ "OperationCode", "Sender", "FixedData", "CustomData", "Result" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.S_EVENT), global::Protocol.S_EVENT.Parser, new[]{ "Sender", "EventCode", "FixedData", "CustomData", "Result" }, null, null, null, null),
@@ -5597,16 +5596,16 @@ namespace Protocol {
 
   }
 
-  public sealed partial class C_VARIABLE : pb::IMessage<C_VARIABLE>
+  public sealed partial class C_RPC : pb::IMessage<C_RPC>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<C_VARIABLE> _parser = new pb::MessageParser<C_VARIABLE>(() => new C_VARIABLE());
+    private static readonly pb::MessageParser<C_RPC> _parser = new pb::MessageParser<C_RPC>(() => new C_RPC());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<C_VARIABLE> Parser { get { return _parser; } }
+    public static pb::MessageParser<C_RPC> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -5622,7 +5621,7 @@ namespace Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public C_VARIABLE() {
+    public C_RPC() {
       OnConstruction();
     }
 
@@ -5630,59 +5629,59 @@ namespace Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public C_VARIABLE(C_VARIABLE other) : this() {
-      index_ = other.index_;
-      heliosVariable_ = other.heliosVariable_ != null ? other.heliosVariable_.Clone() : null;
+    public C_RPC(C_RPC other) : this() {
+      instanceID_ = other.instanceID_;
+      methodName_ = other.methodName_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public C_VARIABLE Clone() {
-      return new C_VARIABLE(this);
+    public C_RPC Clone() {
+      return new C_RPC(this);
     }
 
-    /// <summary>Field number for the "index" field.</summary>
-    public const int IndexFieldNumber = 1;
-    private ulong index_;
+    /// <summary>Field number for the "instanceID" field.</summary>
+    public const int InstanceIDFieldNumber = 1;
+    private uint instanceID_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ulong Index {
-      get { return index_; }
+    public uint InstanceID {
+      get { return instanceID_; }
       set {
-        index_ = value;
+        instanceID_ = value;
       }
     }
 
-    /// <summary>Field number for the "heliosVariable" field.</summary>
-    public const int HeliosVariableFieldNumber = 2;
-    private global::Protocol.HeliosVariable heliosVariable_;
+    /// <summary>Field number for the "methodName" field.</summary>
+    public const int MethodNameFieldNumber = 2;
+    private string methodName_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Protocol.HeliosVariable HeliosVariable {
-      get { return heliosVariable_; }
+    public string MethodName {
+      get { return methodName_; }
       set {
-        heliosVariable_ = value;
+        methodName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as C_VARIABLE);
+      return Equals(other as C_RPC);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(C_VARIABLE other) {
+    public bool Equals(C_RPC other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Index != other.Index) return false;
-      if (!object.Equals(HeliosVariable, other.HeliosVariable)) return false;
+      if (InstanceID != other.InstanceID) return false;
+      if (MethodName != other.MethodName) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -5690,8 +5689,8 @@ namespace Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (Index != 0UL) hash ^= Index.GetHashCode();
-      if (heliosVariable_ != null) hash ^= HeliosVariable.GetHashCode();
+      if (InstanceID != 0) hash ^= InstanceID.GetHashCode();
+      if (MethodName.Length != 0) hash ^= MethodName.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -5710,13 +5709,13 @@ namespace Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (Index != 0UL) {
+      if (InstanceID != 0) {
         output.WriteRawTag(8);
-        output.WriteUInt64(Index);
+        output.WriteUInt32(InstanceID);
       }
-      if (heliosVariable_ != null) {
+      if (MethodName.Length != 0) {
         output.WriteRawTag(18);
-        output.WriteMessage(HeliosVariable);
+        output.WriteString(MethodName);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -5728,13 +5727,13 @@ namespace Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Index != 0UL) {
+      if (InstanceID != 0) {
         output.WriteRawTag(8);
-        output.WriteUInt64(Index);
+        output.WriteUInt32(InstanceID);
       }
-      if (heliosVariable_ != null) {
+      if (MethodName.Length != 0) {
         output.WriteRawTag(18);
-        output.WriteMessage(HeliosVariable);
+        output.WriteString(MethodName);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -5746,11 +5745,11 @@ namespace Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (Index != 0UL) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(Index);
+      if (InstanceID != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(InstanceID);
       }
-      if (heliosVariable_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(HeliosVariable);
+      if (MethodName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(MethodName);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -5760,18 +5759,15 @@ namespace Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(C_VARIABLE other) {
+    public void MergeFrom(C_RPC other) {
       if (other == null) {
         return;
       }
-      if (other.Index != 0UL) {
-        Index = other.Index;
+      if (other.InstanceID != 0) {
+        InstanceID = other.InstanceID;
       }
-      if (other.heliosVariable_ != null) {
-        if (heliosVariable_ == null) {
-          HeliosVariable = new global::Protocol.HeliosVariable();
-        }
-        HeliosVariable.MergeFrom(other.HeliosVariable);
+      if (other.MethodName.Length != 0) {
+        MethodName = other.MethodName;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -5789,14 +5785,11 @@ namespace Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            Index = input.ReadUInt64();
+            InstanceID = input.ReadUInt32();
             break;
           }
           case 18: {
-            if (heliosVariable_ == null) {
-              HeliosVariable = new global::Protocol.HeliosVariable();
-            }
-            input.ReadMessage(HeliosVariable);
+            MethodName = input.ReadString();
             break;
           }
         }
@@ -5815,14 +5808,11 @@ namespace Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            Index = input.ReadUInt64();
+            InstanceID = input.ReadUInt32();
             break;
           }
           case 18: {
-            if (heliosVariable_ == null) {
-              HeliosVariable = new global::Protocol.HeliosVariable();
-            }
-            input.ReadMessage(HeliosVariable);
+            MethodName = input.ReadString();
             break;
           }
         }
@@ -5942,8 +5932,8 @@ namespace Protocol {
         case ValueOneofCase.HeliosVariable:
           HeliosVariable = other.HeliosVariable.Clone();
           break;
-        case ValueOneofCase.CVariable:
-          CVariable = other.CVariable.Clone();
+        case ValueOneofCase.CRpc:
+          CRpc = other.CRpc.Clone();
           break;
       }
 
@@ -6256,15 +6246,15 @@ namespace Protocol {
       }
     }
 
-    /// <summary>Field number for the "c_variable" field.</summary>
-    public const int CVariableFieldNumber = 26;
+    /// <summary>Field number for the "c_rpc" field.</summary>
+    public const int CRpcFieldNumber = 26;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Protocol.C_VARIABLE CVariable {
-      get { return valueCase_ == ValueOneofCase.CVariable ? (global::Protocol.C_VARIABLE) value_ : null; }
+    public global::Protocol.C_RPC CRpc {
+      get { return valueCase_ == ValueOneofCase.CRpc ? (global::Protocol.C_RPC) value_ : null; }
       set {
         value_ = value;
-        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.CVariable;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.CRpc;
       }
     }
 
@@ -6297,7 +6287,7 @@ namespace Protocol {
       SChangeObjectsOwner = 23,
       CEvent = 24,
       HeliosVariable = 25,
-      CVariable = 26,
+      CRpc = 26,
     }
     private ValueOneofCase valueCase_ = ValueOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6353,7 +6343,7 @@ namespace Protocol {
       if (!object.Equals(SChangeObjectsOwner, other.SChangeObjectsOwner)) return false;
       if (!object.Equals(CEvent, other.CEvent)) return false;
       if (!object.Equals(HeliosVariable, other.HeliosVariable)) return false;
-      if (!object.Equals(CVariable, other.CVariable)) return false;
+      if (!object.Equals(CRpc, other.CRpc)) return false;
       if (ValueCase != other.ValueCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -6387,7 +6377,7 @@ namespace Protocol {
       if (valueCase_ == ValueOneofCase.SChangeObjectsOwner) hash ^= SChangeObjectsOwner.GetHashCode();
       if (valueCase_ == ValueOneofCase.CEvent) hash ^= CEvent.GetHashCode();
       if (valueCase_ == ValueOneofCase.HeliosVariable) hash ^= HeliosVariable.GetHashCode();
-      if (valueCase_ == ValueOneofCase.CVariable) hash ^= CVariable.GetHashCode();
+      if (valueCase_ == ValueOneofCase.CRpc) hash ^= CRpc.GetHashCode();
       hash ^= (int) valueCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -6507,9 +6497,9 @@ namespace Protocol {
         output.WriteRawTag(202, 1);
         output.WriteMessage(HeliosVariable);
       }
-      if (valueCase_ == ValueOneofCase.CVariable) {
+      if (valueCase_ == ValueOneofCase.CRpc) {
         output.WriteRawTag(210, 1);
-        output.WriteMessage(CVariable);
+        output.WriteMessage(CRpc);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -6621,9 +6611,9 @@ namespace Protocol {
         output.WriteRawTag(202, 1);
         output.WriteMessage(HeliosVariable);
       }
-      if (valueCase_ == ValueOneofCase.CVariable) {
+      if (valueCase_ == ValueOneofCase.CRpc) {
         output.WriteRawTag(210, 1);
-        output.WriteMessage(CVariable);
+        output.WriteMessage(CRpc);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -6710,8 +6700,8 @@ namespace Protocol {
       if (valueCase_ == ValueOneofCase.HeliosVariable) {
         size += 2 + pb::CodedOutputStream.ComputeMessageSize(HeliosVariable);
       }
-      if (valueCase_ == ValueOneofCase.CVariable) {
-        size += 2 + pb::CodedOutputStream.ComputeMessageSize(CVariable);
+      if (valueCase_ == ValueOneofCase.CRpc) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(CRpc);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -6876,11 +6866,11 @@ namespace Protocol {
           }
           HeliosVariable.MergeFrom(other.HeliosVariable);
           break;
-        case ValueOneofCase.CVariable:
-          if (CVariable == null) {
-            CVariable = new global::Protocol.C_VARIABLE();
+        case ValueOneofCase.CRpc:
+          if (CRpc == null) {
+            CRpc = new global::Protocol.C_RPC();
           }
-          CVariable.MergeFrom(other.CVariable);
+          CRpc.MergeFrom(other.CRpc);
           break;
       }
 
@@ -7125,12 +7115,12 @@ namespace Protocol {
             break;
           }
           case 210: {
-            global::Protocol.C_VARIABLE subBuilder = new global::Protocol.C_VARIABLE();
-            if (valueCase_ == ValueOneofCase.CVariable) {
-              subBuilder.MergeFrom(CVariable);
+            global::Protocol.C_RPC subBuilder = new global::Protocol.C_RPC();
+            if (valueCase_ == ValueOneofCase.CRpc) {
+              subBuilder.MergeFrom(CRpc);
             }
             input.ReadMessage(subBuilder);
-            CVariable = subBuilder;
+            CRpc = subBuilder;
             break;
           }
         }
@@ -7374,12 +7364,12 @@ namespace Protocol {
             break;
           }
           case 210: {
-            global::Protocol.C_VARIABLE subBuilder = new global::Protocol.C_VARIABLE();
-            if (valueCase_ == ValueOneofCase.CVariable) {
-              subBuilder.MergeFrom(CVariable);
+            global::Protocol.C_RPC subBuilder = new global::Protocol.C_RPC();
+            if (valueCase_ == ValueOneofCase.CRpc) {
+              subBuilder.MergeFrom(CRpc);
             }
             input.ReadMessage(subBuilder);
-            CVariable = subBuilder;
+            CRpc = subBuilder;
             break;
           }
         }

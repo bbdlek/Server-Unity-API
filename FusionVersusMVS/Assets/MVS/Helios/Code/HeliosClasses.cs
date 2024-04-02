@@ -22,6 +22,9 @@ namespace MVS.Helios
         
         public List<HeliosVariable> HeliosVariableTable = new List<HeliosVariable>();
 
+        public Dictionary<string, Tuple<MethodInfo, string>> RPCMethods =
+            new Dictionary<string, Tuple<MethodInfo, string>>();
+
         public uint instanceID;
         
         public uint clientInstanceID;
@@ -54,6 +57,7 @@ namespace MVS.Helios
                 ObjectInfo = new ObjectInfo();
              
             FindHeliosVariable();
+            FindRPCMethods();
             
             if(!GetComponentInChildren<HeliosObject>())
             {
@@ -93,6 +97,17 @@ namespace MVS.Helios
             return obj;
         }
 
+        public void RPC(string methodName)
+        {
+            Debug.Log(ObjectInfo.ObjectID.InstanceID);
+            HeliosNetwork.RPC(ObjectInfo.ObjectID.InstanceID, methodName);
+        }
+
+        public void ExecuteRpc(string methodName)
+        {
+            RPCMethods[methodName].Item1.Invoke(this, null);
+        }
+
         public void FindHeliosVariable()
         {
             var fields = this.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
@@ -117,6 +132,33 @@ namespace MVS.Helios
                         heliosVariable.SetIndex(HeliosVariableTable.LastIndexOf(heliosVariable));
                         // ObjectInfo.TestValues.Add(heliosVariable.GetValue()); 
                         ObjectInfo.CustomData.Add(heliosVariable.GetValue().ToByteString());
+                    }
+                }
+            }
+        }
+
+        public void FindRPCMethods()
+        {
+            Type classType = GetType();
+            MethodInfo[] methods = classType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+            foreach (var method in methods)
+            {
+                HeliosRPCAttribute attribute =
+                    (HeliosRPCAttribute)Attribute.GetCustomAttribute(method, typeof(HeliosRPCAttribute));
+                if (attribute != null)
+                {
+                    if (GetComponent<HeliosObject>())
+                    {
+                        string methodName = method.Name;
+                        string target = attribute.Target;
+                        GetComponent<HeliosObject>().RPCMethods.Add(methodName, Tuple.Create(method, target));
+                    }
+                    else
+                    {
+                        string methodName = method.Name;
+                        string target = attribute.Target;
+                        RPCMethods.Add(methodName, Tuple.Create(method, target));
                     }
                 }
             }

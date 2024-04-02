@@ -66,8 +66,8 @@ namespace MVS.Helios
                                 var obj = HeliosObjectList.Find(x =>
                                     x.ObjectInfo.ObjectID.ClientInstanceID ==
                                     (int)objectInfo.ObjectID.ClientInstanceID);
-                                Debug.Log(obj.name);
                                 obj.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
+                                obj.UpdateCustomData();
                                 break;
                         }
                         
@@ -83,7 +83,7 @@ namespace MVS.Helios
                                 x.ObjectInfo.ObjectID.ClientInstanceID ==
                                 (int)objectInfo.ObjectID.ClientInstanceID);
                             obj.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
-                            Debug.Log(obj.instanceID);
+                            Debug.Log(obj.ObjectInfo.ObjectID.InstanceID);
                             break;
                         }
                         else
@@ -124,6 +124,12 @@ namespace MVS.Helios
                         var id = objectInfo.ObjectID.InstanceID;
                         NetworkRemoveObject(id);
                     }
+                    break;
+                case (int)Protocol.EventCode.Rpc:
+                    var dataRpc = Packs.Parser.ParseFrom(eventData.FixedData).CRpc;
+                    Debug.Log(dataRpc.InstanceID);
+                    var rpcObj = FindObjectById(dataRpc.InstanceID);
+                    rpcObj.ExecuteRpc(dataRpc.MethodName);
                     break;
             }
         }

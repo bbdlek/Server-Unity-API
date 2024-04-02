@@ -272,6 +272,17 @@ namespace MVS.Helios
         {
             return true;
         }
+        
+        // TODO : RPC
+        public static bool RPC(uint instanceID, string methodName)
+        {
+            var fixedData = new C_RPC
+            {
+                InstanceID = instanceID,
+                MethodName = methodName
+            };
+            return RaiseEvent((int)Protocol.EventCode.Rpc, fixedData);
+        }
 
         public static bool JoinOrCreateRoom(string AuthToken, long AppID, long WaplRoomID, string Name)
         {

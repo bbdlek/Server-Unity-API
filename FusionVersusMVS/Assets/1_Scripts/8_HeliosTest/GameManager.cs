@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Fusion;
 using MVS.Helios;
 using MVS.Realtime;
 using UnityEngine;
@@ -12,10 +13,17 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     public HNInt score = new HNInt(0);
     
+    [Rpc]
     private void Awake()
     {
         // score = 3;
         HeliosNetwork.SendRate = 1;
+    }
+
+    [HeliosRPC(target: "ALL")]
+    public void AddScore()
+    {
+        score.Value++;
     }
 
     public void OnClickConnectBtn()
@@ -66,7 +74,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            score.Value++;
+            RPC("AddScore");
         }
     }
 }

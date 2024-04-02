@@ -42,12 +42,12 @@ namespace Protocol {
             "VF9CRUFUEAASFwoTUk9PTV9KT0lOX09SX0NSRUFURRABEg4KClJPT01fTEVB",
             "VkUQAhINCglST09NX0xJU1QQAxINCglQTEFZRVJfSUQQBBIOCgpHUk9VUF9M",
             "SVNUEAUSDgoKR1JPVVBfSk9JThAGEg8KC0dST1VQX0xFQVZFEAcSDwoLUkFJ",
-            "U0VfRVZFTlQQCBISCg5JTklUX1ZBUklBQkxFUxAJKqQBCglFdmVudENvZGUS",
+            "U0VfRVZFTlQQCBISCg5JTklUX1ZBUklBQkxFUxAJKq0BCglFdmVudENvZGUS",
             "FwoTT1RIRVJfQ0xJRU5UX0pPSU5FRBAAEhMKD0lOSVRJQUxfT0JKRUNUUxAB",
             "EhcKE0FERF9ORVRXT1JLX09CSkVDVFMQAhIaChZSRU1PVkVfTkVUV09SS19P",
             "QkpFQ1RTEAMSGgoWVVBEQVRFX05FVFdPUktfT0JKRUNUUxAEEhgKFENIQU5H",
-            "RV9PQkpFQ1RTX09XTkVSEAUqMQoIUGFyYW1LZXkSDAoIUE9TSVRJT04QABIM",
-            "CghST1RBVElPThABEgkKBVNDQUxFEAJiBnByb3RvMw=="));
+            "RV9PQkpFQ1RTX09XTkVSEAUSBwoDUlBDEAYqMQoIUGFyYW1LZXkSDAoIUE9T",
+            "SVRJT04QABIMCghST1RBVElPThABEgkKBVNDQUxFEAJiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protocol.Result), typeof(global::Protocol.PropsID), typeof(global::Protocol.ObjectSyncType), typeof(global::Protocol.OperationCode), typeof(global::Protocol.EventCode), typeof(global::Protocol.ParamKey), }, null, null));
@@ -143,6 +143,7 @@ namespace Protocol {
     [pbr::OriginalName("REMOVE_NETWORK_OBJECTS")] RemoveNetworkObjects = 3,
     [pbr::OriginalName("UPDATE_NETWORK_OBJECTS")] UpdateNetworkObjects = 4,
     [pbr::OriginalName("CHANGE_OBJECTS_OWNER")] ChangeObjectsOwner = 5,
+    [pbr::OriginalName("RPC")] Rpc = 6,
   }
 
   public enum ParamKey {
