@@ -54,7 +54,6 @@ namespace MVS.Realtime
             if (peerConnectionState == ConnectionStateValue.Connecting)
                 peerConnectionState = ConnectionStateValue.Connected;
             ApplicationIsInitialized = true;
-            Listener.OnStatusChanged(StatusCode.Connect);
         }
         
         internal abstract void Disconnect();

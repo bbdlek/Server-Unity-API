@@ -156,7 +156,6 @@ namespace MVS.Helios
             switch (arg2)
             {
                 case ClientState.ConnectedToMVS:
-                    RealtimeClient.ConnectionCallbacksTarget.OnConnected();
                     break;
                 case ClientState.DisConnected:
                     break;

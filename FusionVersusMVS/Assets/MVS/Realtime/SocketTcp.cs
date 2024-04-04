@@ -129,7 +129,6 @@ namespace MVS.Realtime
         {
             Listener.MVSDebug(DebugLevel.INFO, "WebSocket connected");
             State = RealtimeSocketState.Connected;
-            Listener.OnStatusChanged(StatusCode.Connect);
             peerBase.OnConnect();
             //Todo : TPeer로 옮겨야 하나
             wsh = new WebSocketHandler(this);

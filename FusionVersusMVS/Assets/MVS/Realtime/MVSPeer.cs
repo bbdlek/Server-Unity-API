@@ -78,10 +78,9 @@ namespace MVS.Realtime
                 Listener.MVSDebug(DebugLevel.ERROR, $"Connect() failed to create a RealtimeSocket instance for {ex.InnerException}");
                 return false;
             }
-
             
-            peerBase.Connect(serverAddress, appId, serverType);
             Listener.OnStatusChanged(StatusCode.Connect);
+            peerBase.Connect(serverAddress, appId, serverType);
             return true;
         }
 

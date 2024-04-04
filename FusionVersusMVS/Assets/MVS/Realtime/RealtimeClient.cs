@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Google.Protobuf;
-using Google.Protobuf.WellKnownTypes;
 using Protocol;
 using UnityEngine;
 
@@ -293,23 +291,24 @@ namespace MVS.Realtime
 
             DisconnectedReason = DisconnectedReason.None;
 
+            switch (serverType)
+            {
+                case ServerConnection.NameServer:
+                    State = ClientState.ConnectingToNameServer;
+                    break;
+                case ServerConnection.MasterServer:
+                    State = ClientState.ConnectingToMasterServer;
+                    break;
+                case ServerConnection.MVS:
+                    State = ClientState.ConnectingToMVS;
+                    break;
+
+            }
+            
             bool connecting = RealtimePeer.Connect(serverAddress + ":" + serverPort, appId, serverType);
             if (connecting)
             {
                 Server = serverType;
-                switch (serverType)
-                {
-                    case ServerConnection.NameServer:
-                        State = ClientState.ConnectingToNameServer;
-                        break;
-                    case ServerConnection.MasterServer:
-                        State = ClientState.ConnectingToMasterServer;
-                        break;
-                    case ServerConnection.MVS:
-                        State = ClientState.ConnectingToMVS;
-                        break;
-
-                }
             }
 
             return connecting;
