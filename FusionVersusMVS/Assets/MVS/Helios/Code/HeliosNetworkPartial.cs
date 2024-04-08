@@ -50,7 +50,6 @@ namespace MVS.Helios
 
         private static void OnEvent(EventData eventData)
         {
-            Debug.Log(eventData.code);
             switch (eventData.code)
             {
                 case EventCode.PKT_S_INITIAL_OBJECTS:
@@ -64,9 +63,8 @@ namespace MVS.Helios
                                 break;
                             case ObjectSyncType.GlobalOwn:
                                 var obj = HeliosObjectList.Find(x =>
-                                    x.ObjectInfo.ObjectID.ClientInstanceID ==
-                                    (int)objectInfo.ObjectID.ClientInstanceID);
-                                obj.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
+                                    x.ObjectInfo.ObjectID.ClientInstanceID == objectInfo.ObjectID.ClientInstanceID);
+                                obj.ObjectInfo = objectInfo;
                                 obj.UpdateCustomData();
                                 break;
                         }
@@ -82,8 +80,7 @@ namespace MVS.Helios
                             var obj = HeliosObjectList.Find(x =>
                                 x.ObjectInfo.ObjectID.ClientInstanceID ==
                                 (int)objectInfo.ObjectID.ClientInstanceID);
-                            obj.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
-                            Debug.Log(obj.ObjectInfo.ObjectID.InstanceID);
+                            obj.ObjectInfo = objectInfo;
                             break;
                         }
                         else
@@ -94,13 +91,13 @@ namespace MVS.Helios
                             }
                             else
                             {
-                                Debug.Log(objectInfo.ObjectID.ClientInstanceID);
                                 var obj = HeliosObjectList.Find(x =>
                                     x.ObjectInfo.ObjectID.ClientInstanceID ==
                                     (int)objectInfo.ObjectID.ClientInstanceID);
                                 obj.GetComponent<HeliosObject>().InstanceId = objectInfo.ObjectID.InstanceID;
                                 foreach (var heliosMonoBehavior in obj.GetComponentsInChildren<HeliosMonoBehavior>())
                                 {
+                                    heliosMonoBehavior.FindNetworkedVariables();
                                     heliosMonoBehavior.FindHeliosVariable();
                                 }
                             }   
@@ -109,7 +106,6 @@ namespace MVS.Helios
                     break;
                 case EventCode.PKT_S_UPDATE_NETWORK_OBJECTS:
                     var dataUpdate = Packs.Parser.ParseFrom(eventData.FixedData).SUpdateNetworkObjects;
-                    Debug.Log(dataUpdate.ObjectInfos.Count);
                     foreach (var objectInfo in dataUpdate.ObjectInfos)
                     {
                         var id = objectInfo.ObjectID.InstanceID;
@@ -136,7 +132,6 @@ namespace MVS.Helios
 
         private static void OnOperation(OperationResponse opRes)
         {
-            Debug.Log(opRes.OperationCode);
             switch (opRes.OperationCode)
             {
                 case OperationCode.HEART_BEAT:
@@ -144,6 +139,14 @@ namespace MVS.Helios
                 case OperationCode.ROOM_JOIN_OR_CREATE:
                     break;
                 case OperationCode.GROUP_JOIN:
+                    foreach (var obj in HeliosNetwork.HeliosObjectList)
+                    {
+                        obj.ObjectInfo.SyncType = ObjectSyncType.GlobalOwn;
+                        obj.ObjectInfo.OwnerPlayerID = 0;
+                        var pkt = new C_ADD_NETWORK_OBJECTS();
+                        pkt.ObjectInfos.Add(obj.ObjectInfo);
+                        HeliosNetwork.RaiseEvent(EventCode.PKT_C_ADD_NETWORK_OBJECTS, pkt);
+                    }
                     break;
                 case OperationCode.PLAYER_ID:
                     break;

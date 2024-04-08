@@ -18,10 +18,10 @@ namespace MVS.Realtime
         public string FixedRegion;
 
         /// <summary> Server IP for MVS Application </summary>
-        public string Server = "222.122.186.49";
+        public string Server = "";
 
         /// <summary> Server Port for MVS Application </summary>
-        public int Port = 80;
+        public int Port = 0;
 
         public bool IsUseNameServer;
 

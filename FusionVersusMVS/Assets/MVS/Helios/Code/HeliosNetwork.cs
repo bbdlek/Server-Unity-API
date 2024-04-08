@@ -249,6 +249,8 @@ namespace MVS.Helios
             RealtimeClient.AppId = appSettings.AppId;
             AppVersion = appSettings.AppVersion;
 
+            RealtimeClient.AppSettingsDebug = appSettings.DebugLevel;
+
             // TODO : Master, Name Server
             return RealtimeClient.Connect(appSettings.Server, appSettings.Port.ToString(), appSettings.AppId,
                 ServerConnection.MVS);
@@ -386,7 +388,6 @@ namespace MVS.Helios
             }
 
             bool isLocalInstantiate = !instantiateEvent && LocalPlayer.Equals(instantiateParams.creator);
-            Debug.Log(isLocalInstantiate);
             
             // TODO : IF Local Instantiate
             if (isLocalInstantiate)
@@ -394,11 +395,11 @@ namespace MVS.Helios
                 foreach (var ho in go.GetComponentsInChildren<HeliosObject>())
                 {
                     ho.IsMine = true;
+                    ho.FindNetworkedVariables();
                     ho.FindHeliosVariable();
                     HeliosObjectList.Add(ho);
                     ho.ObjectInfo.ObjectID.ClientInstanceID = (uint)HeliosNetwork.HeliosObjectList.LastIndexOf(ho);
                     ho.ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
-                    Debug.Log("ClientInstanceID: " + ho.ObjectInfo.ObjectID.ClientInstanceID);
                     instantiateParams.clientInstanceID = ho.ObjectInfo.ObjectID.ClientInstanceID;
                 }
                 SendInstantiate(instantiateParams, isRoomObject);
@@ -410,11 +411,11 @@ namespace MVS.Helios
                 {
                     ho.InstanceId = instantiateParams.instanceId;
                     ho.IsMine = false;
+                    ho.FindNetworkedVariables();
                     ho.FindHeliosVariable();
                     HeliosObjectList.Add(ho);
                     ho.ObjectInfo.ObjectID.ClientInstanceID = (uint)HeliosNetwork.HeliosObjectList.LastIndexOf(ho);
                     ho.ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
-                    Debug.Log("InstanceID: " + ho.InstanceId);
                     // heliosMonoBehavior.SetHeliosVariableIndex();
                 }
                 HeliosObjectList.Add(go.GetComponent<HeliosObject>());
@@ -507,28 +508,8 @@ namespace MVS.Helios
                 obj.GetComponent<HeliosTransform>().networkRotation = rotation2;
             }
             
-
-            // Debug.Log(objectInfo.TestValues.Count());
-            // if (objectInfo.TestValues.Count > 0)
-            // {
-            //     for (int i = 0; i < objectInfo.TestValues.Count; i++)
-            //     {
-            //         Debug.Log(objectInfo.TestValues[i].Key);
-            //         FindObjectById(id).ObjectInfo.TestValues[objectInfo.TestValues[i].Key] = objectInfo.TestValues[i];
-            //     }
-            // }
-
-            Debug.Log(objectInfo.CustomData.Count());
-            if(objectInfo.CustomData.Count > 0)
-            {
-                for (int i = 0; i < objectInfo.CustomData.Count; i++)
-                {
-                    Debug.Log("Data " + objectInfo.CustomData[i]);
-                    FindObjectById(id).ObjectInfo.CustomData[i] = objectInfo.CustomData[i];
-                    Debug.Log(FindObjectById(id).gameObject.name);
-                    FindObjectById(id).UpdateCustomData();
-                }
-            }
+            FindObjectById(id).ObjectInfo = objectInfo;
+            FindObjectById(id).UpdateCustomData();
         }
 
         private static void NetworkRemoveObject(uint id)

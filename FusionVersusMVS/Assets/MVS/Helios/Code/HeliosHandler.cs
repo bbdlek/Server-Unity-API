@@ -1,12 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using _1_Scripts._8_HeliosTest;
 using Google.Protobuf;
 using MVS.Realtime;
 using Protocol;
 using UnityEngine;
-using UnityEngine.Profiling;
 using EventCode = MVS.Realtime.EventCode;
 using HeliosVariable = Protocol.HeliosVariable;
 
@@ -77,23 +73,54 @@ namespace MVS.Helios
             var data = new C_UPDATE_NETWORK_OBJECTS();
             foreach (var ho in HeliosNetwork.HeliosObjectList.FindAll(x => x.hasUpdate))
             {
-                Debug.Log("InstanceID :" + ho.ObjectInfo.ObjectID.InstanceID);
                 var updateObject = new ObjectInfo
                 {
                     ObjectID = ho.ObjectInfo.ObjectID,
                     SyncType = ho.ObjectInfo.SyncType,
                     OwnerPlayerID = ho.ObjectInfo.OwnerPlayerID,
                 };
-                foreach (var variable in ho.HeliosVariableTable)
+                // for (int i = 0; i < ho.heliosAttributes.Count; i++)
+                // {
+                //     if (ho.heliosAttributes[i].GetValue(ho) != ho.initialHeliosValues[i])
+                //     {
+                //         updateObject.CustomData.Add(ho.ObjectInfo.CustomData[i]);
+                //         ho.initialHeliosValues[i] = ho.heliosAttributes[i].GetValue(ho);
+                //     }
+                // }
+
+                for (int i = 0; i < ho.heliosAttributes.Count; i++)
                 {
-                    Debug.Log(variable.GetValue().NInt32);
-                    updateObject.CustomData.Add(variable.GetValue().ToByteString());
-                    Debug.Log(HeliosVariable.Parser.ParseFrom(variable.GetValue().ToByteString()).NInt32);
-                    variable.SetFlag(false);
+                    HeliosVariable hv = new HeliosVariable();
+                    switch (ho.heliosAttributes[i].GetValue(ho))
+                    {
+                        case int value:
+                            hv.NInt32 = value;
+                            break;
+                        case long value:
+                            hv.NInt64 = value;
+                            break;
+                        case float value:
+                            hv.NFloat = value;
+                            break;
+                        case double value:
+                            hv.NDouble = value;
+                            break;
+                        case string value:
+                            hv.NString = value;
+                            break;
+                    }
+                    ho.ObjectInfo.CustomData[i] = hv.ToByteString();
+                    updateObject.CustomData.Add(hv.ToByteString());
+                    ho.initialHeliosValues[i] = ho.heliosAttributes[i].GetValue(ho);
                 }
+                
+                // foreach (var variable in ho.HeliosVariableTable)
+                // {
+                //     updateObject.CustomData.Add(variable.GetValue().ToByteString());
+                //     variable.SetFlag(false);
+                // }
                 data.ObjectInfos.Add(updateObject);
                 HeliosNetwork.RaiseEvent(EventCode.PKT_C_UPDATE_NETWORK_OBJECTS, data);
-                ho.hasUpdate = false;
             }
         }
 

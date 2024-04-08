@@ -355,23 +355,28 @@ namespace MVS.Realtime
             return this.RealtimePeer.SendEvent(eventCode, fixedData, customData);
         }
 
+        public DebugLevel AppSettingsDebug = DebugLevel.ERROR;
+
         public virtual void MVSDebug(DebugLevel debugLevel, string msg)
         {
-            if (debugLevel == DebugLevel.ERROR)
+            if(debugLevel <= AppSettingsDebug)
             {
-                Debug.LogError(msg);
-            }
-            else if (debugLevel == DebugLevel.WARNING)
-            {
-                Debug.LogWarning(msg);
-            }
-            else if (debugLevel == DebugLevel.INFO)
-            {
-                Debug.Log(msg);
-            }
-            else if (debugLevel == DebugLevel.ALL)
-            {
-                Debug.Log(msg);
+                if (debugLevel == DebugLevel.ERROR)
+                {
+                    Debug.LogError(msg);
+                }
+                else if (debugLevel == DebugLevel.WARNING)
+                {
+                    Debug.LogWarning(msg);
+                }
+                else if (debugLevel == DebugLevel.INFO)
+                {
+                    Debug.Log(msg);
+                }
+                else if (debugLevel == DebugLevel.ALL)
+                {
+                    Debug.Log(msg);
+                }
             }
         }
 
@@ -496,7 +501,6 @@ namespace MVS.Realtime
                 case OperationCode.PLAYER_ID:
                     var dataPlayerID = Packs.Parser.ParseFrom(operationResponse.FixedData).SPlayerId;
                     LocalPlayer.PlayerInfo.PlayerID = dataPlayerID.PlayerID;
-                    Debug.Log(LocalPlayer.UserId);
                     break;
             }
 

@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using _1_Scripts._8_HeliosTest;
 using MVS.Helios;
 using UnityEngine;
 
@@ -45,8 +41,8 @@ namespace MVS.Realtime
         public virtual void SetFlag(bool flag)
         {
             IsUpdate = flag;
-            if(_owner != null)
-                _owner.hasUpdate = flag;
+            // if(_owner != null)
+            //     _owner.hasUpdate = flag;
         }
     }
     
@@ -175,7 +171,7 @@ namespace MVS.Realtime
             get
             {
                 Debug.Log("Get");
-                return base._value.NInt32;
+                return base._value.NDouble;
             }
             set
             {
