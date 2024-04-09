@@ -19,6 +19,10 @@ namespace MVS.Realtime
             set => _roomInfo = value;
         }
 
+        private List<Group> _groupList = new List<Group>();
+
+        public List<Group> GroupList => _groupList;
+
         private Dictionary<ulong, Player> _playerList = new Dictionary<ulong, Player>();
 
         public Dictionary<ulong, Player> PlayerList => _playerList;

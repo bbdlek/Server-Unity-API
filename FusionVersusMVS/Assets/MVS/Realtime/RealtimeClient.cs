@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Google.Protobuf;
 using Protocol;
 using UnityEngine;
@@ -175,6 +176,8 @@ namespace MVS.Realtime
         public bool InGroup => State == ClientState.JoinedGroup;
         
         public Player LocalPlayer { get; internal set; }
+
+        public List<Room> RoomList { get; internal set; } = new List<Room>();
         
         public Room CurrentRoom { get; internal set; }
         
@@ -502,6 +505,24 @@ namespace MVS.Realtime
                     var dataPlayerID = Packs.Parser.ParseFrom(operationResponse.FixedData).SPlayerId;
                     LocalPlayer.PlayerInfo.PlayerID = dataPlayerID.PlayerID;
                     break;
+                case OperationCode.ROOM_LIST:
+                    var dataRoomList = Packs.Parser.ParseFrom(operationResponse.FixedData).SRoomList;
+                    foreach (var roomInfo in dataRoomList.RoomInfos)
+                    {
+                        RoomList.Clear();
+                        RoomList.Add(new Room(roomInfo));
+                    }
+                    _roomTask.SetResult(RoomList);
+                    break;
+                case OperationCode.GROUP_LIST:
+                    var dataGroupList = Packs.Parser.ParseFrom(operationResponse.FixedData).SGroupList;
+                    foreach (var groupInfo in dataGroupList.GroupInfos)
+                    {
+                        CurrentRoom.GroupList.Clear();
+                        CurrentRoom.GroupList.Add(new Group(groupInfo, CurrentRoom));
+                    }
+                    _groupTask.SetResult(CurrentRoom.GroupList);
+                    break;
             }
 
             OpResponseReceived?.Invoke(operationResponse);
@@ -657,6 +678,27 @@ namespace MVS.Realtime
         }
         
         //Functions
+        public bool OpRoomList()
+        {
+            if (!CheckOpCanBeSent((byte)OperationCode.ROOM_LIST, Server, "RoomList"))
+            {
+                return false;
+            }
+
+            bool sent = RealtimePeer.OpRoomList();
+
+            return sent;
+        }
+
+        private TaskCompletionSource<List<Room>> _roomTask;
+
+        public async Task OpRoomTask()
+        {
+            _roomTask = new TaskCompletionSource<List<Room>>();
+            RealtimePeer.OpRoomList();
+            await _roomTask.Task;
+        }
+        
         public bool OpCreateRoom(JoinRoomParams joinRoomParams)
         {
             if (!CheckOpCanBeSent((byte)OperationCode.ROOM_JOIN_OR_CREATE, Server, "CreateRoom"))
@@ -667,6 +709,15 @@ namespace MVS.Realtime
             bool sent = RealtimePeer.OpCreateRoom(joinRoomParams);
 
             return sent;
+        }
+        
+        private TaskCompletionSource<List<Group>> _groupTask;
+
+        public async Task OpGroupTask()
+        {
+            _groupTask = new TaskCompletionSource<List<Group>>();
+            RealtimePeer.OpGroupList();
+            await _groupTask.Task;
         }
 
         public bool OpJoinGroup(uint sceneNumber, uint channelID)

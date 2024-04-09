@@ -39,6 +39,12 @@ namespace MVS.Realtime
             }
         }
 
+        public virtual bool OpRoomList()
+        {
+            var fixedData = new C_TEST_ROOM_LIST();
+            return SendOperation(Protocol.OperationCode.RoomList, fixedData);
+        }
+
         public virtual bool OpCreateRoom(JoinRoomParams opParams)
         {
             var fixedData = new C_ROOM_JOIN_OR_CREATE
@@ -49,6 +55,12 @@ namespace MVS.Realtime
                 Name = opParams.Name
             };
             return SendOperation(Protocol.OperationCode.RoomJoinOrCreate, fixedData);
+        }
+
+        public virtual bool OpGroupList()
+        {
+            var fixedData = new C_GROUP_LIST();
+            return SendOperation(Protocol.OperationCode.GroupList, fixedData);
         }
 
         public virtual bool OpJoinGroup(C_GROUP_JOIN groupJoinPkt)

@@ -1,8 +1,6 @@
-
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using Google.Protobuf;
 using MVS.Realtime;
 using Protocol;
@@ -97,16 +95,16 @@ namespace MVS.Helios
         {
             get
             {
-                return 1000f / sendFrequency;
+                return 1000f / _sendFrequency;
             }
 
             set
             {
-                sendFrequency = 1000f / value;
+                _sendFrequency = 1000f / value;
             }
         }
 
-        private static float sendFrequency = 33f; // in milliseconds.
+        private static float _sendFrequency = 33f; // in milliseconds.
 
         public static List<HeliosVariable> HeliosVariables = new List<HeliosVariable>();
         // public static Dictionary<int, HeliosVariable> HeliosVariableDic = new Dictionary<int, HeliosVariable>();
@@ -115,20 +113,24 @@ namespace MVS.Helios
         {
             get
             {
-                return isMessageQueueRunning;
+                return _isMessageQueueRunning;
             }
 
             set
             {
-                isMessageQueueRunning = value;
+                _isMessageQueueRunning = value;
             }
         }
         
-        private static bool isMessageQueueRunning = true;
+        private static bool _isMessageQueueRunning = true;
         
         public static float MinimalTimeScaleToDispatchInFixedUpdate = -1f;
 
+        public static List<Room> RoomList => RealtimeClient == null ? null : RealtimeClient.RoomList;
+
         public static Room CurrentRoom => RealtimeClient == null ? null : RealtimeClient.CurrentRoom;
+
+        public static List<Group> GroupList => RealtimeClient == null ? null : CurrentRoom.GroupList;
         
         public static Group CurrentGroup => RealtimeClient == null ? null : RealtimeClient.CurrentGroup;
 
@@ -183,10 +185,7 @@ namespace MVS.Helios
 
         static HeliosNetwork()
         {
-            if (RealtimeClient == null)
-            {
-                RealtimeClient = new RealtimeClient();
-            }
+            RealtimeClient = new RealtimeClient();
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
@@ -286,6 +285,11 @@ namespace MVS.Helios
             return RaiseEvent((int)Protocol.EventCode.Rpc, fixedData);
         }
 
+        public static async Task GetRoomList()
+        {
+            await RealtimeClient.OpRoomTask();
+        }
+
         public static bool JoinOrCreateRoom(string AuthToken, long AppID, long WaplRoomID, string Name)
         {
             // if (!IsConnectedAndReady) return false;
@@ -298,6 +302,11 @@ namespace MVS.Helios
             };
 
             return RealtimeClient.OpCreateRoom(opParams);
+        }
+
+        public static async Task GetGroupList()
+        {
+            await RealtimeClient.OpGroupTask();
         }
 
         public static bool JoinGroup(uint sceneNumber, uint channelID)

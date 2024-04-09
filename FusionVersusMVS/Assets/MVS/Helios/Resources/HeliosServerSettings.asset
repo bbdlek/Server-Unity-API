@@ -21,7 +21,7 @@ MonoBehaviour:
     IsUseNameServer: 0
     IsDirectToMVS: 1
     Protocol: 3
-    DebugLevel: 4
+    DebugLevel: 0
   RunInBackground: 0
   NetworkPrefabs:
     Prefabs:

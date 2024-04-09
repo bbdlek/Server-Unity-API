@@ -43,6 +43,24 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         GameObject cubeObject = HeliosNetwork.Instantiate(prefabsForSpawn[Random.Range(0, prefabsForSpawn.Length)], Vector3.zero, Quaternion.identity);
     }
 
+    public async void OnClickRoomTaskBtn()
+    {
+        await HeliosNetwork.GetRoomList();
+        foreach (var room in HeliosNetwork.RoomList)
+        {
+            Debug.Log(room.RoomInfo.Name);
+        }
+    }
+    
+    public async void OnClickGroupTaskBtn()
+    {
+        await HeliosNetwork.GetGroupList();
+        foreach (var group in HeliosNetwork.GroupList)
+        {
+            Debug.Log(group.GroupInfo.GroupID);
+        }
+    }
+
     public override void OnConnected()
     {
         base.OnConnected();
