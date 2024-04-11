@@ -13,6 +13,10 @@ namespace MVS.Helios
         public AppSettings AppSettings;
         
         // Helios Log Settings
+
+        [Tooltip("Network Frequency")]
+        [Range(1.0f, 60.0f)]
+        public float SendRate = 30.0f;
         
         [Tooltip("Run In Background")]
         public bool RunInBackground = true;

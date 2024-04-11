@@ -91,21 +91,8 @@ namespace MVS.Helios
         public static ServerConnection ServerConnection => RealtimeClient == null ? ServerConnection.NameServer : RealtimeClient.Server;
         
         //Auth
-        
-        public static float SendRate
-        {
-            get
-            {
-                return 1000f / _sendFrequency;
-            }
 
-            set
-            {
-                _sendFrequency = 1000f / value;
-            }
-        }
-
-        private static float _sendFrequency = 33f; // in milliseconds.
+        public static float SendRate = 33.0f;
 
         public static List<HeliosVariable> HeliosVariables = new List<HeliosVariable>();
         // public static Dictionary<int, HeliosVariable> HeliosVariableDic = new Dictionary<int, HeliosVariable>();
@@ -209,6 +196,7 @@ namespace MVS.Helios
             HeliosHandler.Instance.Client = RealtimeClient;
 
             Application.runInBackground = HeliosSettings.RunInBackground;
+            SendRate = HeliosSettings.SendRate;
             
             // TODO : PrefabPool
             PrefabPool = new DefaultPrefabPool();

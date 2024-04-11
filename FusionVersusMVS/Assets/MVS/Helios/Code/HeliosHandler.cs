@@ -65,6 +65,7 @@ namespace MVS.Helios
             if (_elapsedTime >= 1f / HeliosNetwork.SendRate)
             {
                 CheckAndUpdateVariables();
+                _elapsedTime = 0f;
             }
         }
 
