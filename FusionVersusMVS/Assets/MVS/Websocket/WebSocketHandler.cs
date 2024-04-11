@@ -180,7 +180,7 @@ public partial class WebSocketHandler
             // ButtonManager.SetResult((PKT_ID)id, result);
             if (result)
             {
-                if ((PKT_ID)id == PKT_ID.PKT_S_HEART_BEAT) continue;
+                // if ((PKT_ID)id == PKT_ID.PKT_S_HEART_BEAT) continue;
                 HighLightLog((PKT_ID)id);
             }
             else
@@ -201,10 +201,10 @@ public partial class WebSocketHandler
         streamWriter.Write(header.size);
         streamWriter.Write(data);
 
-        if(id != PKT_ID.PKT_C_HEART_BEAT)
-        {
-            SendLog($"Send {id} size {header.size}");
-        }
+        // if(id != PKT_ID.PKT_C_HEART_BEAT)
+        // {
+        //     SendLog($"Send {id} size {header.size}");
+        // }
         
         // wsc.Send(sendStream.ToArray());
         _socketTcp.SendPacket(sendStream.ToArray());
@@ -299,8 +299,8 @@ public partial class WebSocketHandler
         {
             if (handlerDic[id](data, size))
             {
-                if(id != PKT_ID.PKT_C_HEART_BEAT)
-                    HighLightLog(id);
+                // if(id != PKT_ID.PKT_C_HEART_BEAT)
+                //     HighLightLog(id);
                 return true;
             }
             else

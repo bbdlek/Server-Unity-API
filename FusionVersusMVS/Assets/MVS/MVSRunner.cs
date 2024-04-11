@@ -158,7 +158,7 @@ namespace MVS
                 SyncType = ObjectSyncType.PersonalOwn,
                 OwnerPlayerID = 0
             });
-            _wsh.SendPacket(WebSocketHandler.PKT_ID.PKT_C_ADD_NETWORK_OBJECTS, pkt.ToByteArray(), pkt.CalculateSize());
+            // _wsh.SendPacket(WebSocketHandler.PKT_ID.PKT_C_ADD_NETWORK_OBJECTS, pkt.ToByteArray(), pkt.CalculateSize());
         }
 
         // public MVSNetworkObject Spawn(
@@ -205,7 +205,7 @@ namespace MVS
             };
             var data = pkt.ToByteArray();
             var size = pkt.CalculateSize();
-            _wsh.SendPacket(WebSocketHandler.PKT_ID.PKT_C_ROOM_JOIN_OR_CREATE, data, size);
+            // _wsh.SendPacket(WebSocketHandler.PKT_ID.PKT_C_ROOM_JOIN_OR_CREATE, data, size);
             
             sceneNumber = 1;
             channelID = 1;
@@ -220,10 +220,10 @@ namespace MVS
             };
             var dataG = pktGroup.ToByteArray();
             var sizeG = pktGroup.CalculateSize();
-            _wsh.SendPacket(WebSocketHandler.PKT_ID.PKT_C_GROUP_JOIN, dataG, sizeG);
+            // _wsh.SendPacket(WebSocketHandler.PKT_ID.PKT_C_GROUP_JOIN, dataG, sizeG);
 
             var pktInitObject = new C_INITIAL_OBJECTS();
-            _wsh.SendPacket(WebSocketHandler.PKT_ID.PKT_C_INITIAL_OBJECTS, pktInitObject.ToByteArray(), pktInitObject.CalculateSize());
+            // _wsh.SendPacket(WebSocketHandler.PKT_ID.PKT_C_INITIAL_OBJECTS, pktInitObject.ToByteArray(), pktInitObject.CalculateSize());
         }
 
         public void SendChat()
@@ -234,7 +234,7 @@ namespace MVS
             };
             var data = pkt.ToByteArray();
             var size = pkt.CalculateSize();
-            _wsh.SendPacket(WebSocketHandler.PKT_ID.PKT_C_CHAT, data, size);
+            // _wsh.SendPacket(WebSocketHandler.PKT_ID.PKT_C_CHAT, data, size);
         }
 
         private void Update()
@@ -246,7 +246,7 @@ namespace MVS
             if (_pingTime < -0.2f)
             {
                 C_HEART_BEAT packet = new C_HEART_BEAT();
-                _wsh.SendPacket(WebSocketHandler.PKT_ID.PKT_C_HEART_BEAT, packet.ToByteArray(), packet.CalculateSize());
+                // _wsh.SendPacket(WebSocketHandler.PKT_ID.PKT_C_HEART_BEAT, packet.ToByteArray(), packet.CalculateSize());
                 _pingTime = 0;
             }
         }

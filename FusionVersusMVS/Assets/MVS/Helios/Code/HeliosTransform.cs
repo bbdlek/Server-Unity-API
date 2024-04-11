@@ -20,9 +20,13 @@ namespace MVS.Helios
         
         public Quaternion networkRotation;
         private Quaternion _storedRotation;
+        
+        public Vector3 networkScale;
+        private Vector3 _storedScale;
 
         public bool syncPosition = true;
         public bool syncRotation = true;
+        public bool syncScale = true;
 
         private bool _isMine;
         
@@ -36,12 +40,15 @@ namespace MVS.Helios
 
             _storedRotation = transform.localRotation;
             networkRotation = Quaternion.identity;
+
+            _storedScale = transform.localScale;
+            networkScale = Vector3.zero;
         }
 
         private void Update()
         {
             var tr = transform;
-            if ((tr.localPosition != _storedPosition || tr.localRotation != _storedRotation) && _isMine)
+            if ((tr.localPosition != _storedPosition || tr.localRotation != _storedRotation || tr.localScale != _storedScale) && _isMine)
             {
                 //Send?
                 var fixedData = new C_UPDATE_NETWORK_OBJECTS();
@@ -56,29 +63,6 @@ namespace MVS.Helios
                     OwnerPlayerID = HeliosNetwork.LocalPlayer.UserId
                 };
                 
-                // Version 1
-                var paramDic = new CustomDic();
-                paramDic.Params.Add("Position", new HeliosVariable
-                {
-                    NVector = new Protocol.Vector3
-                    {
-                        X = tr.localPosition.x,
-                        Y = tr.localPosition.y,
-                        Z = tr.localPosition.z
-                    }
-                });
-                paramDic.Params.Add("Rotation", new HeliosVariable
-                {
-                    NVector = new Protocol.Vector3
-                    {
-                        X = tr.eulerAngles.x,
-                        Y = tr.eulerAngles.y,
-                        Z = tr.eulerAngles.z
-                    }
-                });
-                ObjectInfo.CustomValues = paramDic;
-                
-                // Version 2
                 ObjectInfo.TestValues.Add(new HeliosVariable
                 {
                     Key = CustomVariables.GetKeyByName("position"),
@@ -101,26 +85,42 @@ namespace MVS.Helios
                     }
                 });
                 
+                ObjectInfo.TestValues.Add(new HeliosVariable
+                {
+                    Key = CustomVariables.GetKeyByName("scale"),
+                    NVector = new Protocol.Vector3
+                    {
+                        X = tr.localScale.x,
+                        Y = tr.localScale.y,
+                        Z = tr.localScale.z
+                    }
+                });
+                
                 fixedData.ObjectInfos.Add(ObjectInfo);
                 
                 HeliosNetwork.RaiseEvent(EventCode.PKT_C_UPDATE_NETWORK_OBJECTS, fixedData);
+                
                 _storedPosition = tr.localPosition;
                 networkPosition = _storedPosition;
+                
+                _storedPosition = tr.localEulerAngles;
+                networkRotation = _storedRotation;
+                
+                _storedScale = tr.localScale;
+                networkScale = _storedScale;
             }
             
             
             //Read?
             if(!_isMine)
             {
-                tr.localPosition = networkPosition;
-                tr.localRotation = networkRotation;
+                if(syncPosition)
+                    tr.localPosition = networkPosition;
+                if(syncRotation)
+                    tr.localRotation = networkRotation;
+                if (syncScale)
+                    tr.localScale = networkScale;
             }
-
-            // IF IsMine
-            // {
-            //     tr.localPosition = Vector3.MoveTowards(tr.localPosition, _networkPosition, Time.deltaTime);
-            //     tr.localRotation = Quaternion.RotateTowards(tr.localRotation, _networkRotation, Time.deltaTime);
-            // }
         }
     }
 }

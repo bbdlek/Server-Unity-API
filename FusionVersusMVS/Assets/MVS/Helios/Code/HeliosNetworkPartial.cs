@@ -139,14 +139,6 @@ namespace MVS.Helios
                 case OperationCode.ROOM_JOIN_OR_CREATE:
                     break;
                 case OperationCode.GROUP_JOIN:
-                    foreach (var obj in HeliosNetwork.HeliosObjectList)
-                    {
-                        obj.ObjectInfo.SyncType = ObjectSyncType.GlobalOwn;
-                        obj.ObjectInfo.OwnerPlayerID = 0;
-                        var pkt = new C_ADD_NETWORK_OBJECTS();
-                        pkt.ObjectInfos.Add(obj.ObjectInfo);
-                        HeliosNetwork.RaiseEvent(EventCode.PKT_C_ADD_NETWORK_OBJECTS, pkt);
-                    }
                     break;
                 case OperationCode.PLAYER_ID:
                     break;

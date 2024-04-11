@@ -358,14 +358,11 @@ namespace MVS.Helios
 
         private static GameObject NetworkInstantiate(ObjectInfo objectInfo)
         {
-            // var propPos = objectInfo.NumberProps.FirstOrDefault(prop => prop.Index == PropsID.Position3D).Value;
-            // var propRot = objectInfo.NumberProps.FirstOrDefault(prop => prop.Index == PropsID.Rotation3D).Value;
-            var propPos = objectInfo.CustomValues.Params["Position"].NVector;
-            var propRot = objectInfo.CustomValues.Params["Rotation"].NVector;
+            var propPos = objectInfo.TestValues.Last(x => x.Key == CustomVariables.GetKeyByName("position")).NVector;
+            var propRot = objectInfo.TestValues.Last(x => x.Key == CustomVariables.GetKeyByName("rotation")).NVector;
             Vector3 position = new Vector3((float)propPos.X, (float)propPos.Y, (float)propPos.Z);
             Vector3 rotationV3 = new Vector3((float)propRot.X, (float)propRot.Y, (float)propRot.Z);
             Quaternion rotation = Quaternion.Euler(rotationV3);
-            // Quaternion rotation = new Quaternion((float)propRot[0], (float)propRot[1], (float)propRot[2], (float)propRot[3]);
             InstantiateParams instantiateParams = new InstantiateParams
             {
                 prefabId = objectInfo.ObjectID.PrefabID,
@@ -450,9 +447,9 @@ namespace MVS.Helios
                 SyncType = ObjectSyncType.PersonalOwn,
                 OwnerPlayerID = LocalPlayer.UserId,
             };
-            var paramDic = new CustomDic();
-            paramDic.Params.Add("Position", new Protocol.HeliosVariable()
+            ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
             {
+                Key = CustomVariables.GetKeyByName("position"),
                 NVector = new Protocol.Vector3
                 {
                     X = instantiateParams.position.x,
@@ -460,24 +457,17 @@ namespace MVS.Helios
                     Z = instantiateParams.position.z
                 }
             });
-            Quaternion rot = new Quaternion
+            ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
             {
-                x = instantiateParams.rotation.x,
-                y = instantiateParams.rotation.y,
-                z = instantiateParams.rotation.z,
-                w = instantiateParams.rotation.w,
-            };
-            Vector3 rotation = rot.eulerAngles;
-            paramDic.Params.Add("Rotation", new Protocol.HeliosVariable
-            {
+                Key = CustomVariables.GetKeyByName("rotation"),
                 NVector = new Protocol.Vector3
                 {
-                    X = rotation.x,
-                    Y = rotation.y,
-                    Z = rotation.z
+                    X = instantiateParams.rotation.x,
+                    Y = instantiateParams.rotation.y,
+                    Z = instantiateParams.rotation.z
                 }
             });
-            ObjectInfo.CustomValues = paramDic;
+            Debug.Log(ObjectInfo.TestValues.Count);
             pkt.ObjectInfos.Add(ObjectInfo);
             return SendEventInternal(EventCode.PKT_C_ADD_NETWORK_OBJECTS, pkt);
         }
@@ -498,23 +488,28 @@ namespace MVS.Helios
             }
             else
             {
-                // Version 1
-                var propPos = objectInfo.CustomValues.Params["Position"].NVector;
-                var propRot = objectInfo.CustomValues.Params["Rotation"].NVector;
-                Vector3 position = new Vector3((float)propPos.X, (float)propPos.Y, (float)propPos.Z);
-                Vector3 rotationV3 = new Vector3((float)propRot.X, (float)propRot.Y, (float)propRot.Z);
-                Quaternion rotation = Quaternion.Euler(rotationV3);
-            
-                // Version 2
-                var propPos2 = objectInfo.TestValues.FirstOrDefault(variable => variable.Key == CustomVariables.GetKeyByName("position"))?.NVector;
-                var propRot2 = objectInfo.TestValues.FirstOrDefault(variable => variable.Key == CustomVariables.GetKeyByName("rotation"))?.NVector;
-                Vector3 position2 = new Vector3((float)propPos2.X, (float)propPos2.Y, (float)propPos2.Z);
-                Vector3 rotation2V3 = new Vector3((float)propRot2.X, (float)propRot2.Y, (float)propRot2.Z);
-                Quaternion rotation2 = Quaternion.Euler(rotation2V3);
-
                 var obj = FindObjectById(id);
-                obj.GetComponent<HeliosTransform>().networkPosition = position2;
-                obj.GetComponent<HeliosTransform>().networkRotation = rotation2;
+                var propPos = objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("position"))?.NVector;
+                var propRot = objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("rotation"))?.NVector;
+                var propScale = objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("scale"))?.NVector;
+                if (propPos != null)
+                {
+                    Vector3 position = new Vector3((float)propPos.X, (float)propPos.Y, (float)propPos.Z);
+                    obj.GetComponent<HeliosTransform>().networkPosition = position;
+                }
+
+                if (propRot != null)
+                {
+                    Vector3 rotationV3 = new Vector3((float)propRot.X, (float)propRot.Y, (float)propRot.Z);
+                    Quaternion rotation = Quaternion.Euler(rotationV3);
+                    obj.GetComponent<HeliosTransform>().networkRotation = rotation;
+                }
+
+                if (propScale != null)
+                {
+                    Vector3 scale = new Vector3((float)propScale.X, (float)propScale.Y, (float)propScale.Z);
+                    obj.GetComponent<HeliosTransform>().networkScale = scale;
+                }
             }
             
             FindObjectById(id).ObjectInfo = objectInfo;
