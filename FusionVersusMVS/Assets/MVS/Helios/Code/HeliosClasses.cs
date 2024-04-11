@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text;
 using Google.Protobuf;
 using MVS.Helios.Utility;
 using MVS.Realtime;
@@ -34,8 +36,8 @@ namespace MVS.Helios
         
         public List<HeliosVariable> HeliosVariableTable = new List<HeliosVariable>();
 
-        public Dictionary<string, Tuple<MethodInfo, string>> RPCMethods =
-            new Dictionary<string, Tuple<MethodInfo, string>>();
+        public Dictionary<ulong, Tuple<MethodInfo, string>> RPCMethods =
+            new Dictionary<ulong, Tuple<MethodInfo, string>>();
 
         // [SerializeField] private uint _instanceID;
         //
@@ -123,15 +125,23 @@ namespace MVS.Helios
             return obj;
         }
 
-        public void RPC(string methodName)
+        public void RPC(string methodName, params object[] args)
         {
-            Debug.Log(ObjectInfo.ObjectID.InstanceID);
-            HeliosNetwork.RPC(ObjectInfo.ObjectID.InstanceID, methodName);
+            HeliosNetwork.RPC(ObjectInfo.ObjectID.InstanceID, methodName, args);
         }
 
-        public void ExecuteRpc(string methodName)
+        public void ExecuteRpc(ulong methodNameHash, byte[] methodArgs)
         {
-            RPCMethods[methodName].Item1.Invoke(this, null);
+            var parameters = HeliosUtility.DeserializeParameters(methodArgs);
+            try
+            {
+                RPCMethods[methodNameHash].Item1.Invoke(this, parameters);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"예상된 매개변수 수와 일치하지 않습니다. {e.Message}");
+                throw;
+            }
         }
 
         public void FindNetworkedVariables()
@@ -253,13 +263,17 @@ namespace MVS.Helios
                     {
                         string methodName = method.Name;
                         string target = attribute.Target;
-                        GetComponent<HeliosObject>().RPCMethods.Add(methodName, Tuple.Create(method, target));
+                        var parameters = method.GetParameters();
+                        
+                        GetComponent<HeliosObject>().RPCMethods.Add(HeliosUtility.Compute64BitHash(methodName), Tuple.Create(method, target));
                     }
                     else
                     {
                         string methodName = method.Name;
                         string target = attribute.Target;
-                        RPCMethods.Add(methodName, Tuple.Create(method, target));
+                        var parameters = method.GetParameters();
+                        
+                        RPCMethods.Add(HeliosUtility.Compute64BitHash(methodName), Tuple.Create(method, target));
                     }
                 }
             }

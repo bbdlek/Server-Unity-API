@@ -1,14 +1,14 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
+#endif
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+#if UNITY_EDITOR
 [InitializeOnLoad]
 public class MVSNetworkObjectBaker
 {
+
     public static void BakeNew()
     {
         GameObject[] rootObjects = SceneManager.GetActiveScene().GetRootGameObjects();
@@ -55,5 +55,7 @@ public class MVSNetworkObjectBaker
             
         }
     }
+
     
 }
+#endif

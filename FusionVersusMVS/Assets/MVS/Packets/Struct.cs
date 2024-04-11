@@ -92,49 +92,49 @@ namespace Protocol {
             "Zm8SCwoDbXNnGAIgASgJEiAKBnJlc3VsdBgDIAEoDjIQLlByb3RvY29sLlJl",
             "c3VsdCJsCgdDX0VWRU5UEhEKCWV2ZW50Q29kZRgBIAEoBRIiCglmaXhlZERh",
             "dGEYAiABKAsyDy5Qcm90b2NvbC5QYWNrcxIqCgpjdXN0b21EYXRhGAMgAygL",
-            "MhYuUHJvdG9jb2wuQ3VzdG9tU3RydWN0Ii8KBUNfUlBDEhIKCmluc3RhbmNl",
-            "SUQYASABKA0SEgoKbWV0aG9kTmFtZRgCIAEoCSKCAQoQQ19JTklUX1ZBUklB",
-            "QkxFUxI8Cgl2YXJpYWJsZXMYASADKAsyKS5Qcm90b2NvbC5DX0lOSVRfVkFS",
-            "SUFCTEVTLlZhcmlhYmxlc0VudHJ5GjAKDlZhcmlhYmxlc0VudHJ5EgsKA2tl",
-            "eRgBIAEoBRINCgV2YWx1ZRgCIAEoCToCOAEi1AsKBVBhY2tzEi4KDGNfaGVh",
-            "cnRfYmVhdBgBIAEoCzIWLlByb3RvY29sLkNfSEVBUlRfQkVBVEgAEi4KDHNf",
-            "aGVhcnRfYmVhdBgCIAEoCzIWLlByb3RvY29sLlNfSEVBUlRfQkVBVEgAEkAK",
-            "FWNfcm9vbV9qb2luX29yX2NyZWF0ZRgDIAEoCzIfLlByb3RvY29sLkNfUk9P",
-            "TV9KT0lOX09SX0NSRUFURUgAEkAKFXNfcm9vbV9qb2luX29yX2NyZWF0ZRgE",
-            "IAEoCzIfLlByb3RvY29sLlNfUk9PTV9KT0lOX09SX0NSRUFURUgAEjEKC2Nf",
-            "cm9vbV9saXN0GAUgASgLMhouUHJvdG9jb2wuQ19URVNUX1JPT01fTElTVEgA",
-            "EjEKC3Nfcm9vbV9saXN0GAYgASgLMhouUHJvdG9jb2wuU19URVNUX1JPT01f",
-            "TElTVEgAEiwKC2NfcGxheWVyX2lkGAcgASgLMhUuUHJvdG9jb2wuQ19QTEFZ",
-            "RVJfSURIABIsCgtzX3BsYXllcl9pZBgIIAEoCzIVLlByb3RvY29sLlNfUExB",
-            "WUVSX0lESAASLgoMY19ncm91cF9saXN0GAkgASgLMhYuUHJvdG9jb2wuQ19H",
-            "Uk9VUF9MSVNUSAASLgoMc19ncm91cF9saXN0GAogASgLMhYuUHJvdG9jb2wu",
-            "U19HUk9VUF9MSVNUSAASLgoMY19ncm91cF9qb2luGAsgASgLMhYuUHJvdG9j",
-            "b2wuQ19HUk9VUF9KT0lOSAASLgoMc19ncm91cF9qb2luGAwgASgLMhYuUHJv",
-            "dG9jb2wuU19HUk9VUF9KT0lOSAASOAoRY19pbml0aWFsX29iamVjdHMYDSAB",
-            "KAsyGy5Qcm90b2NvbC5DX0lOSVRJQUxfT0JKRUNUU0gAEjgKEXNfaW5pdGlh",
-            "bF9vYmplY3RzGA4gASgLMhsuUHJvdG9jb2wuU19JTklUSUFMX09CSkVDVFNI",
-            "ABJAChVzX290aGVyX2NsaWVudF9qb2luZWQYDyABKAsyHy5Qcm90b2NvbC5T",
-            "X09USEVSX0NMSUVOVF9KT0lORURIABJAChVjX2FkZF9uZXR3b3JrX29iamVj",
-            "dHMYECABKAsyHy5Qcm90b2NvbC5DX0FERF9ORVRXT1JLX09CSkVDVFNIABJA",
-            "ChVzX2FkZF9uZXR3b3JrX29iamVjdHMYESABKAsyHy5Qcm90b2NvbC5TX0FE",
-            "RF9ORVRXT1JLX09CSkVDVFNIABJGChhjX3JlbW92ZV9uZXR3b3JrX29iamVj",
-            "dHMYEiABKAsyIi5Qcm90b2NvbC5DX1JFTU9WRV9ORVRXT1JLX09CSkVDVFNI",
-            "ABJGChhzX3JlbW92ZV9uZXR3b3JrX29iamVjdHMYEyABKAsyIi5Qcm90b2Nv",
-            "bC5TX1JFTU9WRV9ORVRXT1JLX09CSkVDVFNIABJGChhjX3VwZGF0ZV9uZXR3",
-            "b3JrX29iamVjdHMYFCABKAsyIi5Qcm90b2NvbC5DX1VQREFURV9ORVRXT1JL",
-            "X09CSkVDVFNIABJGChhzX3VwZGF0ZV9uZXR3b3JrX29iamVjdHMYFSABKAsy",
-            "Ii5Qcm90b2NvbC5TX1VQREFURV9ORVRXT1JLX09CSkVDVFNIABJCChZjX2No",
-            "YW5nZV9vYmplY3RzX293bmVyGBYgASgLMiAuUHJvdG9jb2wuQ19DSEFOR0Vf",
-            "T0JKRUNUU19PV05FUkgAEkIKFnNfY2hhbmdlX29iamVjdHNfb3duZXIYFyAB",
-            "KAsyIC5Qcm90b2NvbC5TX0NIQU5HRV9PQkpFQ1RTX09XTkVSSAASJAoHY19l",
-            "dmVudBgYIAEoCzIRLlByb3RvY29sLkNfRVZFTlRIABIyCg5oZWxpb3NWYXJp",
-            "YWJsZRgZIAEoCzIYLlByb3RvY29sLkhlbGlvc1ZhcmlhYmxlSAASIAoFY19y",
-            "cGMYGiABKAsyDy5Qcm90b2NvbC5DX1JQQ0gAQgcKBXZhbHVlIrsBCg5IZWxp",
-            "b3NWYXJpYWJsZRILCgNrZXkYASABKAUSEQoHTlN0cmluZxgCIAEoCUgAEhAK",
-            "Bk5JbnQzMhgDIAEoBUgAEhAKBk5JbnQ2NBgEIAEoA0gAEhAKBk5GbG9hdBgF",
-            "IAEoAkgAEhEKB05Eb3VibGUYBiABKAFIABIkCgdOVmVjdG9yGAcgASgLMhEu",
-            "UHJvdG9jb2wuVmVjdG9yM0gAEhEKB05DdXN0b20YCCABKAxIAEIHCgV2YWx1",
-            "ZWIGcHJvdG8z"));
+            "MhYuUHJvdG9jb2wuQ3VzdG9tU3RydWN0IkMKBUNfUlBDEhIKCmluc3RhbmNl",
+            "SUQYASABKA0SEgoKbWV0aG9kTmFtZRgCIAEoBBISCgptZXRob2RBcmdzGAMg",
+            "ASgMIoIBChBDX0lOSVRfVkFSSUFCTEVTEjwKCXZhcmlhYmxlcxgBIAMoCzIp",
+            "LlByb3RvY29sLkNfSU5JVF9WQVJJQUJMRVMuVmFyaWFibGVzRW50cnkaMAoO",
+            "VmFyaWFibGVzRW50cnkSCwoDa2V5GAEgASgFEg0KBXZhbHVlGAIgASgJOgI4",
+            "ASLUCwoFUGFja3MSLgoMY19oZWFydF9iZWF0GAEgASgLMhYuUHJvdG9jb2wu",
+            "Q19IRUFSVF9CRUFUSAASLgoMc19oZWFydF9iZWF0GAIgASgLMhYuUHJvdG9j",
+            "b2wuU19IRUFSVF9CRUFUSAASQAoVY19yb29tX2pvaW5fb3JfY3JlYXRlGAMg",
+            "ASgLMh8uUHJvdG9jb2wuQ19ST09NX0pPSU5fT1JfQ1JFQVRFSAASQAoVc19y",
+            "b29tX2pvaW5fb3JfY3JlYXRlGAQgASgLMh8uUHJvdG9jb2wuU19ST09NX0pP",
+            "SU5fT1JfQ1JFQVRFSAASMQoLY19yb29tX2xpc3QYBSABKAsyGi5Qcm90b2Nv",
+            "bC5DX1RFU1RfUk9PTV9MSVNUSAASMQoLc19yb29tX2xpc3QYBiABKAsyGi5Q",
+            "cm90b2NvbC5TX1RFU1RfUk9PTV9MSVNUSAASLAoLY19wbGF5ZXJfaWQYByAB",
+            "KAsyFS5Qcm90b2NvbC5DX1BMQVlFUl9JREgAEiwKC3NfcGxheWVyX2lkGAgg",
+            "ASgLMhUuUHJvdG9jb2wuU19QTEFZRVJfSURIABIuCgxjX2dyb3VwX2xpc3QY",
+            "CSABKAsyFi5Qcm90b2NvbC5DX0dST1VQX0xJU1RIABIuCgxzX2dyb3VwX2xp",
+            "c3QYCiABKAsyFi5Qcm90b2NvbC5TX0dST1VQX0xJU1RIABIuCgxjX2dyb3Vw",
+            "X2pvaW4YCyABKAsyFi5Qcm90b2NvbC5DX0dST1VQX0pPSU5IABIuCgxzX2dy",
+            "b3VwX2pvaW4YDCABKAsyFi5Qcm90b2NvbC5TX0dST1VQX0pPSU5IABI4ChFj",
+            "X2luaXRpYWxfb2JqZWN0cxgNIAEoCzIbLlByb3RvY29sLkNfSU5JVElBTF9P",
+            "QkpFQ1RTSAASOAoRc19pbml0aWFsX29iamVjdHMYDiABKAsyGy5Qcm90b2Nv",
+            "bC5TX0lOSVRJQUxfT0JKRUNUU0gAEkAKFXNfb3RoZXJfY2xpZW50X2pvaW5l",
+            "ZBgPIAEoCzIfLlByb3RvY29sLlNfT1RIRVJfQ0xJRU5UX0pPSU5FREgAEkAK",
+            "FWNfYWRkX25ldHdvcmtfb2JqZWN0cxgQIAEoCzIfLlByb3RvY29sLkNfQURE",
+            "X05FVFdPUktfT0JKRUNUU0gAEkAKFXNfYWRkX25ldHdvcmtfb2JqZWN0cxgR",
+            "IAEoCzIfLlByb3RvY29sLlNfQUREX05FVFdPUktfT0JKRUNUU0gAEkYKGGNf",
+            "cmVtb3ZlX25ldHdvcmtfb2JqZWN0cxgSIAEoCzIiLlByb3RvY29sLkNfUkVN",
+            "T1ZFX05FVFdPUktfT0JKRUNUU0gAEkYKGHNfcmVtb3ZlX25ldHdvcmtfb2Jq",
+            "ZWN0cxgTIAEoCzIiLlByb3RvY29sLlNfUkVNT1ZFX05FVFdPUktfT0JKRUNU",
+            "U0gAEkYKGGNfdXBkYXRlX25ldHdvcmtfb2JqZWN0cxgUIAEoCzIiLlByb3Rv",
+            "Y29sLkNfVVBEQVRFX05FVFdPUktfT0JKRUNUU0gAEkYKGHNfdXBkYXRlX25l",
+            "dHdvcmtfb2JqZWN0cxgVIAEoCzIiLlByb3RvY29sLlNfVVBEQVRFX05FVFdP",
+            "UktfT0JKRUNUU0gAEkIKFmNfY2hhbmdlX29iamVjdHNfb3duZXIYFiABKAsy",
+            "IC5Qcm90b2NvbC5DX0NIQU5HRV9PQkpFQ1RTX09XTkVSSAASQgoWc19jaGFu",
+            "Z2Vfb2JqZWN0c19vd25lchgXIAEoCzIgLlByb3RvY29sLlNfQ0hBTkdFX09C",
+            "SkVDVFNfT1dORVJIABIkCgdjX2V2ZW50GBggASgLMhEuUHJvdG9jb2wuQ19F",
+            "VkVOVEgAEjIKDmhlbGlvc1ZhcmlhYmxlGBkgASgLMhguUHJvdG9jb2wuSGVs",
+            "aW9zVmFyaWFibGVIABIgCgVjX3JwYxgaIAEoCzIPLlByb3RvY29sLkNfUlBD",
+            "SABCBwoFdmFsdWUiuwEKDkhlbGlvc1ZhcmlhYmxlEgsKA2tleRgBIAEoBRIR",
+            "CgdOU3RyaW5nGAIgASgJSAASEAoGTkludDMyGAMgASgFSAASEAoGTkludDY0",
+            "GAQgASgDSAASEAoGTkZsb2F0GAUgASgCSAASEQoHTkRvdWJsZRgGIAEoAUgA",
+            "EiQKB05WZWN0b3IYByABKAsyES5Qcm90b2NvbC5WZWN0b3IzSAASEQoHTkN1",
+            "c3RvbRgIIAEoDEgAQgcKBXZhbHVlYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protocol.EnumReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.AnyReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -176,7 +176,7 @@ namespace Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C_CHAT), global::Protocol.C_CHAT.Parser, new[]{ "Msg" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.S_CHAT), global::Protocol.S_CHAT.Parser, new[]{ "PlayerInfo", "Msg", "Result" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C_EVENT), global::Protocol.C_EVENT.Parser, new[]{ "EventCode", "FixedData", "CustomData" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C_RPC), global::Protocol.C_RPC.Parser, new[]{ "InstanceID", "MethodName" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C_RPC), global::Protocol.C_RPC.Parser, new[]{ "InstanceID", "MethodName", "MethodArgs" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C_INIT_VARIABLES), global::Protocol.C_INIT_VARIABLES.Parser, new[]{ "Variables" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.Packs), global::Protocol.Packs.Parser, new[]{ "CHeartBeat", "SHeartBeat", "CRoomJoinOrCreate", "SRoomJoinOrCreate", "CRoomList", "SRoomList", "CPlayerId", "SPlayerId", "CGroupList", "SGroupList", "CGroupJoin", "SGroupJoin", "CInitialObjects", "SInitialObjects", "SOtherClientJoined", "CAddNetworkObjects", "SAddNetworkObjects", "CRemoveNetworkObjects", "SRemoveNetworkObjects", "CUpdateNetworkObjects", "SUpdateNetworkObjects", "CChangeObjectsOwner", "SChangeObjectsOwner", "CEvent", "HeliosVariable", "CRpc" }, new[]{ "Value" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.HeliosVariable), global::Protocol.HeliosVariable.Parser, new[]{ "Key", "NString", "NInt32", "NInt64", "NFloat", "NDouble", "NVector", "NCustom" }, new[]{ "Value" }, null, null, null)
@@ -8636,6 +8636,7 @@ namespace Protocol {
     public C_RPC(C_RPC other) : this() {
       instanceID_ = other.instanceID_;
       methodName_ = other.methodName_;
+      methodArgs_ = other.methodArgs_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -8659,13 +8660,25 @@ namespace Protocol {
 
     /// <summary>Field number for the "methodName" field.</summary>
     public const int MethodNameFieldNumber = 2;
-    private string methodName_ = "";
+    private ulong methodName_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string MethodName {
+    public ulong MethodName {
       get { return methodName_; }
       set {
-        methodName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        methodName_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "methodArgs" field.</summary>
+    public const int MethodArgsFieldNumber = 3;
+    private pb::ByteString methodArgs_ = pb::ByteString.Empty;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pb::ByteString MethodArgs {
+      get { return methodArgs_; }
+      set {
+        methodArgs_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -8686,6 +8699,7 @@ namespace Protocol {
       }
       if (InstanceID != other.InstanceID) return false;
       if (MethodName != other.MethodName) return false;
+      if (MethodArgs != other.MethodArgs) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -8694,7 +8708,8 @@ namespace Protocol {
     public override int GetHashCode() {
       int hash = 1;
       if (InstanceID != 0) hash ^= InstanceID.GetHashCode();
-      if (MethodName.Length != 0) hash ^= MethodName.GetHashCode();
+      if (MethodName != 0UL) hash ^= MethodName.GetHashCode();
+      if (MethodArgs.Length != 0) hash ^= MethodArgs.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -8717,9 +8732,13 @@ namespace Protocol {
         output.WriteRawTag(8);
         output.WriteUInt32(InstanceID);
       }
-      if (MethodName.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(MethodName);
+      if (MethodName != 0UL) {
+        output.WriteRawTag(16);
+        output.WriteUInt64(MethodName);
+      }
+      if (MethodArgs.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteBytes(MethodArgs);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -8735,9 +8754,13 @@ namespace Protocol {
         output.WriteRawTag(8);
         output.WriteUInt32(InstanceID);
       }
-      if (MethodName.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(MethodName);
+      if (MethodName != 0UL) {
+        output.WriteRawTag(16);
+        output.WriteUInt64(MethodName);
+      }
+      if (MethodArgs.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteBytes(MethodArgs);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -8752,8 +8775,11 @@ namespace Protocol {
       if (InstanceID != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(InstanceID);
       }
-      if (MethodName.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(MethodName);
+      if (MethodName != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(MethodName);
+      }
+      if (MethodArgs.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(MethodArgs);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -8770,8 +8796,11 @@ namespace Protocol {
       if (other.InstanceID != 0) {
         InstanceID = other.InstanceID;
       }
-      if (other.MethodName.Length != 0) {
+      if (other.MethodName != 0UL) {
         MethodName = other.MethodName;
+      }
+      if (other.MethodArgs.Length != 0) {
+        MethodArgs = other.MethodArgs;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -8792,8 +8821,12 @@ namespace Protocol {
             InstanceID = input.ReadUInt32();
             break;
           }
-          case 18: {
-            MethodName = input.ReadString();
+          case 16: {
+            MethodName = input.ReadUInt64();
+            break;
+          }
+          case 26: {
+            MethodArgs = input.ReadBytes();
             break;
           }
         }
@@ -8815,8 +8848,12 @@ namespace Protocol {
             InstanceID = input.ReadUInt32();
             break;
           }
-          case 18: {
-            MethodName = input.ReadString();
+          case 16: {
+            MethodName = input.ReadUInt64();
+            break;
+          }
+          case 26: {
+            MethodArgs = input.ReadBytes();
             break;
           }
         }

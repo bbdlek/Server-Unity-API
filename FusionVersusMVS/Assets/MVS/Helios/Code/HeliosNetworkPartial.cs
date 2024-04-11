@@ -123,9 +123,8 @@ namespace MVS.Helios
                     break;
                 case (int)Protocol.EventCode.Rpc:
                     var dataRpc = Packs.Parser.ParseFrom(eventData.FixedData).CRpc;
-                    Debug.Log(dataRpc.InstanceID);
                     var rpcObj = FindObjectById(dataRpc.InstanceID);
-                    rpcObj.ExecuteRpc(dataRpc.MethodName);
+                    rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());
                     break;
             }
         }

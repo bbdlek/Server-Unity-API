@@ -35,7 +35,6 @@ public class MVSNetworkObject : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log($"{gameObject.name}의 ID : {gameObject.GetInstanceID()}");
-        Debug.Log($"{EditorUtility.InstanceIDToObject(gameObject.GetInstanceID())}");
+
     }
 }

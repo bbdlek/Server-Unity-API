@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Google.Protobuf;
+using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
 using UnityEditor;
@@ -191,7 +192,9 @@ namespace MVS.Helios
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void StaticReInitialize()
         {
+            #if UNITY_EDITOR
             if(!EditorApplication.isPlayingOrWillChangePlaymode) return;
+            #endif
 
             ConnectionProtocol protocol = HeliosSettings.AppSettings.Protocol;
             RealtimeClient = new RealtimeClient(protocol);
@@ -275,12 +278,13 @@ namespace MVS.Helios
         }
         
         // TODO : RPC
-        public static bool RPC(uint instanceID, string methodName)
+        public static bool RPC(uint instanceID, string methodName, params object[] args)
         {
             var fixedData = new C_RPC
             {
                 InstanceID = instanceID,
-                MethodName = methodName
+                MethodName = HeliosUtility.Compute64BitHash(methodName),
+                MethodArgs = ByteString.CopyFrom(HeliosUtility.SerializeParameters(args))
             };
             return RaiseEvent((int)Protocol.EventCode.Rpc, fixedData);
         }
