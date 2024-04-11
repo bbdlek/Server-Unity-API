@@ -4,7 +4,7 @@ namespace MVS.Helios
     using UnityEngine;
 
     [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Property | AttributeTargets.Field)]
-    public class NetworkedAttribute : Attribute
+    public class HNSyncAttribute : Attribute
     {
         public HeliosMonoBehavior Owner;
     }

@@ -140,8 +140,8 @@ namespace MVS.Helios
 
             foreach (var field in fields)
             {
-                NetworkedAttribute attribute =
-                    (NetworkedAttribute)Attribute.GetCustomAttribute(field, typeof(NetworkedAttribute));
+                HNSyncAttribute attribute =
+                    (HNSyncAttribute)Attribute.GetCustomAttribute(field, typeof(HNSyncAttribute));
                 if (attribute != null)
                 {
                     Protocol.HeliosVariable hv = new Protocol.HeliosVariable();

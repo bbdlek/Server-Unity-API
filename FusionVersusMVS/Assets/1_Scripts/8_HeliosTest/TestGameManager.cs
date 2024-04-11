@@ -7,7 +7,7 @@ using UnityEngine.PlayerLoop;
 
 public class TestGameManager : HeliosMonoBehavior
 {
-    [Networked] public int score = 0;
+    [HNSync] public int score = 0;
 
     private void Update()
     {

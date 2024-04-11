@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 {
     public GameObject[] prefabsForSpawn;
 
-    [Networked] public int score2;
+    [HNSync] public int score2;
     
     private void Awake()
     {
