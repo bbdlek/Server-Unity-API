@@ -1,5 +1,4 @@
 using System;
-using WebSocketSharp;
 
 namespace MVS.Realtime
 {

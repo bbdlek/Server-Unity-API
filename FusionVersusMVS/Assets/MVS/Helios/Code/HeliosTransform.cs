@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using Google.Protobuf.Collections;
 using MVS.Realtime;
 using Protocol;
 using UnityEngine;
-using UnityEngine.Serialization;
 using EventCode = MVS.Realtime.EventCode;
 using HeliosVariable = Protocol.HeliosVariable;
-using Transform = Protocol.Transform;
 using Vector3 = UnityEngine.Vector3;
 
 namespace MVS.Helios

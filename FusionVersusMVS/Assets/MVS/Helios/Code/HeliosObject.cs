@@ -1,10 +1,4 @@
-using System;
-using MVS.Realtime;
-using Protocol;
-using Unity.Collections;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace MVS.Helios
 {
@@ -15,6 +9,8 @@ namespace MVS.Helios
         private uint _prefabId;
         [SerializeField]
         private uint _instanceId;
+
+        private HeliosMonoBehavior _views;
         
         public uint PrefabId
         {
@@ -35,8 +31,26 @@ namespace MVS.Helios
                 _instanceId = value;
             }
         }
+        
+        protected bool isMine = false;
+        
+        public bool IsMine
+        {
+            get
+            {
+                return isMine;
+            }
+            set
+            {
+                isMine = value;
+            }
+        }
 
         public HeliosTransform heliosTransform;
-        
+
+        private void OnDestroy()
+        {
+            HeliosNetwork.NetworkRemoveObject(InstanceId);
+        }
     }
 }

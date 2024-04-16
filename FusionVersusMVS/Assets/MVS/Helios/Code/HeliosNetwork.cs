@@ -8,7 +8,6 @@ using Protocol;
 using UnityEditor;
 using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
-using HeliosVariable = MVS.Realtime.HeliosVariable;
 using Vector3 = UnityEngine.Vector3;
 
 namespace MVS.Helios
@@ -93,9 +92,6 @@ namespace MVS.Helios
         //Auth
 
         public static float SendRate = 33.0f;
-
-        public static List<HeliosVariable> HeliosVariables = new List<HeliosVariable>();
-        // public static Dictionary<int, HeliosVariable> HeliosVariableDic = new Dictionary<int, HeliosVariable>();
         
         public static bool IsMessageQueueRunning
         {
@@ -182,6 +178,8 @@ namespace MVS.Helios
             #if UNITY_EDITOR
             if(!EditorApplication.isPlayingOrWillChangePlaymode) return;
             #endif
+            
+            Debug.Log("Initialized");
 
             ConnectionProtocol protocol = HeliosSettings.AppSettings.Protocol;
             RealtimeClient = new RealtimeClient(protocol);
@@ -208,6 +206,10 @@ namespace MVS.Helios
         
         public static bool ConnectUsingSettings()
         {
+            #if UNITY_EDITOR
+            #else
+            StaticReInitialize();
+            #endif
             if (HeliosSettings == null)
             {
                 Debug.LogError("Can't connect: Loading settings failed. ServerSettings asset must be in any 'Resources' folder as: " + HeliosSettingsFileName);
@@ -390,11 +392,11 @@ namespace MVS.Helios
             // TODO : IF Local Instantiate
             if (isLocalInstantiate)
             {
-                foreach (var ho in go.GetComponentsInChildren<HeliosObject>())
+                go.GetComponent<HeliosObject>().IsMine = true;
+                HeliosObjectList.Add(go.GetComponent<HeliosObject>());
+                foreach (var ho in go.GetComponentsInChildren<HeliosMonoBehavior>())
                 {
-                    ho.IsMine = true;
-                    ho.FindNetworkedVariables();
-                    ho.FindHeliosVariable();
+                    // ho.FindHeliosVariable();
                     HeliosObjectList.Add(ho);
                     ho.ObjectInfo.ObjectID.ClientInstanceID = (uint)HeliosNetwork.HeliosObjectList.LastIndexOf(ho);
                     ho.ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
@@ -405,16 +407,14 @@ namespace MVS.Helios
             else
             {
                 go.GetComponent<HeliosObject>().InstanceId = instantiateParams.instanceId;
-                foreach (var ho in go.GetComponentsInChildren<HeliosObject>())
+                go.GetComponent<HeliosObject>().IsMine = false;
+                foreach (var ho in go.GetComponentsInChildren<HeliosMonoBehavior>())
                 {
-                    ho.InstanceId = instantiateParams.instanceId;
-                    ho.IsMine = false;
                     ho.FindNetworkedVariables();
-                    ho.FindHeliosVariable();
-                    HeliosObjectList.Add(ho);
+                    // ho.FindRPCMethods();
+                    // HeliosObjectList.Add(ho);
                     ho.ObjectInfo.ObjectID.ClientInstanceID = (uint)HeliosNetwork.HeliosObjectList.LastIndexOf(ho);
                     ho.ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
-                    // heliosMonoBehavior.SetHeliosVariableIndex();
                 }
                 HeliosObjectList.Add(go.GetComponent<HeliosObject>());
             }
@@ -459,7 +459,6 @@ namespace MVS.Helios
                     Z = instantiateParams.rotation.z
                 }
             });
-            Debug.Log(ObjectInfo.TestValues.Count);
             pkt.ObjectInfos.Add(ObjectInfo);
             return SendEventInternal(EventCode.PKT_C_ADD_NETWORK_OBJECTS, pkt);
         }
@@ -508,7 +507,7 @@ namespace MVS.Helios
             FindObjectById(id).UpdateCustomData();
         }
 
-        private static void NetworkRemoveObject(uint id)
+        public static void NetworkRemoveObject(uint id)
         {
             if (HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.InstanceID == id))
             {

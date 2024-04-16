@@ -22,7 +22,8 @@ MonoBehaviour:
     IsDirectToMVS: 1
     Protocol: 3
     DebugLevel: 4
-  RunInBackground: 0
+  SendRate: 60
+  RunInBackground: 1
   NetworkPrefabs:
     Prefabs:
     - {fileID: 8508066451922919660, guid: 694a86331524cd962a3a86cbca50fa22, type: 3}

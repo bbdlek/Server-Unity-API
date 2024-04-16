@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MVS.Helios;
 using MVS.Realtime;
+using QFSW.QC;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -23,7 +24,15 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     public void AddTest()
     {
-        test++;
+        test++; 
+    }
+
+    [Command]
+    public void ConnectCustom(string url, int port)
+    {
+        HeliosNetwork.HeliosSettings.AppSettings.Server = url;
+        HeliosNetwork.HeliosSettings.AppSettings.Port = port;
+        HeliosNetwork.ConnectUsingSettings();
     }
 
     public void OnClickConnectBtn()

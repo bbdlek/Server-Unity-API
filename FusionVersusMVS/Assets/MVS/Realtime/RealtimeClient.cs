@@ -423,7 +423,8 @@ namespace MVS.Realtime
                             break;
                     }
 
-                    State = ClientState.DisConnected;
+                    // State = ClientState.DisConnected;
+                    Disconnect();
                     ConnectionCallbacksTarget.OnDisconnected();
                     break;
                 case StatusCode.Exception:

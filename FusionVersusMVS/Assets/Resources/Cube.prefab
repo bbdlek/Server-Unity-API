@@ -16,8 +16,6 @@ GameObject:
   - component: {fileID: 2631683146492028902}
   - component: {fileID: -2500174006590929170}
   - component: {fileID: 1020471132256078773}
-  - component: {fileID: 5894588249078282212}
-  - component: {fileID: 1815300020320552882}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -123,6 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30e3e9e8305b4750ba301bdfe5e2dd78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attributeMonoBehaviors: []
   _prefabId: 5
   _instanceId: 0
   heliosTransform: {fileID: 0}
@@ -138,6 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af6d28e9808043349288f7352e4b25bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attributeMonoBehaviors: []
   networkPosition: {x: 0, y: 0, z: 0}
   networkRotation: {x: 0, y: 0, z: 0, w: 0}
   networkScale: {x: 0, y: 0, z: 0}
@@ -183,45 +183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cc5c69ee5d4a37058037d623abd4036, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score:
-    IsUpdate: 0
-    Index: 0
-    _value: 1
-  score2:
-    IsUpdate: 0
-    Index: 0
-    _value: 3
---- !u!95 &5894588249078282212
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8931026403998881570}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 6fd7eb0666fb18a08872179fef94a5f8, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1815300020320552882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8931026403998881570}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4f1923d117d8c299bfd8d816abaf285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
+  attributeMonoBehaviors: []
+  score: 1
+  score2: 3

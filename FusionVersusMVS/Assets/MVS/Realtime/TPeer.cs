@@ -3,7 +3,7 @@ namespace MVS.Realtime
     #nullable disable
     public class TPeer : PeerBase
     {
-        private SocketTcp _socketTcp;
+        private MVSWebSocket _mvsWebSocket;
         protected internal bool DoFraming = true;
         
         internal override bool Connect(string serverAddress, string appId, ServerConnection serverType)
@@ -17,14 +17,14 @@ namespace MVS.Realtime
 
         public override void OnConnect()
         {
-            _socketTcp = (SocketTcp)realtimeSocket;
+            _mvsWebSocket = (MVSWebSocket)realtimeSocket;
         }
 
         internal override void Disconnect()
         {
             realtimeSocket.Disconnect();
             Listener.MVSDebug(DebugLevel.INFO, "TPeer Disconnect()");
-            peerConnectionState = ConnectionStateValue.Disconnecting;
+            peerConnectionState = ConnectionStateValue.Disconnected;
         }
 
         internal override void StopConnection()
@@ -40,10 +40,10 @@ namespace MVS.Realtime
 
         internal override bool ProcessIncomingData()
         {
-            if(_socketTcp != null)
+            if(_mvsWebSocket != null)
             {
-                if(_socketTcp.PollReceive)
-                    _socketTcp.wsh.ProcessReceiveData();
+                if(_mvsWebSocket.PollReceive)
+                    _mvsWebSocket.wsh.ProcessReceiveData();
             }
             return true;
         }

@@ -6,7 +6,7 @@ using WebSocketSharp;
 namespace MVS.Realtime
 {
     #nullable disable
-    public class SocketTcp : RealtimeSocketConnection, IDisposable
+    public class MVSWebSocket : RealtimeSocketConnection
     {
         private WebSocket ws;
         public WebSocketHandler wsh;
@@ -14,7 +14,7 @@ namespace MVS.Realtime
         private readonly object syncer = new object();
         
         [Preserve]
-        public SocketTcp(PeerBase peerBase) : base(peerBase)
+        public MVSWebSocket(PeerBase peerBase) : base(peerBase)
         {
             Listener.MVSDebug(DebugLevel.INFO, "SocketTcp, .Net, Unity");
             
@@ -22,27 +22,27 @@ namespace MVS.Realtime
             PollReceive = false;
         }
 
-        ~SocketTcp() => this.Dispose();
-        
-        public void Dispose()
-        {
-            State = RealtimeSocketState.Disconnecting;
-            if (ws != null)
-            {
-                try
-                {
-                    if (ws.IsAlive)
-                        ws.Close();
-                }
-                catch (Exception e)
-                {
-                    Listener.MVSDebug(DebugLevel.INFO, $"Exception in Dispose : {e?.ToString()}");
-                }
-            }
-
-            ws = null;
-            State = RealtimeSocketState.Disconnected;
-        }
+        // ~MVSWebSocket() => this.Dispose();
+        //
+        // public void Dispose()
+        // {
+        //     State = RealtimeSocketState.Disconnecting;
+        //     if (ws != null)
+        //     {
+        //         try
+        //         {
+        //             if (ws.IsAlive)
+        //                 ws.Close();
+        //         }
+        //         catch (Exception e)
+        //         {
+        //             Listener.MVSDebug(DebugLevel.INFO, $"Exception in Dispose : {e?.ToString()}");
+        //         }
+        //     }
+        //
+        //     ws = null;
+        //     State = RealtimeSocketState.Disconnected;
+        // }
 
         public override bool Connect()
         {
@@ -155,6 +155,7 @@ namespace MVS.Realtime
         {
             Listener.MVSDebug(DebugLevel.INFO, "WebSocket closed with code: " + e.Reason);
             Listener.OnStatusChanged(StatusCode.Disconnect);
+            peerBase.peerConnectionState = (ConnectionStateValue)PeerState.Disconnected;
         }
     }
 }

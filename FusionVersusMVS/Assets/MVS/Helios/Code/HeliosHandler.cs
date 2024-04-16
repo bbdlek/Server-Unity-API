@@ -50,7 +50,6 @@ namespace MVS.Helios
             if (Time.timeScale > HeliosNetwork.MinimalTimeScaleToDispatchInFixedUpdate)
             {
                 if(!HeliosNetwork.IsConnected) return;
-                
                 HeliosNetwork.RealtimeClient.RealtimePeer.ProcessIncomingData();
             }
         }
@@ -92,7 +91,7 @@ namespace MVS.Helios
                 for (int i = 0; i < ho.heliosAttributes.Count; i++)
                 {
                     HeliosVariable hv = new HeliosVariable();
-                    switch (ho.heliosAttributes[i].GetValue(ho))
+                    switch (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]))
                     {
                         case int value:
                             hv.NInt32 = value;
@@ -112,7 +111,7 @@ namespace MVS.Helios
                     }
                     ho.ObjectInfo.CustomData[i] = hv.ToByteString();
                     updateObject.CustomData.Add(hv.ToByteString());
-                    ho.initialHeliosValues[i] = ho.heliosAttributes[i].GetValue(ho);
+                    ho.initialHeliosValues[i] = ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]);
                 }
                 
                 // foreach (var variable in ho.HeliosVariableTable)

@@ -2,12 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using MVS;
 using MVS.Realtime;
-using Protocol;
-using UnityEngine;
 using WebSocketSharp;
 using UInt64 = System.UInt64;
 
@@ -33,11 +29,8 @@ public partial class WebSocketHandler
     }
     
     public Dictionary<PKT_ID, Func<byte[], int, bool>> handlerDic;
-    private WebSocketConnection wsc;
-    private SocketTcp _socketTcp;
-    private IRealtimePeerListener Listener => _socketTcp.peerBase.Listener;
-    public int clientNum;
-    public bool isMain;
+    private MVSWebSocket _mvsWebSocket;
+    private IRealtimePeerListener Listener => _mvsWebSocket.peerBase.Listener;
 
     private static int HeaderSize = 4; // Assuming 2 UInt16 for the header
     private const int MaxBufferSize = 1024 * 100; // 100KB, adjust as necessary
@@ -64,11 +57,9 @@ public partial class WebSocketHandler
 
 #endregion
 
-    public WebSocketHandler(SocketTcp socketTcp)
+    public WebSocketHandler(MVSWebSocket mvsWebSocket)
     {
-        _socketTcp = socketTcp;
-        clientNum = 1;
-        isMain = clientNum == 1;
+        _mvsWebSocket = mvsWebSocket;
         HeaderSize = Marshal.SizeOf<Header>();
 
         // wsc = new WebSocketConnection();
@@ -77,31 +68,6 @@ public partial class WebSocketHandler
         {
             _jobPool.Push(new Job(){header = new Header(), data = new byte[MaxBufferSize]});
         }
-    }
-
-    public WebSocketHandler(int clientNum)
-    {
-        this.clientNum = clientNum;
-        isMain = (clientNum==1);
-        
-        HeaderSize = Marshal.SizeOf<Header>();
-
-        wsc = new WebSocketConnection();
-
-        for (int i = 0; i < 20; i++)
-        {
-            _jobPool.Push(new Job(){header = new Header(), data = new byte[MaxBufferSize]});
-        }
-    }
-
-    public void ConnectServer(MVSRunner runner)
-    {
-        wsc.Start(this, runner);
-    }
-
-    public void Disconnect()
-    {
-        wsc.OnDestroy();
     }
 
     public void OnReceiveData(byte[] data)
@@ -163,7 +129,6 @@ public partial class WebSocketHandler
     
     public void ProcessReceiveData()
     {
-        // _socketTcp.peerBase.Listener.MVSDebug(DebugLevel.INFO, "ProcessReceiveData");
         var job = DequeueJob();
         while (job != null)
         {
@@ -185,14 +150,14 @@ public partial class WebSocketHandler
             }
             else
             {
-                Debug.LogError($"CID[{clientNum}] : {(PKT_ID)id} packet is inconsistent");
+                Listener.MVSDebug(DebugLevel.ERROR, $"{(PKT_ID)id} packet is inconsistent");
             }
         }
     }
 
     private void SendData(PKT_ID id, byte[] data)
     {
-        _socketTcp.peerBase.Listener.MVSDebug(DebugLevel.INFO, $"SendData {id.ToString()}");
+        // _socketTcp.peerBase.Listener.MVSDebug(DebugLevel.INFO, $"SendData {id.ToString()}");
         Header header = new Header(){id = (UInt16)id, size = (UInt16)(data.Length+HeaderSize)};
         
         sendStream.SetLength(0);
@@ -207,7 +172,7 @@ public partial class WebSocketHandler
         // }
         
         // wsc.Send(sendStream.ToArray());
-        _socketTcp.SendPacket(sendStream.ToArray());
+        _mvsWebSocket.SendPacket(sendStream.ToArray());
     }
     
     public bool ConsistencyCheck<T>(T left, T right, string name = "")
@@ -305,13 +270,13 @@ public partial class WebSocketHandler
             }
             else
             {
-                Debug.LogError($"{id} send fail");
+                Listener.MVSDebug(DebugLevel.ERROR, $"{id} send fail");
                 return false;
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"{id} send fail");
+            Listener.MVSDebug(DebugLevel.ERROR, $"{id} send fail");
             throw;
         }
     }

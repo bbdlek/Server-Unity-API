@@ -2,19 +2,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using Google.Protobuf;
-using MVS;
 using MVS.Realtime;
 using Protocol;
-// using Enum;
-using UnityEngine;
-using WebSocketSharp;
-using EventCode = MVS.Realtime.EventCode;
-using HeliosVariable = Protocol.HeliosVariable;
 using OperationCode = MVS.Realtime.OperationCode;
-using Random = UnityEngine.Random;
-using Vector3 = Protocol.Vector3;
 
 public partial class WebSocketHandler
 {
@@ -42,7 +33,7 @@ public partial class WebSocketHandler
         var packet = S_OPERATION.Parser.ParseFrom(data);
         if (packet.Result != Result.Success)
         {
-            Debug.LogError($"packet result : {packet.Result}");
+            Listener.MVSDebug(DebugLevel.ERROR, $"packet result : {packet.Result}");
             return false;
         }
 
@@ -63,7 +54,7 @@ public partial class WebSocketHandler
         var packet = S_EVENT.Parser.ParseFrom(data);
         if (packet.Result != Result.Success)
         {
-            Debug.LogError($"packet result : {packet.Result}");
+            Listener.MVSDebug(DebugLevel.ERROR, $"packet result : {packet.Result}");
             return false;
         }
         EventData eventData = new EventData

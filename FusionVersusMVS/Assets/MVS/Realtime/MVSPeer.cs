@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using _1_Scripts._8_HeliosTest;
 using Google.Protobuf;
-using Google.Protobuf.WellKnownTypes;
 using Protocol;
 using Type = System.Type;
 
@@ -42,10 +40,10 @@ namespace MVS.Realtime
         {
             TransportProtocol = protocol;
             SocketImplementationConfig = new Dictionary<ConnectionProtocol, Type>();
-            SocketImplementationConfig[ConnectionProtocol.Sap] = typeof(SocketTcp);
-            SocketImplementationConfig[ConnectionProtocol.Tcp] = typeof(SocketTcp);
-            SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(SocketTcp);
-            SocketImplementationConfig[ConnectionProtocol.WebSocket] = typeof(SocketTcp);
+            SocketImplementationConfig[ConnectionProtocol.Sap] = typeof(MVSWebSocket);
+            SocketImplementationConfig[ConnectionProtocol.Tcp] = typeof(MVSWebSocket);
+            SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(MVSWebSocket);
+            SocketImplementationConfig[ConnectionProtocol.WebSocket] = typeof(MVSWebSocket);
             CreatePeerBase();
         }
 
@@ -167,7 +165,6 @@ namespace MVS.Realtime
                     break;
                 case (int)Protocol.EventCode.Rpc:
                     packs.CRpc = fixedData as C_RPC;
-                    Listener.MVSDebug(DebugLevel.INFO, packs.CRpc.InstanceID.ToString());
                     break;
             }
             if(fixedData != null)

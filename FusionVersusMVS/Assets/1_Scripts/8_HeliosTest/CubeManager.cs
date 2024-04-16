@@ -1,28 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using MVS.Helios;
-using MVS.Realtime;
 using UnityEngine;
 
 public class CubeManager : HeliosMonoBehavior
 {
-    public HNInt score = new HNInt(1);
-    public HNInt score2 = new HNInt(3);
-    // Start is called before the first frame update
-    void Start()
+    [HeliosRPC("TargetAll")]
+    public void AddScore()
     {
-        score.Value = 3;
+        score++;
     }
 
-    // Update is called once per frame
-    void Update()
+    public int score = 1;
+    [HNSync] public int score2 = 3;
+
+    private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Q) && IsMine)
+        {
+            RPC("AddScore");
+        }
+        
         if (Input.GetKeyDown(KeyCode.L) && IsMine)
         {
-            Debug.Log(CustomVariables.GetNameByKey(1));
-            
-            score.Value++;
-            score2.Value++;
+            score2++;
         }
     }
+    
+
 }
