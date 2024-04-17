@@ -49,9 +49,9 @@ namespace MVS.Realtime
         
         public abstract bool Disconnect();
 
-        public abstract bool Send(byte[] data, int size);
+        public abstract bool Send(byte[] data);
         
-        public abstract bool Receive(EventCode eventCode, byte[] data, int size);
+        public abstract bool Receive(byte[] data);
 
         private static bool TryParseAddress(
             string url,

@@ -9,40 +9,18 @@ namespace MVS.Realtime
     public class MVSWebSocket : RealtimeSocketConnection
     {
         private WebSocket ws;
-        public WebSocketHandler wsh;
+        // public WebSocketHandler wsh;
         
         private readonly object syncer = new object();
         
         [Preserve]
         public MVSWebSocket(PeerBase peerBase) : base(peerBase)
         {
-            Listener.MVSDebug(DebugLevel.INFO, "SocketTcp, .Net, Unity");
+            Listener.MVSDebug(DebugLevel.INFO, "MVSWebSocket, .Net, Unity");
             
             // 데이터 수신을 폴링하지 않음
             PollReceive = false;
         }
-
-        // ~MVSWebSocket() => this.Dispose();
-        //
-        // public void Dispose()
-        // {
-        //     State = RealtimeSocketState.Disconnecting;
-        //     if (ws != null)
-        //     {
-        //         try
-        //         {
-        //             if (ws.IsAlive)
-        //                 ws.Close();
-        //         }
-        //         catch (Exception e)
-        //         {
-        //             Listener.MVSDebug(DebugLevel.INFO, $"Exception in Dispose : {e?.ToString()}");
-        //         }
-        //     }
-        //
-        //     ws = null;
-        //     State = RealtimeSocketState.Disconnected;
-        // }
 
         public override bool Connect()
         {
@@ -84,14 +62,10 @@ namespace MVS.Realtime
             return true;
         }
 
-        public override bool Send(byte[] data, int size)
+        public override bool Send(byte[] data)
         {
-            if (wsh == null)
-            {
-                wsh = new WebSocketHandler(this);
-                wsh.Init();
-            }
-            wsh.SendPacket(WebSocketHandler.PKT_ID.PKT_C_OPERATION, data, size);
+            Listener.MVSDebug(DebugLevel.INFO, "Send");
+            ws.Send(data);
             return true;
         }
 
@@ -100,8 +74,9 @@ namespace MVS.Realtime
             ws.Send(data);
         }
 
-        public override bool Receive(EventCode eventCode, byte[] data, int size)
+        public override bool Receive(byte[] data)
         {
+            peerBase.ReceiveIncomingData(data);
             return true;
         }
 
@@ -130,9 +105,6 @@ namespace MVS.Realtime
             Listener.MVSDebug(DebugLevel.INFO, "WebSocket connected");
             State = RealtimeSocketState.Connected;
             peerBase.OnConnect();
-            //Todo : TPeer로 옮겨야 하나
-            wsh = new WebSocketHandler(this);
-            wsh.Init();
             PollReceive = true;
         }
 
@@ -141,7 +113,8 @@ namespace MVS.Realtime
         {
             try
             {
-                wsh.OnReceiveData(e.RawData);
+                Receive(e.RawData);
+                // wsh.OnReceiveData(e.RawData);
             }
             catch (Exception exception)
             {

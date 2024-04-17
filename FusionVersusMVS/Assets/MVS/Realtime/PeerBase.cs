@@ -60,6 +60,8 @@ namespace MVS.Realtime
 
         internal abstract bool ProcessOutgoingData();
 
+        internal abstract void ReceiveIncomingData(byte[] data);
+
         internal (byte[], int) SerializeOperationToPacket(
             Protocol.OperationCode operationCode,
             IMessage fixedData,

@@ -41,7 +41,7 @@ namespace MVS.Realtime
             TransportProtocol = protocol;
             SocketImplementationConfig = new Dictionary<ConnectionProtocol, Type>();
             SocketImplementationConfig[ConnectionProtocol.Sap] = typeof(MVSWebSocket);
-            SocketImplementationConfig[ConnectionProtocol.Tcp] = typeof(MVSWebSocket);
+            SocketImplementationConfig[ConnectionProtocol.Tcp] = typeof(SocketTcp);
             SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(MVSWebSocket);
             SocketImplementationConfig[ConnectionProtocol.WebSocket] = typeof(MVSWebSocket);
             CreatePeerBase();
@@ -180,6 +180,7 @@ namespace MVS.Realtime
             CustomDic customData = null
         )
         {
+            Listener.MVSDebug(DebugLevel.INFO, "SendOperation");
             (byte[] data, int size) = peerBase.SerializeOperationToPacket(operationCode, fixedData, customData);
             peerBase.SendPacket(data, size);
             return true;
