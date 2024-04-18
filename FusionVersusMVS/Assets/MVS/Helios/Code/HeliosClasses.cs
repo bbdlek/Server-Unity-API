@@ -349,6 +349,16 @@ namespace MVS.Helios
             HeliosNetwork.HeliosObjectList.RemoveAt((int)gameObject.GetComponent<HeliosObject>().InstanceId);
             GameObject.Destroy(gameObject);
         }
+        
+        public void Destroy(uint id)
+        {
+            var obj = HeliosNetwork.HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.InstanceID == id);
+            var RemovePkt = new C_REMOVE_NETWORK_OBJECTS();
+            ObjectInfo objectInfo = obj.ObjectInfo;
+            RemovePkt.ObjectInfos.Add(objectInfo);
+            HeliosNetwork.RaiseEvent(EventCode.PKT_C_REMOVE_NETWORK_OBJECTS, RemovePkt);
+            GameObject.Destroy(obj.gameObject);
+        }
     }
 
     public class MonoBehaviorHeliosCallbacks : HeliosMonoBehavior, IConnectionCallbacks, IMakingRoomCallbacks,

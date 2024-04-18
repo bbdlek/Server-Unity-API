@@ -12,5 +12,6 @@ namespace MVS.Helios
         GameObject Instantiate(uint prefabId, Vector3 position, Quaternion rotation);
 
         void Destroy(GameObject gameObject);
+        void Destroy(uint id);
     }
 }

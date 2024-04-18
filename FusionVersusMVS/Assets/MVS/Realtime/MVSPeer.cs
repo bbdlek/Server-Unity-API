@@ -180,7 +180,6 @@ namespace MVS.Realtime
             CustomDic customData = null
         )
         {
-            Listener.MVSDebug(DebugLevel.INFO, "SendOperation");
             (byte[] data, int size) = peerBase.SerializeOperationToPacket(operationCode, fixedData, customData);
             peerBase.SendPacket(data, size);
             return true;

@@ -807,7 +807,8 @@ PlayerSettings:
   scriptingBackend:
     Standalone: 0
   il2cppCompilerConfiguration: {}
-  il2cppCodeGeneration: {}
+  il2cppCodeGeneration:
+    WebGL: 1
   managedStrippingLevel:
     Bratwurst: 1
     EmbeddedLinux: 1

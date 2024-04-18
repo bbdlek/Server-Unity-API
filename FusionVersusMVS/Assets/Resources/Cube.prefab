@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 5808998708978907606}
   - component: {fileID: 4520983366914065623}
   - component: {fileID: 8508066451922919660}
-  - component: {fileID: 2631683146492028902}
   - component: {fileID: -2500174006590929170}
   - component: {fileID: 1020471132256078773}
+  - component: {fileID: 7551403675085834006}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -125,25 +125,6 @@ MonoBehaviour:
   _prefabId: 5
   _instanceId: 0
   heliosTransform: {fileID: 0}
---- !u!114 &2631683146492028902
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8931026403998881570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af6d28e9808043349288f7352e4b25bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attributeMonoBehaviors: []
-  networkPosition: {x: 0, y: 0, z: 0}
-  networkRotation: {x: 0, y: 0, z: 0, w: 0}
-  networkScale: {x: 0, y: 0, z: 0}
-  syncPosition: 1
-  syncRotation: 1
-  syncScale: 1
 --- !u!54 &-2500174006590929170
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -186,3 +167,25 @@ MonoBehaviour:
   attributeMonoBehaviors: []
   score: 1
   score2: 3
+--- !u!114 &7551403675085834006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8931026403998881570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af6d28e9808043349288f7352e4b25bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attributeMonoBehaviors: []
+  positionTolerance: 0.01
+  rotationTolerance: 1
+  scaleTolerance: 0.01
+  networkPosition: {x: 0, y: 0, z: 0}
+  networkRotation: {x: 0, y: 0, z: 0, w: 0}
+  networkScale: {x: 0, y: 0, z: 0}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 1

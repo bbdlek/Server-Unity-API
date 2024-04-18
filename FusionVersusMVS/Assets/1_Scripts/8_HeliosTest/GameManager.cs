@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using MVS.Helios;
 using MVS.Realtime;
 using QFSW.QC;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviorHeliosCallbacks
@@ -70,6 +72,23 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         foreach (var group in HeliosNetwork.GroupList)
         {
             Debug.Log(group.GroupInfo.GroupID);
+        }
+    }
+
+    public void OnDropDown(TMP_Dropdown dropdown)
+    {
+        switch (dropdown.value)
+        {
+            case 0:
+                HeliosNetwork.HeliosSettings.AppSettings.Protocol = ConnectionProtocol.WebSocket;
+                HeliosNetwork.HeliosSettings.AppSettings.Port = 30080;
+                Debug.Log($"Changed To Websocket {HeliosNetwork.HeliosSettings.AppSettings.Port}");
+                break;
+            case 1:
+                HeliosNetwork.HeliosSettings.AppSettings.Protocol = ConnectionProtocol.Tcp;
+                HeliosNetwork.HeliosSettings.AppSettings.Port = 30082;
+                Debug.Log($"Changed To Tcp {HeliosNetwork.HeliosSettings.AppSettings.Port}");
+                break;
         }
     }
 

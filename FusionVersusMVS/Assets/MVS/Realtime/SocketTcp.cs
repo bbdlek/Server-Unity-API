@@ -219,7 +219,8 @@ namespace MVS.Realtime
 
         public override bool Send(byte[] data)
         {
-            _socket.Send(data, 0, data.Length, SocketFlags.None);
+            if(_socket != null && State == RealtimeSocketState.Connected)
+                _socket.Send(data, 0, data.Length, SocketFlags.None);
             return true;
         }
 

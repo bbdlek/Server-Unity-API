@@ -64,14 +64,9 @@ namespace MVS.Realtime
 
         public override bool Send(byte[] data)
         {
-            Listener.MVSDebug(DebugLevel.INFO, "Send");
-            ws.Send(data);
+            if(State == RealtimeSocketState.Connected)
+                ws.Send(data);
             return true;
-        }
-
-        public void SendPacket(byte[] data)
-        {
-            ws.Send(data);
         }
 
         public override bool Receive(byte[] data)

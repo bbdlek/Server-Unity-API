@@ -512,15 +512,8 @@ namespace MVS.Helios
             if (HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.InstanceID == id))
             {
                 var obj = HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.InstanceID == id);
-                // foreach (var heliosMonoBehavior in obj.GetComponentsInChildren<HeliosMonoBehavior>())
-                // {
-                //     foreach (var heliosVariable in heliosMonoBehavior.HeliosVariableTable)
-                //     {
-                //         HeliosVariableDic.Remove(heliosVariable.Index);
-                //     }
-                // }
-                GameObject.Destroy(obj.gameObject);
-                HeliosObjectList.Remove(obj);
+                _prefabPool.Destroy(id);
+                // HeliosObjectList.Remove(obj);
             }
         }
         

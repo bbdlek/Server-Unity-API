@@ -10,12 +10,32 @@ namespace MVS.Helios
     [AddComponentMenu("Helios/HeliosTransform")]
     public class HeliosTransform : HeliosMonoBehavior
     {
+        //Tolerance
+        public float positionTolerance = 0.01f; // 위치 변경 허용 범위
+        public float rotationTolerance = 1f; // 회전 변경 허용 범위 (예: 1도)
+        public float scaleTolerance = 0.01f; // 크기 변경 허용 범위
+
+        private bool HasPositionChanged(Vector3 newPosition) {
+            return Vector3.Distance(newPosition, _storedPosition) > positionTolerance;
+        }
+
+        private bool HasRotationChanged(Quaternion newRotation) {
+            return Quaternion.Angle(newRotation, _storedRotation) > rotationTolerance;
+        }
+
+        private bool HasScaleChanged(Vector3 newScale) {
+            return Vector3.Distance(newScale, _storedScale) > scaleTolerance;
+        }
+
+        [HideInInspector]
         public Vector3 networkPosition;
         private Vector3 _storedPosition;
         
+        [HideInInspector]
         public Quaternion networkRotation;
         private Quaternion _storedRotation;
         
+        [HideInInspector]
         public Vector3 networkScale;
         private Vector3 _storedScale;
 
@@ -31,20 +51,19 @@ namespace MVS.Helios
         {
             _isMine = GetComponent<HeliosObject>().IsMine;
             _storedPosition = transform.localPosition;
-            networkPosition = Vector3.zero;
+            networkPosition = _storedPosition;
 
             _storedRotation = transform.localRotation;
-            networkRotation = Quaternion.identity;
+            networkRotation = _storedRotation;
 
             _storedScale = transform.localScale;
-            networkScale = Vector3.zero;
+            networkScale = _storedScale;
         }
 
         private void Update()
         {
             var tr = transform;
-            if ((tr.localPosition != _storedPosition || tr.localRotation != _storedRotation || tr.localScale != _storedScale) && _isMine)
-            {
+            if (_isMine && (HasPositionChanged(tr.localPosition) || HasRotationChanged(tr.localRotation) || HasScaleChanged(tr.localScale))) {
                 //Send?
                 var fixedData = new C_UPDATE_NETWORK_OBJECTS();
                 var ObjectInfo = new ObjectInfo
@@ -98,7 +117,7 @@ namespace MVS.Helios
                 _storedPosition = tr.localPosition;
                 networkPosition = _storedPosition;
                 
-                _storedPosition = tr.localEulerAngles;
+                _storedRotation = tr.localRotation;
                 networkRotation = _storedRotation;
                 
                 _storedScale = tr.localScale;
@@ -110,11 +129,17 @@ namespace MVS.Helios
             if(!_isMine)
             {
                 if(syncPosition)
+                {
                     tr.localPosition = networkPosition;
+                }
                 if(syncRotation)
+                {
                     tr.localRotation = networkRotation;
+                }
                 if (syncScale)
+                {
                     tr.localScale = networkScale;
+                }
             }
         }
     }

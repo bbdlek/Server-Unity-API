@@ -83,7 +83,6 @@ namespace MVS.Realtime
 
         internal override bool SendPacket(byte[] data, int size)
         {
-            Listener.MVSDebug(DebugLevel.INFO, "SendPacket");
             //TCP Data 생성
             Header header = new Header()
                 { id = (UInt16)PKT_ID.PKT_C_OPERATION, size = (UInt16)(data.Length + HeaderSize) };
