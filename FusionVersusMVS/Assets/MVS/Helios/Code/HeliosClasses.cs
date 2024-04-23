@@ -34,30 +34,7 @@ namespace MVS.Helios
 
         public Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior, string>> RPCMethods =
             new Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior, string>>();
-
-        // [SerializeField] private uint _instanceID;
-        //
-        // public uint instanceID
-        // {
-        //     get => ObjectInfo.ObjectID.InstanceID;
-        //     set
-        //     {
-        //         _instanceID = value;
-        //         ObjectInfo.ObjectID.InstanceID = value;
-        //     }
-        // }
-        //
-        // [SerializeField] private uint _clientInstanceID;
-        //
-        // public uint clientInstanceID
-        // {
-        //     get => ObjectInfo.ObjectID.ClientInstanceID;
-        //     set
-        //     {
-        //         _clientInstanceID = value;
-        //         ObjectInfo.ObjectID.ClientInstanceID = value;
-        //     }
-        // }
+        
 
         public ObjectInfo ObjectInfo = new ObjectInfo
         {

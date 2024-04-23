@@ -91,7 +91,7 @@ namespace MVS.Realtime
                 while (State == RealtimeSocketState.Connected && _socket != null && _socket.Connected)
                 {
                     byte[] buffer = new byte[1024]; // 데이터를 읽을 버퍼를 준비합니다.
-                    int bytesRead = await _socket.ReceiveAsync(buffer, SocketFlags.None); // 비동기로 데이터를 읽습니다.
+                    int bytesRead = await _socket.ReceiveAsync(new ArraySegment<byte>(buffer), SocketFlags.None); // 비동기로 데이터를 읽습니다.
 
                     if (bytesRead > 0)
                     {

@@ -5,7 +5,9 @@ using Google.Protobuf;
 using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
 using Vector3 = UnityEngine.Vector3;
