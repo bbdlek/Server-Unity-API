@@ -14,7 +14,7 @@ namespace MVS.Realtime
 
         internal ConnectionProtocol Protocol;
 
-        internal ConnectionStateValue peerConnectionState = ConnectionStateValue.Disconnected;
+        public ConnectionStateValue peerConnectionState = ConnectionStateValue.Disconnected;
 
         internal short peerID = -1;
         
@@ -60,7 +60,7 @@ namespace MVS.Realtime
 
         internal abstract bool ProcessOutgoingData();
 
-        internal abstract void ReceiveIncomingData(byte[] data);
+        public abstract void ReceiveIncomingData(byte[] data);
 
         internal (byte[], int) SerializeOperationToPacket(
             Protocol.OperationCode operationCode,

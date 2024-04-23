@@ -43,11 +43,7 @@ namespace MVS.Realtime
             SocketImplementationConfig[ConnectionProtocol.Sap] = typeof(MVSWebSocket);
             SocketImplementationConfig[ConnectionProtocol.Tcp] = typeof(SocketTcp);
             SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(MVSWebSocket);
-            #if UNITY_WEBGL
-            SocketImplementationConfig[ConnectionProtocol.WebSocket] = typeof(MVSWebGLSocket);
-            #else
             SocketImplementationConfig[ConnectionProtocol.WebSocket] = typeof(MVSWebSocket);
-            #endif
             CreatePeerBase();
         }
 

@@ -138,7 +138,7 @@ namespace MVS.Realtime
             return true;
         }
 
-        internal override void ReceiveIncomingData(byte[] data)
+        public override void ReceiveIncomingData(byte[] data)
         {
             EnsureCapacity(data.Length);
             Array.Copy(data, 0, recvBuffer, bufferEnd, data.Length);

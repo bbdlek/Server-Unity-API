@@ -8,7 +8,7 @@ namespace MVS.Realtime
     {
         public RealtimePeer(ConnectionProtocol protocol) : base(protocol)
         {
-            // this.ConfigUnitySockets();
+            this.ConfigUnitySockets();
         }
         
         public RealtimePeer(IRealtimePeerListener listener, ConnectionProtocol protocol) : this(protocol)
@@ -20,19 +20,26 @@ namespace MVS.Realtime
         private void ConfigUnitySockets()
         {
             Type websocketType = null;
-            websocketType = Type.GetType("ExitGames.Client.Photon.SocketWebTcp, PhotonWebSocket", false);
+            websocketType = Type.GetType("MVS.Realtime.MVSWebGLSocket, MVSWebSocket", false);
             if (websocketType == null)
             {
-                websocketType = Type.GetType("ExitGames.Client.Photon.SocketWebTcp, Assembly-CSharp-firstpass", false);
+                websocketType = Type.GetType("MVS.Realtime.MVSWebGLSocket, Assembly-CSharp-firstpass", false);
             }
             if (websocketType == null)
             {
-                websocketType = Type.GetType("ExitGames.Client.Photon.SocketWebTcp, Assembly-CSharp", false);
+                websocketType = Type.GetType("MVS.Realtime.MVSWebGLSocket, Assembly-CSharp", false);
             }
+#if UNITY_WEBGL
+            if (websocketType == null)
+            {
+                this.Listener.MVSDebug(DebugLevel.WARNING, "SocketWebTcp type not found in the usual Assemblies. This is required as wrapper for the browser WebSocket API. Make sure to make the PhotonLibs\\WebSocket code available.");
+            }
+#endif
 
             if (websocketType != null)
             {
-                
+                UnityEngine.Debug.Log("ConfigUnitySockets()" + websocketType);
+                this.SocketImplementationConfig[ConnectionProtocol.WebSocket] = websocketType;
             }
         }
 

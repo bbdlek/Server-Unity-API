@@ -16,6 +16,7 @@ namespace MVS.Realtime
         [Preserve]
         public MVSWebGLSocket(PeerBase npeer) : base(npeer)
         {
+            Listener.MVSDebug(DebugLevel.INFO, typeof(MVSWebGLSocket).ToString());
             ServerAddress = npeer.ServerAddress;
             
             Listener.MVSDebug(DebugLevel.INFO, "MVSWebGLSocket, .Net, Unity");

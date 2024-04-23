@@ -189,7 +189,8 @@ namespace MVS.Helios
             #endif
             
             ConnectionProtocol protocol = HeliosSettings.AppSettings.Protocol;
-            RealtimeClient = new RealtimeClient(protocol);
+            if(RealtimeClient == null)
+                RealtimeClient = new RealtimeClient(protocol);
             
             RealtimeClient.EventReceived -= OnEvent;
             RealtimeClient.EventReceived += OnEvent;
