@@ -61,6 +61,7 @@ namespace MVS.Realtime
 
         public override void OnConnect()
         {
+            Listener.MVSDebug(DebugLevel.INFO, "TPeer OnConnect()");
             handlerDic = new Dictionary<PKT_ID, Func<byte[], int, bool>>();
             handlerDic[PKT_ID.PKT_S_OPERATION] = (bytes, len) => PacketHandler<S_OPERATION>.Handling(Handle_S_OPERATION, bytes, len);
             handlerDic[PKT_ID.PKT_S_EVENT] = (bytes, len) => PacketHandler<S_EVENT>.Handling(Handle_S_EVENT, bytes, len);
@@ -120,6 +121,7 @@ namespace MVS.Realtime
                 PoolJob(job);
 
                 job = DequeueJob();
+                Listener.MVSDebug(DebugLevel.INFO, "ProcessIncomingData" + job);
                 
                 if (result)
                 {

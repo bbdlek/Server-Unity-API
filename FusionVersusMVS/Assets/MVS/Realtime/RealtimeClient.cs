@@ -200,6 +200,7 @@ namespace MVS.Realtime
 
         public RealtimeClient(ConnectionProtocol protocol = Realtime.ConnectionProtocol.Tcp)
         {
+            Debug.Log("RealtimeClient()");
             ConnectionCallbacksTarget = new ConnectionCallbacksContainer(this);
             MakingRoomCallbacksTarget = new MakingRoomCallbacksContainer(this);
             MakingGroupCallbacksTarget = new MakingGroupCallbacksContainer(this);

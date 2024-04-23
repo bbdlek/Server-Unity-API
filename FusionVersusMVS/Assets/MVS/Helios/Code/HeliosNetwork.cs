@@ -169,36 +169,45 @@ namespace MVS.Helios
 
         static HeliosNetwork()
         {
-            RealtimeClient = new RealtimeClient();
+#if !UNITY_EDITOR
+            Debug.Log("HeliosNetwork1");
+            StaticReInitialize();
+#else
+            Debug.Log("HeliosNetwork2");
+            if(RealtimeClient == null)
+                RealtimeClient = new RealtimeClient();
+#endif
         }
 
+        #if UNITY_EDITOR && UNITY_2019_4_OR_NEWER
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+        #endif
         private static void StaticReInitialize()
         {
             #if UNITY_EDITOR
             if(!EditorApplication.isPlayingOrWillChangePlaymode) return;
             #endif
             
-            Debug.Log("Initialized");
-
+            Debug.Log("StaticReInitialize()");
+            
             ConnectionProtocol protocol = HeliosSettings.AppSettings.Protocol;
             RealtimeClient = new RealtimeClient(protocol);
-
+            
             RealtimeClient.EventReceived -= OnEvent;
             RealtimeClient.EventReceived += OnEvent;
             RealtimeClient.OpResponseReceived -= OnOperation;
             RealtimeClient.OpResponseReceived += OnOperation;
             RealtimeClient.StateChanged -= OnClientStateChanged;
             RealtimeClient.StateChanged += OnClientStateChanged;
-
+            
             HeliosHandler.Instance.Client = RealtimeClient;
-
+            
             Application.runInBackground = HeliosSettings.RunInBackground;
             SendRate = HeliosSettings.SendRate;
             
             // TODO : PrefabPool
             PrefabPool = new DefaultPrefabPool();
-
+            
             // TODO : Register CustomType?
             CustomVariablesUnity.Register();
 
@@ -206,10 +215,6 @@ namespace MVS.Helios
         
         public static bool ConnectUsingSettings()
         {
-            #if UNITY_EDITOR
-            #else
-            StaticReInitialize();
-            #endif
             if (HeliosSettings == null)
             {
                 Debug.LogError("Can't connect: Loading settings failed. ServerSettings asset must be in any 'Resources' folder as: " + HeliosSettingsFileName);

@@ -8,7 +8,7 @@ namespace MVS.Realtime
     #nullable disable
     public class MVSWebSocket : RealtimeSocketConnection
     {
-        private WebSocket ws;
+        private WebSocketSharp.WebSocket ws;
         // public WebSocketHandler wsh;
         
         private readonly object syncer = new object();
@@ -77,7 +77,8 @@ namespace MVS.Realtime
 
         internal void DnsAndConnect()
         {
-            ws = new WebSocket($"ws://{ServerAddress}:{ServerPort}");
+            Listener.MVSDebug(DebugLevel.INFO, $"ws://{ServerAddress}:{ServerPort}");
+            ws = new WebSocketSharp.WebSocket($"ws://{ServerAddress}:{ServerPort}");
 
             ws.OnOpen += OnWebSocketOpen;
             ws.OnMessage += OnWebSocketMessage;
