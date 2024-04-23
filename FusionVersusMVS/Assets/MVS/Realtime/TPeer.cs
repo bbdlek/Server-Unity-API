@@ -121,7 +121,6 @@ namespace MVS.Realtime
                 PoolJob(job);
 
                 job = DequeueJob();
-                Listener.MVSDebug(DebugLevel.INFO, "ProcessIncomingData" + job);
                 
                 if (result)
                 {

@@ -83,7 +83,6 @@ namespace MVS.Realtime
             
             try
             {
-                Listener.MVSDebug(DebugLevel.INFO, ConnectAddress);
                 _socket = WebSocketFactory.CreateInstance("ws://" + ConnectAddress);
                 // sock = new WebSocket("ws://" + ConnectAddress);
                 // sock.DebugReturn = (l, s) =>

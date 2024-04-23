@@ -200,7 +200,6 @@ namespace MVS.Realtime
 
         public RealtimeClient(ConnectionProtocol protocol = Realtime.ConnectionProtocol.Tcp)
         {
-            Debug.Log("RealtimeClient()");
             ConnectionCallbacksTarget = new ConnectionCallbacksContainer(this);
             MakingRoomCallbacksTarget = new MakingRoomCallbacksContainer(this);
             MakingGroupCallbacksTarget = new MakingGroupCallbacksContainer(this);
@@ -649,7 +648,6 @@ namespace MVS.Realtime
             CurrentGroup.RealtimeClient = this;
 
             State = ClientState.JoinedGroup;
-            Debug.Log(data.Result);
             if (data.Result == Result.SuccessGroupCreate)
             {
                 MakingGroupCallbacksTarget.OnCreatedGroup();

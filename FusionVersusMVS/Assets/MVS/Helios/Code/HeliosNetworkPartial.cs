@@ -61,7 +61,6 @@ namespace MVS.Helios
                                 var obj = HeliosObjectList.Find(x =>
                                     x.ObjectInfo.ObjectID.ClientInstanceID == objectInfo.ObjectID.ClientInstanceID);
                                 obj.ObjectInfo = objectInfo;
-                                Debug.Log(obj.ObjectInfo.ObjectID.InstanceID);
                                 obj.UpdateCustomData();
                                 break;
                         }

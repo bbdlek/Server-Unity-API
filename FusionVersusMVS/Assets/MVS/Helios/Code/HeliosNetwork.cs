@@ -170,10 +170,8 @@ namespace MVS.Helios
         static HeliosNetwork()
         {
 #if !UNITY_EDITOR
-            Debug.Log("HeliosNetwork1");
             StaticReInitialize();
 #else
-            Debug.Log("HeliosNetwork2");
             if(RealtimeClient == null)
                 RealtimeClient = new RealtimeClient();
 #endif
@@ -187,8 +185,6 @@ namespace MVS.Helios
             #if UNITY_EDITOR
             if(!EditorApplication.isPlayingOrWillChangePlaymode) return;
             #endif
-            
-            Debug.Log("StaticReInitialize()");
             
             ConnectionProtocol protocol = HeliosSettings.AppSettings.Protocol;
             RealtimeClient = new RealtimeClient(protocol);

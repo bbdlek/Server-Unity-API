@@ -483,7 +483,6 @@ namespace HybridWebSocket
                     if (ev.RawData != null)
                     {
                         this.OnMessage?.Invoke(ev.RawData);
-                        Debug.Log(ev.RawData);
                     }
                 };
 
