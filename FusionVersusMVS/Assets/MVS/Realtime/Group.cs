@@ -17,7 +17,7 @@ namespace MVS.Realtime
         
         public Room RoomReference { get; set; }
         
-        private Dictionary<ulong, Player> _playerList;
+        private Dictionary<ulong, Player> _playerList = new Dictionary<ulong, Player>();
 
         public Dictionary<ulong, Player> PlayerList => _playerList;
 
@@ -26,12 +26,10 @@ namespace MVS.Realtime
             return PlayerList;
         }
 
-        public virtual Player StorePlayer(Player player)
+        public virtual void StorePlayer(Player player)
         {
             PlayerList[player.UserId] = player;
             player.GroupReference = this;
-
-            return player;
         }
 
         public Player GetPlayer(ulong playerId, bool findMaster = false)

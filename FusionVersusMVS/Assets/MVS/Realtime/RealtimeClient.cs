@@ -442,6 +442,8 @@ namespace MVS.Realtime
                 case EventCode.PKT_S_OTHER_CLIENT_JOINED:
                     var data = Packs.Parser.ParseFrom(eventData.FixedData).SOtherClientJoined;
                     Player otherPlayer = new Player(data.PlayerInfo);
+                    CurrentGroup.StorePlayer(otherPlayer);
+                    CurrentRoom.StorePlayer(otherPlayer);
                     InGroupCallbacksTarget.OnPlayerEnteredGroup(otherPlayer);
                     break;
             }
@@ -507,21 +509,31 @@ namespace MVS.Realtime
                     break;
                 case OperationCode.ROOM_LIST:
                     var dataRoomList = Packs.Parser.ParseFrom(operationResponse.FixedData).SRoomList;
-                    foreach (var roomInfo in dataRoomList.RoomInfos)
+                    if(dataRoomList.RoomInfos.Count > 0)
                     {
-                        RoomList.Clear();
-                        RoomList.Add(new Room(roomInfo));
+                        foreach (var roomInfo in dataRoomList.RoomInfos)
+                        {
+                            RoomList.Clear();
+                            RoomList.Add(new Room(roomInfo));
+                        }
+
+                        _roomTask.SetResult(RoomList);
                     }
-                    _roomTask.SetResult(RoomList);
+                    else _roomTask.SetResult(null);
                     break;
                 case OperationCode.GROUP_LIST:
                     var dataGroupList = Packs.Parser.ParseFrom(operationResponse.FixedData).SGroupList;
-                    foreach (var groupInfo in dataGroupList.GroupInfos)
+                    if(dataGroupList.GroupInfos.Count > 0)
                     {
-                        CurrentRoom.GroupList.Clear();
-                        CurrentRoom.GroupList.Add(new Group(groupInfo, CurrentRoom));
+                        foreach (var groupInfo in dataGroupList.GroupInfos)
+                        {
+                            CurrentRoom.GroupList.Clear();
+                            CurrentRoom.GroupList.Add(new Group(groupInfo, CurrentRoom));
+                        }
+
+                        _groupTask.SetResult(CurrentRoom.GroupList);
                     }
-                    _groupTask.SetResult(CurrentRoom.GroupList);
+                    else _groupTask.SetResult(null);
                     break;
             }
 
@@ -645,6 +657,12 @@ namespace MVS.Realtime
             Group newGroup = new Group(groupInfo, CurrentRoom);
 
             CurrentGroup = newGroup;
+            foreach (var playerInfo in newGroup.GroupInfo.PlayerInfos)
+            {
+                Player existedPlayer = new Player(playerInfo);
+                CurrentGroup.StorePlayer(existedPlayer);
+                CurrentRoom.StorePlayer(existedPlayer);
+            }
             CurrentGroup.RealtimeClient = this;
 
             State = ClientState.JoinedGroup;

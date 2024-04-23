@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using MVS.Realtime;
 using Protocol;
-using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
 using OperationCode = MVS.Realtime.OperationCode;
 
@@ -112,7 +111,6 @@ namespace MVS.Helios
                     }
                     break;
                 case EventCode.PKT_S_REMOVE_NETWORK_OBJECTS:
-                    Debug.Log("REMOVE");
                     var dataRemove = Packs.Parser.ParseFrom(eventData.FixedData).SRemoveNetworkObjects;
                     foreach (var objectInfo in dataRemove.ObjectInfos)
                     {
