@@ -99,7 +99,6 @@ namespace MVS.Realtime
                         byte[] dataToProcess = ExtractNeededData(buffer, bytesRead);
                         if (dataToProcess.Length > 0)
                         {
-                            Listener.MVSDebug(DebugLevel.INFO, BitConverter.ToString(dataToProcess));
                             peerBase.ReceiveIncomingData(dataToProcess);
                         }
                     }

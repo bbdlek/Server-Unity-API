@@ -56,7 +56,7 @@ namespace MVS.Helios
             }
         }
         
-        public virtual void Start()
+        public virtual void Awake()
         {
             if(ObjectInfo == null)
                 ObjectInfo = new ObjectInfo();
@@ -159,6 +159,10 @@ namespace MVS.Helios
                     {
                         hv.NDouble = (double)field.GetValue(this);
                     }
+                    else if(field.FieldType == typeof(bool))
+                    {
+                        hv.NBool = (bool)field.GetValue(this);
+                    }
                     else if(field.FieldType == typeof(string))
                     {
                         hv.NString = (string)field.GetValue(this);
@@ -255,6 +259,9 @@ namespace MVS.Helios
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NFloat:
                         field.SetValue(attributeMonoBehaviors[i], Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NFloat);
+                        break;
+                    case Protocol.HeliosVariable.ValueOneofCase.NBool:
+                        field.SetValue(attributeMonoBehaviors[i], Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NBool);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NDouble:
                         field.SetValue(attributeMonoBehaviors[i], Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NDouble);

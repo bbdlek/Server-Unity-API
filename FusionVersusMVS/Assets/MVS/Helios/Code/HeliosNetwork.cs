@@ -414,7 +414,7 @@ namespace MVS.Helios
                 go.GetComponent<HeliosObject>().IsMine = false;
                 foreach (var ho in go.GetComponentsInChildren<HeliosMonoBehavior>())
                 {
-                    ho.FindNetworkedVariables();
+                    // ho.FindNetworkedVariables();
                     // ho.FindRPCMethods();
                     // HeliosObjectList.Add(ho);
                     ho.ObjectInfo.ObjectID.ClientInstanceID = (uint)HeliosNetwork.HeliosObjectList.LastIndexOf(ho);

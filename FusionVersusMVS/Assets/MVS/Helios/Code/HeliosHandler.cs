@@ -73,12 +73,22 @@ namespace MVS.Helios
             var data = new C_UPDATE_NETWORK_OBJECTS();
             foreach (var ho in HeliosNetwork.HeliosObjectList.FindAll(x => x.hasUpdate))
             {
-                var updateObject = new ObjectInfo
+                var updateObject = new ObjectInfo();
+                if (ho.GetComponent<HeliosObject>())
                 {
-                    ObjectID = ho.ObjectInfo.ObjectID,
-                    SyncType = ho.ObjectInfo.SyncType,
-                    OwnerPlayerID = ho.ObjectInfo.OwnerPlayerID,
-                };
+                    var heliosObject = ho.GetComponent<HeliosObject>();
+                    updateObject.ObjectID = new ObjectID
+                    {
+                        PrefabID = heliosObject.PrefabId,
+                        InstanceID = heliosObject.InstanceId,
+                    };
+                    updateObject.SyncType = ObjectSyncType.PersonalOwn;
+                    updateObject.OwnerPlayerID = HeliosNetwork.LocalPlayer.UserId;
+                }
+                else
+                {
+                    updateObject = ho.ObjectInfo;
+                }
                 // for (int i = 0; i < ho.heliosAttributes.Count; i++)
                 // {
                 //     if (ho.heliosAttributes[i].GetValue(ho) != ho.initialHeliosValues[i])
@@ -104,6 +114,9 @@ namespace MVS.Helios
                             break;
                         case double value:
                             hv.NDouble = value;
+                            break;
+                        case bool value:
+                            hv.NBool = value;
                             break;
                         case string value:
                             hv.NString = value;

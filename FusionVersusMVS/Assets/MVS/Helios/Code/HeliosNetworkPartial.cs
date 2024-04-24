@@ -93,7 +93,7 @@ namespace MVS.Helios
                                 foreach (var heliosMonoBehavior in obj.GetComponentsInChildren<HeliosMonoBehavior>())
                                 {
                                     heliosMonoBehavior.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
-                                    heliosMonoBehavior.FindNetworkedVariables();
+                                    // heliosMonoBehavior.FindNetworkedVariables();
                                     // heliosMonoBehavior.FindRPCMethods();
                                     // heliosMonoBehavior.FindHeliosVariable();
                                 }
