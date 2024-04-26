@@ -112,6 +112,8 @@ namespace MVS.Helios
             {
                 objectID = ObjectInfo.ObjectID;
             }
+            Debug.Log(objectID.InstanceID);
+            Debug.Log(objectID.ClientInstanceID);
             HeliosNetwork.RPC(objectID, methodName, args);
         }
 

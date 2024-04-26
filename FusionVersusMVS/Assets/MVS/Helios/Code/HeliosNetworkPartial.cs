@@ -15,21 +15,6 @@ namespace MVS.Helios
             return HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.InstanceID == (int)id);
         }
         
-        // public static HeliosMonoBehavior FindObjectById(ObjectID id)
-        // {
-        //     foreach (var heliosMonoBehavior in HeliosObjectList)
-        //     {
-        //         if (heliosMonoBehavior.hasInstanceId &&
-        //             heliosMonoBehavior.ObjectInfo.ObjectID.InstanceID == (int)id.InstanceID)
-        //             return heliosMonoBehavior;
-        //         if (!heliosMonoBehavior.hasInstanceId &&
-        //             heliosMonoBehavior.ObjectInfo.ObjectID.ClientInstanceID == (int)id.ClientInstanceID)
-        //             return heliosMonoBehavior;
-        //     }
-        //
-        //     return null;
-        // }
-        
         public static void AddCallbackTarget(object target)
         {
             RealtimeClient.AddCallbackTarget(target);

@@ -81,6 +81,7 @@ namespace MVS.Helios
                     {
                         PrefabID = heliosObject.PrefabId,
                         InstanceID = heliosObject.InstanceId,
+                        ClientInstanceID = heliosObject.ClientInstanceId,
                     };
                     updateObject.SyncType = ObjectSyncType.PersonalOwn;
                     updateObject.OwnerPlayerID = HeliosNetwork.LocalPlayer.UserId;

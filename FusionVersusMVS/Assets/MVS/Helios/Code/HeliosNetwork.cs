@@ -493,6 +493,9 @@ namespace MVS.Helios
                 }
             }
             
+            Debug.Log(objectInfo.ObjectID.InstanceID);
+            Debug.Log(objectInfo.ObjectID.ClientInstanceID);
+            Debug.Log(objectInfo.CustomData.Count);
             FindObjectById(id).ObjectInfo = objectInfo;
             FindObjectById(id).UpdateCustomData();
         }
