@@ -74,22 +74,6 @@ namespace MVS.Helios
             foreach (var ho in HeliosNetwork.HeliosObjectList.FindAll(x => x.hasUpdate))
             {
                 var updateObject = new ObjectInfo();
-                if (ho.GetComponent<HeliosObject>())
-                {
-                    var heliosObject = ho.GetComponent<HeliosObject>();
-                    updateObject.ObjectID = new ObjectID
-                    {
-                        PrefabID = heliosObject.PrefabId,
-                        InstanceID = heliosObject.InstanceId,
-                        ClientInstanceID = heliosObject.ClientInstanceId,
-                    };
-                    updateObject.SyncType = ObjectSyncType.PersonalOwn;
-                    updateObject.OwnerPlayerID = HeliosNetwork.LocalPlayer.UserId;
-                }
-                else
-                {
-                    updateObject = ho.ObjectInfo;
-                }
 
                 for (int i = 0; i < ho.heliosAttributes.Count; i++)
                 {
@@ -117,6 +101,23 @@ namespace MVS.Helios
                     }
                     ho.ObjectInfo.CustomData[i] = hv.ToByteString();
                     ho.initialHeliosValues[i] = ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]);
+                }
+                if (ho.GetComponent<HeliosObject>())
+                {
+                    var heliosObject = ho.GetComponent<HeliosObject>();
+                    updateObject.ObjectID = new ObjectID
+                    {
+                        PrefabID = heliosObject.PrefabId,
+                        InstanceID = heliosObject.InstanceId,
+                        ClientInstanceID = heliosObject.ClientInstanceId,
+                    };
+                    updateObject.SyncType = ObjectSyncType.PersonalOwn;
+                    updateObject.OwnerPlayerID = HeliosNetwork.LocalPlayer.UserId;
+                    updateObject = heliosObject.ObjectInfo;
+                }
+                else
+                {
+                    updateObject = ho.ObjectInfo;
                 }
                 data.ObjectInfos.Add(updateObject);
                 HeliosNetwork.RaiseEvent(EventCode.PKT_C_UPDATE_NETWORK_OBJECTS, data);

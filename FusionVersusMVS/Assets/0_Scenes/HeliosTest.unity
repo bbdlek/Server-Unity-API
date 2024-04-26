@@ -341,7 +341,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9572d66defe85de2cbb5e5f4a7685785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasInstanceId: 0
+  instanceID: 0
+  clientInstanceID: 0
   attributeMonoBehaviors: []
   score: 0
 --- !u!4 &174426210
@@ -3032,7 +3033,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1643932109}
   - component: {fileID: 1643932110}
-  - component: {fileID: 1643932111}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3067,28 +3067,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab53856b4ac2c258e926cd94169b2221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasInstanceId: 0
+  instanceID: 0
+  clientInstanceID: 0
   attributeMonoBehaviors: []
   prefabsForSpawn:
   - {fileID: 8931026403998881570, guid: 7182995e8b9816168a367c0ea6a2d403, type: 3}
   score2: 0
   score3: 0
   test: 0
---- !u!114 &1643932111
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1643932108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9572d66defe85de2cbb5e5f4a7685785, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hasInstanceId: 0
-  attributeMonoBehaviors: []
-  score: 0
 --- !u!1 &1742886492
 GameObject:
   m_ObjectHideFlags: 0

@@ -121,10 +121,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30e3e9e8305b4750ba301bdfe5e2dd78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasInstanceID: 0
+  instanceID: 0
+  clientInstanceID: 0
   attributeMonoBehaviors: []
   _prefabId: 5
   _instanceId: 11
+  _clientInstanceId: 0
   heliosTransform: {fileID: 0}
 --- !u!54 &-2500174006590929170
 Rigidbody:
@@ -165,7 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cc5c69ee5d4a37058037d623abd4036, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasInstanceID: 0
+  instanceID: 0
+  clientInstanceID: 0
   attributeMonoBehaviors: []
   score: 1
   score2: 3
@@ -181,7 +184,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af6d28e9808043349288f7352e4b25bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasInstanceID: 0
+  instanceID: 0
+  clientInstanceID: 0
   attributeMonoBehaviors: []
   positionTolerance: 0.01
   rotationTolerance: 1

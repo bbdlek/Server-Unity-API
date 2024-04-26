@@ -112,8 +112,6 @@ namespace MVS.Helios
             {
                 objectID = ObjectInfo.ObjectID;
             }
-            Debug.Log(objectID.InstanceID);
-            Debug.Log(objectID.ClientInstanceID);
             HeliosNetwork.RPC(objectID, methodName, args);
         }
 
@@ -342,6 +340,7 @@ namespace MVS.Helios
             ObjectInfo objectInfo = obj.ObjectInfo;
             RemovePkt.ObjectInfos.Add(objectInfo);
             HeliosNetwork.RaiseEvent(EventCode.PKT_C_REMOVE_NETWORK_OBJECTS, RemovePkt);
+            HeliosNetwork.HeliosObjectList.Remove(obj);
             GameObject.Destroy(obj.gameObject);
         }
     }

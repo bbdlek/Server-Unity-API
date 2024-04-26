@@ -9,11 +9,17 @@ public class TestGameManager : HeliosMonoBehavior
 {
     [HNSync] public int score = 0;
 
+    [HeliosRPC("ALL")]
+    private void Test()
+    {
+        Debug.Log("TEST");
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            score++;
+            RPC("Test");
         }
     }
 }

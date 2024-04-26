@@ -75,7 +75,7 @@ namespace MVS.Helios
                             var obj = HeliosObjectList.Find(x =>
                                 x.ObjectInfo.ObjectID.ClientInstanceID ==
                                 (int)objectInfo.ObjectID.ClientInstanceID);
-                            obj.ObjectInfo = objectInfo;
+                            obj.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
                             // obj.hasInstanceId = true;
                         }
                         else
@@ -120,8 +120,6 @@ namespace MVS.Helios
                     break;
                 case (int)Protocol.EventCode.Rpc:
                     var dataRpc = Packs.Parser.ParseFrom(eventData.FixedData).CRpc;
-                    // RealtimeClient.MVSDebug(DebugLevel.INFO, $"CI : {dataRpc.ObjectID.ClientInstanceID}, ID : {dataRpc.ObjectID.InstanceID}");
-                    // var rpcObj = FindObjectById(dataRpc.ObjectID);
                     var rpcObj = FindObjectById(dataRpc.ObjectID.InstanceID);
                     rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());
                     break;

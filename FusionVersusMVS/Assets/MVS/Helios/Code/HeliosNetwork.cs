@@ -397,7 +397,6 @@ namespace MVS.Helios
                 HeliosObjectList.Add(go.GetComponent<HeliosObject>());
                 go.GetComponent<HeliosObject>().ClientInstanceId = (uint)HeliosObjectList.LastIndexOf(go.GetComponent<HeliosObject>());
                 instantiateParams.clientInstanceID = go.GetComponent<HeliosObject>().ClientInstanceId;
-                Debug.Log(instantiateParams.clientInstanceID);
                 SendInstantiate(instantiateParams, isRoomObject);
             }
             else
@@ -492,10 +491,6 @@ namespace MVS.Helios
                     obj.GetComponent<HeliosTransform>().networkScale = scale;
                 }
             }
-            
-            Debug.Log(objectInfo.ObjectID.InstanceID);
-            Debug.Log(objectInfo.ObjectID.ClientInstanceID);
-            Debug.Log(objectInfo.CustomData.Count);
             FindObjectById(id).ObjectInfo = objectInfo;
             FindObjectById(id).UpdateCustomData();
         }
