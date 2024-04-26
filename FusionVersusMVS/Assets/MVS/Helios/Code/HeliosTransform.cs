@@ -72,6 +72,7 @@ namespace MVS.Helios
                     {
                         PrefabID = GetComponent<HeliosObject>().PrefabId,
                         InstanceID = GetComponent<HeliosObject>().InstanceId,
+                        ClientInstanceID = GetComponent<HeliosObject>().ClientInstanceId,
                     },
                     SyncType = ObjectSyncType.PersonalOwn,
                     OwnerPlayerID = HeliosNetwork.LocalPlayer.UserId

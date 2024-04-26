@@ -272,11 +272,12 @@ namespace MVS.Helios
         }
         
         // TODO : RPC
-        public static bool RPC(uint instanceID, string methodName, params object[] args)
+        public static bool RPC(ObjectID objectID, string methodName, params object[] args)
         {
+            // Debug.Log($"CI : {objectID.ClientInstanceID}, I : {objectID.InstanceID}");
             var fixedData = new C_RPC
             {
-                InstanceID = instanceID,
+                ObjectID = objectID,
                 MethodName = HeliosUtility.Compute64BitHash(methodName),
                 MethodArgs = ByteString.CopyFrom(HeliosUtility.SerializeParameters(args))
             };
@@ -386,40 +387,25 @@ namespace MVS.Helios
                 return null;
             }
 
-            if (go.activeSelf)
-            {
-                
-            }
-
             bool isLocalInstantiate = !instantiateEvent && LocalPlayer.Equals(instantiateParams.creator);
             
             // TODO : IF Local Instantiate
             if (isLocalInstantiate)
             {
                 go.GetComponent<HeliosObject>().IsMine = true;
+                go.GetComponent<HeliosObject>().ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
                 HeliosObjectList.Add(go.GetComponent<HeliosObject>());
-                foreach (var ho in go.GetComponentsInChildren<HeliosMonoBehavior>())
-                {
-                    // ho.FindHeliosVariable();
-                    HeliosObjectList.Add(ho);
-                    ho.ObjectInfo.ObjectID.ClientInstanceID = (uint)HeliosNetwork.HeliosObjectList.LastIndexOf(ho);
-                    ho.ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
-                    instantiateParams.clientInstanceID = ho.ObjectInfo.ObjectID.ClientInstanceID;
-                }
+                go.GetComponent<HeliosObject>().ClientInstanceId = (uint)HeliosObjectList.LastIndexOf(go.GetComponent<HeliosObject>());
+                instantiateParams.clientInstanceID = go.GetComponent<HeliosObject>().ClientInstanceId;
+                Debug.Log(instantiateParams.clientInstanceID);
                 SendInstantiate(instantiateParams, isRoomObject);
             }
             else
             {
                 go.GetComponent<HeliosObject>().InstanceId = instantiateParams.instanceId;
+                // go.GetComponent<HeliosObject>().hasInstanceId = true;
                 go.GetComponent<HeliosObject>().IsMine = false;
-                foreach (var ho in go.GetComponentsInChildren<HeliosMonoBehavior>())
-                {
-                    // ho.FindNetworkedVariables();
-                    // ho.FindRPCMethods();
-                    // HeliosObjectList.Add(ho);
-                    ho.ObjectInfo.ObjectID.ClientInstanceID = (uint)HeliosNetwork.HeliosObjectList.LastIndexOf(ho);
-                    ho.ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
-                }
+                go.GetComponent<HeliosObject>().ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
                 HeliosObjectList.Add(go.GetComponent<HeliosObject>());
             }
             

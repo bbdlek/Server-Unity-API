@@ -9,6 +9,8 @@ namespace MVS.Helios
         private uint _prefabId;
         [SerializeField]
         private uint _instanceId;
+        [SerializeField]
+        private uint _clientInstanceId;
 
         private HeliosMonoBehavior _views;
         
@@ -29,6 +31,16 @@ namespace MVS.Helios
             {
                 ObjectInfo.ObjectID.InstanceID = value;
                 _instanceId = value;
+            }
+        }
+        
+        public uint ClientInstanceId
+        {
+            get => _clientInstanceId;
+            set
+            {
+                ObjectInfo.ObjectID.ClientInstanceID = value;
+                _clientInstanceId = value;
             }
         }
         

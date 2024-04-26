@@ -15,6 +15,21 @@ namespace MVS.Helios
             return HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.InstanceID == (int)id);
         }
         
+        // public static HeliosMonoBehavior FindObjectById(ObjectID id)
+        // {
+        //     foreach (var heliosMonoBehavior in HeliosObjectList)
+        //     {
+        //         if (heliosMonoBehavior.hasInstanceId &&
+        //             heliosMonoBehavior.ObjectInfo.ObjectID.InstanceID == (int)id.InstanceID)
+        //             return heliosMonoBehavior;
+        //         if (!heliosMonoBehavior.hasInstanceId &&
+        //             heliosMonoBehavior.ObjectInfo.ObjectID.ClientInstanceID == (int)id.ClientInstanceID)
+        //             return heliosMonoBehavior;
+        //     }
+        //
+        //     return null;
+        // }
+        
         public static void AddCallbackTarget(object target)
         {
             RealtimeClient.AddCallbackTarget(target);
@@ -76,6 +91,7 @@ namespace MVS.Helios
                                 x.ObjectInfo.ObjectID.ClientInstanceID ==
                                 (int)objectInfo.ObjectID.ClientInstanceID);
                             obj.ObjectInfo = objectInfo;
+                            // obj.hasInstanceId = true;
                         }
                         else
                         {
@@ -85,17 +101,16 @@ namespace MVS.Helios
                             }
                             else
                             {
+                                // RealtimeClient.MVSDebug(DebugLevel.INFO, objectInfo.ObjectID.ClientInstanceID.ToString());
                                 var obj = HeliosObjectList.Find(x =>
                                     x.ObjectInfo.ObjectID.ClientInstanceID ==
                                     (int)objectInfo.ObjectID.ClientInstanceID);
                                 obj.GetComponent<HeliosObject>().InstanceId = objectInfo.ObjectID.InstanceID;
-                                // Debug.Log(obj.GetComponent<HeliosObject>().InstanceId);
+                                // obj.GetComponent<HeliosObject>().hasInstanceId = true;
                                 foreach (var heliosMonoBehavior in obj.GetComponentsInChildren<HeliosMonoBehavior>())
                                 {
                                     heliosMonoBehavior.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
-                                    // heliosMonoBehavior.FindNetworkedVariables();
-                                    // heliosMonoBehavior.FindRPCMethods();
-                                    // heliosMonoBehavior.FindHeliosVariable();
+                                    // heliosMonoBehavior.hasInstanceId = true;
                                 }
                             }   
                         }
@@ -120,7 +135,9 @@ namespace MVS.Helios
                     break;
                 case (int)Protocol.EventCode.Rpc:
                     var dataRpc = Packs.Parser.ParseFrom(eventData.FixedData).CRpc;
-                    var rpcObj = FindObjectById(dataRpc.InstanceID);
+                    // RealtimeClient.MVSDebug(DebugLevel.INFO, $"CI : {dataRpc.ObjectID.ClientInstanceID}, ID : {dataRpc.ObjectID.InstanceID}");
+                    // var rpcObj = FindObjectById(dataRpc.ObjectID);
+                    var rpcObj = FindObjectById(dataRpc.ObjectID.InstanceID);
                     rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());
                     break;
             }

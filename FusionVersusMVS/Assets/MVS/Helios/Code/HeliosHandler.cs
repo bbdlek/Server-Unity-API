@@ -89,14 +89,6 @@ namespace MVS.Helios
                 {
                     updateObject = ho.ObjectInfo;
                 }
-                // for (int i = 0; i < ho.heliosAttributes.Count; i++)
-                // {
-                //     if (ho.heliosAttributes[i].GetValue(ho) != ho.initialHeliosValues[i])
-                //     {
-                //         updateObject.CustomData.Add(ho.ObjectInfo.CustomData[i]);
-                //         ho.initialHeliosValues[i] = ho.heliosAttributes[i].GetValue(ho);
-                //     }
-                // }
 
                 for (int i = 0; i < ho.heliosAttributes.Count; i++)
                 {
@@ -123,15 +115,8 @@ namespace MVS.Helios
                             break;
                     }
                     ho.ObjectInfo.CustomData[i] = hv.ToByteString();
-                    updateObject.CustomData.Add(hv.ToByteString());
                     ho.initialHeliosValues[i] = ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]);
                 }
-                
-                // foreach (var variable in ho.HeliosVariableTable)
-                // {
-                //     updateObject.CustomData.Add(variable.GetValue().ToByteString());
-                //     variable.SetFlag(false);
-                // }
                 data.ObjectInfos.Add(updateObject);
                 HeliosNetwork.RaiseEvent(EventCode.PKT_C_UPDATE_NETWORK_OBJECTS, data);
             }

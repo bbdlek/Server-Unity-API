@@ -60,7 +60,7 @@ namespace MVS.Helios
         {
             if(ObjectInfo == null)
                 ObjectInfo = new ObjectInfo();
-             
+            
             FindNetworkedVariables();
             FindRPCMethods();
             
@@ -103,16 +103,16 @@ namespace MVS.Helios
 
         public void RPC(string methodName, params object[] args)
         {
-            // uint instanceID;
-            // if (GetComponent<HeliosObject>())
-            // {
-            //     instanceID = GetComponent<HeliosObject>().InstanceId;
-            // }
-            // else
-            // {
-            //     instanceID = ObjectInfo.ObjectID.InstanceID;
-            // }
-            HeliosNetwork.RPC(ObjectInfo.ObjectID.InstanceID, methodName, args);
+            ObjectID objectID;
+            if (GetComponent<HeliosObject>())
+            {
+                objectID = GetComponent<HeliosObject>().ObjectInfo.ObjectID;
+            }
+            else
+            {
+                objectID = ObjectInfo.ObjectID;
+            }
+            HeliosNetwork.RPC(objectID, methodName, args);
         }
 
         public void ExecuteRpc(ulong methodNameHash, byte[] methodArgs)
@@ -245,7 +245,6 @@ namespace MVS.Helios
 
         public void UpdateCustomData()
         {
-            HeliosMonoBehavior owner;
             for (int i = 0; i < ObjectInfo.CustomData.Count; i++)
             {
                 FieldInfo field = heliosAttributes[i];
