@@ -497,12 +497,7 @@ namespace MVS.Helios
 
         public static void NetworkRemoveObject(uint id)
         {
-            if (HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.InstanceID == id))
-            {
-                var obj = HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.InstanceID == id);
-                _prefabPool.Destroy(id);
-                // HeliosObjectList.Remove(obj);
-            }
+            _prefabPool.Destroy(id);
         }
         
         private static bool SendEventInternal(int eventCode, IMessage data, CustomDic customData = null)
