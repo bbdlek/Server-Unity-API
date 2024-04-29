@@ -17,11 +17,19 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     public int score3;
     [HNSync] public int test;
 
+    [HNSync] public Vector2 testVec2 = new Vector2(2, 3);
+
     [HeliosRPC(target: "ALL")]
     public void AddScore(int added1, int added2)
     {
         score2 += added1;
         score3 += added2;
+    }
+
+    [HeliosRPC("All")]
+    public void ChangeVec2()
+    {
+        testVec2.x++;
     }
 
     public void AddTest()
@@ -121,6 +129,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         if (Input.GetKeyDown(KeyCode.P))
         {
             RPC("AddScore", 3, 6);
+            RPC("ChangeVec2");
             // AddScore();
             AddTest();
         }

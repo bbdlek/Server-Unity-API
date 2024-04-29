@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
 
 namespace MVS.Helios.Utility
 {
@@ -19,13 +20,23 @@ namespace MVS.Helios.Utility
                 return default(T);
             }
 
-            IFormatter formatter = new BinaryFormatter();
-            using (MemoryStream stream = new MemoryStream())
+            try
             {
-                formatter.Serialize(stream, obj);
-                stream.Seek(0, SeekOrigin.Begin);
-                return (T)formatter.Deserialize(stream);
+                IFormatter formatter = new BinaryFormatter();
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    formatter.Serialize(stream, obj);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    return (T)formatter.Deserialize(stream);
+                }
             }
+            catch (Exception e)
+            {
+                // Debug.Log(e);
+                var newObject = obj;
+                return newObject;
+            }
+            
         }
     }
 }

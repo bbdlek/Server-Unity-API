@@ -5,6 +5,7 @@ using Protocol;
 using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
 using HeliosVariable = Protocol.HeliosVariable;
+using Vector3 = Protocol.Vector3;
 
 namespace MVS.Helios
 {
@@ -97,6 +98,31 @@ namespace MVS.Helios
                             break;
                         case string value:
                             hv.NString = value;
+                            break;
+                        case Vector2 value:
+                            hv.NVector = new Vector3
+                            {
+                                X = value.x,
+                                Y = value.y,
+                                Z = 0
+                            };
+                            break;
+                        case UnityEngine.Vector3 value:
+                            hv.NVector = new Vector3
+                            {
+                                X = value.x,
+                                Y = value.y,
+                                Z = value.z
+                            };
+                            break;
+                        case UnityEngine.Quaternion value:
+                            UnityEngine.Vector3 val = value.eulerAngles;
+                            hv.NVector = new Vector3
+                            {
+                                X = val.x,
+                                Y = val.y,
+                                Z = val.z
+                            };
                             break;
                     }
                     ho.ObjectInfo.CustomData[i] = hv.ToByteString();

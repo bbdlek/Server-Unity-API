@@ -131,6 +131,27 @@ namespace MVS.Helios
             }
         }
 
+        [Serializable]
+        private struct SerializableVector2
+        {
+            [SerializeField]
+            private float x;
+
+            [SerializeField]
+            private float y;
+            
+            public SerializableVector2(Vector2 vector)
+            {
+                x = vector.x;
+                y = vector.y;
+            }
+
+            public Vector2 ToVector2()
+            {
+                return new Vector2(x, y);
+            }
+        }
+
         public void FindNetworkedVariables()
         {
             var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -142,47 +163,62 @@ namespace MVS.Helios
                 if (attribute != null)
                 {
                     Protocol.HeliosVariable hv = new Protocol.HeliosVariable();
-                        
+                    var obj = field.GetValue(this);
                     if (field.FieldType == typeof(int))
                     {
-                        hv.NInt32 = (int)field.GetValue(this);
+                        hv.NInt32 = (int)obj;
                     }
                     else if(field.FieldType == typeof(long))
                     {
-                        hv.NInt64 = (long)field.GetValue(this);
+                        hv.NInt64 = (long)obj;
                     }
                     else if(field.FieldType == typeof(float))
                     {
-                        hv.NFloat = (float)field.GetValue(this);
+                        hv.NFloat = (float)obj;
                     }
                     else if(field.FieldType == typeof(double))
                     {
-                        hv.NDouble = (double)field.GetValue(this);
+                        hv.NDouble = (double)obj;
                     }
                     else if(field.FieldType == typeof(bool))
                     {
-                        hv.NBool = (bool)field.GetValue(this);
+                        hv.NBool = (bool)obj;
                     }
                     else if(field.FieldType == typeof(string))
                     {
-                        hv.NString = (string)field.GetValue(this);
+                        hv.NString = (string)obj;
+                    }
+                    else if(field.FieldType == typeof(Vector2))
+                    {
+                        var v = (Vector2)obj;
+                        hv.NVector = new Protocol.Vector3
+                        {
+                            X = v.x,
+                            Y = v.y,
+                            Z = 0
+                        };
                     }
                     else if(field.FieldType == typeof(Vector3))
                     {
-                        Vector3 v = (Vector3)field.GetValue(this);
-                        hv.NVector.X = v.x;
-                        hv.NVector.Y = v.y;
-                        hv.NVector.Z = v.z;
+                        Vector3 v = (Vector3)obj;
+                        hv.NVector = new Protocol.Vector3
+                        {
+                            X = v.x,
+                            Y = v.y,
+                            Z = v.z
+                        };
                     }
                     else if(field.FieldType == typeof(Quaternion))
                     {
-                        Quaternion q = (Quaternion)field.GetValue(this);
+                        Quaternion q = (Quaternion)obj;
                         Vector3 v = q.eulerAngles;
-                        hv.NVector.X = v.x;
-                        hv.NVector.Y = v.y;
-                        hv.NVector.Z = v.z;
+                        hv.NVector = new Protocol.Vector3
+                        {
+                            X = v.x,
+                            Y = v.y,
+                            Z = v.z
+                        };
                     }
-                    var obj = field.GetValue(this);
                     if (GetComponent<HeliosObject>())
                     {
                         var ho = GetComponent<HeliosObject>();
@@ -268,14 +304,32 @@ namespace MVS.Helios
                     case Protocol.HeliosVariable.ValueOneofCase.NString:
                         field.SetValue(attributeMonoBehaviors[i], Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NString);
                         break;
-                    // case Protocol.HeliosVariable.ValueOneofCase.NVector:
-                    //     if (HeliosVariableTable[i] is HNVector hnVectorVariable)
-                    //         hnVectorVariable.Value =
-                    //             Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector;
-                    //     else if (HeliosVariableTable[i] is HNQuaternion hnQuaternionVariable)
-                    //         hnQuaternionVariable.Value =
-                    //             Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector;
-                    //     break;
+                    case Protocol.HeliosVariable.ValueOneofCase.NVector:
+                        if (field.FieldType == typeof(Vector2))
+                        {
+                            Vector2 val =
+                                new Vector2(
+                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.X,
+                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.Y);
+                            field.SetValue(attributeMonoBehaviors[i], val);
+                        } else if (field.FieldType == typeof(UnityEngine.Vector3))
+                        {
+                            UnityEngine.Vector3 val =
+                                new Vector3(
+                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.X,
+                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.Y,
+                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.Z);
+                            field.SetValue(attributeMonoBehaviors[i], val);
+                        } else if (field.FieldType == typeof(Quaternion))
+                        {
+                            UnityEngine.Vector3 val =
+                                new Vector3(
+                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.X,
+                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.Y,
+                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.Z);
+                            field.SetValue(attributeMonoBehaviors[i], Quaternion.Euler(val));
+                        }
+                        break;
                 }
 
                 initialHeliosValues[i] = field.GetValue(attributeMonoBehaviors[i]);
