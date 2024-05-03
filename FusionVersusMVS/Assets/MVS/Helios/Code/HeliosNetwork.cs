@@ -369,7 +369,8 @@ namespace MVS.Helios
                 clientInstanceID = objectInfo.ObjectID.ClientInstanceID,
                 position = position,
                 rotation = rotation,
-                creator = CurrentRoom.GetPlayer(objectInfo.OwnerPlayerID)
+                creator = CurrentRoom.GetPlayer(objectInfo.OwnerPlayerID),
+                ObjectInfo = objectInfo
             };
             return NetworkInstantiate(instantiateParams, false, true);
         }
@@ -394,17 +395,58 @@ namespace MVS.Helios
             {
                 go.GetComponent<HeliosObject>().IsMine = true;
                 go.GetComponent<HeliosObject>().ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
+                go.GetComponent<HeliosObject>().ObjectInfo.OwnerPlayerID = instantiateParams.creator.UserId;
+                go.GetComponent<HeliosObject>().ObjectInfo.ObjectID.PrefabID = instantiateParams.prefabId;
                 HeliosObjectList.Add(go.GetComponent<HeliosObject>());
                 go.GetComponent<HeliosObject>().ClientInstanceId = (uint)HeliosObjectList.LastIndexOf(go.GetComponent<HeliosObject>());
                 instantiateParams.clientInstanceID = go.GetComponent<HeliosObject>().ClientInstanceId;
+                go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+                {
+                    Key = CustomVariables.GetKeyByName("position"),
+                    NVector = new Protocol.Vector3
+                    {
+                        X = instantiateParams.position.x,
+                        Y = instantiateParams.position.y,
+                        Z = instantiateParams.position.z
+                    }
+                });
+                go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+                {
+                    Key = CustomVariables.GetKeyByName("rotation"),
+                    NVector = new Protocol.Vector3
+                    {
+                        X = instantiateParams.rotation.x,
+                        Y = instantiateParams.rotation.y,
+                        Z = instantiateParams.rotation.z
+                    }
+                });
+                go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+                {
+                    Key = CustomVariables.GetKeyByName("scale"),
+                    NVector = new Protocol.Vector3
+                    {
+                        X = 1,
+                        Y = 1,
+                        Z = 1
+                    }
+                });
                 SendInstantiate(instantiateParams, isRoomObject);
             }
             else
             {
-                go.GetComponent<HeliosObject>().InstanceId = instantiateParams.instanceId;
-                // go.GetComponent<HeliosObject>().hasInstanceId = true;
                 go.GetComponent<HeliosObject>().IsMine = false;
+                go.GetComponent<HeliosObject>().ObjectInfo = instantiateParams.ObjectInfo;
+                go.GetComponent<HeliosObject>().InstanceId = instantiateParams.instanceId;
                 go.GetComponent<HeliosObject>().ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
+                go.GetComponent<HeliosObject>().ObjectInfo.OwnerPlayerID = instantiateParams.creator.UserId;
+                go.GetComponent<HeliosObject>().ObjectInfo.ObjectID.PrefabID = instantiateParams.prefabId;
+                go.GetComponent<HeliosObject>().ClientInstanceId = instantiateParams.clientInstanceID;
+                foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
+                {
+                    heliosMonoBehavior.FindNetworkedVariables();
+                    heliosMonoBehavior.FindRPCMethods();
+                }
+                go.GetComponent<HeliosObject>().UpdateCustomData();
                 HeliosObjectList.Add(go.GetComponent<HeliosObject>());
             }
             

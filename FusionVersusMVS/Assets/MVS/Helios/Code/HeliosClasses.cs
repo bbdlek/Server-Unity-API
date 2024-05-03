@@ -6,6 +6,7 @@ using Google.Protobuf;
 using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
+using UnityEditor;
 using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
 using Vector3 = UnityEngine.Vector3;
@@ -152,8 +153,14 @@ namespace MVS.Helios
             }
         }
 
+        private bool _isFindNetworkedVariables = false;
+        private bool _isFindRPC = false;
+        
         public void FindNetworkedVariables()
         {
+            if(_isFindNetworkedVariables) return;
+            _isFindNetworkedVariables = true;
+            Debug.Log("FindNetworkedVariables");
             var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             foreach (var field in fields)
@@ -225,12 +232,15 @@ namespace MVS.Helios
                         attribute.Owner = ho;
                         
                         //ATTRIBUTE
-                        ho.heliosAttributes.Add(field);
+                        if(!ho.heliosAttributes.Contains(field))
+                            ho.heliosAttributes.Add(field);
+                        
                         ho.attributeMonoBehaviors.Add(this);
                         ho.initialHeliosValues.Add(DeepCopyHelper.DeepCopy(obj));
                         
                         //HELIOSVARIABLE
                         ho.ObjectInfo.CustomData.Add(hv.ToByteString());
+                        Debug.Log("Addddddd");
                     }
                     else
                     {
@@ -243,6 +253,7 @@ namespace MVS.Helios
                         
                         //HELIOSVARIABLE
                         ObjectInfo.CustomData.Add(hv.ToByteString());
+                        Debug.Log("Addddddd");
                     }
                 }
             }
@@ -250,6 +261,8 @@ namespace MVS.Helios
 
         public void FindRPCMethods()
         {
+            if(_isFindRPC) return;
+            _isFindRPC = true;
             Type classType = GetType();
             MethodInfo[] methods = classType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
@@ -281,7 +294,7 @@ namespace MVS.Helios
 
         public void UpdateCustomData()
         {
-            for (int i = 0; i < ObjectInfo.CustomData.Count; i++)
+            for (int i = 0; i < heliosAttributes.Count; i++)
             {
                 FieldInfo field = heliosAttributes[i];
                 switch (Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).ValueCase)

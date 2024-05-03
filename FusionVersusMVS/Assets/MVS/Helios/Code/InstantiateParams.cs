@@ -1,5 +1,7 @@
 using MVS.Realtime;
+using Protocol;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 namespace MVS.Helios
 {
@@ -20,8 +22,9 @@ namespace MVS.Helios
         public Quaternion rotation;
         public Player creator;
         public InstantiateState state;
+        public ObjectInfo ObjectInfo;
         
-        public InstantiateParams(uint prefabId, uint instanceId, uint clientInstanceID, Vector3 position, Quaternion rotation, Player creator, InstantiateState state)
+        public InstantiateParams(uint prefabId, uint instanceId, uint clientInstanceID, Vector3 position, Quaternion rotation, Player creator, InstantiateState state, ObjectInfo objectInfo)
         {
             this.prefabId = prefabId;
             this.instanceId = instanceId;
@@ -30,6 +33,7 @@ namespace MVS.Helios
             this.rotation = rotation;
             this.creator = creator;
             this.state = state;
+            ObjectInfo = objectInfo;
         }
     }
 }

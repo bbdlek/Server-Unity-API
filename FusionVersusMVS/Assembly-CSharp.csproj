@@ -85,6 +85,7 @@
      <Compile Include="Assets/MVS/Realtime/MVSWebGLSocket.cs" />
      <Compile Include="Assets/MVS/3rd-party/Google.Protobuf/CodedOutputStream.ComputeSize.cs" />
      <Compile Include="Assets/MVS/3rd-party/Google.Protobuf/Extension.cs" />
+     <Compile Include="Assets/1_Scripts/8_HeliosTest/CubeTest2.cs" />
      <Compile Include="Assets/MVS/3rd-party/Google.Protobuf/Compiler/Plugin.pb.cs" />
      <Compile Include="Assets/MVS/3rd-party/Google.Protobuf/Reflection/MethodDescriptor.cs" />
      <Compile Include="Assets/MVS/Helios/Code/Utility/DeepCopyHelper.cs" />
