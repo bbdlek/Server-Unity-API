@@ -19,6 +19,20 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     [HNSync] public Vector2 testVec2 = new Vector2(2, 3);
 
+    [HNSync] public List<int> testList = new List<int>(){1, 2, 3};
+    
+    [HNSync] public Color color = new Color();
+    [HNSync] public Color32 color32 = new Color32();
+
+    [HNSync] public Dictionary<int, string> testDic = new Dictionary<int, string>();
+
+    public enum EnumTest
+    {
+        test1, test2
+    }
+
+    [HNSync] public EnumTest enumTest = EnumTest.test1;
+
     [HeliosRPC(target: "ALL")]
     public void AddScore(int added1, int added2)
     {
@@ -30,11 +44,15 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     public void ChangeVec2()
     {
         testVec2.x++;
+        Debug.Log(testDic[0]);
     }
 
     public void AddTest()
     {
         test++; 
+        testList.Add(10);
+        testDic[0] = test.ToString();
+        enumTest = EnumTest.test2;
     }
 
     [Command]

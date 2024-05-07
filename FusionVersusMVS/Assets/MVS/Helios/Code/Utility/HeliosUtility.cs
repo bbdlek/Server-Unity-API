@@ -1,8 +1,11 @@
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
+using Google.Protobuf;
+using UnityEngine;
 
 namespace MVS.Helios.Utility
 {
@@ -38,6 +41,42 @@ namespace MVS.Helios.Utility
             {
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
                 return (object[])binaryFormatter.Deserialize(memoryStream);
+            }
+        }
+        
+        public static ByteString ObjectToBytes(object obj)
+        {
+            var binFormatter = new BinaryFormatter();
+            var mStream = new MemoryStream();
+            if(obj.GetType().IsSerializable)
+                binFormatter.Serialize(mStream, obj);
+            else
+            {
+                UnityEngine.Debug.Log("Can't Serialize");
+                return null;
+            }
+
+            return ByteString.CopyFrom(mStream.ToArray());
+            
+            // int iSize = Marshal.SizeOf(obj);
+            //
+            // byte[] arr = new byte[iSize];
+            //
+            // IntPtr ptr = Marshal.AllocHGlobal(iSize);
+            // Marshal.StructureToPtr(obj, ptr, false);
+            // Marshal.Copy(ptr, arr, 0, iSize);
+            // Marshal.FreeHGlobal(ptr);
+            //
+            // return ByteString.CopyFrom(arr);
+        }
+
+        public static object ByteToObject(ByteString buffer)
+        {
+            Debug.Log(buffer.Length);
+            using (MemoryStream memoryStream = new MemoryStream(buffer.ToByteArray()))
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                return binaryFormatter.Deserialize(memoryStream);
             }
         }
     }

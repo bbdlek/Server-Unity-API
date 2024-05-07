@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using Google.Protobuf;
 using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
-using UnityEditor;
 using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
 using Vector3 = UnityEngine.Vector3;
@@ -72,36 +70,6 @@ namespace MVS.Helios
             }
         }
 
-        private ByteString ObjectToBytes(object obj)
-        {
-            int iSize = Marshal.SizeOf(obj);
-
-            byte[] arr = new byte[iSize];
-
-            IntPtr ptr = Marshal.AllocHGlobal(iSize);
-            Marshal.StructureToPtr(obj, ptr, false);
-            Marshal.Copy(ptr, arr, 0, iSize);
-            Marshal.FreeHGlobal(ptr);
-            
-            return ByteString.CopyFrom(arr);
-        }
-
-        private T ByteToObject<T>(ByteString buffer)
-        {
-            int size = Marshal.SizeOf(typeof(T));
-
-            if (size > buffer.Length)
-            {
-                throw new Exception();
-            }
-
-            IntPtr ptr = Marshal.AllocHGlobal(size);
-            Marshal.Copy(buffer.ToByteArray(), 0, ptr, size);
-            T obj = (T)Marshal.PtrToStructure(ptr, typeof(T));
-            Marshal.FreeHGlobal(ptr);
-            return obj;
-        }
-
         public void RPC(string methodName, params object[] args)
         {
             ObjectID objectID;
@@ -132,27 +100,6 @@ namespace MVS.Helios
             }
         }
 
-        [Serializable]
-        private struct SerializableVector2
-        {
-            [SerializeField]
-            private float x;
-
-            [SerializeField]
-            private float y;
-            
-            public SerializableVector2(Vector2 vector)
-            {
-                x = vector.x;
-                y = vector.y;
-            }
-
-            public Vector2 ToVector2()
-            {
-                return new Vector2(x, y);
-            }
-        }
-
         private bool _isFindNetworkedVariables = false;
         private bool _isFindRPC = false;
         
@@ -160,7 +107,6 @@ namespace MVS.Helios
         {
             if(_isFindNetworkedVariables) return;
             _isFindNetworkedVariables = true;
-            Debug.Log("FindNetworkedVariables");
             var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             foreach (var field in fields)
@@ -226,6 +172,24 @@ namespace MVS.Helios
                             Z = v.z
                         };
                     }
+                    else
+                    {
+                        if (field.FieldType.IsSerializable)
+                        {
+                            hv.NCustom = HeliosUtility.ObjectToBytes(obj);   
+                        }
+                        else
+                        {
+                            if (field.FieldType == typeof(Color))
+                            {
+                                obj = ColorUtility.ToHtmlStringRGBA((Color)obj);
+                            } 
+                            else if (field.FieldType == typeof(Color32))
+                            {
+                                obj = ColorUtility.ToHtmlStringRGBA((Color32)obj);
+                            }
+                        }
+                    }
                     if (GetComponent<HeliosObject>())
                     {
                         var ho = GetComponent<HeliosObject>();
@@ -240,7 +204,6 @@ namespace MVS.Helios
                         
                         //HELIOSVARIABLE
                         ho.ObjectInfo.CustomData.Add(hv.ToByteString());
-                        Debug.Log("Addddddd");
                     }
                     else
                     {
@@ -253,7 +216,6 @@ namespace MVS.Helios
                         
                         //HELIOSVARIABLE
                         ObjectInfo.CustomData.Add(hv.ToByteString());
-                        Debug.Log("Addddddd");
                     }
                 }
             }
@@ -342,6 +304,23 @@ namespace MVS.Helios
                                     (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.Z);
                             field.SetValue(attributeMonoBehaviors[i], Quaternion.Euler(val));
                         }
+                        break;
+                    default:
+                        Debug.Log($"Unsupported Type : {field.FieldType} - {field.Name}");
+                        var value = HeliosUtility.ByteToObject(Protocol.HeliosVariable.Parser
+                            .ParseFrom(ObjectInfo.CustomData[i]).NCustom);
+                        if (field.FieldType == typeof(Color))
+                        {
+                            ColorUtility.TryParseHtmlString("#" + value, out Color loadedColor);
+                            value = loadedColor;
+                        }
+                        else if (field.FieldType == typeof(Color32))
+                        {
+                            ColorUtility.TryParseHtmlString("#" + value, out Color loadedColor);
+                            value = (Color32)loadedColor;
+                        }
+                        field.SetValue(attributeMonoBehaviors[i], value);
+
                         break;
                 }
 

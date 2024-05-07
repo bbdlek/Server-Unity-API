@@ -60,6 +60,7 @@ namespace MVS.Helios
                                 var obj = HeliosObjectList.Find(x =>
                                     x.ObjectInfo.ObjectID.ClientInstanceID == objectInfo.ObjectID.ClientInstanceID);
                                 obj.ObjectInfo = objectInfo;
+                                RealtimeClient.RealtimePeer.Listener.MVSDebug(DebugLevel.INFO,  $"Count {objectInfo.CustomData.Count.ToString()}");
                                 obj.UpdateCustomData();
                                 break;
                         }
@@ -144,6 +145,7 @@ namespace MVS.Helios
                             obj.ObjectInfo.SyncType = ObjectSyncType.GlobalOwn;
                             obj.ObjectInfo.OwnerPlayerID = 0;
                             pkt.ObjectInfos.Add(obj.ObjectInfo);
+                            RealtimeClient.RealtimePeer.Listener.MVSDebug(DebugLevel.INFO, obj.ObjectInfo.CustomData.Count.ToString());
                         }
                         RaiseEvent(EventCode.PKT_C_ADD_NETWORK_OBJECTS, pkt);
                     }

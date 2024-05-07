@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Google.Protobuf;
+using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
 using UnityEngine;
@@ -132,6 +133,27 @@ namespace MVS.Helios
                                 Y = val.y,
                                 Z = val.z
                             };
+                            break;
+                        default:
+                            if (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]) is Color)
+                            {
+                                hv.NCustom = HeliosUtility.ObjectToBytes(ColorUtility.ToHtmlStringRGBA((Color)ho
+                                    .heliosAttributes[i]
+                                    .GetValue(ho.attributeMonoBehaviors[i])));
+                            }
+                            else if (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]) is Color32)
+                            {
+                                hv.NCustom = HeliosUtility.ObjectToBytes(ColorUtility.ToHtmlStringRGBA((Color32)ho
+                                    .heliosAttributes[i]
+                                    .GetValue(ho.attributeMonoBehaviors[i])));
+                            }
+                            else
+                            {
+                                hv.NCustom =
+                                    HeliosUtility.ObjectToBytes(ho.heliosAttributes[i]
+                                        .GetValue(ho.attributeMonoBehaviors[i]));    
+                            }
+                            
                             break;
                     }
                     ho.ObjectInfo.CustomData[i] = hv.ToByteString();
