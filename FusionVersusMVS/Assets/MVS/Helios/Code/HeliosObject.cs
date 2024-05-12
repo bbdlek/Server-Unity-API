@@ -1,3 +1,4 @@
+using Protocol;
 using UnityEngine;
 
 namespace MVS.Helios
@@ -11,8 +12,6 @@ namespace MVS.Helios
         private uint _instanceId;
         [SerializeField]
         private uint _clientInstanceId;
-
-        private HeliosMonoBehavior _views;
         
         public uint PrefabId
         {

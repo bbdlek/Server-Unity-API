@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
-using Google.Protobuf;
 using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
 using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
+using HeliosVariable = Protocol.HeliosVariable;
 using Vector3 = UnityEngine.Vector3;
 
 namespace MVS.Helios
@@ -18,18 +19,34 @@ namespace MVS.Helios
             get
             {
                 bool b = false;
-                for (int i = 0; i < heliosAttributes.Count; i++)
+                if (heliosAttributes.Count == 0) return false;
+                for (int i = CustomVariables.GetKeyByName("scale") + 1; i < heliosAttributes.Count + CustomVariables.GetKeyByName("scale") + 1; i++)
                 {
-                    if (!heliosAttributes[i].GetValue(attributeMonoBehaviors[i]).Equals(initialHeliosValues[i]))
-                        b = true;
+                    if (HeliosUtility.IsListType(heliosAttributes[i].FieldType))
+                    {
+                        b = !HeliosUtility.CheckListEquals(heliosAttributes[i].GetValue(attributeMonoBehaviors[i]),
+                            initialHeliosValues[i]);
+                    }
+                    else 
+                    {
+                        try
+                        {
+                            if (!heliosAttributes[i].GetValue(attributeMonoBehaviors[i]).Equals(initialHeliosValues[i]))
+                                b = true;
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.Log(e);
+                        }
+                    }
                 }
                 return b;
             }
         }
 
-        public List<FieldInfo> heliosAttributes = new List<FieldInfo>();
-        public List<HeliosMonoBehavior> attributeMonoBehaviors = new List<HeliosMonoBehavior>();
-        public List<object> initialHeliosValues = new List<object>();
+        public Dictionary<int, FieldInfo> heliosAttributes = new Dictionary<int, FieldInfo>();
+        public Dictionary<int, HeliosMonoBehavior> attributeMonoBehaviors = new Dictionary<int, HeliosMonoBehavior>();
+        public Dictionary<int, object> initialHeliosValues = new Dictionary<int, object>();
 
         public Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior, string>> RPCMethods =
             new Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior, string>>();
@@ -40,7 +57,6 @@ namespace MVS.Helios
             ObjectID = new ObjectID(),
             SyncType = ObjectSyncType.GlobalOwn,
             OwnerPlayerID = 0,
-            CustomValues = null
         };
         
         public bool IsMine
@@ -108,7 +124,7 @@ namespace MVS.Helios
             if(_isFindNetworkedVariables) return;
             _isFindNetworkedVariables = true;
             var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
+            
             foreach (var field in fields)
             {
                 HNSyncAttribute attribute =
@@ -182,11 +198,13 @@ namespace MVS.Helios
                         {
                             if (field.FieldType == typeof(Color))
                             {
-                                obj = ColorUtility.ToHtmlStringRGBA((Color)obj);
+                                var objColor = ColorUtility.ToHtmlStringRGBA((Color)obj);
+                                hv.NCustom = HeliosUtility.ObjectToBytes(objColor); 
                             } 
                             else if (field.FieldType == typeof(Color32))
                             {
-                                obj = ColorUtility.ToHtmlStringRGBA((Color32)obj);
+                                var objColor32 = ColorUtility.ToHtmlStringRGBA((Color32)obj);
+                                hv.NCustom = HeliosUtility.ObjectToBytes(objColor32); 
                             }
                         }
                     }
@@ -195,31 +213,81 @@ namespace MVS.Helios
                         var ho = GetComponent<HeliosObject>();
                         attribute.Owner = ho;
                         
-                        //ATTRIBUTE
-                        if(!ho.heliosAttributes.Contains(field))
-                            ho.heliosAttributes.Add(field);
-                        
-                        ho.attributeMonoBehaviors.Add(this);
-                        ho.initialHeliosValues.Add(DeepCopyHelper.DeepCopy(obj));
-                        
                         //HELIOSVARIABLE
-                        ho.ObjectInfo.CustomData.Add(hv.ToByteString());
+                        var key = ho.ObjectInfo.TestValues.Count;
+                        if (key == 0)
+                        {
+                            ho.ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+                            {
+                                Key = CustomVariables.GetKeyByName("position"),
+                                NVector = new Protocol.Vector3
+                                {
+                                    X = 0,
+                                    Y = 0,
+                                    Z = 0
+                                }
+                            });
+                            ho.ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+                            {
+                                Key = CustomVariables.GetKeyByName("rotation"),
+                                NVector = new Protocol.Vector3
+                                {
+                                    X = 0,
+                                    Y = 0,
+                                    Z = 0
+                                }
+                            });
+                            ho.ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+                            {
+                                Key = CustomVariables.GetKeyByName("scale"),
+                                NVector = new Protocol.Vector3
+                                {
+                                    X = 1,
+                                    Y = 1,
+                                    Z = 1
+                                }
+                            });
+                        }
+                        key = ho.ObjectInfo.TestValues.Count;
+                        hv.Key = key;
+                        if(!ho.ObjectInfo.TestValues.Contains(hv))
+                            ho.ObjectInfo.TestValues.Add(hv);
+                        
+                        //ATTRIBUTE
+                        ho.heliosAttributes.TryAdd(key, field);
+                        
+                        ho.attributeMonoBehaviors.TryAdd(key, this);
+                        
+                        ho.initialHeliosValues.TryAdd(key, DeepCopyHelper.DeepCopy(obj));
                     }
                     else
                     {
                         attribute.Owner = this;
                         
-                        //ATTRIBUTE
-                        heliosAttributes.Add(field);
-                        attributeMonoBehaviors.Add(this);
-                        initialHeliosValues.Add(DeepCopyHelper.DeepCopy(obj));
-                        
                         //HELIOSVARIABLE
-                        ObjectInfo.CustomData.Add(hv.ToByteString());
+                        int requiredCount = CustomVariables.GetKeyByName("scale") + 2;
+                        int currentCount = ObjectInfo.TestValues.Count;
+
+                        if (currentCount < requiredCount)
+                        {
+                            int elementsToAdd = requiredCount - currentCount - 1;
+                            ObjectInfo.TestValues.AddRange(Enumerable.Repeat(new HeliosVariable(), elementsToAdd));
+                        }
+                        
+                        var key = ObjectInfo.TestValues.Count;
+                        hv.Key = key;
+                        
+                        ObjectInfo.TestValues.Add(hv);
+                        
+                        //ATTRIBUTE
+                        heliosAttributes.TryAdd(key, field);
+                        attributeMonoBehaviors.TryAdd(key, this);
+                        initialHeliosValues.TryAdd(key, DeepCopyHelper.DeepCopy(obj));
                     }
                 }
             }
         }
+        
 
         public void FindRPCMethods()
         {
@@ -254,61 +322,61 @@ namespace MVS.Helios
             }
         }
 
-        public void UpdateCustomData()
+        public void UpdateCustomData(ObjectInfo updatedObjectInfo)
         {
-            for (int i = 0; i < heliosAttributes.Count; i++)
+            foreach (var customData in updatedObjectInfo.TestValues)
             {
-                FieldInfo field = heliosAttributes[i];
-                switch (Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).ValueCase)
+                var key = customData.Key;
+                if(key < 3) continue;
+                var field = heliosAttributes[key];
+                switch (customData.ValueCase)
                 {
                     case Protocol.HeliosVariable.ValueOneofCase.NInt32:
-                        field.SetValue(attributeMonoBehaviors[i], Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NInt32);
+                        field.SetValue(attributeMonoBehaviors[key], customData.NInt32);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NInt64:
-                        field.SetValue(attributeMonoBehaviors[i], Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NInt64); 
+                        field.SetValue(attributeMonoBehaviors[key], customData.NInt64); 
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NFloat:
-                        field.SetValue(attributeMonoBehaviors[i], Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NFloat);
+                        field.SetValue(attributeMonoBehaviors[key], customData.NFloat);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NBool:
-                        field.SetValue(attributeMonoBehaviors[i], Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NBool);
+                        field.SetValue(attributeMonoBehaviors[key], customData.NBool);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NDouble:
-                        field.SetValue(attributeMonoBehaviors[i], Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NDouble);
+                        field.SetValue(attributeMonoBehaviors[key], customData.NDouble);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NString:
-                        field.SetValue(attributeMonoBehaviors[i], Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NString);
+                        field.SetValue(attributeMonoBehaviors[key], customData.NString);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NVector:
                         if (field.FieldType == typeof(Vector2))
                         {
                             Vector2 val =
                                 new Vector2(
-                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.X,
-                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.Y);
-                            field.SetValue(attributeMonoBehaviors[i], val);
+                                    (float)customData.NVector.X,
+                                    (float)customData.NVector.Y);
+                            field.SetValue(attributeMonoBehaviors[key], val);
                         } else if (field.FieldType == typeof(UnityEngine.Vector3))
                         {
                             UnityEngine.Vector3 val =
                                 new Vector3(
-                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.X,
-                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.Y,
-                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.Z);
-                            field.SetValue(attributeMonoBehaviors[i], val);
+                                    (float)customData.NVector.X,
+                                    (float)customData.NVector.Y,
+                                    (float)customData.NVector.Z);
+                            field.SetValue(attributeMonoBehaviors[key], val);
                         } else if (field.FieldType == typeof(Quaternion))
                         {
                             UnityEngine.Vector3 val =
                                 new Vector3(
-                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.X,
-                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.Y,
-                                    (float)Protocol.HeliosVariable.Parser.ParseFrom(ObjectInfo.CustomData[i]).NVector.Z);
-                            field.SetValue(attributeMonoBehaviors[i], Quaternion.Euler(val));
+                                    (float)customData.NVector.X,
+                                    (float)customData.NVector.Y,
+                                    (float)customData.NVector.Z);
+                            field.SetValue(attributeMonoBehaviors[key], Quaternion.Euler(val));
                         }
                         break;
                     default:
-                        Debug.Log($"Unsupported Type : {field.FieldType} - {field.Name}");
-                        var value = HeliosUtility.ByteToObject(Protocol.HeliosVariable.Parser
-                            .ParseFrom(ObjectInfo.CustomData[i]).NCustom);
+                        var value = HeliosUtility.ByteToObject(customData.NCustom);
                         if (field.FieldType == typeof(Color))
                         {
                             ColorUtility.TryParseHtmlString("#" + value, out Color loadedColor);
@@ -319,12 +387,10 @@ namespace MVS.Helios
                             ColorUtility.TryParseHtmlString("#" + value, out Color loadedColor);
                             value = (Color32)loadedColor;
                         }
-                        field.SetValue(attributeMonoBehaviors[i], value);
-
+                        field.SetValue(attributeMonoBehaviors[key], value);
                         break;
                 }
-
-                initialHeliosValues[i] = field.GetValue(attributeMonoBehaviors[i]);
+            initialHeliosValues[key] = field.GetValue(attributeMonoBehaviors[key]);
             }
         }
     }

@@ -1,0 +1,82 @@
+syntax = "proto3";
+package Protocol; 
+
+// 패킷 변수만 갖고는 실패 이유를 알기 어려우므로 Enum 을 통해 실패 이유를 전달
+// 여기에 실패의 이유를 적는 Enum 을 추후에 컨텐츠 별로 추가하자.
+enum Result
+{
+	SUCCESS = 0;
+	FAILED = 1;
+
+	// Room 관련 성공
+	SUCCESS_ROOM_CREATE = 2;
+	SUCCESS_ROOM_JOINED = 3;
+
+	// Group 관련 성공
+	SUCCESS_GROUP_CREATE = 4;
+	SUCCESS_GROUP_JOINED = 5;
+
+	// Room 관련 에러
+	FAILED_ROOM_NOT_EXISTS_ROOM = 10;
+	FAILED_ROOM_ALREADY_EXISTS_ROOM = 11;
+	FAILED_ROOM_NOT_IN_ROOM = 12; // Player 가 Room 에 들어와 있지 않음
+
+	// Group 관련 에러
+	FAILED_GROUP_NOT_EXISTS_GROUP = 20; // 찾는 그룹이 존재하지 않음
+	FAILED_GROUP_NOT_IN_GROUP = 21; // 현재 Player 가 그룹 내에 있지 않음
+	FAILED_GROUP_ALREADY_EXISTS_GROUP = 22; // 추가하려는 그룹이 이미 존재
+	FAILED_GROUP_SAME_GROUP = 23;
+	FAILED_GROUP_NOT_EXISTS_PLAYER = 24; // 찾는 플레이어가 존재하지 않음
+	FAILED_GROUP_ALREADY_EXISTS_PLAYER = 25; // 추가하려는 플레이어가 이미 존재
+}
+
+enum PropsID
+{
+	MV_PROPS_START = 0;
+	POSITION_3D = 1;
+	ROTATION_3D = 2;
+	SCALE_3D = 3;
+	MV_PROPS_END = 100000;
+
+//	ANOTHER_PROPS_START = 100001;
+}
+
+enum ObjectSyncType
+{
+	PERSONAL_OWN = 0;
+	GROUP_OWN = 1; // 여기에 해당하는 ObjectMap이 Group이랑 Room에 추가되어야 함. 이거 움직일 수 있는 사람은 MasterClient만
+	ROOM_OWN = 2;
+	GLOBAL_OWN = 3;
+}
+
+enum OperationCode
+{
+    HEART_BEAT = 0;
+    ROOM_JOIN_OR_CREATE = 1;
+    ROOM_LEAVE = 2;
+    ROOM_LIST = 3;
+    PLAYER_ID = 4;
+    GROUP_LIST = 5;
+    GROUP_JOIN = 6;
+    GROUP_LEAVE = 7;
+    RAISE_EVENT = 8;
+		INIT_VARIABLES = 9;
+}
+
+enum EventCode
+{
+    OTHER_CLIENT_JOINED = 0;
+    INITIAL_OBJECTS = 1;
+    ADD_NETWORK_OBJECTS = 2;
+    REMOVE_NETWORK_OBJECTS = 3;
+    UPDATE_NETWORK_OBJECTS = 4;
+    CHANGE_OBJECTS_OWNER = 5;
+		RPC = 6;
+}
+
+enum ParamKey
+{
+    POSITION = 0;
+    ROTATION = 1;
+    SCALE = 2;
+}

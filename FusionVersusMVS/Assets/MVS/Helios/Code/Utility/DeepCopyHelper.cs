@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -12,7 +13,7 @@ namespace MVS.Helios.Utility
         {
             if (!typeof(T).IsSerializable)
             {
-                throw new ArgumentException("The type must be serializable.", nameof(obj));
+                Debug.Log($"The type must be serializable. {nameof(obj)}");
             }
 
             if (obj == null)
@@ -20,23 +21,49 @@ namespace MVS.Helios.Utility
                 return default(T);
             }
 
-            try
+            if (HeliosUtility.IsListType(obj.GetType()))
             {
-                IFormatter formatter = new BinaryFormatter();
-                using (MemoryStream stream = new MemoryStream())
+                IList list = (IList)obj;
+                IList copiedList = (IList)Activator.CreateInstance(obj.GetType());
+                
+                foreach (var item in list)
                 {
-                    formatter.Serialize(stream, obj);
-                    stream.Seek(0, SeekOrigin.Begin);
-                    return (T)formatter.Deserialize(stream);
+                    if (item is ICloneable)
+                    {
+                        copiedList.Add(((ICloneable)item).Clone());
+                    }
+                    else if (item != null && item.GetType().IsValueType)
+                    {
+                        copiedList.Add(item);
+                    }
+                    else
+                    {
+                        copiedList.Add(item);
+                    }
                 }
+                return (T)copiedList;
             }
-            catch (Exception e)
+            else
             {
-                // Debug.Log(e);
-                var newObject = obj;
-                return newObject;
+                try
+                {
+                    IFormatter formatter = new BinaryFormatter();
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        formatter.Serialize(stream, obj);
+                        stream.Seek(0, SeekOrigin.Begin);
+                        return (T)formatter.Deserialize(stream);
+                    }
+                }
+                catch (Exception e)
+                {
+                    // Debug.Log(e);
+                    var newObject = obj;
+                    return newObject;
+                }   
             }
-            
+
+            return default;
         }
     }
 }

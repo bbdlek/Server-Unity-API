@@ -21,8 +21,8 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     [HNSync] public List<int> testList = new List<int>(){1, 2, 3};
     
-    [HNSync] public Color color = new Color();
-    [HNSync] public Color32 color32 = new Color32();
+    // [HNSync] public Color color = new Color();
+    // [HNSync] public Color32 color32 = new Color32();
 
     [HNSync] public Dictionary<int, string> testDic = new Dictionary<int, string>();
 
@@ -44,7 +44,8 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     public void ChangeVec2()
     {
         testVec2.x++;
-        Debug.Log(testDic[0]);
+        if(testDic.Count > 0)
+            Debug.Log(testDic[0]);
     }
 
     public void AddTest()

@@ -1,11 +1,10 @@
 using System;
+using System.Collections;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
 using Google.Protobuf;
-using UnityEngine;
 
 namespace MVS.Helios.Utility
 {
@@ -72,12 +71,51 @@ namespace MVS.Helios.Utility
 
         public static object ByteToObject(ByteString buffer)
         {
-            Debug.Log(buffer.Length);
             using (MemoryStream memoryStream = new MemoryStream(buffer.ToByteArray()))
             {
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
                 return binaryFormatter.Deserialize(memoryStream);
             }
+        }
+
+        public static bool CheckListEquals(object obj1, object obj2)
+        {
+            // 두 객체가 모두 리스트인지 확인
+            if (!(obj1 is IList) || !(obj2 is IList))
+            {
+                throw new ArgumentException("Both parameters must be lists.");
+            }
+
+            IList list1 = (IList)obj1;
+            IList list2 = (IList)obj2;
+
+            // 리스트의 길이가 같은지 확인
+            if (list1.Count != list2.Count)
+            {
+                return false;
+            }
+
+            // 각 요소를 비교하여 내용이 같은지 확인
+            for (int i = 0; i < list1.Count; i++)
+            {
+                if (!object.Equals(list1[i], list2[i]))
+                {
+                    return false;
+                }
+            }
+
+            // 모든 요소가 같으면 true 반환
+            return true;
+        }
+        
+        public static bool IsListType(Type type)
+        {
+            return type.FullName != null && type.FullName.StartsWith("System.Collections.Generic.List`");
+        }
+
+        public static bool IsDictionaryType(Type type)
+        {
+            return type.FullName != null && type.FullName.StartsWith("System.Collections.Generic.Dictionary`");
         }
     }
 }

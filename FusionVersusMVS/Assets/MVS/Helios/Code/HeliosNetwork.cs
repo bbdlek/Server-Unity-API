@@ -390,6 +390,37 @@ namespace MVS.Helios
 
             bool isLocalInstantiate = !instantiateEvent && LocalPlayer.Equals(instantiateParams.creator);
             
+            go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+            {
+                Key = CustomVariables.GetKeyByName("position"),
+                NVector = new Protocol.Vector3
+                {
+                    X = instantiateParams.position.x,
+                    Y = instantiateParams.position.y,
+                    Z = instantiateParams.position.z
+                }
+            });
+            go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+            {
+                Key = CustomVariables.GetKeyByName("rotation"),
+                NVector = new Protocol.Vector3
+                {
+                    X = instantiateParams.rotation.x,
+                    Y = instantiateParams.rotation.y,
+                    Z = instantiateParams.rotation.z
+                }
+            });
+            go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+            {
+                Key = CustomVariables.GetKeyByName("scale"),
+                NVector = new Protocol.Vector3
+                {
+                    X = 1,
+                    Y = 1,
+                    Z = 1
+                }
+            });
+            
             // TODO : IF Local Instantiate
             if (isLocalInstantiate)
             {
@@ -400,36 +431,12 @@ namespace MVS.Helios
                 HeliosObjectList.Add(go.GetComponent<HeliosObject>());
                 go.GetComponent<HeliosObject>().ClientInstanceId = (uint)HeliosObjectList.LastIndexOf(go.GetComponent<HeliosObject>());
                 instantiateParams.clientInstanceID = go.GetComponent<HeliosObject>().ClientInstanceId;
-                go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+                foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
                 {
-                    Key = CustomVariables.GetKeyByName("position"),
-                    NVector = new Protocol.Vector3
-                    {
-                        X = instantiateParams.position.x,
-                        Y = instantiateParams.position.y,
-                        Z = instantiateParams.position.z
-                    }
-                });
-                go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
-                {
-                    Key = CustomVariables.GetKeyByName("rotation"),
-                    NVector = new Protocol.Vector3
-                    {
-                        X = instantiateParams.rotation.x,
-                        Y = instantiateParams.rotation.y,
-                        Z = instantiateParams.rotation.z
-                    }
-                });
-                go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
-                {
-                    Key = CustomVariables.GetKeyByName("scale"),
-                    NVector = new Protocol.Vector3
-                    {
-                        X = 1,
-                        Y = 1,
-                        Z = 1
-                    }
-                });
+                    heliosMonoBehavior.FindNetworkedVariables();
+                    heliosMonoBehavior.FindRPCMethods();
+                }
+                instantiateParams.ObjectInfo = go.GetComponent<HeliosObject>().ObjectInfo;
                 SendInstantiate(instantiateParams, isRoomObject);
             }
             else
@@ -440,13 +447,14 @@ namespace MVS.Helios
                 go.GetComponent<HeliosObject>().ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
                 go.GetComponent<HeliosObject>().ObjectInfo.OwnerPlayerID = instantiateParams.creator.UserId;
                 go.GetComponent<HeliosObject>().ObjectInfo.ObjectID.PrefabID = instantiateParams.prefabId;
+                go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Clear();
                 go.GetComponent<HeliosObject>().ClientInstanceId = instantiateParams.clientInstanceID;
                 foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
                 {
                     heliosMonoBehavior.FindNetworkedVariables();
                     heliosMonoBehavior.FindRPCMethods();
                 }
-                go.GetComponent<HeliosObject>().UpdateCustomData();
+                go.GetComponent<HeliosObject>().UpdateCustomData(go.GetComponent<HeliosObject>().ObjectInfo);
                 HeliosObjectList.Add(go.GetComponent<HeliosObject>());
             }
             
@@ -459,38 +467,48 @@ namespace MVS.Helios
         internal static bool SendInstantiate(InstantiateParams instantiateParams, bool isRoomObject = false)
         {
             var pkt = new C_ADD_NETWORK_OBJECTS();
-            var ObjectInfo = new ObjectInfo
-            {
-                ObjectID = new ObjectID
-                {
-                    PrefabID = instantiateParams.prefabId,
-                    InstanceID = instantiateParams.instanceId,
-                    ClientInstanceID = instantiateParams.clientInstanceID
-                },
-                SyncType = ObjectSyncType.PersonalOwn,
-                OwnerPlayerID = LocalPlayer.UserId,
-            };
-            ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
-            {
-                Key = CustomVariables.GetKeyByName("position"),
-                NVector = new Protocol.Vector3
-                {
-                    X = instantiateParams.position.x,
-                    Y = instantiateParams.position.y,
-                    Z = instantiateParams.position.z
-                }
-            });
-            ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
-            {
-                Key = CustomVariables.GetKeyByName("rotation"),
-                NVector = new Protocol.Vector3
-                {
-                    X = instantiateParams.rotation.x,
-                    Y = instantiateParams.rotation.y,
-                    Z = instantiateParams.rotation.z
-                }
-            });
-            pkt.ObjectInfos.Add(ObjectInfo);
+            // var ObjectInfo = new ObjectInfo
+            // {
+            //     ObjectID = new ObjectID
+            //     {
+            //         PrefabID = instantiateParams.prefabId,
+            //         InstanceID = instantiateParams.instanceId,
+            //         ClientInstanceID = instantiateParams.clientInstanceID
+            //     },
+            //     SyncType = ObjectSyncType.PersonalOwn,
+            //     OwnerPlayerID = LocalPlayer.UserId,
+            // };
+            // ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+            // {
+            //     Key = CustomVariables.GetKeyByName("position"),
+            //     NVector = new Protocol.Vector3
+            //     {
+            //         X = instantiateParams.position.x,
+            //         Y = instantiateParams.position.y,
+            //         Z = instantiateParams.position.z
+            //     }
+            // });
+            // ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+            // {
+            //     Key = CustomVariables.GetKeyByName("rotation"),
+            //     NVector = new Protocol.Vector3
+            //     {
+            //         X = instantiateParams.rotation.x,
+            //         Y = instantiateParams.rotation.y,
+            //         Z = instantiateParams.rotation.z
+            //     }
+            // });
+            // ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+            // {
+            //     Key = CustomVariables.GetKeyByName("scale"),
+            //     NVector = new Protocol.Vector3
+            //     {
+            //         X = 1,
+            //         Y = 1,
+            //         Z = 1
+            //     }
+            // });
+            pkt.ObjectInfos.Add(instantiateParams.ObjectInfo);
             return SendEventInternal(EventCode.PKT_C_ADD_NETWORK_OBJECTS, pkt);
         }
 
@@ -533,8 +551,8 @@ namespace MVS.Helios
                     obj.GetComponent<HeliosTransform>().networkScale = scale;
                 }
             }
-            FindObjectById(id).ObjectInfo = objectInfo;
-            FindObjectById(id).UpdateCustomData();
+            // FindObjectById(id).ObjectInfo = objectInfo;
+            FindObjectById(id).UpdateCustomData(objectInfo);
         }
 
         public static void NetworkRemoveObject(uint id)

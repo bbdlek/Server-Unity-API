@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Google.Protobuf;
 using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
@@ -75,20 +74,38 @@ namespace MVS.Helios
             var data = new C_UPDATE_NETWORK_OBJECTS();
             foreach (var ho in HeliosNetwork.HeliosObjectList.FindAll(x => x.hasUpdate))
             {
-                ObjectInfo updateObject;
+                ObjectInfo updateObject = new ObjectInfo();
                 if (GetComponent<HeliosObject>())
                 {
-                    updateObject = GetComponent<HeliosObject>().ObjectInfo;
+                    updateObject.ObjectID = GetComponent<HeliosObject>().ObjectInfo.ObjectID;
+                    updateObject.SyncType = GetComponent<HeliosObject>().ObjectInfo.SyncType;
+                    updateObject.OwnerPlayerID = GetComponent<HeliosObject>().ObjectInfo.OwnerPlayerID;
                 }
                 else
                 {
-                    updateObject = ho.ObjectInfo;
+                    updateObject.ObjectID = ho.ObjectInfo.ObjectID;
+                    updateObject.SyncType = ho.ObjectInfo.SyncType;
+                    updateObject.OwnerPlayerID = ho.ObjectInfo.OwnerPlayerID;
                 }
+                Debug.Log(ho.heliosAttributes.Count + CustomVariables.GetKeyByName("scale"));
                 // var updateObject = new ObjectInfo();
 
-                for (int i = 0; i < ho.heliosAttributes.Count; i++)
+                for (int i = CustomVariables.GetKeyByName("scale") + 1; i < ho.heliosAttributes.Count + CustomVariables.GetKeyByName("scale") + 1; i++)
                 {
+                    if (HeliosUtility.IsListType(ho.heliosAttributes[i].FieldType))
+                    {
+                        bool listEquals = HeliosUtility.CheckListEquals(ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]),
+                            ho.initialHeliosValues[i]);
+                        if (listEquals)
+                            continue;
+                    }
+                    else
+                    {
+                        if (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]).Equals(ho.initialHeliosValues[i]))
+                            continue;
+                    }
                     HeliosVariable hv = new HeliosVariable();
+                    hv.Key = ho.ObjectInfo.TestValues[i].Key;
                     switch (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]))
                     {
                         case int value:
@@ -156,8 +173,14 @@ namespace MVS.Helios
                             
                             break;
                     }
-                    ho.ObjectInfo.CustomData[i] = hv.ToByteString();
-                    ho.initialHeliosValues[i] = ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]);
+                    ho.ObjectInfo.TestValues[i] = hv;
+                    if (HeliosUtility.IsListType(ho.initialHeliosValues[i].GetType()))
+                    {
+                        ho.initialHeliosValues[i] =
+                            DeepCopyHelper.DeepCopy(ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]));
+                    }
+                    else ho.initialHeliosValues[i] = ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]);
+                    updateObject.TestValues.Add(hv);
                 }
                 data.ObjectInfos.Add(updateObject);
                 HeliosNetwork.RaiseEvent(EventCode.PKT_C_UPDATE_NETWORK_OBJECTS, data);

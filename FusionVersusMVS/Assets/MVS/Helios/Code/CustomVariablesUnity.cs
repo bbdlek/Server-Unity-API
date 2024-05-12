@@ -6,9 +6,9 @@ namespace MVS.Helios
     {
         internal static void Register()
         {
-            CustomVariables.TryRegisterVariable(1, "position");
-            CustomVariables.TryRegisterVariable(2, "rotation");
-            CustomVariables.TryRegisterVariable(3, "scale");
+            CustomVariables.TryRegisterVariable(0, "position");
+            CustomVariables.TryRegisterVariable(1, "rotation");
+            CustomVariables.TryRegisterVariable(2, "scale");
             HeliosNetwork.RealtimeClient.MVSDebug(DebugLevel.INFO, "Register Unity");
         }
     }

@@ -122,7 +122,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30e3e9e8305b4750ba301bdfe5e2dd78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attributeMonoBehaviors: []
   _prefabId: 5
   _instanceId: 11
   _clientInstanceId: 0
@@ -166,7 +165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cc5c69ee5d4a37058037d623abd4036, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attributeMonoBehaviors: []
   score: 1
   score2: 3
 --- !u!114 &7551403675085834006
@@ -181,7 +179,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af6d28e9808043349288f7352e4b25bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attributeMonoBehaviors: []
   positionTolerance: 0.01
   rotationTolerance: 1
   scaleTolerance: 0.01
@@ -191,6 +188,7 @@ MonoBehaviour:
   syncPosition: 1
   syncRotation: 1
   syncScale: 1
+  smoothness: 10
 --- !u!114 &-5747347219559409451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,7 +201,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab4e044b65acd63568eb1cf76ec423bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attributeMonoBehaviors: []
   testFloat: 0
   testFloat2: 0
   testVec1: {x: 0, y: 0}
