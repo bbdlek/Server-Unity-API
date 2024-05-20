@@ -80,6 +80,10 @@ namespace MVS.Helios
                     updateObject.ObjectID = GetComponent<HeliosObject>().ObjectInfo.ObjectID;
                     updateObject.SyncType = GetComponent<HeliosObject>().ObjectInfo.SyncType;
                     updateObject.OwnerPlayerID = GetComponent<HeliosObject>().ObjectInfo.OwnerPlayerID;
+                    for (int var = 0; var < 3; var++)
+                    {
+                        updateObject.TestValues.Add(GetComponent<HeliosObject>().ObjectInfo.TestValues[var]);
+                    }
                 }
                 else
                 {
@@ -166,6 +170,7 @@ namespace MVS.Helios
                             }
                             else
                             {
+                                Debug.Log("default");
                                 hv.NCustom =
                                     HeliosUtility.ObjectToBytes(ho.heliosAttributes[i]
                                         .GetValue(ho.attributeMonoBehaviors[i]));    
@@ -180,9 +185,9 @@ namespace MVS.Helios
                             DeepCopyHelper.DeepCopy(ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]));
                     }
                     else ho.initialHeliosValues[i] = ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]);
-                    updateObject.TestValues.Add(hv);
+                    // updateObject.TestValues.Add(hv);
                 }
-                data.ObjectInfos.Add(updateObject);
+                data.ObjectInfos.Add(ho.ObjectInfo);
                 HeliosNetwork.RaiseEvent(EventCode.PKT_C_UPDATE_NETWORK_OBJECTS, data);
             }
         }

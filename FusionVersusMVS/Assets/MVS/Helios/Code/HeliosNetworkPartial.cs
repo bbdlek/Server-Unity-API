@@ -59,7 +59,7 @@ namespace MVS.Helios
                             case ObjectSyncType.GlobalOwn:
                                 var obj = HeliosObjectList.Find(x =>
                                     x.ObjectInfo.ObjectID.ClientInstanceID == objectInfo.ObjectID.ClientInstanceID);
-                                // obj.ObjectInfo = objectInfo;
+                                obj.ObjectInfo = objectInfo;
                                 obj.ObjectInfo.ObjectID = objectInfo.ObjectID;
                                 obj.UpdateCustomData(objectInfo);
                                 break;

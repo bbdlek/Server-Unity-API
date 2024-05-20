@@ -1,3 +1,4 @@
+using System.Linq;
 using MVS.Realtime;
 using Protocol;
 using UnityEngine;
@@ -43,7 +44,7 @@ namespace MVS.Helios
         public bool syncRotation = true;
         public bool syncScale = true;
 
-        public float smoothness = 10f;
+        public float smoothness;
 
         private bool _isMine;
 
@@ -56,10 +57,10 @@ namespace MVS.Helios
         {
             _heliosObject = GetComponent<HeliosObject>();
             _isMine = _heliosObject.IsMine;
-            _storedPosition = transform.localPosition;
+            _storedPosition = transform.position;
             networkPosition = _storedPosition;
 
-            _storedRotation = transform.localRotation;
+            _storedRotation = transform.rotation;
             networkRotation = _storedRotation;
 
             _storedScale = transform.localScale;
@@ -69,88 +70,88 @@ namespace MVS.Helios
         private void Update()
         {
             var tr = transform;
-            if (_isMine && (HasPositionChanged(tr.localPosition) || HasRotationChanged(tr.localRotation) || HasScaleChanged(tr.localScale))) {
+            if (_isMine && (HasPositionChanged(tr.localPosition) || HasRotationChanged(tr.rotation) || HasScaleChanged(tr.localScale))) {
                 //Send?
                 var fixedData = new C_UPDATE_NETWORK_OBJECTS();
-                // _objectInfo =_heliosObject.ObjectInfo;
+                _objectInfo =_heliosObject.ObjectInfo;
                 //////TestValue 같이
-                var _objectInfo = new ObjectInfo
-                {
-                    ObjectID = new ObjectID
-                    {
-                        PrefabID = GetComponent<HeliosObject>().PrefabId,
-                        InstanceID = GetComponent<HeliosObject>().InstanceId,
-                        ClientInstanceID = GetComponent<HeliosObject>().ClientInstanceId,
-                    },
-                    SyncType = ObjectSyncType.PersonalOwn,
-                    OwnerPlayerID = HeliosNetwork.LocalPlayer.UserId
-                };
+                // var _objectInfo = new ObjectInfo
+                // {
+                //     ObjectID = new ObjectID
+                //     {
+                //         PrefabID = GetComponent<HeliosObject>().PrefabId,
+                //         InstanceID = GetComponent<HeliosObject>().InstanceId,
+                //         ClientInstanceID = GetComponent<HeliosObject>().ClientInstanceId,
+                //     },
+                //     SyncType = ObjectSyncType.PersonalOwn,
+                //     OwnerPlayerID = HeliosNetwork.LocalPlayer.UserId
+                // };
 
-                // _objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("position"))!.NVector =
-                //     new Protocol.Vector3
-                //     {
-                //         X = tr.localPosition.x,
-                //         Y = tr.localPosition.y,
-                //         Z = tr.localPosition.z
-                //     };
-                //
-                // _objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("rotation"))!.NVector =
-                //     new Protocol.Vector3
-                //     {
-                //         X = tr.eulerAngles.x,
-                //         Y = tr.eulerAngles.y,
-                //         Z = tr.eulerAngles.z
-                //     };
-                //
-                // _objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("scale"))!.NVector =
-                //     new Protocol.Vector3
-                //     {
-                //         X = tr.localScale.x,
-                //         Y = tr.localScale.y,
-                //         Z = tr.localScale.z
-                //     };
-
-                _objectInfo.TestValues.Add(new HeliosVariable
-                {
-                    Key = CustomVariables.GetKeyByName("position"),
-                    NVector = new Protocol.Vector3
+                _objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("position"))!.NVector =
+                    new Protocol.Vector3
                     {
-                        X = tr.localPosition.x,
-                        Y = tr.localPosition.y,
-                        Z = tr.localPosition.z
-                    }
-                });
+                        X = tr.position.x,
+                        Y = tr.position.y,
+                        Z = tr.position.z
+                    };
                 
-                _objectInfo.TestValues.Add(new HeliosVariable
-                {
-                    Key = CustomVariables.GetKeyByName("rotation"),
-                    NVector = new Protocol.Vector3
+                _objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("rotation"))!.NVector =
+                    new Protocol.Vector3
                     {
                         X = tr.eulerAngles.x,
                         Y = tr.eulerAngles.y,
                         Z = tr.eulerAngles.z
-                    }
-                });
+                    };
                 
-                _objectInfo.TestValues.Add(new HeliosVariable
-                {
-                    Key = CustomVariables.GetKeyByName("scale"),
-                    NVector = new Protocol.Vector3
+                _objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("scale"))!.NVector =
+                    new Protocol.Vector3
                     {
                         X = tr.localScale.x,
                         Y = tr.localScale.y,
                         Z = tr.localScale.z
-                    }
-                });
+                    };
+
+                // _objectInfo.TestValues.Add(new HeliosVariable
+                // {
+                //     Key = CustomVariables.GetKeyByName("position"),
+                //     NVector = new Protocol.Vector3
+                //     {
+                //         X = tr.localPosition.x,
+                //         Y = tr.localPosition.y,
+                //         Z = tr.localPosition.z
+                //     }
+                // });
+                //
+                // _objectInfo.TestValues.Add(new HeliosVariable
+                // {
+                //     Key = CustomVariables.GetKeyByName("rotation"),
+                //     NVector = new Protocol.Vector3
+                //     {
+                //         X = tr.eulerAngles.x,
+                //         Y = tr.eulerAngles.y,
+                //         Z = tr.eulerAngles.z
+                //     }
+                // });
+                //
+                // _objectInfo.TestValues.Add(new HeliosVariable
+                // {
+                //     Key = CustomVariables.GetKeyByName("scale"),
+                //     NVector = new Protocol.Vector3
+                //     {
+                //         X = tr.localScale.x,
+                //         Y = tr.localScale.y,
+                //         Z = tr.localScale.z
+                //     }
+                // });
                 
                 fixedData.ObjectInfos.Add(_objectInfo);
                 
                 HeliosNetwork.RaiseEvent(EventCode.PKT_C_UPDATE_NETWORK_OBJECTS, fixedData);
                 
-                _storedPosition = tr.localPosition;
+                _storedPosition = tr.position;
                 networkPosition = _storedPosition;
                 
-                _storedRotation = tr.localRotation;
+                _storedRotation = tr.rotation;
                 networkRotation = _storedRotation;
                 
                 _storedScale = tr.localScale;
@@ -164,12 +165,12 @@ namespace MVS.Helios
                 if(syncPosition)
                 {
                     // 부드러운 이동을 위해 Lerp 사용
-                    tr.localPosition = Vector3.Lerp(tr.localPosition, networkPosition, Time.deltaTime * smoothness);
+                    tr.position = Vector3.Lerp(tr.position, networkPosition, Time.deltaTime * smoothness);
                 }
                 if(syncRotation)
                 {
                     // 부드러운 회전을 위해 Slerp 사용
-                    tr.localRotation = Quaternion.Slerp(tr.localRotation, networkRotation, Time.deltaTime * smoothness);
+                    tr.rotation = Quaternion.Slerp(tr.rotation, networkRotation, Time.deltaTime * smoothness);
                 }
                 if (syncScale)
                 {
