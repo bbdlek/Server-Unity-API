@@ -9,6 +9,46 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
+[Serializable]
+public class Costume
+{
+    public int Body;
+    public int BodyPart;
+    public int Eyes;
+    public int Gloves;
+    public int HeadPart;
+    public int Mouth;
+    public int Tail;
+
+    public static Costume Default()
+    {
+        return new Costume
+        {
+            Body = 1,
+            BodyPart = 0,
+            Eyes = 1,
+            Gloves = 0,
+            HeadPart = 0,
+            Mouth = 1,
+            Tail = 0
+        };
+    }
+    
+    public static Costume DeepCopy(Costume original)
+    {
+        return new Costume
+        {
+            Body = original.Body,
+            BodyPart = original.BodyPart,
+            Eyes = original.Eyes,
+            Gloves = original.Gloves,
+            HeadPart = original.HeadPart,
+            Mouth = original.Mouth,
+            Tail = original.Tail
+        };
+    }
+}
+
 public class GameManager : MonoBehaviorHeliosCallbacks
 {
     public GameObject[] prefabsForSpawn;
@@ -20,6 +60,8 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     [HNSync] public Vector2 testVec2 = new Vector2(2, 3);
 
     [HNSync] public List<int> testList = new List<int>(){1, 2, 3};
+
+    [HNSync] public Costume costume = default;
     
     // [HNSync] public Color color = new Color();
     // [HNSync] public Color32 color32 = new Color32();

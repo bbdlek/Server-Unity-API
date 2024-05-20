@@ -377,6 +377,7 @@ namespace MVS.Helios
                         break;
                     default:
                         var value = HeliosUtility.ByteToObject(customData.NCustom);
+                        Debug.Log(value);
                         if (field.FieldType == typeof(Color))
                         {
                             ColorUtility.TryParseHtmlString("#" + value, out Color loadedColor);
