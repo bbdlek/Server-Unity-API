@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Google.Protobuf;
 using Protocol;
 
@@ -65,7 +66,7 @@ namespace MVS.Realtime
         internal (byte[], int) SerializeOperationToPacket(
             Protocol.OperationCode operationCode,
             IMessage fixedData,
-            CustomDic customData = null)
+            List<Protocol.HeliosVariable> customData = null)
         {
             var pkt = new C_OPERATION
             {
@@ -87,7 +88,12 @@ namespace MVS.Realtime
             }
 
             if (customData != null)
-                pkt.CustomData = customData;
+            {
+                foreach (var data in customData)
+                {
+                    pkt.CustomData.Add(data);
+                }
+            }
 
             return (pkt.ToByteArray(), pkt.CalculateSize());
         }

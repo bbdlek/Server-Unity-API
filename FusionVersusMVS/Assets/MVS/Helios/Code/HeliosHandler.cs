@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MVS.Helios.Utility;
 using MVS.Realtime;
@@ -91,7 +92,6 @@ namespace MVS.Helios
                     updateObject.SyncType = ho.ObjectInfo.SyncType;
                     updateObject.OwnerPlayerID = ho.ObjectInfo.OwnerPlayerID;
                 }
-                Debug.Log(ho.heliosAttributes.Count + CustomVariables.GetKeyByName("scale"));
                 // var updateObject = new ObjectInfo();
 
                 for (int i = CustomVariables.GetKeyByName("scale") + 1; i < ho.heliosAttributes.Count + CustomVariables.GetKeyByName("scale") + 1; i++)
@@ -170,7 +170,6 @@ namespace MVS.Helios
                             }
                             else
                             {
-                                Debug.Log("default");
                                 hv.NCustom =
                                     HeliosUtility.ObjectToBytes(ho.heliosAttributes[i]
                                         .GetValue(ho.attributeMonoBehaviors[i]));    
@@ -185,9 +184,10 @@ namespace MVS.Helios
                             DeepCopyHelper.DeepCopy(ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]));
                     }
                     else ho.initialHeliosValues[i] = ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]);
-                    // updateObject.TestValues.Add(hv);
+                    updateObject.TestValues.Add(hv);
                 }
-                data.ObjectInfos.Add(ho.ObjectInfo);
+                // data.ObjectInfos.Add(ho.ObjectInfo);
+                data.ObjectInfos.Add(updateObject);
                 HeliosNetwork.RaiseEvent(EventCode.PKT_C_UPDATE_NETWORK_OBJECTS, data);
             }
         }

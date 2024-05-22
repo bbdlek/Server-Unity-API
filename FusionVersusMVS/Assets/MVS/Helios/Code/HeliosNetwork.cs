@@ -315,7 +315,7 @@ namespace MVS.Helios
             return RealtimeClient.OpJoinGroup(sceneNumber, channelID);
         }
 
-        public static bool RaiseEvent(int eventCode, IMessage fixedData = null, CustomDic customData = null)
+        public static bool RaiseEvent(int eventCode, IMessage fixedData = null, List<Protocol.HeliosVariable> customData = null)
         {
             // if (!InGroup) return false;
 
@@ -560,7 +560,7 @@ namespace MVS.Helios
             _prefabPool.Destroy(id);
         }
         
-        private static bool SendEventInternal(int eventCode, IMessage data, CustomDic customData = null)
+        private static bool SendEventInternal(int eventCode, IMessage data, List<Protocol.HeliosVariable> customData = null)
         {
             // if (!InRoom)
             // {

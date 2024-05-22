@@ -1,4 +1,5 @@
 #nullable disable
+using System.Collections.Generic;
 using Protocol;
 
 namespace MVS.Realtime
@@ -11,7 +12,7 @@ namespace MVS.Realtime
         
         public byte[] FixedData;
 
-        public CustomDic CustomData;
+        public List<Protocol.HeliosVariable> CustomData = new List<Protocol.HeliosVariable>();
 
         public ulong Sender
         {

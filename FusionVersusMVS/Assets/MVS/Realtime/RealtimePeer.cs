@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Google.Protobuf;
 using Protocol;
 using Type = System.Type;
@@ -82,7 +83,7 @@ namespace MVS.Realtime
             return SendOperation(Protocol.OperationCode.InitVariables, initVariablesPkt);
         }
 
-        public override bool SendEvent(int eventCode, IMessage fixedData = null, CustomDic customData = null)
+        public override bool SendEvent(int eventCode, IMessage fixedData = null, List<Protocol.HeliosVariable> customData = null)
         {
             base.SendEvent(eventCode, fixedData, customData);
             return true;

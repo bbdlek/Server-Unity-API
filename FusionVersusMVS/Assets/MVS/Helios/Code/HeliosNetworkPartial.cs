@@ -103,6 +103,7 @@ namespace MVS.Helios
                     }
                     break;
                 case EventCode.PKT_S_UPDATE_NETWORK_OBJECTS:
+                    if(eventData.Sender == LocalPlayer.UserId) break;
                     var dataUpdate = Packs.Parser.ParseFrom(eventData.FixedData).SUpdateNetworkObjects;
                     foreach (var objectInfo in dataUpdate.ObjectInfos)
                     {

@@ -26,19 +26,19 @@ namespace Protocol {
           string.Concat(
             "Cg5Qcm90b2NvbC5wcm90bxIIUHJvdG9jb2waCkVudW0ucHJvdG8aDFN0cnVj",
             "dC5wcm90bxoZZ29vZ2xlL3Byb3RvYnVmL2FueS5wcm90bxoeZ29vZ2xlL3By",
-            "b3RvYnVmL3dyYXBwZXJzLnByb3RvIooBCgtDX09QRVJBVElPThIuCg1vcGVy",
+            "b3RvYnVmL3dyYXBwZXJzLnByb3RvIo8BCgtDX09QRVJBVElPThIuCg1vcGVy",
             "YXRpb25Db2RlGAEgASgOMhcuUHJvdG9jb2wuT3BlcmF0aW9uQ29kZRIiCglm",
-            "aXhlZERhdGEYAiABKAsyDy5Qcm90b2NvbC5QYWNrcxInCgpjdXN0b21EYXRh",
-            "GAMgASgLMhMuUHJvdG9jb2wuQ3VzdG9tRGljItIBCgtTX09QRVJBVElPThIu",
-            "Cg1vcGVyYXRpb25Db2RlGAEgASgOMhcuUHJvdG9jb2wuT3BlcmF0aW9uQ29k",
-            "ZRIkCgZzZW5kZXIYAiABKAsyFC5Qcm90b2NvbC5QbGF5ZXJJbmZvEiIKCWZp",
-            "eGVkRGF0YRgDIAEoCzIPLlByb3RvY29sLlBhY2tzEicKCmN1c3RvbURhdGEY",
-            "BCABKAsyEy5Qcm90b2NvbC5DdXN0b21EaWMSIAoGcmVzdWx0GAUgASgOMhAu",
-            "UHJvdG9jb2wuUmVzdWx0IrEBCgdTX0VWRU5UEiQKBnNlbmRlchgBIAEoCzIU",
-            "LlByb3RvY29sLlBsYXllckluZm8SEQoJZXZlbnRDb2RlGAIgASgFEiIKCWZp",
-            "eGVkRGF0YRgDIAEoCzIPLlByb3RvY29sLlBhY2tzEicKCmN1c3RvbURhdGEY",
-            "BCABKAsyEy5Qcm90b2NvbC5DdXN0b21EaWMSIAoGcmVzdWx0GAUgASgOMhAu",
-            "UHJvdG9jb2wuUmVzdWx0YgZwcm90bzM="));
+            "aXhlZERhdGEYAiABKAsyDy5Qcm90b2NvbC5QYWNrcxIsCgpjdXN0b21EYXRh",
+            "GAMgAygLMhguUHJvdG9jb2wuSGVsaW9zVmFyaWFibGUi1wEKC1NfT1BFUkFU",
+            "SU9OEi4KDW9wZXJhdGlvbkNvZGUYASABKA4yFy5Qcm90b2NvbC5PcGVyYXRp",
+            "b25Db2RlEiQKBnNlbmRlchgCIAEoCzIULlByb3RvY29sLlBsYXllckluZm8S",
+            "IgoJZml4ZWREYXRhGAMgASgLMg8uUHJvdG9jb2wuUGFja3MSLAoKY3VzdG9t",
+            "RGF0YRgEIAMoCzIYLlByb3RvY29sLkhlbGlvc1ZhcmlhYmxlEiAKBnJlc3Vs",
+            "dBgFIAEoDjIQLlByb3RvY29sLlJlc3VsdCK2AQoHU19FVkVOVBIkCgZzZW5k",
+            "ZXIYASABKAsyFC5Qcm90b2NvbC5QbGF5ZXJJbmZvEhEKCWV2ZW50Q29kZRgC",
+            "IAEoBRIiCglmaXhlZERhdGEYAyABKAsyDy5Qcm90b2NvbC5QYWNrcxIsCgpj",
+            "dXN0b21EYXRhGAQgAygLMhguUHJvdG9jb2wuSGVsaW9zVmFyaWFibGUSIAoG",
+            "cmVzdWx0GAUgASgOMhAuUHJvdG9jb2wuUmVzdWx0YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protocol.EnumReflection.Descriptor, global::Protocol.StructReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.AnyReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -87,7 +87,7 @@ namespace Protocol {
     public C_OPERATION(C_OPERATION other) : this() {
       operationCode_ = other.operationCode_;
       fixedData_ = other.fixedData_ != null ? other.fixedData_.Clone() : null;
-      customData_ = other.customData_ != null ? other.customData_.Clone() : null;
+      customData_ = other.customData_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -123,17 +123,16 @@ namespace Protocol {
 
     /// <summary>Field number for the "customData" field.</summary>
     public const int CustomDataFieldNumber = 3;
-    private global::Protocol.CustomDic customData_;
+    private static readonly pb::FieldCodec<global::Protocol.HeliosVariable> _repeated_customData_codec
+        = pb::FieldCodec.ForMessage(26, global::Protocol.HeliosVariable.Parser);
+    private readonly pbc::RepeatedField<global::Protocol.HeliosVariable> customData_ = new pbc::RepeatedField<global::Protocol.HeliosVariable>();
     /// <summary>
     ///    repeated bytes testData = 4;
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Protocol.CustomDic CustomData {
+    public pbc::RepeatedField<global::Protocol.HeliosVariable> CustomData {
       get { return customData_; }
-      set {
-        customData_ = value;
-      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -153,7 +152,7 @@ namespace Protocol {
       }
       if (OperationCode != other.OperationCode) return false;
       if (!object.Equals(FixedData, other.FixedData)) return false;
-      if (!object.Equals(CustomData, other.CustomData)) return false;
+      if(!customData_.Equals(other.customData_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -163,7 +162,7 @@ namespace Protocol {
       int hash = 1;
       if (OperationCode != global::Protocol.OperationCode.HeartBeat) hash ^= OperationCode.GetHashCode();
       if (fixedData_ != null) hash ^= FixedData.GetHashCode();
-      if (customData_ != null) hash ^= CustomData.GetHashCode();
+      hash ^= customData_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -190,10 +189,7 @@ namespace Protocol {
         output.WriteRawTag(18);
         output.WriteMessage(FixedData);
       }
-      if (customData_ != null) {
-        output.WriteRawTag(26);
-        output.WriteMessage(CustomData);
-      }
+      customData_.WriteTo(output, _repeated_customData_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -212,10 +208,7 @@ namespace Protocol {
         output.WriteRawTag(18);
         output.WriteMessage(FixedData);
       }
-      if (customData_ != null) {
-        output.WriteRawTag(26);
-        output.WriteMessage(CustomData);
-      }
+      customData_.WriteTo(ref output, _repeated_customData_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -232,9 +225,7 @@ namespace Protocol {
       if (fixedData_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(FixedData);
       }
-      if (customData_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CustomData);
-      }
+      size += customData_.CalculateSize(_repeated_customData_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -256,12 +247,7 @@ namespace Protocol {
         }
         FixedData.MergeFrom(other.FixedData);
       }
-      if (other.customData_ != null) {
-        if (customData_ == null) {
-          CustomData = new global::Protocol.CustomDic();
-        }
-        CustomData.MergeFrom(other.CustomData);
-      }
+      customData_.Add(other.customData_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -289,10 +275,7 @@ namespace Protocol {
             break;
           }
           case 26: {
-            if (customData_ == null) {
-              CustomData = new global::Protocol.CustomDic();
-            }
-            input.ReadMessage(CustomData);
+            customData_.AddEntriesFrom(input, _repeated_customData_codec);
             break;
           }
         }
@@ -322,10 +305,7 @@ namespace Protocol {
             break;
           }
           case 26: {
-            if (customData_ == null) {
-              CustomData = new global::Protocol.CustomDic();
-            }
-            input.ReadMessage(CustomData);
+            customData_.AddEntriesFrom(ref input, _repeated_customData_codec);
             break;
           }
         }
@@ -372,7 +352,7 @@ namespace Protocol {
       operationCode_ = other.operationCode_;
       sender_ = other.sender_ != null ? other.sender_.Clone() : null;
       fixedData_ = other.fixedData_ != null ? other.fixedData_.Clone() : null;
-      customData_ = other.customData_ != null ? other.customData_.Clone() : null;
+      customData_ = other.customData_.Clone();
       result_ = other.result_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -421,14 +401,13 @@ namespace Protocol {
 
     /// <summary>Field number for the "customData" field.</summary>
     public const int CustomDataFieldNumber = 4;
-    private global::Protocol.CustomDic customData_;
+    private static readonly pb::FieldCodec<global::Protocol.HeliosVariable> _repeated_customData_codec
+        = pb::FieldCodec.ForMessage(34, global::Protocol.HeliosVariable.Parser);
+    private readonly pbc::RepeatedField<global::Protocol.HeliosVariable> customData_ = new pbc::RepeatedField<global::Protocol.HeliosVariable>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Protocol.CustomDic CustomData {
+    public pbc::RepeatedField<global::Protocol.HeliosVariable> CustomData {
       get { return customData_; }
-      set {
-        customData_ = value;
-      }
     }
 
     /// <summary>Field number for the "result" field.</summary>
@@ -461,7 +440,7 @@ namespace Protocol {
       if (OperationCode != other.OperationCode) return false;
       if (!object.Equals(Sender, other.Sender)) return false;
       if (!object.Equals(FixedData, other.FixedData)) return false;
-      if (!object.Equals(CustomData, other.CustomData)) return false;
+      if(!customData_.Equals(other.customData_)) return false;
       if (Result != other.Result) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -473,7 +452,7 @@ namespace Protocol {
       if (OperationCode != global::Protocol.OperationCode.HeartBeat) hash ^= OperationCode.GetHashCode();
       if (sender_ != null) hash ^= Sender.GetHashCode();
       if (fixedData_ != null) hash ^= FixedData.GetHashCode();
-      if (customData_ != null) hash ^= CustomData.GetHashCode();
+      hash ^= customData_.GetHashCode();
       if (Result != global::Protocol.Result.Success) hash ^= Result.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -505,10 +484,7 @@ namespace Protocol {
         output.WriteRawTag(26);
         output.WriteMessage(FixedData);
       }
-      if (customData_ != null) {
-        output.WriteRawTag(34);
-        output.WriteMessage(CustomData);
-      }
+      customData_.WriteTo(output, _repeated_customData_codec);
       if (Result != global::Protocol.Result.Success) {
         output.WriteRawTag(40);
         output.WriteEnum((int) Result);
@@ -535,10 +511,7 @@ namespace Protocol {
         output.WriteRawTag(26);
         output.WriteMessage(FixedData);
       }
-      if (customData_ != null) {
-        output.WriteRawTag(34);
-        output.WriteMessage(CustomData);
-      }
+      customData_.WriteTo(ref output, _repeated_customData_codec);
       if (Result != global::Protocol.Result.Success) {
         output.WriteRawTag(40);
         output.WriteEnum((int) Result);
@@ -562,9 +535,7 @@ namespace Protocol {
       if (fixedData_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(FixedData);
       }
-      if (customData_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CustomData);
-      }
+      size += customData_.CalculateSize(_repeated_customData_codec);
       if (Result != global::Protocol.Result.Success) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
       }
@@ -595,12 +566,7 @@ namespace Protocol {
         }
         FixedData.MergeFrom(other.FixedData);
       }
-      if (other.customData_ != null) {
-        if (customData_ == null) {
-          CustomData = new global::Protocol.CustomDic();
-        }
-        CustomData.MergeFrom(other.CustomData);
-      }
+      customData_.Add(other.customData_);
       if (other.Result != global::Protocol.Result.Success) {
         Result = other.Result;
       }
@@ -638,10 +604,7 @@ namespace Protocol {
             break;
           }
           case 34: {
-            if (customData_ == null) {
-              CustomData = new global::Protocol.CustomDic();
-            }
-            input.ReadMessage(CustomData);
+            customData_.AddEntriesFrom(input, _repeated_customData_codec);
             break;
           }
           case 40: {
@@ -682,10 +645,7 @@ namespace Protocol {
             break;
           }
           case 34: {
-            if (customData_ == null) {
-              CustomData = new global::Protocol.CustomDic();
-            }
-            input.ReadMessage(CustomData);
+            customData_.AddEntriesFrom(ref input, _repeated_customData_codec);
             break;
           }
           case 40: {
@@ -736,7 +696,7 @@ namespace Protocol {
       sender_ = other.sender_ != null ? other.sender_.Clone() : null;
       eventCode_ = other.eventCode_;
       fixedData_ = other.fixedData_ != null ? other.fixedData_.Clone() : null;
-      customData_ = other.customData_ != null ? other.customData_.Clone() : null;
+      customData_ = other.customData_.Clone();
       result_ = other.result_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -785,14 +745,13 @@ namespace Protocol {
 
     /// <summary>Field number for the "customData" field.</summary>
     public const int CustomDataFieldNumber = 4;
-    private global::Protocol.CustomDic customData_;
+    private static readonly pb::FieldCodec<global::Protocol.HeliosVariable> _repeated_customData_codec
+        = pb::FieldCodec.ForMessage(34, global::Protocol.HeliosVariable.Parser);
+    private readonly pbc::RepeatedField<global::Protocol.HeliosVariable> customData_ = new pbc::RepeatedField<global::Protocol.HeliosVariable>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Protocol.CustomDic CustomData {
+    public pbc::RepeatedField<global::Protocol.HeliosVariable> CustomData {
       get { return customData_; }
-      set {
-        customData_ = value;
-      }
     }
 
     /// <summary>Field number for the "result" field.</summary>
@@ -825,7 +784,7 @@ namespace Protocol {
       if (!object.Equals(Sender, other.Sender)) return false;
       if (EventCode != other.EventCode) return false;
       if (!object.Equals(FixedData, other.FixedData)) return false;
-      if (!object.Equals(CustomData, other.CustomData)) return false;
+      if(!customData_.Equals(other.customData_)) return false;
       if (Result != other.Result) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -837,7 +796,7 @@ namespace Protocol {
       if (sender_ != null) hash ^= Sender.GetHashCode();
       if (EventCode != 0) hash ^= EventCode.GetHashCode();
       if (fixedData_ != null) hash ^= FixedData.GetHashCode();
-      if (customData_ != null) hash ^= CustomData.GetHashCode();
+      hash ^= customData_.GetHashCode();
       if (Result != global::Protocol.Result.Success) hash ^= Result.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -869,10 +828,7 @@ namespace Protocol {
         output.WriteRawTag(26);
         output.WriteMessage(FixedData);
       }
-      if (customData_ != null) {
-        output.WriteRawTag(34);
-        output.WriteMessage(CustomData);
-      }
+      customData_.WriteTo(output, _repeated_customData_codec);
       if (Result != global::Protocol.Result.Success) {
         output.WriteRawTag(40);
         output.WriteEnum((int) Result);
@@ -899,10 +855,7 @@ namespace Protocol {
         output.WriteRawTag(26);
         output.WriteMessage(FixedData);
       }
-      if (customData_ != null) {
-        output.WriteRawTag(34);
-        output.WriteMessage(CustomData);
-      }
+      customData_.WriteTo(ref output, _repeated_customData_codec);
       if (Result != global::Protocol.Result.Success) {
         output.WriteRawTag(40);
         output.WriteEnum((int) Result);
@@ -926,9 +879,7 @@ namespace Protocol {
       if (fixedData_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(FixedData);
       }
-      if (customData_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CustomData);
-      }
+      size += customData_.CalculateSize(_repeated_customData_codec);
       if (Result != global::Protocol.Result.Success) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
       }
@@ -959,12 +910,7 @@ namespace Protocol {
         }
         FixedData.MergeFrom(other.FixedData);
       }
-      if (other.customData_ != null) {
-        if (customData_ == null) {
-          CustomData = new global::Protocol.CustomDic();
-        }
-        CustomData.MergeFrom(other.CustomData);
-      }
+      customData_.Add(other.customData_);
       if (other.Result != global::Protocol.Result.Success) {
         Result = other.Result;
       }
@@ -1002,10 +948,7 @@ namespace Protocol {
             break;
           }
           case 34: {
-            if (customData_ == null) {
-              CustomData = new global::Protocol.CustomDic();
-            }
-            input.ReadMessage(CustomData);
+            customData_.AddEntriesFrom(input, _repeated_customData_codec);
             break;
           }
           case 40: {
@@ -1046,10 +989,7 @@ namespace Protocol {
             break;
           }
           case 34: {
-            if (customData_ == null) {
-              CustomData = new global::Protocol.CustomDic();
-            }
-            input.ReadMessage(CustomData);
+            customData_.AddEntriesFrom(ref input, _repeated_customData_codec);
             break;
           }
           case 40: {

@@ -22,7 +22,7 @@ public class Player : NetworkBehaviour
 
     private void Awake()
     {
-        // _cc = GetComponent<NetworkCharacterController>();
+        _cc = GetComponent<NetworkCharacterController>();
         _rigidbody = GetComponent<Rigidbody>();
         _material = GetComponentInChildren<MeshRenderer>().material;
     }

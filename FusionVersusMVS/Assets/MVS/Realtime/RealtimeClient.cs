@@ -353,7 +353,7 @@ namespace MVS.Realtime
             }
         }
         
-        public virtual bool SendEvent(int eventCode, IMessage fixedData, CustomDic customData = null)
+        public virtual bool SendEvent(int eventCode, IMessage fixedData, List<Protocol.HeliosVariable> customData = null)
         {
             return this.RealtimePeer.SendEvent(eventCode, fixedData, customData);
         }
@@ -433,6 +433,8 @@ namespace MVS.Realtime
             }
         }
 
+        public long CurRTT = 0;
+
         public virtual void OnEvent(EventData eventData)
         {
             // Player player = CurrentRoom != null ? CurrentRoom.GetPlayer(eventData.Sender) : null;
@@ -445,6 +447,24 @@ namespace MVS.Realtime
                     CurrentGroup.StorePlayer(otherPlayer);
                     CurrentRoom.StorePlayer(otherPlayer);
                     InGroupCallbacksTarget.OnPlayerEnteredGroup(otherPlayer);
+                    break;
+                case EventCode.PKT_S_UPDATE_NETWORK_OBJECTS:
+                    //RTT
+                    var updateData = Packs.Parser.ParseFrom(eventData.FixedData).SUpdateNetworkObjects;
+                    var sequenceNum = eventData.CustomData.FindLast(x => x.Key == 10000).NInt32;
+                    if (RealtimePeer.StopwatchList.ContainsKey(sequenceNum))
+                    {
+                        var sw = RealtimePeer.StopwatchList[eventData.CustomData.FindLast(x => x.Key == 10000).NInt32];
+                        var rtt = sw.ElapsedMilliseconds;
+                        CurRTT = rtt;
+                        sw.Stop();
+                        RealtimePeer.StopwatchList.Remove(sequenceNum);
+                        if (rtt > 100)
+                        {
+                            MVSDebug(DebugLevel.INFO, $"RTT {sequenceNum} : {rtt} ms");
+                        }
+                        // MVSDebug(DebugLevel.INFO, $"RTT {sequenceNum} : {rtt} ms");
+                    }
                     break;
             }
             UpdateCallbackTargets();
@@ -790,7 +810,7 @@ namespace MVS.Realtime
             return sent;
         }
         
-        public virtual bool OpRaiseEvent(int EventCode, IMessage pkt = null, CustomDic customData = null)
+        public virtual bool OpRaiseEvent(int EventCode, IMessage pkt = null, List<Protocol.HeliosVariable> customData = null)
         {
             if (!CheckOpCanBeSent((byte)OperationCode.RAISE_EVENT, Server, "RaiseEvent"))
             {

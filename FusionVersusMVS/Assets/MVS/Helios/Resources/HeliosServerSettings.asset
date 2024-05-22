@@ -16,7 +16,7 @@ MonoBehaviour:
     AppId: 
     AppVersion: 
     FixedRegion: 
-    Server: 192.168.154.135
+    Server: 192.168.154.130
     Port: 30080
     IsUseNameServer: 0
     IsDirectToMVS: 1

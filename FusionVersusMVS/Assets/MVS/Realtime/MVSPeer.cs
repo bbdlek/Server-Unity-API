@@ -139,7 +139,7 @@ namespace MVS.Realtime
             return peerBase.ProcessOutgoingData();
         }
 
-        public virtual bool SendEvent(int eventCode, IMessage fixedData = null, CustomDic customData = null)
+        public virtual bool SendEvent(int eventCode, IMessage fixedData = null, List<Protocol.HeliosVariable> customData = null)
         {
             var packs = new Packs();
             var pkt = new C_EVENT
@@ -156,6 +156,19 @@ namespace MVS.Realtime
                     break;
                 case EventCode.PKT_C_UPDATE_NETWORK_OBJECTS:
                     packs.CUpdateNetworkObjects = fixedData as C_UPDATE_NETWORK_OBJECTS;
+                    //RTT
+                    StopwatchList.Add(SequenceNum, new Stopwatch());
+                    StopwatchList[SequenceNum].Start();
+                    if (customData == null)
+                    {
+                        customData = new List<Protocol.HeliosVariable>();
+                    }
+                    customData.Add(new Protocol.HeliosVariable
+                    {
+                        Key = 10000,
+                        NInt32 = SequenceNum,
+                    });
+                    SequenceNum++;
                     break;
                 case EventCode.PKT_C_REMOVE_NETWORK_OBJECTS:
                     packs.CRemoveNetworkObjects = fixedData as C_REMOVE_NETWORK_OBJECTS;
@@ -169,15 +182,26 @@ namespace MVS.Realtime
             }
             if(fixedData != null)
                 pkt.FixedData = packs;
+
+            if (customData != null)
+            {
+                foreach (var data in customData)
+                {
+                    pkt.CustomData.Add(data);
+                }
+            }
             
-            SendOperation(Protocol.OperationCode.RaiseEvent, pkt, customData);
+            SendOperation(Protocol.OperationCode.RaiseEvent, pkt);
             return true;
         }
+        
+        public static int SequenceNum = 0;
+        public Dictionary<int, Stopwatch> StopwatchList = new Dictionary<int, Stopwatch>();
 
         public virtual bool SendOperation(
             Protocol.OperationCode operationCode,
             IMessage fixedData,
-            CustomDic customData = null
+            List<Protocol.HeliosVariable> customData = null
         )
         {
             (byte[] data, int size) = peerBase.SerializeOperationToPacket(operationCode, fixedData, customData);

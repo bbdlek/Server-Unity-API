@@ -20,7 +20,7 @@ namespace MVS.Helios
             {
                 bool b = false;
                 if (heliosAttributes.Count == 0) return false;
-                for (int i = CustomVariables.GetKeyByName("scale") + 1; i < heliosAttributes.Count + CustomVariables.GetKeyByName("scale") + 1; i++)
+                for (int i = CustomVariablesUnity.ScaleKey + 1; i < heliosAttributes.Count + CustomVariablesUnity.ScaleKey + 1; i++)
                 {
                     if (HeliosUtility.IsListType(heliosAttributes[i].FieldType))
                     {
@@ -219,7 +219,7 @@ namespace MVS.Helios
                         {
                             ho.ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
                             {
-                                Key = CustomVariables.GetKeyByName("position"),
+                                Key = CustomVariablesUnity.PosKey,
                                 NVector = new Protocol.Vector3
                                 {
                                     X = 0,
@@ -229,7 +229,7 @@ namespace MVS.Helios
                             });
                             ho.ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
                             {
-                                Key = CustomVariables.GetKeyByName("rotation"),
+                                Key = CustomVariablesUnity.RotKey,
                                 NVector = new Protocol.Vector3
                                 {
                                     X = 0,
@@ -239,7 +239,7 @@ namespace MVS.Helios
                             });
                             ho.ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
                             {
-                                Key = CustomVariables.GetKeyByName("scale"),
+                                Key = CustomVariablesUnity.ScaleKey,
                                 NVector = new Protocol.Vector3
                                 {
                                     X = 1,
@@ -265,7 +265,7 @@ namespace MVS.Helios
                         attribute.Owner = this;
                         
                         //HELIOSVARIABLE
-                        int requiredCount = CustomVariables.GetKeyByName("scale") + 2;
+                        int requiredCount = CustomVariablesUnity.ScaleKey + 2;
                         int currentCount = ObjectInfo.TestValues.Count;
 
                         if (currentCount < requiredCount)
@@ -377,7 +377,6 @@ namespace MVS.Helios
                         break;
                     default:
                         var value = HeliosUtility.ByteToObject(customData.NCustom);
-                        Debug.Log(value);
                         if (field.FieldType == typeof(Color))
                         {
                             ColorUtility.TryParseHtmlString("#" + value, out Color loadedColor);

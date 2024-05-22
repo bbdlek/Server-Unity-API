@@ -79,7 +79,7 @@ namespace MVS.Helios.Utility
             {
                 EventCode = 0
             };
-            pkt.CustomData.Add(testStruct);
+            // pkt.CustomData.Add(testStruct);
             // testStruct.Data.Insert(3, Any.Pack(new FloatValue { Value = 32 }));
             for (int i = 0; i < testStruct.Data.Count; i++)
             {

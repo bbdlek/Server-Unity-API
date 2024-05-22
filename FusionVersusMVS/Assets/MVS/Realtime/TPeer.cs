@@ -211,7 +211,10 @@ namespace MVS.Realtime
                 ReturnCode = 0,
                 FixedData = packet.FixedData.ToByteArray()
             };
-            opData.CustomData = packet.CustomData;
+            foreach (var hv in packet.CustomData)
+            {
+                opData.CustomData.Add(hv);
+            }
             Listener.OnOperationResponse(opData);
 
             return true;
@@ -231,7 +234,13 @@ namespace MVS.Realtime
                 Sender = packet.Sender.PlayerID,
                 FixedData = packet.FixedData.ToByteArray()
             };
-            eventData.CustomData = packet.CustomData;
+            if(packet.CustomData != null)
+            {
+                foreach (var hv in packet.CustomData)
+                {
+                    eventData.CustomData.Add(hv);
+                }
+            }
             Listener.OnEvent(eventData);
 
             return true;
