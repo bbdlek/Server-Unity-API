@@ -570,6 +570,11 @@ namespace MVS.Helios
 
             return RealtimeClient.OpRaiseEvent(eventCode, data, customData);
         }
+
+        public static long GetCurrentRTT()
+        {
+            return RealtimeClient.CurRTT;
+        }
         
 
         public static void LoadOrCreateSettings()

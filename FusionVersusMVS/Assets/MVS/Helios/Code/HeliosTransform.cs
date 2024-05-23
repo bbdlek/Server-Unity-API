@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using MVS.Realtime;
 using Protocol;
@@ -47,8 +48,7 @@ namespace MVS.Helios
         public float smoothness;
 
         private bool _isMine;
-
-        private ObjectInfo _objectInfo;
+        
         private HeliosObject _heliosObject;
         
         // TODO : Local Lossy
@@ -69,114 +69,92 @@ namespace MVS.Helios
 
         private void Update()
         {
-            var tr = transform;
-            if (_isMine && (HasPositionChanged(tr.localPosition) || HasRotationChanged(tr.rotation) || HasScaleChanged(tr.localScale))) {
-                //Send?
-                var fixedData = new C_UPDATE_NETWORK_OBJECTS();
-                _objectInfo =_heliosObject.ObjectInfo;
-                //////TestValue 같이
-                // var _objectInfo = new ObjectInfo
-                // {
-                //     ObjectID = new ObjectID
-                //     {
-                //         PrefabID = GetComponent<HeliosObject>().PrefabId,
-                //         InstanceID = GetComponent<HeliosObject>().InstanceId,
-                //         ClientInstanceID = GetComponent<HeliosObject>().ClientInstanceId,
-                //     },
-                //     SyncType = ObjectSyncType.PersonalOwn,
-                //     OwnerPlayerID = HeliosNetwork.LocalPlayer.UserId
-                // };
-
-                _objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("position"))!.NVector =
-                    new Protocol.Vector3
-                    {
-                        X = tr.position.x,
-                        Y = tr.position.y,
-                        Z = tr.position.z
-                    };
-                
-                _objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("rotation"))!.NVector =
-                    new Protocol.Vector3
-                    {
-                        X = tr.eulerAngles.x,
-                        Y = tr.eulerAngles.y,
-                        Z = tr.eulerAngles.z
-                    };
-                
-                _objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("scale"))!.NVector =
-                    new Protocol.Vector3
-                    {
-                        X = tr.localScale.x,
-                        Y = tr.localScale.y,
-                        Z = tr.localScale.z
-                    };
-
-                // _objectInfo.TestValues.Add(new HeliosVariable
-                // {
-                //     Key = CustomVariables.GetKeyByName("position"),
-                //     NVector = new Protocol.Vector3
-                //     {
-                //         X = tr.localPosition.x,
-                //         Y = tr.localPosition.y,
-                //         Z = tr.localPosition.z
-                //     }
-                // });
-                //
-                // _objectInfo.TestValues.Add(new HeliosVariable
-                // {
-                //     Key = CustomVariables.GetKeyByName("rotation"),
-                //     NVector = new Protocol.Vector3
-                //     {
-                //         X = tr.eulerAngles.x,
-                //         Y = tr.eulerAngles.y,
-                //         Z = tr.eulerAngles.z
-                //     }
-                // });
-                //
-                // _objectInfo.TestValues.Add(new HeliosVariable
-                // {
-                //     Key = CustomVariables.GetKeyByName("scale"),
-                //     NVector = new Protocol.Vector3
-                //     {
-                //         X = tr.localScale.x,
-                //         Y = tr.localScale.y,
-                //         Z = tr.localScale.z
-                //     }
-                // });
-                
-                fixedData.ObjectInfos.Add(_objectInfo);
-                
-                HeliosNetwork.RaiseEvent(EventCode.PKT_C_UPDATE_NETWORK_OBJECTS, fixedData);
-                
-                _storedPosition = tr.position;
-                networkPosition = _storedPosition;
-                
-                _storedRotation = tr.rotation;
-                networkRotation = _storedRotation;
-                
-                _storedScale = tr.localScale;
-                networkScale = _storedScale;
-            }
-            
-            
             //Read?
             if(!_isMine)
             {
                 if(syncPosition)
                 {
                     // 부드러운 이동을 위해 Lerp 사용
-                    tr.position = Vector3.Lerp(tr.position, networkPosition, Time.deltaTime * smoothness);
+                    transform.position = Vector3.Lerp(transform.position, networkPosition, Time.deltaTime * smoothness);
                 }
                 if(syncRotation)
                 {
                     // 부드러운 회전을 위해 Slerp 사용
-                    tr.rotation = Quaternion.Slerp(tr.rotation, networkRotation, Time.deltaTime * smoothness);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, networkRotation, Time.deltaTime * smoothness);
                 }
                 if (syncScale)
                 {
                     // 부드러운 크기 변경을 위해 Lerp 사용
-                    tr.localScale = Vector3.Lerp(tr.localScale, networkScale, Time.deltaTime * smoothness);
+                    transform.localScale = Vector3.Lerp(transform.localScale, networkScale, Time.deltaTime * smoothness);
                 }
+            }
+        }
+        
+        private float _elapsedTime = 0f;
+
+        private void LateUpdate()
+        {
+            if(!HeliosNetwork.InGroup) return;
+            _elapsedTime += Time.deltaTime;
+            
+            if (_elapsedTime >= 1f / HeliosNetwork.SendRate)
+            {
+                if (_isMine && (HasPositionChanged(transform.localPosition) || HasRotationChanged(transform.rotation) || HasScaleChanged(transform.localScale))) {
+                    var fixedData = new C_UPDATE_NETWORK_OBJECTS();
+                    var _objectInfo = new ObjectInfo
+                    {
+                        ObjectID = _heliosObject.ObjectInfo.ObjectID,
+                        SyncType = ObjectSyncType.PersonalOwn,
+                        OwnerPlayerID = _heliosObject.ObjectInfo.OwnerPlayerID
+                    };
+
+                    _objectInfo.TestValues.Add(new HeliosVariable
+                    {
+                        Key = CustomVariablesUnity.PosKey,
+                        NVector = new Protocol.Vector3
+                        {
+                            X = transform.localPosition.x,
+                            Y = transform.localPosition.y,
+                            Z = transform.localPosition.z
+                        }
+                    });
+                    
+                    _objectInfo.TestValues.Add(new HeliosVariable
+                    {
+                        Key = CustomVariablesUnity.RotKey,
+                        NVector = new Protocol.Vector3
+                        {
+                            X = transform.eulerAngles.x,
+                            Y = transform.eulerAngles.y,
+                            Z = transform.eulerAngles.z
+                        }
+                    });
+                    
+                    _objectInfo.TestValues.Add(new HeliosVariable
+                    {
+                        Key = CustomVariablesUnity.ScaleKey,
+                        NVector = new Protocol.Vector3
+                        {
+                            X = transform.localScale.x,
+                            Y = transform.localScale.y,
+                            Z = transform.localScale.z
+                        }
+                    });
+                    
+                    fixedData.ObjectInfos.Add(_objectInfo);
+                    
+                    HeliosNetwork.RaiseEvent(EventCode.PKT_C_UPDATE_NETWORK_OBJECTS, fixedData);
+                    
+                    _storedPosition = transform.position;
+                    networkPosition = _storedPosition;
+                    
+                    _storedRotation = transform.rotation;
+                    networkRotation = _storedRotation;
+                    
+                    _storedScale = transform.localScale;
+                    networkScale = _storedScale;
+                }
+                _elapsedTime = 0f;
             }
         }
     }

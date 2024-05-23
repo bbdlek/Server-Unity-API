@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using MVS.Helios.Utility;
 using MVS.Realtime;
@@ -94,7 +93,7 @@ namespace MVS.Helios
                 }
                 // var updateObject = new ObjectInfo();
 
-                for (int i = CustomVariables.GetKeyByName("scale") + 1; i < ho.heliosAttributes.Count + CustomVariables.GetKeyByName("scale") + 1; i++)
+                for (int i = CustomVariablesUnity.ScaleKey + 1; i < ho.heliosAttributes.Count + CustomVariablesUnity.ScaleKey + 1; i++)
                 {
                     if (HeliosUtility.IsListType(ho.heliosAttributes[i].FieldType))
                     {
@@ -194,7 +193,7 @@ namespace MVS.Helios
 
         public void OnConnected()
         {
-            Debug.Log("OnConnected");
+            
         }
 
         public void OnConnectedToMaster()
