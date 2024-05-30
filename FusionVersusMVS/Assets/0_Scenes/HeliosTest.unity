@@ -272,10 +272,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: 
-  maxDataPoints: 5
+  maxDataPoints: 50
   graphContainer: {fileID: 1452413592}
   uiLineRenderer: {fileID: 1452413595}
-  circleSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  circleSprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &120285223
 GameObject:
   m_ObjectHideFlags: 0
