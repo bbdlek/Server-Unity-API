@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
+            Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{BB046ADF-597C-4FA1-B34A-41F2E7DA360B}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>MVSHelios</RootNamespace>
+        <AssemblyName>MVSHelios</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE, SUPPORTED_UNITY</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE, SUPPORTED_UNITY</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="Google.Protobuf">
+          <HintPath>..\..\FusionRealtime\FusionRealtime\bin\Release\Google.Protobuf.dll</HintPath>
+        </Reference>
+        <Reference Include="HeliosRealtime">
+          <HintPath>..\..\FusionRealtime\FusionRealtime\bin\Release\HeliosRealtime.dll</HintPath>
+        </Reference>
+        <Reference Include="mscorlib">
+          <HintPath>..\..\..\..\..\Unity\Hub\Editor\2022.3.3f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\mscorlib.dll</HintPath>
+        </Reference>
+        <Reference Include="System"/>
+        <Reference Include="System.Buffers">
+          <HintPath>..\..\..\..\..\Unity\Hub\Editor\2022.3.3f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Buffers.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Data"/>
+        <Reference Include="System.Memory">
+          <HintPath>..\..\..\..\..\Unity\Hub\Editor\2022.3.3f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Memory.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Numerics.Vectors">
+          <HintPath>..\..\MVSRealtime\MVSRealtime\bin\Release\System.Numerics.Vectors.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime.CompilerServices.Unsafe">
+          <HintPath>..\..\MVSRealtime\MVSRealtime\bin\Release\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Xml"/>
+        <Reference Include="UnityEditor">
+          <HintPath>..\..\..\..\..\Unity\Hub\Editor\2022.3.3f1\Editor\Data\Managed\UnityEditor.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine">
+          <HintPath>..\..\..\..\..\Unity\Hub\Editor\2022.3.3f1\Editor\Data\Managed\UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="websocket-sharp">
+          <HintPath>..\..\MVSRealtime\MVSRealtime\bin\Release\websocket-sharp.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="HeliosHandler.cs" />
+        <Compile Include="IHeliosCallbacks.cs" />
+        <Compile Include="HeliosVariable.cs" />
+        <Compile Include="HeliosAttribute.cs" />
+        <Compile Include="InstantiateParams.cs" />
+        <Compile Include="CustomVariablesUnity.cs" />
+        <Compile Include="HeliosNetworkPartial.cs" />
+        <Compile Include="HeliosSettings.cs" />
+        <Compile Include="HeliosTransform.cs" />
+        <Compile Include="HeliosRPCAttribute.cs" />
+        <Compile Include="HeliosObject.cs" />
+        <Compile Include="HeliosObjectTable.cs" />
+        <Compile Include="HeliosNetwork.cs" />
+        <Compile Include="HeliosClasses.cs" />
+        <Compile Include="Utility/HeliosStruct.cs" />
+        <Compile Include="Utility/DeepCopyHelper.cs" />
+        <Compile Include="Utility/HeliosUtility.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>
