@@ -39,3 +39,41 @@
 /home/bbdlek/RiderProjects/MVSHelios/MVSHelios/bin/Release/ScriptCompilationBuildProgram.Data.pdb
 /home/bbdlek/RiderProjects/MVSHelios/MVSHelios/bin/Release/BeeBuildProgramCommon.Data.pdb
 /home/bbdlek/RiderProjects/MVSHelios/MVSHelios/bin/Release/mscorlib.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\MVSHelios.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\MVSHelios.pdb
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\Google.Protobuf.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\HeliosRealtime.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\System.Buffers.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\System.Memory.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\System.Numerics.Vectors.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\System.Runtime.CompilerServices.Unsafe.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\websocket-sharp.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\Unity.Cecil.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\Bee.BeeDriver2.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\Bee.BinLog.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\PlayerBuildProgramLibrary.Data.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\Bee.TinyProfiler2.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\ExCSS.Unity.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\Unity.CompilationPipeline.Common.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\ScriptCompilationBuildProgram.Data.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\BeeBuildProgramCommon.Data.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\System.CodeDom.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\Google.Protobuf.xml
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\HeliosRealtime.pdb
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\System.Numerics.Vectors.xml
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\System.Runtime.CompilerServices.Unsafe.xml
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\UnityEditor.pdb
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\UnityEditor.xml
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\UnityEngine.pdb
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\UnityEngine.xml
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\websocket-sharp.xml
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\Bee.BeeDriver2.pdb
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\Bee.BinLog.pdb
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\PlayerBuildProgramLibrary.Data.pdb
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\ScriptCompilationBuildProgram.Data.pdb
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\BeeBuildProgramCommon.Data.pdb
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\obj\Release\MVSHelios.csproj.AssemblyReference.cache
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\obj\Release\MVSHelios.csproj.CoreCompileInputs.cache
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\obj\Release\MVSHelios.csproj.Up2Date
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\obj\Release\MVSHelios.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\obj\Release\MVSHelios.pdb

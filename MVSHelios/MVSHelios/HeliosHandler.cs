@@ -72,7 +72,7 @@ namespace MVS.Helios
         private void CheckAndUpdateVariables()
         {
             var data = new C_UPDATE_NETWORK_OBJECTS();
-            foreach (var ho in HeliosNetwork.HeliosObjectList.FindAll(x => x.hasUpdate))
+            foreach (var ho in HeliosNetwork.HeliosObjectList.FindAll(x => x.hasUpdate && (x.IsMine|| x.ObjectInfo.SyncType == ObjectSyncType.GlobalOwn)))
             {
                 ObjectInfo updateObject = new ObjectInfo();
                 if (GetComponent<HeliosObject>())

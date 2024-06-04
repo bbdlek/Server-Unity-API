@@ -56,14 +56,12 @@ namespace MVS.Realtime
         {
             get
             {
-                Debug.Log("Get");
                 return base._value.NInt32;
             }
             set
             {
                 if(_value != value)
                 {
-                    Debug.Log($"Set {Index}");
                     SetFlag(true);
                     base._value.NInt32 = value;
                     _value = value;
@@ -94,14 +92,12 @@ namespace MVS.Realtime
         {
             get
             {
-                Debug.Log("Get");
                 return base._value.NInt64;
             }
             set
             {
                 if(_value != value)
                 {
-                    Debug.Log($"Set {Index}");
                     SetFlag(true);
                     base._value.NInt64 = value;
                     _value = value;
@@ -132,14 +128,12 @@ namespace MVS.Realtime
         {
             get
             {
-                Debug.Log("Get");
                 return base._value.NFloat;
             }
             set
             {
                 if(_value != value)
                 {
-                    Debug.Log($"Set {Index}");
                     SetFlag(true);
                     base._value.NFloat = value;
                     _value = value;
@@ -170,14 +164,12 @@ namespace MVS.Realtime
         {
             get
             {
-                Debug.Log("Get");
                 return base._value.NDouble;
             }
             set
             {
                 if(_value != value)
                 {
-                    Debug.Log($"Set {Index}");
                     SetFlag(true);
                     base._value.NDouble = value;
                     _value = value;
@@ -208,14 +200,12 @@ namespace MVS.Realtime
         {
             get
             {
-                Debug.Log("Get");
                 return base._value.NString;
             }
             set
             {
                 if(_value != value)
                 {
-                    Debug.Log($"Set {Index}");
                     SetFlag(true);
                     base._value.NString = value;
                     _value = value;
@@ -246,7 +236,6 @@ namespace MVS.Realtime
         {
             get
             {
-                Debug.Log("Get");
                 var vec = new Vector3((float)base._value.NVector.X, (float)base._value.NVector.X, (float)base._value.NVector.X);
                 return vec;
             }
@@ -254,7 +243,6 @@ namespace MVS.Realtime
             {
                 if(_value != value)
                 {
-                    Debug.Log($"Set {Index}");
                     SetFlag(true);
                     var vec = new Protocol.Vector3
                     {
@@ -297,7 +285,6 @@ namespace MVS.Realtime
         {
             get
             {
-                Debug.Log("Get");
                 var vec = new Vector3((float)base._value.NVector.X, (float)base._value.NVector.X, (float)base._value.NVector.X);
                 return Quaternion.Euler(vec);
             }
@@ -305,7 +292,6 @@ namespace MVS.Realtime
             {
                 if(_value != value)
                 {
-                    Debug.Log($"Set {Index}");
                     SetFlag(true);
                     Vector3 euler = value.eulerAngles;
                     var vec = new Protocol.Vector3

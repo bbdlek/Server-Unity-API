@@ -143,10 +143,10 @@ namespace MVS.Helios
                         var pkt = new C_ADD_NETWORK_OBJECTS();
                         foreach (var obj in HeliosObjectList)
                         {
+                            if(obj.ObjectInfo.SyncType == ObjectSyncType.PersonalOwn) continue;
                             obj.ObjectInfo.SyncType = ObjectSyncType.GlobalOwn;
                             obj.ObjectInfo.OwnerPlayerID = 0;
                             pkt.ObjectInfos.Add(obj.ObjectInfo);
-                            RealtimeClient.RealtimePeer.Listener.MVSDebug(DebugLevel.INFO, obj.ObjectInfo.TestValues.Count.ToString());
                         }
                         RaiseEvent(EventCode.PKT_C_ADD_NETWORK_OBJECTS, pkt);
                     }

@@ -19,3 +19,22 @@
 /home/bbdlek/RiderProjects/FusionRealtime/FusionRealtime/obj/Release/HeliosRealtime.dll
 /home/bbdlek/RiderProjects/FusionRealtime/FusionRealtime/obj/Release/HeliosRealtime.pdb
 /home/bbdlek/RiderProjects/FusionRealtime/FusionRealtime/bin/Release/mscorlib.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\HeliosRealtime.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\HeliosRealtime.pdb
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\Google.Protobuf.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\System.Buffers.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\System.Memory.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\System.Numerics.Vectors.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\System.Runtime.CompilerServices.Unsafe.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\websocket-sharp.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\Google.Protobuf.xml
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\System.Numerics.Vectors.xml
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\System.Runtime.CompilerServices.Unsafe.xml
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\UnityEngine.pdb
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\UnityEngine.xml
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\websocket-sharp.xml
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\obj\Release\FusionRealtime.csproj.AssemblyReference.cache
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\obj\Release\FusionRealtime.csproj.CoreCompileInputs.cache
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\obj\Release\FusionRe.8B247C0A.Up2Date
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\obj\Release\HeliosRealtime.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\obj\Release\HeliosRealtime.pdb

@@ -450,20 +450,22 @@ namespace MVS.Realtime
                     break;
                 case EventCode.PKT_S_UPDATE_NETWORK_OBJECTS:
                     //RTT
-                    var updateData = Packs.Parser.ParseFrom(eventData.FixedData).SUpdateNetworkObjects;
-                    var sequenceNum = eventData.CustomData.FindLast(x => x.Key == 10000).NInt32;
-                    if (RealtimePeer.StopwatchList.ContainsKey(sequenceNum))
+                    if(eventData.Sender == LocalPlayer.PlayerInfo.PlayerID)
                     {
-                        var sw = RealtimePeer.StopwatchList[eventData.CustomData.FindLast(x => x.Key == 10000).NInt32];
-                        var rtt = sw.ElapsedMilliseconds;
-                        CurRTT = rtt;
-                        sw.Stop();
-                        RealtimePeer.StopwatchList.Remove(sequenceNum);
-                        if (rtt > 100)
+                        var lastEntry = eventData.CustomData.FindLast(x => x.Key == 10000);
+                        if(lastEntry != null)
                         {
-                            MVSDebug(DebugLevel.INFO, $"RTT {sequenceNum} : {rtt} ms");
+                            var sequenceNum = lastEntry.NInt32;
+                            if (RealtimePeer.StopwatchList.ContainsKey(sequenceNum))
+                            {
+                                var sw = RealtimePeer.StopwatchList[
+                                    eventData.CustomData.FindLast(x => x.Key == 10000).NInt32];
+                                var rtt = sw.ElapsedMilliseconds;
+                                CurRTT = rtt;
+                                sw.Stop();
+                                RealtimePeer.StopwatchList.Remove(sequenceNum);
+                            }
                         }
-                        // MVSDebug(DebugLevel.INFO, $"RTT {sequenceNum} : {rtt} ms");
                     }
                     break;
             }
@@ -528,12 +530,12 @@ namespace MVS.Realtime
                     LocalPlayer.PlayerInfo.PlayerID = dataPlayerID.PlayerID;
                     break;
                 case OperationCode.ROOM_LIST:
+                    RoomList.Clear();
                     var dataRoomList = Packs.Parser.ParseFrom(operationResponse.FixedData).SRoomList;
                     if(dataRoomList.RoomInfos.Count > 0)
                     {
                         foreach (var roomInfo in dataRoomList.RoomInfos)
                         {
-                            RoomList.Clear();
                             RoomList.Add(new Room(roomInfo));
                         }
 

@@ -537,13 +537,6 @@ namespace MVS.Helios
 
         public virtual void OnCreatedGroup()
         {
-            var pkt = new C_ADD_NETWORK_OBJECTS();
-            foreach (var obj in HeliosNetwork.HeliosObjectList)
-            {
-                obj.ObjectInfo.SyncType = ObjectSyncType.GlobalOwn;
-                obj.ObjectInfo.OwnerPlayerID = 0;
-            }
-            HeliosNetwork.RaiseEvent(EventCode.PKT_C_ADD_NETWORK_OBJECTS, pkt);
         }
 
         public virtual void OnCreatedGroupFailed(short failCode, string message)
