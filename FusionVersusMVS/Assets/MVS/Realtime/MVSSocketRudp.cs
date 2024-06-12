@@ -20,6 +20,7 @@ namespace MVS.Realtime
             Library.Initialize();
 
             _client = new Host();
+            _client.Create();
             
         }
 
@@ -36,31 +37,86 @@ namespace MVS.Realtime
                     return false;
                 State = RealtimeSocketState.Connecting;
             }
-            // new Thread(DnsAndConnect)
-            // {
-            //     IsBackground = true
-            // }.Start();
+
+            Address address = new Address();
+            address.SetHost(ServerAddress);
+            address.Port = ushort.Parse(ServerPort);
+
+            _server = _client.Connect(address);
+            Listener.MVSDebug(DebugLevel.INFO, $"Connect Enet Address {address.GetHost()} : {address.Port}  STATE : {_server.State}");
+            new Thread(EnetLoop)
+            {
+                IsBackground = true
+            }.Start();
             return true;
         }
 
-        internal void ConnectToServer()
+        internal void EnetLoop()
         {
-            
+            ENet.Event enetEvent;
+
+            while (true)
+            {
+                if (_client.CheckEvents(out enetEvent) <= 0)
+                {
+                    if (_client.Service(15, out enetEvent) <= 0)
+                        return;
+                }
+                
+                //>>>>>>>>>>
+                
+                switch (enetEvent.Type)
+                {
+                    case ENet.EventType.Connect:
+                    {
+                        // connect
+                        Listener.MVSDebug(DebugLevel.ERROR, $"Connected");
+                    }
+                        break;
+                    case ENet.EventType.Disconnect:
+                    {
+                        
+                    }
+                        break;
+                    case ENet.EventType.Receive:
+                    {
+                        byte[] data = new byte[enetEvent.Packet.Length];
+                        enetEvent.Packet.CopyTo(data);
+                        peerBase.ReceiveIncomingData(data);
+                        enetEvent.Packet.Dispose();
+                    }
+                    break;
+
+                    case ENet.EventType.Timeout:
+                    {
+                        Listener.MVSDebug(DebugLevel.ERROR, $"ENET TIMEOUT | Peer State : {enetEvent.Peer.State}");
+                    }
+                        break;
+                }
+            }
         }
 
         public override bool Disconnect()
         {
-            throw new System.NotImplementedException();
+            _server.Disconnect(0);
+            _client.Dispose();
+            Library.Deinitialize();
+
+            return true;
         }
 
         public override bool Send(byte[] data)
         {
-            throw new System.NotImplementedException();
+            Packet packet = default(Packet);
+            packet.Create(data);
+            _server.Send(0, ref packet);
+
+            return true;
         }
 
         public override bool Receive(byte[] data)
         {
-            throw new System.NotImplementedException();
+            return true;
         }
         
     }

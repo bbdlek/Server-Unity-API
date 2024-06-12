@@ -42,9 +42,9 @@ namespace MVS.Realtime
 
         internal void DnsAndConnect()
         {
+                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
-                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 //TODO : TimeOut Settings
                 _socket.NoDelay = true;
                 _socket.ReceiveTimeout = 5000;

@@ -42,7 +42,7 @@ namespace MVS.Realtime
             SocketImplementationConfig = new Dictionary<ConnectionProtocol, Type>();
             SocketImplementationConfig[ConnectionProtocol.Sap] = typeof(MVSWebSocket);
             SocketImplementationConfig[ConnectionProtocol.Tcp] = typeof(SocketTcp);
-            SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(MVSWebSocket);
+            SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(MVSSocketRudp);
             SocketImplementationConfig[ConnectionProtocol.WebSocket] = typeof(MVSWebSocket);
             CreatePeerBase();
         }
