@@ -17,10 +17,10 @@ MonoBehaviour:
     AppVersion: 
     FixedRegion: 
     Server: 192.168.154.130
-    Port: 30080
+    Port: 30082
     IsUseNameServer: 0
     IsDirectToMVS: 1
-    Protocol: 3
+    Protocol: 2
     DebugLevel: 4
   SendRate: 60
   RunInBackground: 1
