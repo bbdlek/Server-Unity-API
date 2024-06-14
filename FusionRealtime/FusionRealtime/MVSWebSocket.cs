@@ -1,4 +1,7 @@
 using System;
+using System.IO;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using UnityEngine.Scripting;
 using WebSocketSharp;
@@ -9,7 +12,7 @@ namespace MVS.Realtime
     public class MVSWebSocket : RealtimeSocketConnection
     {
         private WebSocketSharp.WebSocket ws;
-        // public WebSocketHandler wsh;
+        private readonly X509Certificate2 trustedCertificate;
         
         private readonly object syncer = new object();
         
@@ -20,6 +23,16 @@ namespace MVS.Realtime
             
             // 데이터 수신을 폴링하지 않음
             PollReceive = false;
+
+            // string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            // string certificatePath = Path.Combine(baseDirectory, "/certs/mvs.local.crt");
+            //
+            // if (string.IsNullOrEmpty(certificatePath) || !File.Exists(certificatePath))
+            // {
+            //     throw new ArgumentException("Invalid certificate path", nameof(certificatePath));
+            // }
+            //
+            // trustedCertificate = new X509Certificate2(certificatePath);
         }
 
         public override bool Connect()
@@ -77,12 +90,25 @@ namespace MVS.Realtime
 
         internal void DnsAndConnect()
         {
-            Listener.MVSDebug(DebugLevel.INFO, $"ws://{ServerAddress}:{ServerPort}");
-            ws = new WebSocketSharp.WebSocket($"ws://{ServerAddress}:{ServerPort}");
+            string protocol = "ws";
+            if (peerBase.Protocol == ConnectionProtocol.WebSocketSecure)
+            {
+                protocol = "wss";
+            }
+
+            string url = $"{protocol}://{ServerAddress}:{ServerPort}";
+            Listener.MVSDebug(DebugLevel.INFO, url);
+            ws = new WebSocketSharp.WebSocket(url);
 
             ws.OnOpen += OnWebSocketOpen;
             ws.OnMessage += OnWebSocketMessage;
             ws.OnClose += OnWebSocketClose;
+
+            if (protocol == "wss")
+            {
+                Listener.MVSDebug(DebugLevel.INFO, "WSS Connected");
+                ws.SslConfiguration.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+            }
             
             try
             {
@@ -91,9 +117,25 @@ namespace MVS.Realtime
             catch (Exception ec)
             {
                 Listener.MVSDebug(DebugLevel.ERROR, $"Web Socket Connection Fail : {ec}");
-                throw;
+                HandleConnectionFailure(ec);
             }
             
+        }
+        
+        // private bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        // {
+        //     if (sslPolicyErrors == SslPolicyErrors.None)
+        //         return true;
+        //
+        //     X509Certificate2 serverCertificate = new X509Certificate2(certificate);
+        //     return serverCertificate.Thumbprint == trustedCertificate.Thumbprint;
+        // }
+        
+        private void HandleConnectionFailure(Exception ex)
+        {
+            State = RealtimeSocketState.Disconnected;
+            Listener.OnStatusChanged(StatusCode.Disconnect);
+            Listener.MVSDebug(DebugLevel.ERROR, $"Connection failure handled: {ex}");
         }
         
         private void OnWebSocketOpen(object sender, System.EventArgs e)

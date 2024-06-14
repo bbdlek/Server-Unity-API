@@ -6,5 +6,6 @@ namespace MVS.Realtime
         Udp = 1,
         Tcp = 2,
         WebSocket = 3,
+        WebSocketSecure = 4
     }
 }
