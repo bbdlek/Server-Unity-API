@@ -31,18 +31,6 @@ namespace MVS.Realtime
                     return false;
                 State = RealtimeSocketState.Connecting;
             }
-
-            Address address = new Address();
-            address.SetHost(ServerAddress);
-            address.Port = ushort.Parse(ServerPort);
-            
-            ENet.Library.Initialize();
-
-            _client = new Host();
-            _client.Create();
-            
-            _server = _client.Connect(address);
-            Listener.MVSDebug(DebugLevel.INFO, $"Connect Enet Address {address.GetHost()} : {address.Port}  STATE : {_server.State}");
             
             new Thread(EnetLoop)
             {
@@ -53,48 +41,52 @@ namespace MVS.Realtime
 
         internal void EnetLoop()
         {
+            Address address = new Address();
+            address.SetHost(ServerAddress);
+            address.Port = ushort.Parse(ServerPort);
+            
+            ENet.Library.Initialize();
+
+            _client = new Host();
+            _client.Create();
+            _server = _client.Connect(address);
+            Listener.MVSDebug(DebugLevel.INFO, $"Connect Enet Address {address.GetHost()} : {address.Port}  STATE : {_server.State}");
+            
             ENet.Event enetEvent;
 
             while (true)
             {
-                if (_client.CheckEvents(out enetEvent) <= 0)
+                while (_client.Service(0, out enetEvent) > 0)
                 {
-                    while (_client.Service(0, out enetEvent) > 0)
+                    switch (enetEvent.Type)
                     {
-                        switch (enetEvent.Type)
+                        case ENet.EventType.Connect:
                         {
-                            case ENet.EventType.Connect:
-                            {
-                                // connect
-                                Listener.MVSDebug(DebugLevel.ERROR, $"Connected");
-                            } break;
+                            // connect
+                            peerBase.OnConnect();
+                        } break;
+                        
+                        case ENet.EventType.Disconnect:
+                        {
                             
-                            case ENet.EventType.Disconnect:
-                            {
-                                
-                            } break;
-                            
-                            case ENet.EventType.Receive:
-                            {
-                                byte[] data = new byte[enetEvent.Packet.Length];
-                                enetEvent.Packet.CopyTo(data);
-                                peerBase.ReceiveIncomingData(data);
-                                enetEvent.Packet.Dispose();
-                            } break;
+                        } break;
+                        
+                        case ENet.EventType.Receive:
+                        {
+                            byte[] data = new byte[enetEvent.Packet.Length];
+                            enetEvent.Packet.CopyTo(data);
+                            peerBase.ReceiveIncomingData(data);
+                            enetEvent.Packet.Dispose();
+                        } break;
 
-                            case ENet.EventType.Timeout:
-                            {
-                                Listener.MVSDebug(DebugLevel.ERROR, $"ENET TIMEOUT | Peer State : {enetEvent.Peer.State}");
-                            } break;
-                        }
+                        case ENet.EventType.Timeout:
+                        {
+                            Listener.MVSDebug(DebugLevel.ERROR, $"ENET TIMEOUT | Peer State : {enetEvent.Peer.State}");
+                        } break;
                     }
-                    
-                    _client.Flush();
-                    Listener.MVSDebug(DebugLevel.ERROR, $"ENET Flush");
                 }
                 
-                
-                Thread.Sleep(10);
+                Thread.Sleep(1);
             }
         }
 
