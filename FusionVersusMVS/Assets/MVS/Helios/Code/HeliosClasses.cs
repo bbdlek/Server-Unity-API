@@ -254,11 +254,14 @@ namespace MVS.Helios
                             ho.ObjectInfo.TestValues.Add(hv);
                         
                         //ATTRIBUTE
-                        ho.heliosAttributes.TryAdd(key, field);
+                        if(!ho.heliosAttributes.ContainsKey(key))
+                            ho.heliosAttributes.Add(key, field);
                         
-                        ho.attributeMonoBehaviors.TryAdd(key, this);
+                        if(!ho.attributeMonoBehaviors.ContainsKey(key))
+                            ho.attributeMonoBehaviors.Add(key, this);
                         
-                        ho.initialHeliosValues.TryAdd(key, DeepCopyHelper.DeepCopy(obj));
+                        if(!ho.initialHeliosValues.ContainsKey(key))
+                            ho.initialHeliosValues.Add(key, DeepCopyHelper.DeepCopy(obj));
                     }
                     else
                     {
@@ -280,9 +283,15 @@ namespace MVS.Helios
                         ObjectInfo.TestValues.Add(hv);
                         
                         //ATTRIBUTE
-                        heliosAttributes.TryAdd(key, field);
-                        attributeMonoBehaviors.TryAdd(key, this);
-                        initialHeliosValues.TryAdd(key, DeepCopyHelper.DeepCopy(obj));
+                        if(!heliosAttributes.ContainsKey(key))
+                            heliosAttributes.Add(key, field);
+                        
+                        if(!attributeMonoBehaviors.ContainsKey(key))
+                            attributeMonoBehaviors.Add(key, this);
+                        
+                        if(!initialHeliosValues.ContainsKey(key))
+                            initialHeliosValues.Add(key, DeepCopyHelper.DeepCopy(obj));    
+                        
                     }
                 }
             }
@@ -496,7 +505,6 @@ namespace MVS.Helios
 
         public virtual void OnCreatedRoom()
         {
-            Debug.Log("OnCreatedRoom");
         }
 
         public virtual void OnCreatedRoomFailed(short failCode, string message)
@@ -529,7 +537,6 @@ namespace MVS.Helios
 
         public virtual void OnCreatedGroup()
         {
-            
         }
 
         public virtual void OnCreatedGroupFailed(short failCode, string message)
@@ -560,7 +567,7 @@ namespace MVS.Helios
         {
         }
 
-        public virtual void OnErrorInfo()
+        public virtual void OnErrorInfo(string errorInfo)
         {
         }
     }

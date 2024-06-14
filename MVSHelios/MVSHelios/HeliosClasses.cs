@@ -567,7 +567,7 @@ namespace MVS.Helios
         {
         }
 
-        public virtual void OnErrorInfo()
+        public virtual void OnErrorInfo(string errorInfo)
         {
         }
     }

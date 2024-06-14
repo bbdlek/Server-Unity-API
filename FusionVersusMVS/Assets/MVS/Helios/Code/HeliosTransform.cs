@@ -63,7 +63,7 @@ namespace MVS.Helios
             _storedRotation = transform.rotation;
             networkRotation = _storedRotation;
 
-            _storedScale = transform.localScale;
+            _storedScale = transform.lossyScale;
             networkScale = _storedScale;
         }
 
@@ -85,7 +85,7 @@ namespace MVS.Helios
                 if (syncScale)
                 {
                     // 부드러운 크기 변경을 위해 Lerp 사용
-                    transform.localScale = Vector3.Lerp(transform.localScale, networkScale, Time.deltaTime * smoothness);
+                    transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(networkScale.x/transform.lossyScale.x, networkScale.y/transform.lossyScale.y, networkScale.z/transform.lossyScale.z), Time.deltaTime * smoothness);
                 }
             }
         }
@@ -99,7 +99,7 @@ namespace MVS.Helios
             
             if (_elapsedTime >= 1f / HeliosNetwork.SendRate)
             {
-                if (_isMine && (HasPositionChanged(transform.localPosition) || HasRotationChanged(transform.rotation) || HasScaleChanged(transform.localScale))) {
+                if (_isMine && (HasPositionChanged(transform.position) || HasRotationChanged(transform.rotation) || HasScaleChanged(transform.localScale))) {
                     var fixedData = new C_UPDATE_NETWORK_OBJECTS();
                     var _objectInfo = new ObjectInfo
                     {
@@ -113,9 +113,9 @@ namespace MVS.Helios
                         Key = CustomVariablesUnity.PosKey,
                         NVector = new Protocol.Vector3
                         {
-                            X = transform.localPosition.x,
-                            Y = transform.localPosition.y,
-                            Z = transform.localPosition.z
+                            X = transform.position.x,
+                            Y = transform.position.y,
+                            Z = transform.position.z
                         }
                     });
                     
@@ -135,9 +135,9 @@ namespace MVS.Helios
                         Key = CustomVariablesUnity.ScaleKey,
                         NVector = new Protocol.Vector3
                         {
-                            X = transform.localScale.x,
-                            Y = transform.localScale.y,
-                            Z = transform.localScale.z
+                            X = transform.lossyScale.x,
+                            Y = transform.lossyScale.y,
+                            Z = transform.lossyScale.z
                         }
                     });
                     
@@ -151,7 +151,7 @@ namespace MVS.Helios
                     _storedRotation = transform.rotation;
                     networkRotation = _storedRotation;
                     
-                    _storedScale = transform.localScale;
+                    _storedScale = transform.lossyScale;
                     networkScale = _storedScale;
                 }
                 _elapsedTime = 0f;

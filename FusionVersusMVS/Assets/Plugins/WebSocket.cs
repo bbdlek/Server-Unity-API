@@ -470,6 +470,7 @@ namespace HybridWebSocket
                    
                 // Create WebSocket instance
                 this.ws = new WebSocketSharp.WebSocket(url);
+                ws.SslConfiguration.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
 
                 // Bind OnOpen event
                 this.ws.OnOpen += (sender, ev) =>

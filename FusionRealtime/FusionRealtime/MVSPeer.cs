@@ -44,6 +44,7 @@ namespace MVS.Realtime
             SocketImplementationConfig[ConnectionProtocol.Tcp] = typeof(SocketTcp);
             SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(MVSWebSocket);
             SocketImplementationConfig[ConnectionProtocol.WebSocket] = typeof(MVSWebSocket);
+            SocketImplementationConfig[ConnectionProtocol.WebSocketSecure] = typeof(MVSWebSocket);
             CreatePeerBase();
         }
 
@@ -118,6 +119,7 @@ namespace MVS.Realtime
 
         public virtual void Disconnect()
         {
+            Listener.OnStatusChanged(StatusCode.Disconnect);
             peerBase.Disconnect();
         }
 

@@ -54,7 +54,6 @@ namespace MVS.Helios.Utility
             IFormatter formatter = new BinaryFormatter();
             Stream stream = new MemoryStream();
             formatter.Serialize(stream, player);
-            Debug.Log(stream.Length);
             stream.Close();
             CustomStruct customStruct = SerializeCustomStruct(player);
             var data = DeserializeCustomStruct(customStruct);

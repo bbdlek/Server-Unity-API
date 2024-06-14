@@ -659,7 +659,13 @@ namespace MVS.Realtime
             }
             else if (data.Result == Result.SuccessRoomJoined)
             {
-                MakingRoomCallbacksTarget.OnJoinedRoom();   
+                MakingRoomCallbacksTarget.OnJoinedRoom();
+            }
+
+            if (data.Result == Result.Failed)
+            {
+                MakingRoomCallbacksTarget.OnCreatedRoomFailed((short)Protocol.Result.Failed, "RoomCreateFailed");
+                MakingRoomCallbacksTarget.OnJoinedRoomFailed((short)Protocol.Result.Failed, "RoomJoinFailed");
             }
         }
 
@@ -696,6 +702,12 @@ namespace MVS.Realtime
             else if(data.Result == Result.SuccessGroupJoined)
             {
                 MakingGroupCallbacksTarget.OnJoinedGroup();
+            }
+
+            if (data.Result >= Result.FailedGroupNotExistsGroup && data.Result <= Result.FailedGroupAlreadyExistsPlayer)
+            {
+                MakingRoomCallbacksTarget.OnCreatedRoomFailed((short)data.Result, data.Result.ToString());
+                MakingRoomCallbacksTarget.OnJoinedRoomFailed((short)data.Result, data.Result.ToString());
             }
         }
 
@@ -885,7 +897,7 @@ namespace MVS.Realtime
 
     public interface IErrorInfoCallbacks
     {
-        void OnErrorInfo();
+        void OnErrorInfo(string errorInfo);
     }
     
     public class ConnectionCallbacksContainer : List<IConnectionCallbacks>, IConnectionCallbacks
@@ -1147,37 +1159,14 @@ namespace MVS.Realtime
             _client = client;
         }
         
-        public void OnErrorInfo()
+        public void OnErrorInfo(string errorInfo)
         {
             _client.UpdateCallbackTargets();
             
             foreach (IErrorInfoCallbacks target in this)
             {
-                target.OnErrorInfo();
+                target.OnErrorInfo(errorInfo);
             }
-        }
-    }
-    
-    public class ErrorInfo
-    {
-        /// <summary>
-        /// String containing information about the error.
-        /// </summary>
-        public readonly string Info;
-
-        // public ErrorInfo(EventData eventData)
-        // {
-        //     this.Info = eventData[ParameterCode.Info] as string;
-        // }
-
-        public ErrorInfo(string info)
-        {
-            Info = info;
-        }
-
-        public override string ToString()
-        {
-            return $"ErrorInfo: {this.Info}";
         }
     }
 }

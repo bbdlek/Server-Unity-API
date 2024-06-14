@@ -147,7 +147,6 @@ namespace MVS.Helios
                             obj.ObjectInfo.SyncType = ObjectSyncType.GlobalOwn;
                             obj.ObjectInfo.OwnerPlayerID = 0;
                             pkt.ObjectInfos.Add(obj.ObjectInfo);
-                            RealtimeClient.RealtimePeer.Listener.MVSDebug(DebugLevel.INFO, obj.ObjectInfo.TestValues.Count.ToString());
                         }
                         RaiseEvent(EventCode.PKT_C_ADD_NETWORK_OBJECTS, pkt);
                     }
