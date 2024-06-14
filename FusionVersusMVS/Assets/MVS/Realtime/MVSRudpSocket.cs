@@ -7,7 +7,7 @@ using ENet;
 namespace MVS.Realtime
 {
     
-    public class MVSSocketRudp : RealtimeSocketConnection
+    public class MVSRudpSocket : RealtimeSocketConnection
     {
         private Host _client;
         private Peer _server;
@@ -15,18 +15,12 @@ namespace MVS.Realtime
         private readonly object syncer = new object();
         
         [Preserve]
-        public MVSSocketRudp(PeerBase peerBase) : base(peerBase)
+        public MVSRudpSocket(PeerBase peerBase) : base(peerBase)
         {
-            Library.Initialize();
-
-            _client = new Host();
-            _client.Create();
-            
         }
 
-        ~MVSSocketRudp()
+        ~MVSRudpSocket()
         {
-            Library.Deinitialize();
         }
 
         public override bool Connect()
@@ -41,9 +35,15 @@ namespace MVS.Realtime
             Address address = new Address();
             address.SetHost(ServerAddress);
             address.Port = ushort.Parse(ServerPort);
+            
+            ENet.Library.Initialize();
 
+            _client = new Host();
+            _client.Create();
+            
             _server = _client.Connect(address);
             Listener.MVSDebug(DebugLevel.INFO, $"Connect Enet Address {address.GetHost()} : {address.Port}  STATE : {_server.State}");
+            
             new Thread(EnetLoop)
             {
                 IsBackground = true
@@ -59,40 +59,42 @@ namespace MVS.Realtime
             {
                 if (_client.CheckEvents(out enetEvent) <= 0)
                 {
-                    if (_client.Service(15, out enetEvent) <= 0)
-                        return;
-                }
-                
-                //>>>>>>>>>>
-                
-                switch (enetEvent.Type)
-                {
-                    case ENet.EventType.Connect:
+                    while (_client.Service(0, out enetEvent) > 0)
                     {
-                        // connect
-                        Listener.MVSDebug(DebugLevel.ERROR, $"Connected");
-                    }
-                        break;
-                    case ENet.EventType.Disconnect:
-                    {
-                        
-                    }
-                        break;
-                    case ENet.EventType.Receive:
-                    {
-                        byte[] data = new byte[enetEvent.Packet.Length];
-                        enetEvent.Packet.CopyTo(data);
-                        peerBase.ReceiveIncomingData(data);
-                        enetEvent.Packet.Dispose();
-                    }
-                    break;
+                        switch (enetEvent.Type)
+                        {
+                            case ENet.EventType.Connect:
+                            {
+                                // connect
+                                Listener.MVSDebug(DebugLevel.ERROR, $"Connected");
+                            } break;
+                            
+                            case ENet.EventType.Disconnect:
+                            {
+                                
+                            } break;
+                            
+                            case ENet.EventType.Receive:
+                            {
+                                byte[] data = new byte[enetEvent.Packet.Length];
+                                enetEvent.Packet.CopyTo(data);
+                                peerBase.ReceiveIncomingData(data);
+                                enetEvent.Packet.Dispose();
+                            } break;
 
-                    case ENet.EventType.Timeout:
-                    {
-                        Listener.MVSDebug(DebugLevel.ERROR, $"ENET TIMEOUT | Peer State : {enetEvent.Peer.State}");
+                            case ENet.EventType.Timeout:
+                            {
+                                Listener.MVSDebug(DebugLevel.ERROR, $"ENET TIMEOUT | Peer State : {enetEvent.Peer.State}");
+                            } break;
+                        }
                     }
-                        break;
+                    
+                    _client.Flush();
+                    Listener.MVSDebug(DebugLevel.ERROR, $"ENET Flush");
                 }
+                
+                
+                Thread.Sleep(10);
             }
         }
 
