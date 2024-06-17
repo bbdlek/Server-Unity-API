@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Google.Protobuf;
 using MVS.Helios.Utility;
 using MVS.Realtime;
+using Newtonsoft.Json;
 using Protocol;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -286,11 +287,14 @@ namespace MVS.Helios
 
         public static async Task GetRoomList()
         {
+            //TODO : Master
             await RealtimeClient.OpRoomTask();
         }
 
         public static bool JoinOrCreateRoom(string AuthToken, long AppID, long WaplRoomID, string Name)
         {
+            //TODO : Master
+            
             // if (!IsConnectedAndReady) return false;
             JoinRoomParams opParams = new JoinRoomParams
             {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Google.Protobuf;
+using Newtonsoft.Json;
 using Protocol;
 using UnityEngine;
 
@@ -742,9 +743,15 @@ namespace MVS.Realtime
         }
 
         private TaskCompletionSource<List<Room>> _roomTask;
+        
+        static HttpModule httpModule = new HttpModule();
 
         public async Task OpRoomTask()
         {
+            //TODO : Master
+            var res = await httpModule.GetAsync(" http://222.122.186.54/mvm/api/rooms");
+            var res2 = JsonConvert.DeserializeObject<RoomListResponse>(res);
+            MVSDebug(DebugLevel.INFO, res2.ResponseMessage.ToString());
             _roomTask = new TaskCompletionSource<List<Room>>();
             RealtimePeer.OpRoomList();
             await _roomTask.Task;
