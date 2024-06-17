@@ -41,8 +41,8 @@ namespace MVS.Realtime
             TransportProtocol = protocol;
             SocketImplementationConfig = new Dictionary<ConnectionProtocol, Type>();
             SocketImplementationConfig[ConnectionProtocol.Sap] = typeof(MVSWebSocket);
-            SocketImplementationConfig[ConnectionProtocol.Tcp] = typeof(SocketTcp);
-            SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(MVSWebSocket);
+            SocketImplementationConfig[ConnectionProtocol.Tcp] = typeof(MVSTcpSocket);
+            SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(MVSRudpSocket);
             SocketImplementationConfig[ConnectionProtocol.WebSocket] = typeof(MVSWebSocket);
             SocketImplementationConfig[ConnectionProtocol.WebSocketSecure] = typeof(MVSWebSocket);
             CreatePeerBase();
@@ -88,6 +88,7 @@ namespace MVS.Realtime
             switch (TransportProtocol)
             {
                 case ConnectionProtocol.Tcp:
+                case ConnectionProtocol.Udp:
                 case ConnectionProtocol.Sap:
                 case ConnectionProtocol.WebSocket:
                     if (!(peerBase is TPeer tpeer))

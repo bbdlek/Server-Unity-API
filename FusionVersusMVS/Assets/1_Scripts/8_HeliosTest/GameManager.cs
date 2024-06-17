@@ -158,6 +158,11 @@ public class GameManager : MonoBehaviorHeliosCallbacks
                 HeliosNetwork.HeliosSettings.AppSettings.Port = 30082;
                 Debug.Log($"Changed To Tcp {HeliosNetwork.HeliosSettings.AppSettings.Port}");
                 break;
+            case 2:
+                HeliosNetwork.HeliosSettings.AppSettings.Protocol = ConnectionProtocol.Udp;
+                HeliosNetwork.HeliosSettings.AppSettings.Port = 30083;
+                Debug.Log($"Changed To Udp {HeliosNetwork.HeliosSettings.AppSettings.Port}");
+                break;
         }
     }
 

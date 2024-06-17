@@ -7,7 +7,7 @@ using UnityEngine.Scripting;
 
 namespace MVS.Realtime
 {
-    public class SocketTcp : RealtimeSocketConnection, IDisposable
+    public class MVSTcpSocket : RealtimeSocketConnection, IDisposable
     {
         private Socket _socket;
         private TcpClient _client;
@@ -15,7 +15,7 @@ namespace MVS.Realtime
         private readonly object syncer = new object();
         
         [Preserve]
-        public SocketTcp(PeerBase peerBase) : base(peerBase)
+        public MVSTcpSocket(PeerBase peerBase) : base(peerBase)
         {
             Listener.MVSDebug(DebugLevel.INFO, "SocketTcp, .Net, Unity");
             
@@ -23,7 +23,7 @@ namespace MVS.Realtime
             PollReceive = false;
         }
 
-        ~SocketTcp() => Dispose();
+        ~MVSTcpSocket() => Dispose();
 
         public override bool Connect()
         {
@@ -42,9 +42,9 @@ namespace MVS.Realtime
 
         internal void DnsAndConnect()
         {
+                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
-                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 //TODO : TimeOut Settings
                 _socket.NoDelay = true;
                 _socket.ReceiveTimeout = 5000;
