@@ -285,23 +285,35 @@ namespace MVS.Helios
             return RaiseEvent((int)Protocol.EventCode.Rpc, fixedData);
         }
 
+        public static async Task<string> GetMvmAddress()
+        {
+            RealtimeClient.NameServerAddress = HeliosSettings.AppSettings.NameServer;
+            HeliosSettings.AppSettings.MVM =  await RealtimeClient.OpGetMvmAddress();
+            return HeliosSettings.AppSettings.MVM;
+        }
+
         public static async Task GetRoomList()
         {
             //TODO : Master
             await RealtimeClient.OpRoomTask();
         }
 
-        public static bool JoinOrCreateRoom(string AuthToken, long AppID, long WaplRoomID, string Name)
+        public static async Task RoomJoinToMaster()
+        {
+            await RealtimeClient.OpCreateAndJoinRoom();
+        }
+
+        public static bool JoinOrCreateRoom(string IPAddress, ulong RoomID, ulong MvsUserID, string MvsUserToken)
         {
             //TODO : Master
             
             // if (!IsConnectedAndReady) return false;
-            JoinRoomParams opParams = new JoinRoomParams
+            RoomJoinInfoStruct opParams = new RoomJoinInfoStruct
             {
-                AuthToken = AuthToken,
-                AppID = AppID,
-                RoomID = WaplRoomID,
-                Name = Name
+                IP = IPAddress,
+                RoomID = RoomID,
+                MvsUserID = MvsUserID,
+                MvsUserToken = MvsUserToken
             };
 
             return RealtimeClient.OpCreateRoom(opParams);
@@ -361,8 +373,8 @@ namespace MVS.Helios
 
         private static GameObject NetworkInstantiate(ObjectInfo objectInfo)
         {
-            var propPos = objectInfo.TestValues.Last(x => x.Key == CustomVariables.GetKeyByName("position")).NVector;
-            var propRot = objectInfo.TestValues.Last(x => x.Key == CustomVariables.GetKeyByName("rotation")).NVector;
+            var propPos = objectInfo.Values.Last(x => x.Key == CustomVariables.GetKeyByName("position")).NVector;
+            var propRot = objectInfo.Values.Last(x => x.Key == CustomVariables.GetKeyByName("rotation")).NVector;
             Vector3 position = new Vector3((float)propPos.X, (float)propPos.Y, (float)propPos.Z);
             Vector3 rotationV3 = new Vector3((float)propRot.X, (float)propRot.Y, (float)propRot.Z);
             Quaternion rotation = Quaternion.Euler(rotationV3);
@@ -394,7 +406,7 @@ namespace MVS.Helios
 
             bool isLocalInstantiate = !instantiateEvent && LocalPlayer.Equals(instantiateParams.creator);
             
-            go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+            go.GetComponent<HeliosObject>().ObjectInfo.Values.Add(new Protocol.HeliosVariable
             {
                 Key = CustomVariables.GetKeyByName("position"),
                 NVector = new Protocol.Vector3
@@ -404,7 +416,7 @@ namespace MVS.Helios
                     Z = instantiateParams.position.z
                 }
             });
-            go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+            go.GetComponent<HeliosObject>().ObjectInfo.Values.Add(new Protocol.HeliosVariable
             {
                 Key = CustomVariables.GetKeyByName("rotation"),
                 NVector = new Protocol.Vector3
@@ -414,7 +426,7 @@ namespace MVS.Helios
                     Z = instantiateParams.rotation.z
                 }
             });
-            go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+            go.GetComponent<HeliosObject>().ObjectInfo.Values.Add(new Protocol.HeliosVariable
             {
                 Key = CustomVariables.GetKeyByName("scale"),
                 NVector = new Protocol.Vector3
@@ -451,7 +463,7 @@ namespace MVS.Helios
                 go.GetComponent<HeliosObject>().ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
                 go.GetComponent<HeliosObject>().ObjectInfo.OwnerPlayerID = instantiateParams.creator.UserId;
                 go.GetComponent<HeliosObject>().ObjectInfo.ObjectID.PrefabID = instantiateParams.prefabId;
-                go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Clear();
+                go.GetComponent<HeliosObject>().ObjectInfo.Values.Clear();
                 go.GetComponent<HeliosObject>().ClientInstanceId = instantiateParams.clientInstanceID;
                 foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
                 {
@@ -520,7 +532,7 @@ namespace MVS.Helios
 
         private static void NetworkUpdateObject(uint id, ObjectInfo objectInfo)
         {
-            if (objectInfo.SyncType == ObjectSyncType.GlobalOwn)
+            if (objectInfo.SyncType == ObjectSyncType.GroupOwn)
             {
                 foreach (var ho in HeliosObjectList)
                 {
@@ -533,9 +545,9 @@ namespace MVS.Helios
             else
             {
                 var obj = FindObjectById(id);
-                var propPos = objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("position"))?.NVector;
-                var propRot = objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("rotation"))?.NVector;
-                var propScale = objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("scale"))?.NVector;
+                var propPos = objectInfo.Values.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("position"))?.NVector;
+                var propRot = objectInfo.Values.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("rotation"))?.NVector;
+                var propScale = objectInfo.Values.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("scale"))?.NVector;
                 if (propPos != null)
                 {
                     Vector3 position = new Vector3((float)propPos.X, (float)propPos.Y, (float)propPos.Z);

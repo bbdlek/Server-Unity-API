@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace MVS.Realtime
 {
@@ -38,6 +39,7 @@ namespace MVS.Realtime
                 HttpResponseMessage response = await client.PostAsync(url, content);
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
+                Debug.Log(responseBody);
                 TResponse postResponse = JsonConvert.DeserializeObject<TResponse>(responseBody);
                 return postResponse;
             }

@@ -106,6 +106,17 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         HeliosNetwork.ConnectUsingSettings();
     }
 
+    public async void OnClickGetMasterServer()
+    {
+        var res = await HeliosNetwork.GetMvmAddress();
+        Debug.Log($"MVM IP : {res}");
+    }
+
+    public async void OnClickRoomCreateOrJoin()
+    {
+        await HeliosNetwork.RoomJoinToMaster();
+    }
+
     public void OnClickConnectBtn()
     {
         HeliosNetwork.ConnectUsingSettings();
@@ -131,7 +142,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         await HeliosNetwork.GetRoomList();
         foreach (var room in HeliosNetwork.RoomList)
         {
-            Debug.Log(room.RoomInfo.Name);
+            Debug.Log(room.RoomInfo.RoomID);
         }
     }
     

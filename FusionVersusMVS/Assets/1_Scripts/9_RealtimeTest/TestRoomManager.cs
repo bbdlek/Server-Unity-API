@@ -7,13 +7,13 @@ public class TestRoomManager : Singleton<TestRoomManager>, IMakingRoomCallbacks,
 {
     public void OnClickRoomJoinBtn()
     {
-        TestManager.Instance.Client.OpCreateRoom(new JoinRoomParams
+        /*TestManager.Instance.Client.OpCreateRoom(new RoomJoinInfoStruct()
         {
             AuthToken = "null",
             AppID = 1,
             RoomID = 1,
             Name = "null"
-        });
+        });*/
     }
 
     public void OnCreatedRoom()

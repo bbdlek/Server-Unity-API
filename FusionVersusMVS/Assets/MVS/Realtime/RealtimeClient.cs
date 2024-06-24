@@ -66,6 +66,17 @@ namespace MVS.Realtime
 
     #endregion
 
+    #region Struct
+
+    public struct RoomInfo
+    {
+        public string Name;
+        public string IP;
+        public ulong RoomID;
+    }
+
+    #endregion
+
     public class RealtimeClient : IRealtimePeerListener
     {
         public RealtimePeer RealtimePeer { get; private set; }
@@ -101,9 +112,15 @@ namespace MVS.Realtime
         
         public string MasterServerAddress { get; set; }
         
+        // roominfo from mvm
+        public List<RoomInfo> MvsRoomInfos { get; set; }
+        
+        
         public string MVSAddress { get; set; }
         
         public bool IsDirectToMVS { get; set; }
+        
+        public RoomJoinInfoStruct RoomJoinInfo;
         
         public ServerConnection Server { get; private set; }
 
@@ -179,6 +196,8 @@ namespace MVS.Realtime
         public Player LocalPlayer { get; internal set; }
 
         public List<Room> RoomList { get; internal set; } = new List<Room>();
+        
+        public UInt64 RoomID { get; set; }
         
         public Room CurrentRoom { get; internal set; }
         
@@ -443,12 +462,22 @@ namespace MVS.Realtime
             switch (eventData.code)
             {
                 case EventCode.PKT_S_OTHER_CLIENT_JOINED:
-                    var data = Packs.Parser.ParseFrom(eventData.FixedData).SOtherClientJoined;
+                {
+                    var data = Packs.Parser.ParseFrom(eventData.FixedData).SOtherClientGroupJoined;
                     Player otherPlayer = new Player(data.PlayerInfo);
                     CurrentGroup.StorePlayer(otherPlayer);
                     CurrentRoom.StorePlayer(otherPlayer);
                     InGroupCallbacksTarget.OnPlayerEnteredGroup(otherPlayer);
-                    break;
+                }   break;
+                case EventCode.PKT_S_OTHER_CLIENT_LEAVE:
+                {
+                    var data = Packs.Parser.ParseFrom(eventData.FixedData).SOtherClientGroupLeave;
+                    Player otherPlayer = new Player(data.PlayerInfo);
+                    //TODO: Remove Player
+                    //CurrentGroup.StorePlayer(otherPlayer);
+                    //CurrentRoom.StorePlayer(otherPlayer);
+                    InGroupCallbacksTarget.OnPlayerLeftGroup(otherPlayer);
+                }   break;
                 case EventCode.PKT_S_UPDATE_NETWORK_OBJECTS:
                     //RTT
                     if(eventData.Sender == LocalPlayer.PlayerInfo.PlayerID)
@@ -527,11 +556,10 @@ namespace MVS.Realtime
                     JoinGroup(operationResponse);
                     break;
                 case OperationCode.PLAYER_ID:
-                    var dataPlayerID = Packs.Parser.ParseFrom(operationResponse.FixedData).SPlayerId;
-                    LocalPlayer.PlayerInfo.PlayerID = dataPlayerID.PlayerID;
+                    var dataPlayerID = Packs.Parser.ParseFrom(operationResponse.FixedData).SRoomJoinOrCreate;
                     break;
                 case OperationCode.ROOM_LIST:
-                    RoomList.Clear();
+                    /*RoomList.Clear();
                     var dataRoomList = Packs.Parser.ParseFrom(operationResponse.FixedData).SRoomList;
                     if(dataRoomList.RoomInfos.Count > 0)
                     {
@@ -542,7 +570,7 @@ namespace MVS.Realtime
 
                         _roomTask.SetResult(RoomList);
                     }
-                    else _roomTask.SetResult(null);
+                    else _roomTask.SetResult(null);*/
                     break;
                 case OperationCode.GROUP_LIST:
                     var dataGroupList = Packs.Parser.ParseFrom(operationResponse.FixedData).SGroupList;
@@ -644,9 +672,7 @@ namespace MVS.Realtime
             
             RoomInfo newRoomInfo = new RoomInfo
             {
-                AppID = data.AppID,
-                RoomID = data.WaplRoomID,
-                Name = data.Name
+                 
             };
             CurrentRoom = CreateRoom(newRoomInfo);
             CurrentRoom.RealtimeClient = this;
@@ -678,8 +704,8 @@ namespace MVS.Realtime
 
         private void JoinGroup(OperationResponse operationResponse)
         {
-            var pkt = new C_PLAYER_ID();
-            RealtimePeer.SendOperation(Protocol.OperationCode.PlayerId, pkt);
+            /*var pkt = new C_PLAYER_ID();
+            RealtimePeer.SendOperation(Protocol.OperationCode.PlayerId, pkt);*/
             
             var data = Packs.Parser.ParseFrom(operationResponse.FixedData).SGroupJoin;
             GroupInfo groupInfo = data.GroupInfo;
@@ -729,35 +755,93 @@ namespace MVS.Realtime
             return true;
         }
         
-        //Functions
+        ///Functions
+        
         public bool OpRoomList()
         {
-            if (!CheckOpCanBeSent((byte)OperationCode.ROOM_LIST, Server, "RoomList"))
+            // Lagacy
+            /*if (!CheckOpCanBeSent((byte)OperationCode.ROOM_LIST, Server, "RoomList"))
             {
                 return false;
             }
 
             bool sent = RealtimePeer.OpRoomList();
 
-            return sent;
+            return sent;*/
+
+            return true;
         }
 
-        private TaskCompletionSource<List<Room>> _roomTask;
-        
         static HttpModule httpModule = new HttpModule();
 
-        public async Task OpRoomTask()
+        public async Task<string> OpGetMvmAddress()
         {
-            //TODO : Master
-            var res = await httpModule.GetAsync(" http://222.122.186.54/mvm/api/rooms");
-            var res2 = JsonConvert.DeserializeObject<RoomListResponse>(res);
-            MVSDebug(DebugLevel.INFO, res2.ResponseMessage.ToString());
-            _roomTask = new TaskCompletionSource<List<Room>>();
-            RealtimePeer.OpRoomList();
-            await _roomTask.Task;
+            // 이하 2줄 테스트용 todo: remove
+            MasterServerAddress = "192.168.154.131:8091";
+            return MasterServerAddress;
+            
+            var res = await httpModule.GetAsync($"http://{NameServerAddress}/ns/api/v1/app/7e7f4f49-9ae7-4ef8-900c-d2c66635c4e2");
+            var res2 = JsonConvert.DeserializeObject<MVMResponse>(res);
+            MVSDebug(DebugLevel.INFO, res2.ResponseMessage[0].Hostname.ToString());
+            MasterServerAddress = res2.ResponseMessage[0].IpAddress;
+            
+            return MasterServerAddress;
         }
         
-        public bool OpCreateRoom(JoinRoomParams joinRoomParams)
+        public async Task<List<RoomInfo>> OpRoomTask()
+        {
+            var res = await httpModule.GetAsync($"http://{MasterServerAddress}/mvm/api/rooms");
+            Debug.Log(res);
+            var res2 = JsonConvert.DeserializeObject<RoomListResponse>(res);
+            MVSDebug(DebugLevel.INFO, res2.ResponseMessage.ToString());
+            MvsRoomInfos = new List<RoomInfo>();
+            foreach (var roomRes in res2.ResponseMessage)
+            {
+                MvsRoomInfos.Add(
+                    new RoomInfo()
+                    {
+                        RoomID = roomRes.RoomId,
+                        IP = roomRes.Url,
+                        Name = roomRes.RoomName
+                    }
+                );
+
+                Debug.Log($"room id : {roomRes.RoomId}, ip : {roomRes.Url}, name : {roomRes.RoomName}");
+
+                RoomID = roomRes.RoomId;
+            }
+
+            return MvsRoomInfos;
+        }
+        
+        public async Task<RoomJoinInfoStruct> OpCreateAndJoinRoom()
+        {
+            HttpRequest.RoomCreateRequest roomReq = new HttpRequest.RoomCreateRequest()
+            {
+                RoomId = "10",
+                Name = "TestRoom"
+            };
+            var res = await httpModule.PostAsync<HttpRequest.RoomCreateRequest, RoomCreateResponse>(
+                $"http://{MasterServerAddress}/mvm/api/rooms", roomReq);
+
+            Debug.Log(res);
+
+            RoomID = res.ResponseMessage.RoomId;
+            var address = res.ResponseMessage.MvsUrl.Split("/");
+            RoomJoinInfo.IP = address[0];
+            RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
+            RoomJoinInfo.RoomID = res.ResponseMessage.RoomId;
+            RoomJoinInfo.MvsUserID = res.ResponseMessage.UserId;
+            RoomJoinInfo.MvsUserToken = res.ResponseMessage.Token;
+
+            Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
+            
+            OpCreateRoom(RoomJoinInfo);
+
+            return RoomJoinInfo;
+        }
+        
+        public bool OpCreateRoom(RoomJoinInfoStruct joinRoomParams)
         {
             if (!CheckOpCanBeSent((byte)OperationCode.ROOM_JOIN_OR_CREATE, Server, "CreateRoom"))
             {
@@ -820,7 +904,7 @@ namespace MVS.Realtime
 
         public bool OpInitVariables()
         {
-            var InitVariablesPkt = new C_INIT_VARIABLES();
+            /*var InitVariablesPkt = new C_INIT_VARIABLES();
             foreach (var pair in CustomVariables.VarDic)
             {
                 InitVariablesPkt.Variables.Add(pair.Key, pair.Value);
@@ -828,7 +912,9 @@ namespace MVS.Realtime
 
             bool sent = RealtimePeer.OpInitVariables(InitVariablesPkt);
 
-            return sent;
+            return sent;*/
+
+            return true;
         }
         
         public virtual bool OpRaiseEvent(int EventCode, IMessage pkt = null, List<Protocol.HeliosVariable> customData = null)

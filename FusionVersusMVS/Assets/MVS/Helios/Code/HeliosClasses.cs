@@ -55,7 +55,7 @@ namespace MVS.Helios
         public ObjectInfo ObjectInfo = new ObjectInfo
         {
             ObjectID = new ObjectID(),
-            SyncType = ObjectSyncType.GlobalOwn,
+            SyncType = ObjectSyncType.GroupOwn,
             OwnerPlayerID = 0,
         };
         
@@ -214,10 +214,10 @@ namespace MVS.Helios
                         attribute.Owner = ho;
                         
                         //HELIOSVARIABLE
-                        var key = ho.ObjectInfo.TestValues.Count;
+                        var key = ho.ObjectInfo.Values.Count;
                         if (key == 0)
                         {
-                            ho.ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+                            ho.ObjectInfo.Values.Add(new Protocol.HeliosVariable
                             {
                                 Key = CustomVariablesUnity.PosKey,
                                 NVector = new Protocol.Vector3
@@ -227,7 +227,7 @@ namespace MVS.Helios
                                     Z = 0
                                 }
                             });
-                            ho.ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+                            ho.ObjectInfo.Values.Add(new Protocol.HeliosVariable
                             {
                                 Key = CustomVariablesUnity.RotKey,
                                 NVector = new Protocol.Vector3
@@ -237,7 +237,7 @@ namespace MVS.Helios
                                     Z = 0
                                 }
                             });
-                            ho.ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+                            ho.ObjectInfo.Values.Add(new Protocol.HeliosVariable
                             {
                                 Key = CustomVariablesUnity.ScaleKey,
                                 NVector = new Protocol.Vector3
@@ -248,10 +248,10 @@ namespace MVS.Helios
                                 }
                             });
                         }
-                        key = ho.ObjectInfo.TestValues.Count;
+                        key = ho.ObjectInfo.Values.Count;
                         hv.Key = key;
-                        if(!ho.ObjectInfo.TestValues.Contains(hv))
-                            ho.ObjectInfo.TestValues.Add(hv);
+                        if(!ho.ObjectInfo.Values.Contains(hv))
+                            ho.ObjectInfo.Values.Add(hv);
                         
                         //ATTRIBUTE
                         if(!ho.heliosAttributes.ContainsKey(key))
@@ -269,18 +269,18 @@ namespace MVS.Helios
                         
                         //HELIOSVARIABLE
                         int requiredCount = CustomVariablesUnity.ScaleKey + 2;
-                        int currentCount = ObjectInfo.TestValues.Count;
+                        int currentCount = ObjectInfo.Values.Count;
 
                         if (currentCount < requiredCount)
                         {
                             int elementsToAdd = requiredCount - currentCount - 1;
-                            ObjectInfo.TestValues.AddRange(Enumerable.Repeat(new HeliosVariable(), elementsToAdd));
+                            ObjectInfo.Values.AddRange(Enumerable.Repeat(new HeliosVariable(), elementsToAdd));
                         }
                         
-                        var key = ObjectInfo.TestValues.Count;
+                        var key = ObjectInfo.Values.Count;
                         hv.Key = key;
                         
-                        ObjectInfo.TestValues.Add(hv);
+                        ObjectInfo.Values.Add(hv);
                         
                         //ATTRIBUTE
                         if(!heliosAttributes.ContainsKey(key))
@@ -333,7 +333,7 @@ namespace MVS.Helios
 
         public void UpdateCustomData(ObjectInfo updatedObjectInfo)
         {
-            foreach (var customData in updatedObjectInfo.TestValues)
+            foreach (var customData in updatedObjectInfo.Values)
             {
                 var key = customData.Key;
                 if(key < 3) continue;

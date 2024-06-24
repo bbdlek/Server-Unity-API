@@ -17,6 +17,16 @@ namespace MVS.Realtime
         /// <summary> FixedRegion for MVS Application </summary>
         public string FixedRegion;
 
+        /// <summary>
+        /// NameServer IP for get MVM address
+        /// </summary>
+        public string NameServer = "";
+        
+        /// <summary>
+        /// MV Master IP for Join MVS GameRoom
+        /// </summary>
+        public string MVM = ""; 
+        
         /// <summary> Server IP for MVS Application </summary>
         public string Server = "";
 
@@ -40,6 +50,8 @@ namespace MVS.Realtime
             s.AppId = AppId;
             s.AppVersion = AppVersion;
             s.FixedRegion = FixedRegion;
+            s.NameServer = NameServer;
+            s.MVM = MVM;
             s.Server = Server;
             s.Port = Port;
             s.Protocol = Protocol;

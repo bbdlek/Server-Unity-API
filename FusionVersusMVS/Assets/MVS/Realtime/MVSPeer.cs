@@ -176,9 +176,6 @@ namespace MVS.Realtime
                 case EventCode.PKT_C_REMOVE_NETWORK_OBJECTS:
                     packs.CRemoveNetworkObjects = fixedData as C_REMOVE_NETWORK_OBJECTS;
                     break;
-                case EventCode.PKT_C_CHANGE_OBJECTS_OWNER:
-                    packs.CChangeObjectsOwner = fixedData as C_CHANGE_OBJECTS_OWNER;
-                    break;
                 case (int)Protocol.EventCode.Rpc:
                     packs.CRpc = fixedData as C_RPC;
                     break;

@@ -78,8 +78,8 @@ namespace MVS.Realtime
                 {
                     C_HEART_BEAT data => new Packs { CHeartBeat = data },
                     C_ROOM_JOIN_OR_CREATE data => new Packs { CRoomJoinOrCreate = data },
-                    C_TEST_ROOM_LIST data => new Packs { CRoomList = data },
-                    C_PLAYER_ID data => new Packs { CPlayerId = data },
+                    //C_TEST_ROOM_LIST data => new Packs { CRoomList = data },
+                    //C_PLAYER_ID data => new Packs { CPlayerId = data },
                     C_GROUP_LIST data => new Packs { CGroupList = data },
                     C_GROUP_JOIN data => new Packs { CGroupJoin = data },
                     C_EVENT data => new Packs { CEvent = data },

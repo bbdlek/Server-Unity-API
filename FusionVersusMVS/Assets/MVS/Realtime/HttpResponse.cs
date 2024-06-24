@@ -30,7 +30,7 @@ namespace MVS.Realtime
 
     public class RoomRes
     {
-        public int RoomId { get; set; }
+        public ulong RoomId { get; set; }
         public string Url { get; set; }
         public bool IsPending { get; set; }
         public string RoomName { get; set; }
@@ -43,11 +43,27 @@ namespace MVS.Realtime
 
     public class RoomCreateResponse
     {
-        public string ResponseMessage { get; set; }
+        public RoomResponseMessage ResponseMessage { get; set; }
 
         public override string ToString()
         {
             return $"Response : {ResponseMessage}";
+        }
+    }
+
+    public class RoomResponseMessage
+    {
+        public ulong UserId { get; set; }
+        
+        public ulong RoomId { get; set; }
+        
+        public string Token { get; set; }
+
+        public string MvsUrl { get; set; }
+
+        public override string ToString()
+        {
+            return $"MvsUrl : {MvsUrl}, UserId : {UserId}, RoomId : {RoomId}, UserToken : {Token}";
         }
     }
 

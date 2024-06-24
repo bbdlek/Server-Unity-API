@@ -17,6 +17,10 @@ namespace MVS.Realtime
         [Preserve]
         public MVSRudpSocket(PeerBase peerBase) : base(peerBase)
         {
+            ENet.Library.Initialize();
+            
+            _client = new Host();
+            _client.Create();
         }
 
         ~MVSRudpSocket()
@@ -41,19 +45,16 @@ namespace MVS.Realtime
 
         internal void EnetLoop()
         {
+            ENet.Event enetEvent;
+
             Address address = new Address();
             address.SetHost(ServerAddress);
             address.Port = ushort.Parse(ServerPort);
-            
-            ENet.Library.Initialize();
-
-            _client = new Host();
-            _client.Create();
+        
+            // Enet Connect시 딜레이가 걸려서 쓰레드가 수행하도록 함.
             _server = _client.Connect(address);
             Listener.MVSDebug(DebugLevel.INFO, $"Connect Enet Address {address.GetHost()} : {address.Port}  STATE : {_server.State}");
             
-            ENet.Event enetEvent;
-
             while (true)
             {
                 while (_client.Service(0, out enetEvent) > 0)
