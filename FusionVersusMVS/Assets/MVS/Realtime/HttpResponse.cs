@@ -50,6 +50,16 @@ namespace MVS.Realtime
             return $"Response : {ResponseMessage}";
         }
     }
+    
+    public class RoomJoinResponse
+    {
+        public RoomResponseMessage ResponseMessage { get; set; }
+        
+        public override string ToString()
+        {
+            return $"Response : {ResponseMessage}";
+        }
+    }
 
     public class RoomResponseMessage
     {
@@ -60,20 +70,13 @@ namespace MVS.Realtime
         public string Token { get; set; }
 
         public string MvsUrl { get; set; }
-
-        public override string ToString()
-        {
-            return $"MvsUrl : {MvsUrl}, UserId : {UserId}, RoomId : {RoomId}, UserToken : {Token}";
-        }
-    }
-
-    public class RoomJoinResponse
-    {
-        public string ResponseMessage { get; set; }
         
+        public bool CreationFlag { get; set; }
+
         public override string ToString()
         {
-            return $"Response : {ResponseMessage}";
+            return $"MvsUrl : {MvsUrl}, UserId : {UserId}, RoomId : {RoomId}, UserToken : {Token}, CreationFlag : {CreationFlag}";
         }
     }
+
 }

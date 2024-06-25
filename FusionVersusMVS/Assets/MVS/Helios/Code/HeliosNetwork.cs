@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -300,7 +301,12 @@ namespace MVS.Helios
         
         public static async Task RoomCreateToMaster()
         {
-            await RealtimeClient.OpCreateAndJoinRoomToMvm(new RoomInfo());
+            await RealtimeClient.OpCreateAndJoinRoomToMvm();
+        }
+
+        public static async Task RoomCreateToMaster(string roomName, UInt64 roomId = 0)
+        {
+            await RealtimeClient.OpCreateAndJoinRoomToMvm(new RoomInfo(){Name = roomName, RoomID = roomId});
         }
 
         public static async Task RoomJoinToMaster()

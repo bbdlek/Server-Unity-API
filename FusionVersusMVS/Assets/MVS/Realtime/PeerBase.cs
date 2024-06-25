@@ -42,7 +42,10 @@ namespace MVS.Realtime
             Disconnect();
         }
 
-        public abstract void OnConnect();
+        public virtual void OnConnect()
+        {
+            mvsPeer.OnConnected();
+        }
 
         internal void InitCallback()
         {

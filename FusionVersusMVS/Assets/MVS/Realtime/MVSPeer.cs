@@ -14,7 +14,6 @@ namespace MVS.Realtime
         
         public IRealtimePeerListener Listener { get; protected set; }
 
-        public Action OnConnect;
         public event Action<DisconnectedReason> OnDisconnectReason;
 
         public PeerState PeerState
@@ -79,9 +78,13 @@ namespace MVS.Realtime
                 return false;
             }
             
-            Listener.OnStatusChanged(StatusCode.Connect);
             peerBase.Connect(serverAddress, appId, serverType);
             return true;
+        }
+
+        public void OnConnected()
+        {
+            Listener.OnStatusChanged(StatusCode.Connect);
         }
 
         private void CreatePeerBase()

@@ -221,7 +221,6 @@ namespace MVS.Realtime
 
             RealtimePeer = new RealtimePeer(this, protocol);
             RealtimePeer.OnDisconnectReason += OnDisconnectMessageReceived;
-            RealtimePeer.OnConnect += OnConnected;
             LocalPlayer = CreatePlayer(true, new PlayerInfo
             {
                 PlayerID = 0,
@@ -410,6 +409,7 @@ namespace MVS.Realtime
                         case ClientState.ConnectingToMVS:
                             MVSDebug(DebugLevel.INFO, "ConnectingToMVS");
                             State = ClientState.ConnectedToMVS;
+                            OnConnected();
                             ConnectionCallbacksTarget.OnConnected();
                             break;
                     }
@@ -755,9 +755,9 @@ namespace MVS.Realtime
 
         public async Task<string> OpGetMvmAddress()
         {
-            /*// 이하 2줄 테스트용 todo: remove
+            // 이하 2줄 테스트용 todo: remove
             MasterServerAddress = "192.168.154.131:8091";
-            return MasterServerAddress;*/
+            return MasterServerAddress;
             
             var res = await httpModule.GetAsync($"http://{NameServerAddress}/ns/api/v1/app/7e7f4f49-9ae7-4ef8-900c-d2c66635c4e2");
             if (res == null)
@@ -810,37 +810,32 @@ namespace MVS.Realtime
         
         /// <summary>
         /// MVM에 룸 생성 요청.
+        /// RoomId가 0일시 서버에서 임의로 결정
         /// 현재 Password는 구현되어 있지 않음.
         /// </summary>
         /// <returns></returns>
-        public async Task<RoomJoinInfoStruct> OpCreateAndJoinRoomToMvm(RoomInfo roomInfo, bool isPassword = false)
+        public async Task<RoomJoinInfoStruct> OpCreateAndJoinRoomToMvm(RoomInfo roomInfo = default, bool isPassword = false)
         {
             HttpRequest.RoomCreateRequest roomReq;
-            if (roomInfo.RoomID == 0)
+            roomReq = new HttpRequest.RoomCreateRequest()
             {
-                // Use SelectedRoomInfo
-                roomReq = new HttpRequest.RoomCreateRequest()
-                {
-                    RoomId = SelectedRoomInfo.RoomID.ToString(),
-                    Name = SelectedRoomInfo.Name,
-                    IsPassword = isPassword
-                };
-            }
-            else
-            {
-                roomReq = new HttpRequest.RoomCreateRequest()
-                {
-                    RoomId = roomInfo.RoomID.ToString(),
-                    Name = roomInfo.Name,
-                    IsPassword = isPassword
-                };
-            }
+                RoomId = roomInfo.RoomID.ToString(),
+                Name = roomInfo.Name,
+                IsPassword = isPassword
+            };
             
             var res = await httpModule.PostAsync<HttpRequest.RoomCreateRequest, RoomCreateResponse>(
                 $"http://{MasterServerAddress}/mvm/api/rooms", roomReq);
             if (res == null)
             {
                 MVSDebug(DebugLevel.ERROR, "Room Create Req Fail");
+                return default;
+            }
+            
+            // 이미 방이 만들어 져서 join response가 온경우
+            if (!res.ResponseMessage.CreationFlag)
+            {
+                MVSDebug(DebugLevel.WARNING, "Already Created RoomId");
                 return default;
             }
 
@@ -858,28 +853,35 @@ namespace MVS.Realtime
 
         public async Task<RoomJoinInfoStruct> OpJoinRoomToMvm(RoomInfo roomInfo = default)
         {
-            HttpRequest.RoomCreateRequest roomReq;
+            HttpRequest.RoomJoinRequest roomReq;
             if (roomInfo.RoomID == 0)
             {
                 // Use SelectedRoomInfo
-                roomReq = new HttpRequest.RoomCreateRequest()
+                roomReq = new HttpRequest.RoomJoinRequest()
                 {
                     RoomId = SelectedRoomInfo.RoomID.ToString()
                 };
             }
             else
             {
-                roomReq = new HttpRequest.RoomCreateRequest()
+                roomReq = new HttpRequest.RoomJoinRequest()
                 {
                     RoomId = roomInfo.RoomID.ToString()
                 };
             }
             
-            var res = await httpModule.PostAsync<HttpRequest.RoomCreateRequest, RoomCreateResponse>(
+            var res = await httpModule.PostAsync<HttpRequest.RoomJoinRequest, RoomJoinResponse>(
                 $"http://{MasterServerAddress}/mvm/api/rooms", roomReq);
             if (res == null)
             {
                 MVSDebug(DebugLevel.ERROR, "Room Join Req Fail");
+                return default;
+            }
+            
+            // join request를 보냈는데 create response가 온경우
+            if (res.ResponseMessage.CreationFlag)
+            {
+                MVSDebug(DebugLevel.WARNING, "Join Request but Room Created");
                 return default;
             }
 
