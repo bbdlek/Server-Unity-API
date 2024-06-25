@@ -42,7 +42,7 @@ namespace MVS.Realtime
 
         internal void DnsAndConnect()
         {
-                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
                 //TODO : TimeOut Settings
@@ -76,6 +76,7 @@ namespace MVS.Realtime
             {
                 State = RealtimeSocketState.Connected;
                 peerBase.OnConnect();
+                
                 // new Thread(ReceiveLoop)
                 // {
                 //     IsBackground = true

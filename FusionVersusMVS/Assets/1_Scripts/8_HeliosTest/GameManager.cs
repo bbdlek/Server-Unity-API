@@ -112,19 +112,36 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         Debug.Log($"MVM IP : {res}");
     }
 
+    public async void OnClickRoomTaskBtn()
+    {
+        await HeliosNetwork.GetRoomList();
+        foreach (var room in HeliosNetwork.RoomList)
+        {
+            Debug.Log(room.Name);
+        }
+    }
+
     public async void OnClickRoomCreateOrJoin()
+    {
+        await HeliosNetwork.RoomCreateToMaster();
+    }
+    
+    public async void OnClickRoomJoin()
     {
         await HeliosNetwork.RoomJoinToMaster();
     }
 
-    public void OnClickConnectBtn()
+    public async void OnClickConnectBtn()
     {
-        HeliosNetwork.ConnectUsingSettings();
+        await HeliosNetwork.ConnectUsingSettings();
     }
 
+    /// <summary>
+    /// Direct to MVS
+    /// </summary>
     public void OnClickJoinRoomBtn()
     {
-        HeliosNetwork.JoinOrCreateRoom("auth", 1, 1, "NewRoom");
+        HeliosNetwork.JoinOrCreateRoom("auth", 1, 1, "Dummy");
     }
     
     public void OnClickJoinGroupBtn()
@@ -136,16 +153,6 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     {
         GameObject cubeObject = HeliosNetwork.Instantiate(prefabsForSpawn[Random.Range(0, prefabsForSpawn.Length)], Vector3.zero, Quaternion.identity);
     }
-
-    public async void OnClickRoomTaskBtn()
-    {
-        await HeliosNetwork.GetRoomList();
-        foreach (var room in HeliosNetwork.RoomList)
-        {
-            Debug.Log(room.RoomInfo.RoomID);
-        }
-    }
-    
     public async void OnClickGroupTaskBtn()
     {
         await HeliosNetwork.GetGroupList();

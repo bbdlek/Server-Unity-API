@@ -14,6 +14,7 @@ namespace MVS.Realtime
         
         public IRealtimePeerListener Listener { get; protected set; }
 
+        public Action OnConnect;
         public event Action<DisconnectedReason> OnDisconnectReason;
 
         public PeerState PeerState

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Newtonsoft.Json;
 using Protocol;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
 namespace MVS.Realtime
@@ -21,13 +23,9 @@ namespace MVS.Realtime
         JoinedGroup,
         LeavingGroup,
         
-        ConnectingToNameServer,
-        ConnectedToNameServer,
-        DisConnectingFromNameServer,
-        
-        ConnectingToMasterServer,
-        ConnectedToMasterServer,
-        DisConnectingFromMasterServer,
+        WaitNameServerRes,
+        WaitMasterServerRes,
+        RoomInfoRes,
         
         ConnectingToMVS,
         ConnectedToMVS,
@@ -71,7 +69,6 @@ namespace MVS.Realtime
     public struct RoomInfo
     {
         public string Name;
-        public string IP;
         public ulong RoomID;
     }
 
@@ -114,7 +111,7 @@ namespace MVS.Realtime
         
         // roominfo from mvm
         public List<RoomInfo> MvsRoomInfos { get; set; }
-        
+        public RoomInfo SelectedRoomInfo;
         
         public string MVSAddress { get; set; }
         
@@ -157,12 +154,11 @@ namespace MVS.Realtime
                     case ClientState.Created:
                     case ClientState.DisConnected:
                     case ClientState.DisConnectingFromMVS:
-                    case ClientState.DisConnectingFromMasterServer:
-                    case ClientState.DisConnectingFromNameServer:
+                    case ClientState.WaitNameServerRes:
+                    case ClientState.WaitMasterServerRes:
+                    case ClientState.RoomInfoRes:
                     case ClientState.Authenticating:
                     case ClientState.ConnectingToMVS:
-                    case ClientState.ConnectingToMasterServer:
-                    case ClientState.ConnectingToNameServer:
                     case ClientState.JoiningRoom:
                     case ClientState.JoiningGroup:
                     case ClientState.LeavingRoom:
@@ -195,10 +191,6 @@ namespace MVS.Realtime
         
         public Player LocalPlayer { get; internal set; }
 
-        public List<Room> RoomList { get; internal set; } = new List<Room>();
-        
-        public UInt64 RoomID { get; set; }
-        
         public Room CurrentRoom { get; internal set; }
         
         public Group CurrentGroup { get; internal set; }
@@ -229,6 +221,7 @@ namespace MVS.Realtime
 
             RealtimePeer = new RealtimePeer(this, protocol);
             RealtimePeer.OnDisconnectReason += OnDisconnectMessageReceived;
+            RealtimePeer.OnConnect += OnConnected;
             LocalPlayer = CreatePlayer(true, new PlayerInfo
             {
                 PlayerID = 0,
@@ -251,7 +244,7 @@ namespace MVS.Realtime
 
         #region Operations and Commands
 
-        public virtual bool ConnectUsingSettings(AppSettings appSettings)
+        public virtual async Task<bool> ConnectUsingSettings(AppSettings appSettings)
         {
             if (RealtimePeer.PeerState != PeerState.Disconnected)
             {
@@ -269,18 +262,22 @@ namespace MVS.Realtime
             AppVersion = appSettings.AppVersion;
             IsUsingNameServer = appSettings.IsUseNameServer;
             ConnectionProtocol = appSettings.Protocol;
+            NameServerAddress = appSettings.NameServer;
+            MasterServerAddress = appSettings.MVM;
             DisconnectedReason = DisconnectedReason.None;
 
             if (IsUsingNameServer)
             {
                 Server = ServerConnection.NameServer;
-                if (!RealtimePeer.Connect(NameServerAddress + ":" + appSettings.Port, AppId, ServerConnection.NameServer))
+                State = ClientState.WaitNameServerRes;
+                var res = await OpGetMvmAddress();
+                if (res==null)
                 {
                     return false;
                 }
-                State = ClientState.ConnectingToNameServer;
             }
-            else if(IsDirectToMVS)
+            
+            if(IsDirectToMVS)
             {
                 Server = ServerConnection.MVS;
                 if (!RealtimePeer.Connect(MVSAddress + ":" + appSettings.Port, AppId, ServerConnection.MVS))
@@ -292,11 +289,8 @@ namespace MVS.Realtime
             else
             {
                 Server = ServerConnection.MasterServer;
-                if (!RealtimePeer.Connect(MasterServerAddress + ":" + appSettings.Port, AppId, ServerConnection.MasterServer))
-                {
-                    return false;
-                }
-                State = ClientState.ConnectingToMasterServer;
+                State = ClientState.WaitMasterServerRes;
+                var res = await OpGetRoomList();
             }
 
             return true;
@@ -304,7 +298,7 @@ namespace MVS.Realtime
 
         #endregion
         
-        public bool Connect(string serverAddress, string serverPort, string appId, ServerConnection serverType)
+        public async Task<bool> Connect(string serverAddress, string serverPort, string appId, ServerConnection serverType)
         {
             if (State == ClientState.Disconnecting)
             {
@@ -317,11 +311,8 @@ namespace MVS.Realtime
             switch (serverType)
             {
                 case ServerConnection.NameServer:
-                    State = ClientState.ConnectingToNameServer;
-                    break;
                 case ServerConnection.MasterServer:
-                    State = ClientState.ConnectingToMasterServer;
-                    break;
+                    return false;
                 case ServerConnection.MVS:
                     State = ClientState.ConnectingToMVS;
                     break;
@@ -335,6 +326,12 @@ namespace MVS.Realtime
             }
 
             return connecting;
+        }
+
+        public void OnConnected()
+        {
+            if(!IsDirectToMVS)
+                OpCreateOrJoinRoomToMvs(RoomJoinInfo);
         }
 
         public void Disconnect(DisconnectedReason disconnectedReason = DisconnectedReason.DisconnectByClient)
@@ -352,11 +349,9 @@ namespace MVS.Realtime
             switch (Server)
             {
                 case ServerConnection.NameServer:
-                    State = ClientState.DisConnectingFromNameServer;
-                    break;
                 case ServerConnection.MasterServer:
-                    State = ClientState.DisConnectingFromMasterServer;
-                    break;
+                    State = ClientState.DisConnected;
+                    return;
                 case ServerConnection.MVS:
                     State = ClientState.DisConnectingFromMVS;
                     break;
@@ -412,14 +407,6 @@ namespace MVS.Realtime
                 case StatusCode.Connect:
                     switch (State)
                     {
-                        case ClientState.ConnectingToNameServer:
-                            State = ClientState.ConnectedToNameServer;
-                            MVSDebug(DebugLevel.INFO, "ConnectingToNameServer");
-                            break;
-                        case ClientState.ConnectingToMasterServer:
-                            State = ClientState.ConnectedToMasterServer;
-                            MVSDebug(DebugLevel.INFO, "ConnectingToMasterServer");
-                            break;
                         case ClientState.ConnectingToMVS:
                             MVSDebug(DebugLevel.INFO, "ConnectingToMVS");
                             State = ClientState.ConnectedToMVS;
@@ -431,12 +418,6 @@ namespace MVS.Realtime
                     switch (State)
                     {
                         case ClientState.Created:
-                            break;
-                        case ClientState.DisConnectingFromMasterServer:
-                            MVSDebug(DebugLevel.INFO, "DisconnectedFromMasterServer");
-                            break;
-                        case ClientState.DisConnectingFromNameServer:
-                            MVSDebug(DebugLevel.INFO, "DisconnectedFromNameServer");
                             break;
                         case ClientState.DisConnectingFromMVS:
                             MVSDebug(DebugLevel.INFO, "DisconnectedFromMVS");
@@ -760,27 +741,30 @@ namespace MVS.Realtime
         public bool OpRoomList()
         {
             // Lagacy
-            /*if (!CheckOpCanBeSent((byte)OperationCode.ROOM_LIST, Server, "RoomList"))
+            if (!CheckOpCanBeSent((byte)OperationCode.ROOM_LIST, Server, "RoomList"))
             {
                 return false;
             }
 
             bool sent = RealtimePeer.OpRoomList();
 
-            return sent;*/
-
-            return true;
+            return sent;
         }
 
         static HttpModule httpModule = new HttpModule();
 
         public async Task<string> OpGetMvmAddress()
         {
-            // 이하 2줄 테스트용 todo: remove
+            /*// 이하 2줄 테스트용 todo: remove
             MasterServerAddress = "192.168.154.131:8091";
-            return MasterServerAddress;
+            return MasterServerAddress;*/
             
             var res = await httpModule.GetAsync($"http://{NameServerAddress}/ns/api/v1/app/7e7f4f49-9ae7-4ef8-900c-d2c66635c4e2");
+            if (res == null)
+            {
+                MVSDebug(DebugLevel.ERROR, "Get MVM Address request fail");
+                return null;
+            }
             var res2 = JsonConvert.DeserializeObject<MVMResponse>(res);
             MVSDebug(DebugLevel.INFO, res2.ResponseMessage[0].Hostname.ToString());
             MasterServerAddress = res2.ResponseMessage[0].IpAddress;
@@ -788,10 +772,18 @@ namespace MVS.Realtime
             return MasterServerAddress;
         }
         
-        public async Task<List<RoomInfo>> OpRoomTask()
+        /// <summary>
+        /// Send RoomList Req to MVM
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<RoomInfo>> OpGetRoomList()
         {
             var res = await httpModule.GetAsync($"http://{MasterServerAddress}/mvm/api/rooms");
-            Debug.Log(res);
+            if (res == null)
+            {
+                MVSDebug(DebugLevel.ERROR, "GetRoomList Request Fail");
+                return null;
+            }
             var res2 = JsonConvert.DeserializeObject<RoomListResponse>(res);
             MVSDebug(DebugLevel.INFO, res2.ResponseMessage.ToString());
             MvsRoomInfos = new List<RoomInfo>();
@@ -801,32 +793,96 @@ namespace MVS.Realtime
                     new RoomInfo()
                     {
                         RoomID = roomRes.RoomId,
-                        IP = roomRes.Url,
                         Name = roomRes.RoomName
                     }
                 );
 
-                Debug.Log($"room id : {roomRes.RoomId}, ip : {roomRes.Url}, name : {roomRes.RoomName}");
+                MVSDebug(DebugLevel.INFO,($"room id : {roomRes.RoomId}, ip : {roomRes.Url}, name : {roomRes.RoomName}"));
+            }
 
-                RoomID = roomRes.RoomId;
+            if (MvsRoomInfos.Count > 0)
+            {
+                SelectedRoomInfo = MvsRoomInfos[0];
             }
 
             return MvsRoomInfos;
         }
         
-        public async Task<RoomJoinInfoStruct> OpCreateAndJoinRoom()
+        /// <summary>
+        /// MVM에 룸 생성 요청.
+        /// 현재 Password는 구현되어 있지 않음.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<RoomJoinInfoStruct> OpCreateAndJoinRoomToMvm(RoomInfo roomInfo, bool isPassword = false)
         {
-            HttpRequest.RoomCreateRequest roomReq = new HttpRequest.RoomCreateRequest()
+            HttpRequest.RoomCreateRequest roomReq;
+            if (roomInfo.RoomID == 0)
             {
-                RoomId = "10",
-                Name = "TestRoom"
-            };
+                // Use SelectedRoomInfo
+                roomReq = new HttpRequest.RoomCreateRequest()
+                {
+                    RoomId = SelectedRoomInfo.RoomID.ToString(),
+                    Name = SelectedRoomInfo.Name,
+                    IsPassword = isPassword
+                };
+            }
+            else
+            {
+                roomReq = new HttpRequest.RoomCreateRequest()
+                {
+                    RoomId = roomInfo.RoomID.ToString(),
+                    Name = roomInfo.Name,
+                    IsPassword = isPassword
+                };
+            }
+            
             var res = await httpModule.PostAsync<HttpRequest.RoomCreateRequest, RoomCreateResponse>(
                 $"http://{MasterServerAddress}/mvm/api/rooms", roomReq);
+            if (res == null)
+            {
+                MVSDebug(DebugLevel.ERROR, "Room Create Req Fail");
+                return default;
+            }
 
-            Debug.Log(res);
+            var address = res.ResponseMessage.MvsUrl.Split("/");
+            RoomJoinInfo.IP = address[0];
+            RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
+            RoomJoinInfo.RoomID = res.ResponseMessage.RoomId;
+            RoomJoinInfo.MvsUserID = res.ResponseMessage.UserId;
+            RoomJoinInfo.MvsUserToken = res.ResponseMessage.Token;
 
-            RoomID = res.ResponseMessage.RoomId;
+            Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
+
+            return RoomJoinInfo;
+        }
+
+        public async Task<RoomJoinInfoStruct> OpJoinRoomToMvm(RoomInfo roomInfo = default)
+        {
+            HttpRequest.RoomCreateRequest roomReq;
+            if (roomInfo.RoomID == 0)
+            {
+                // Use SelectedRoomInfo
+                roomReq = new HttpRequest.RoomCreateRequest()
+                {
+                    RoomId = SelectedRoomInfo.RoomID.ToString()
+                };
+            }
+            else
+            {
+                roomReq = new HttpRequest.RoomCreateRequest()
+                {
+                    RoomId = roomInfo.RoomID.ToString()
+                };
+            }
+            
+            var res = await httpModule.PostAsync<HttpRequest.RoomCreateRequest, RoomCreateResponse>(
+                $"http://{MasterServerAddress}/mvm/api/rooms", roomReq);
+            if (res == null)
+            {
+                MVSDebug(DebugLevel.ERROR, "Room Join Req Fail");
+                return default;
+            }
+
             var address = res.ResponseMessage.MvsUrl.Split("/");
             RoomJoinInfo.IP = address[0];
             RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
@@ -836,12 +892,10 @@ namespace MVS.Realtime
 
             Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
             
-            OpCreateRoom(RoomJoinInfo);
-
             return RoomJoinInfo;
         }
         
-        public bool OpCreateRoom(RoomJoinInfoStruct joinRoomParams)
+        public bool OpCreateOrJoinRoomToMvs(RoomJoinInfoStruct joinRoomParams)
         {
             if (!CheckOpCanBeSent((byte)OperationCode.ROOM_JOIN_OR_CREATE, Server, "CreateRoom"))
             {
@@ -931,8 +985,6 @@ namespace MVS.Realtime
     public interface IConnectionCallbacks
     {
         void OnConnected();
-        
-        void OnConnectedToMaster();
 
         void OnDisconnected();
         
@@ -1009,16 +1061,6 @@ namespace MVS.Realtime
             foreach (IConnectionCallbacks target in this)
             {
                 target.OnConnected();
-            }
-        }
-
-        public void OnConnectedToMaster()
-        {
-            _client.UpdateCallbackTargets();
-            
-            foreach (IConnectionCallbacks target in this)
-            {
-                target.OnConnectedToMaster();
             }
         }
 

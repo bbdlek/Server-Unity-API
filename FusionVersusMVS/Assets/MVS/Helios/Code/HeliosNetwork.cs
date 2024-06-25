@@ -11,6 +11,7 @@ using UnityEditor;
 #endif
 using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
+using RoomInfo = MVS.Realtime.RoomInfo;
 using Vector3 = UnityEngine.Vector3;
 
 namespace MVS.Helios
@@ -113,7 +114,7 @@ namespace MVS.Helios
         
         public static float MinimalTimeScaleToDispatchInFixedUpdate = -1f;
 
-        public static List<Room> RoomList => RealtimeClient == null ? null : RealtimeClient.RoomList;
+        public static List<RoomInfo> RoomList => RealtimeClient == null ? null : RealtimeClient.MvsRoomInfos;
 
         public static Room CurrentRoom => RealtimeClient == null ? null : RealtimeClient.CurrentRoom;
 
@@ -213,7 +214,7 @@ namespace MVS.Helios
 
         }
         
-        public static bool ConnectUsingSettings()
+        public static async Task<bool> ConnectUsingSettings()
         {
             if (HeliosSettings == null)
             {
@@ -221,10 +222,10 @@ namespace MVS.Helios
                 return false;
             }
 
-            return ConnectUsingSettings(HeliosSettings.AppSettings);
+            return await ConnectUsingSettings(HeliosSettings.AppSettings);
         }
 
-        public static bool ConnectUsingSettings(AppSettings appSettings)
+        public static async Task<bool> ConnectUsingSettings(AppSettings appSettings)
         {
             if (RealtimeClient.RealtimePeer.PeerState != PeerState.Disconnected)
             {
@@ -248,8 +249,7 @@ namespace MVS.Helios
 
             RealtimeClient.AppSettingsDebug = appSettings.DebugLevel;
 
-            // TODO : Master, Name Server
-            return RealtimeClient.Connect(appSettings.Server, appSettings.Port.ToString(), appSettings.AppId,
+            return await RealtimeClient.Connect(appSettings.Server, appSettings.Port.ToString(), appSettings.AppId,
                 ServerConnection.MVS);
         }
 
@@ -292,21 +292,28 @@ namespace MVS.Helios
             return HeliosSettings.AppSettings.MVM;
         }
 
-        public static async Task GetRoomList()
+        public static async Task<List<RoomInfo>> GetRoomList()
         {
-            //TODO : Master
-            await RealtimeClient.OpRoomTask();
+            var res = await RealtimeClient.OpGetRoomList();
+            return res;
+        }
+        
+        public static async Task RoomCreateToMaster()
+        {
+            await RealtimeClient.OpCreateAndJoinRoomToMvm(new RoomInfo());
         }
 
         public static async Task RoomJoinToMaster()
         {
-            await RealtimeClient.OpCreateAndJoinRoom();
+            await RealtimeClient.OpJoinRoomToMvm();
         }
 
+        /// <summary>
+        /// Direct to MVS
+        /// </summary>
+        /// <returns></returns>
         public static bool JoinOrCreateRoom(string IPAddress, ulong RoomID, ulong MvsUserID, string MvsUserToken)
         {
-            //TODO : Master
-            
             // if (!IsConnectedAndReady) return false;
             RoomJoinInfoStruct opParams = new RoomJoinInfoStruct
             {
@@ -316,7 +323,7 @@ namespace MVS.Helios
                 MvsUserToken = MvsUserToken
             };
 
-            return RealtimeClient.OpCreateRoom(opParams);
+            return RealtimeClient.OpCreateOrJoinRoomToMvs(opParams);
         }
 
         public static async Task GetGroupList()

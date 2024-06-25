@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MVS.Realtime;
 using UnityEngine;
 
@@ -27,9 +28,9 @@ public class TestClient : RealtimeClient
         }
     }
 
-    public override bool ConnectUsingSettings(AppSettings appSettings)
+    public override async Task<bool> ConnectUsingSettings(AppSettings appSettings)
     {
-        return base.ConnectUsingSettings(appSettings);
+        return await base.ConnectUsingSettings(appSettings);
     }
 
     public override void MVSDebug(DebugLevel debugLevel, string msg)

@@ -486,10 +486,6 @@ namespace MVS.Helios
         {
         }
 
-        public virtual void OnConnectedToMaster()
-        {
-        }
-
         public virtual void OnDisconnected()
         {
             HeliosNetwork.RemoveMyObjects();

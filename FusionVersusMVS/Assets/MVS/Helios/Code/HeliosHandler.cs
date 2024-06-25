@@ -196,11 +196,6 @@ namespace MVS.Helios
             
         }
 
-        public void OnConnectedToMaster()
-        {
-            
-        }
-
         public void OnDisconnected()
         {
             

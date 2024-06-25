@@ -65,6 +65,7 @@ namespace MVS.Realtime
             handlerDic = new Dictionary<PKT_ID, Func<byte[], int, bool>>();
             handlerDic[PKT_ID.PKT_S_OPERATION] = (bytes, len) => PacketHandler<S_OPERATION>.Handling(Handle_S_OPERATION, bytes, len);
             handlerDic[PKT_ID.PKT_S_EVENT] = (bytes, len) => PacketHandler<S_EVENT>.Handling(Handle_S_EVENT, bytes, len);
+            mvsPeer.OnConnect();
         }
 
         internal override void Disconnect()
