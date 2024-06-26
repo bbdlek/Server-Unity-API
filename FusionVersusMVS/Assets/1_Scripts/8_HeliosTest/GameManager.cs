@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         }
     }
 
-    public async void OnClickRoomCreateOrJoin()
+    public async void OnClickRoomCreate()
     {
         await HeliosNetwork.RoomCreateToMaster();
     }

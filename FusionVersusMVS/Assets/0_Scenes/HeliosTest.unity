@@ -1804,7 +1804,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1643932110}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: OnClickRoomCreateOrJoin
+        m_MethodName: OnClickRoomCreate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3574,7 +3574,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1643932110}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: OnClickRoomCreateOrJoin
+        m_MethodName: OnClickRoomJoin
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
