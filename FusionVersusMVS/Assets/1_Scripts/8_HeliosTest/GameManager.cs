@@ -115,9 +115,10 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     public async void OnClickRoomTaskBtn()
     {
         await HeliosNetwork.GetRoomList();
+        Debug.Log("[ROOM LIST]");
         foreach (var room in HeliosNetwork.RoomList)
         {
-            Debug.Log(room.Name);
+            Debug.Log($"\tRoomID : {room.RoomID}, RoomName : {room.Name}");
         }
     }
 

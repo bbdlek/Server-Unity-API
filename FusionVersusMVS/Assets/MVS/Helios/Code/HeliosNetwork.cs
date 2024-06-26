@@ -10,6 +10,7 @@ using Protocol;
 using UnityEditor;
 #endif
 using UnityEngine;
+using WebSocketSharp;
 using EventCode = MVS.Realtime.EventCode;
 using RoomInfo = MVS.Realtime.RoomInfo;
 using Vector3 = UnityEngine.Vector3;
@@ -297,34 +298,28 @@ namespace MVS.Helios
             var res = await RealtimeClient.OpGetRoomList();
             return res;
         }
-        
-        public static async Task<UInt64> RoomCreateToMaster()
-        {
-            // MVM으로 바로 접속하는 케이스가 없다면 삭제
-            RealtimeClient.MasterServerAddress = HeliosSettings.AppSettings.MVM;
-            
-            var res = await RealtimeClient.OpCreateAndJoinRoomToMvm();
-            HeliosSettings.AppSettings.Server = res.IP;
-            HeliosSettings.AppSettings.Port = int.Parse(res.Port);
 
-            return res.MvsUserID;
-        }
-
-        public static async Task<UInt64> RoomCreateToMaster(string roomName, UInt64 roomId = 0)
+        public static async Task<UInt64> RoomCreateToMaster(string roomName = default, UInt64 roomId = 0)
         {
             // MVM으로 바로 접속하는 케이스가 없다면 삭제
             RealtimeClient.MasterServerAddress = HeliosSettings.AppSettings.MVM;
             
             var res = await RealtimeClient.OpCreateAndJoinRoomToMvm(new RoomInfo(){Name = roomName, RoomID = roomId});
+            if (res.IP.IsNullOrEmpty()) return 0;
             HeliosSettings.AppSettings.Server = res.IP;
             HeliosSettings.AppSettings.Port = int.Parse(res.Port);
 
             return res.MvsUserID;
         }
 
-        public static async Task RoomJoinToMaster(UInt64 roomId = 0)
+        public static async Task<UInt64> RoomJoinToMaster(UInt64 roomId = 0)
         {
-            await RealtimeClient.OpJoinRoomToMvm(roomId);
+            var res = await RealtimeClient.OpJoinRoomToMvm(roomId);
+            if (res.IP.IsNullOrEmpty()) return 0;
+            HeliosSettings.AppSettings.Server = res.IP;
+            HeliosSettings.AppSettings.Port = int.Parse(res.Port);
+
+            return res.MvsUserID;
         }
 
         /// <summary>
