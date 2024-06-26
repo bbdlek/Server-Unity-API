@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Google.Protobuf;
 using MVS.Helios.Utility;
 using MVS.Realtime;
-using Newtonsoft.Json;
 using Protocol;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -299,19 +298,33 @@ namespace MVS.Helios
             return res;
         }
         
-        public static async Task RoomCreateToMaster()
+        public static async Task<UInt64> RoomCreateToMaster()
         {
-            await RealtimeClient.OpCreateAndJoinRoomToMvm();
+            // MVM으로 바로 접속하는 케이스가 없다면 삭제
+            RealtimeClient.MasterServerAddress = HeliosSettings.AppSettings.MVM;
+            
+            var res = await RealtimeClient.OpCreateAndJoinRoomToMvm();
+            HeliosSettings.AppSettings.Server = res.IP;
+            HeliosSettings.AppSettings.Port = int.Parse(res.Port);
+
+            return res.MvsUserID;
         }
 
-        public static async Task RoomCreateToMaster(string roomName, UInt64 roomId = 0)
+        public static async Task<UInt64> RoomCreateToMaster(string roomName, UInt64 roomId = 0)
         {
-            await RealtimeClient.OpCreateAndJoinRoomToMvm(new RoomInfo(){Name = roomName, RoomID = roomId});
+            // MVM으로 바로 접속하는 케이스가 없다면 삭제
+            RealtimeClient.MasterServerAddress = HeliosSettings.AppSettings.MVM;
+            
+            var res = await RealtimeClient.OpCreateAndJoinRoomToMvm(new RoomInfo(){Name = roomName, RoomID = roomId});
+            HeliosSettings.AppSettings.Server = res.IP;
+            HeliosSettings.AppSettings.Port = int.Parse(res.Port);
+
+            return res.MvsUserID;
         }
 
-        public static async Task RoomJoinToMaster()
+        public static async Task RoomJoinToMaster(UInt64 roomId = 0)
         {
-            await RealtimeClient.OpJoinRoomToMvm();
+            await RealtimeClient.OpJoinRoomToMvm(roomId);
         }
 
         /// <summary>

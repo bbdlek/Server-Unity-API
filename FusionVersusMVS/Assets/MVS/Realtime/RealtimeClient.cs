@@ -755,9 +755,9 @@ namespace MVS.Realtime
 
         public async Task<string> OpGetMvmAddress()
         {
-            // 이하 2줄 테스트용 todo: remove
+            /*// 이하 2줄 테스트용 todo: remove
             MasterServerAddress = "192.168.154.131:8091";
-            return MasterServerAddress;
+            return MasterServerAddress;*/
             
             var res = await httpModule.GetAsync($"http://{NameServerAddress}/ns/api/v1/app/7e7f4f49-9ae7-4ef8-900c-d2c66635c4e2");
             if (res == null)
@@ -851,10 +851,10 @@ namespace MVS.Realtime
             return RoomJoinInfo;
         }
 
-        public async Task<RoomJoinInfoStruct> OpJoinRoomToMvm(RoomInfo roomInfo = default)
+        public async Task<RoomJoinInfoStruct> OpJoinRoomToMvm(UInt64 roomId = default)
         {
             HttpRequest.RoomJoinRequest roomReq;
-            if (roomInfo.RoomID == 0)
+            if (roomId == 0)
             {
                 // Use SelectedRoomInfo
                 roomReq = new HttpRequest.RoomJoinRequest()
@@ -866,7 +866,7 @@ namespace MVS.Realtime
             {
                 roomReq = new HttpRequest.RoomJoinRequest()
                 {
-                    RoomId = roomInfo.RoomID.ToString()
+                    RoomId = roomId.ToString()
                 };
             }
             
