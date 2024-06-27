@@ -81,27 +81,7 @@ namespace MVS.Realtime
         public string AppVersion { get; set; }
 
         public string AppId { get; set; }
-
-        // public AuthenticationValues AuthValues { get; set; }
-
-        public AuthModeOption AuthMode = AuthModeOption.None;
-
         public ConnectionProtocol? ConnectionProtocol { get; set; }
-
-        // public object TokenForInit
-        // {
-        //     get
-        //     {
-        //         if (AuthMode == AuthModeOption.Auth)
-        //         {
-        //             return null;
-        //         }
-        //
-        //         return AuthValues?.Token;
-        //     }
-        // }
-
-        private object tokenCache;
         
         public bool IsUsingNameServer { get; set; }
         
@@ -651,11 +631,14 @@ namespace MVS.Realtime
         {
             var data = Packs.Parser.ParseFrom(operationResponse.FixedData).SRoomJoinOrCreate;
             
-            RoomInfo newRoomInfo = new RoomInfo
+            if (data.Result == Result.Failed)
             {
-                 
-            };
-            CurrentRoom = CreateRoom(newRoomInfo);
+                MakingRoomCallbacksTarget.OnCreatedRoomFailed((short)Protocol.Result.Failed, "RoomCreateFailed");
+                MakingRoomCallbacksTarget.OnJoinedRoomFailed((short)Protocol.Result.Failed, "RoomJoinFailed");
+                return;
+            }
+            
+            CurrentRoom = CreateRoom(SelectedRoomInfo);
             CurrentRoom.RealtimeClient = this;
             CurrentRoom.StorePlayer(LocalPlayer);
 
@@ -669,12 +652,7 @@ namespace MVS.Realtime
             {
                 MakingRoomCallbacksTarget.OnJoinedRoom();
             }
-
-            if (data.Result == Result.Failed)
-            {
-                MakingRoomCallbacksTarget.OnCreatedRoomFailed((short)Protocol.Result.Failed, "RoomCreateFailed");
-                MakingRoomCallbacksTarget.OnJoinedRoomFailed((short)Protocol.Result.Failed, "RoomJoinFailed");
-            }
+            
         }
 
         protected internal virtual Room CreateRoom(RoomInfo roomInfo)
@@ -755,9 +733,9 @@ namespace MVS.Realtime
 
         public async Task<string> OpGetMvmAddress()
         {
-            /*// 이하 2줄 테스트용 todo: remove
+            // 이하 2줄 테스트용 todo: remove
             MasterServerAddress = "192.168.154.131:8091";
-            return MasterServerAddress;*/
+            return MasterServerAddress;
             
             var res = await httpModule.GetAsync($"http://{NameServerAddress}/ns/api/v1/app/7e7f4f49-9ae7-4ef8-900c-d2c66635c4e2");
             if (res == null)
@@ -845,7 +823,7 @@ namespace MVS.Realtime
             RoomJoinInfo.RoomID = res.ResponseMessage.RoomId;
             RoomJoinInfo.MvsUserID = res.ResponseMessage.UserId;
             RoomJoinInfo.MvsUserToken = res.ResponseMessage.Token;
-
+            
             Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
 
             return RoomJoinInfo;
@@ -892,7 +870,10 @@ namespace MVS.Realtime
             RoomJoinInfo.MvsUserID = res.ResponseMessage.UserId;
             RoomJoinInfo.MvsUserToken = res.ResponseMessage.Token;
 
-            Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
+            LocalPlayer.PlayerInfo.PlayerID = res.ResponseMessage.UserId;
+
+            if(state!= ClientState.ConnectingToMVS)
+                Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
             
             return RoomJoinInfo;
         }

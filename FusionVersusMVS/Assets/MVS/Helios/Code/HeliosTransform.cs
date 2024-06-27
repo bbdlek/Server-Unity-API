@@ -104,7 +104,7 @@ namespace MVS.Helios
                     var _objectInfo = new ObjectInfo
                     {
                         ObjectID = _heliosObject.ObjectInfo.ObjectID,
-                        SyncType = ObjectSyncType.PersonalOwn,
+                        SyncType = _heliosObject.ObjectInfo.SyncType,
                         OwnerPlayerID = _heliosObject.ObjectInfo.OwnerPlayerID
                     };
 

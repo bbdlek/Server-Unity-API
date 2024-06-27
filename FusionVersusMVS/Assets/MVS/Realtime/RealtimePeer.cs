@@ -102,8 +102,6 @@ namespace MVS.Realtime
         }
 
     }
-    
-    public enum AuthModeOption { None, Auth }
 
     public enum CustomAuthenticationType : byte
     {

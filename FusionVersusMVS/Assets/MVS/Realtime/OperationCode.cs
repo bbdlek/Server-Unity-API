@@ -10,8 +10,9 @@ namespace MVS.Realtime
         GROUP_LIST = 5,
         GROUP_JOIN = 6,
         GROUP_LEAVE = 7,
-        RAISE_EVENT = 8,
-        INIT_VARIABLES = 9,
+        GROUP_OWNER = 8,
+        RAISE_EVENT = 9,
+        INIT_VARIABLES = 10,
         AUTHENTICATE = 100,
     }
 }

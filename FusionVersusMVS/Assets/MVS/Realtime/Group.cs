@@ -8,11 +8,14 @@ namespace MVS.Realtime
         public RealtimeClient RealtimeClient { get; set; }
         
         public GroupInfo GroupInfo { get; set; }
+        
+        public bool IsLocalGroupOwner { get; set; }
 
         public Group(GroupInfo groupInfo, Room roomReference)
         {
             RoomReference = roomReference;
             GroupInfo = groupInfo;
+            IsLocalGroupOwner = false;
         }
         
         public Room RoomReference { get; set; }

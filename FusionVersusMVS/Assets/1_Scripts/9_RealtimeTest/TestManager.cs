@@ -27,7 +27,6 @@ public class TestManager : Singleton<TestManager>
         {
             AppVersion = null,
             AppId = null,
-            AuthMode = AuthModeOption.None,
         };
     }
 
