@@ -41,8 +41,8 @@ namespace MVS.Realtime
             TransportProtocol = protocol;
             SocketImplementationConfig = new Dictionary<ConnectionProtocol, Type>();
             SocketImplementationConfig[ConnectionProtocol.Sap] = typeof(MVSWebSocket);
-            SocketImplementationConfig[ConnectionProtocol.Tcp] = typeof(SocketTcp);
-            SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(MVSWebSocket);
+            SocketImplementationConfig[ConnectionProtocol.Tcp] = typeof(MVSTcpSocket);
+            SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(MVSRudpSocket);
             SocketImplementationConfig[ConnectionProtocol.WebSocket] = typeof(MVSWebSocket);
             SocketImplementationConfig[ConnectionProtocol.WebSocketSecure] = typeof(MVSWebSocket);
             CreatePeerBase();
@@ -78,9 +78,13 @@ namespace MVS.Realtime
                 return false;
             }
             
-            Listener.OnStatusChanged(StatusCode.Connect);
             peerBase.Connect(serverAddress, appId, serverType);
             return true;
+        }
+
+        public void OnConnected()
+        {
+            Listener.OnStatusChanged(StatusCode.Connect);
         }
 
         private void CreatePeerBase()
@@ -88,6 +92,7 @@ namespace MVS.Realtime
             switch (TransportProtocol)
             {
                 case ConnectionProtocol.Tcp:
+                case ConnectionProtocol.Udp:
                 case ConnectionProtocol.Sap:
                 case ConnectionProtocol.WebSocket:
                     if (!(peerBase is TPeer tpeer))
@@ -174,9 +179,6 @@ namespace MVS.Realtime
                     break;
                 case EventCode.PKT_C_REMOVE_NETWORK_OBJECTS:
                     packs.CRemoveNetworkObjects = fixedData as C_REMOVE_NETWORK_OBJECTS;
-                    break;
-                case EventCode.PKT_C_CHANGE_OBJECTS_OWNER:
-                    packs.CChangeObjectsOwner = fixedData as C_CHANGE_OBJECTS_OWNER;
                     break;
                 case (int)Protocol.EventCode.Rpc:
                     packs.CRpc = fixedData as C_RPC;

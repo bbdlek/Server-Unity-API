@@ -61,6 +61,7 @@ namespace MVS.Realtime
 
         public override void OnConnect()
         {
+            base.OnConnect();
             Listener.MVSDebug(DebugLevel.INFO, "TPeer OnConnect()");
             handlerDic = new Dictionary<PKT_ID, Func<byte[], int, bool>>();
             handlerDic[PKT_ID.PKT_S_OPERATION] = (bytes, len) => PacketHandler<S_OPERATION>.Handling(Handle_S_OPERATION, bytes, len);

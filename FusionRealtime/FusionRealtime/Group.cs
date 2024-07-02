@@ -8,11 +8,14 @@ namespace MVS.Realtime
         public RealtimeClient RealtimeClient { get; set; }
         
         public GroupInfo GroupInfo { get; set; }
+        
+        public bool IsLocalGroupOwner { get; set; }
 
         public Group(GroupInfo groupInfo, Room roomReference)
         {
             RoomReference = roomReference;
             GroupInfo = groupInfo;
+            IsLocalGroupOwner = false;
         }
         
         public Room RoomReference { get; set; }
@@ -30,6 +33,14 @@ namespace MVS.Realtime
         {
             PlayerList[player.UserId] = player;
             player.GroupReference = this;
+        }
+
+        public virtual void RemovePlayer(Player player)
+        {
+            if (PlayerList.ContainsKey(player.UserId))
+            {
+                PlayerList.Remove(player.UserId);
+            }
         }
 
         public Player GetPlayer(ulong playerId, bool findMaster = false)

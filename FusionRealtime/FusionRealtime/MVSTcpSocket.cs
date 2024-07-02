@@ -7,7 +7,7 @@ using UnityEngine.Scripting;
 
 namespace MVS.Realtime
 {
-    public class SocketTcp : RealtimeSocketConnection, IDisposable
+    public class MVSTcpSocket : RealtimeSocketConnection, IDisposable
     {
         private Socket _socket;
         private TcpClient _client;
@@ -15,7 +15,7 @@ namespace MVS.Realtime
         private readonly object syncer = new object();
         
         [Preserve]
-        public SocketTcp(PeerBase peerBase) : base(peerBase)
+        public MVSTcpSocket(PeerBase peerBase) : base(peerBase)
         {
             Listener.MVSDebug(DebugLevel.INFO, "SocketTcp, .Net, Unity");
             
@@ -23,7 +23,7 @@ namespace MVS.Realtime
             PollReceive = false;
         }
 
-        ~SocketTcp() => Dispose();
+        ~MVSTcpSocket() => Dispose();
 
         public override bool Connect()
         {
@@ -42,9 +42,9 @@ namespace MVS.Realtime
 
         internal void DnsAndConnect()
         {
+            _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
-                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 //TODO : TimeOut Settings
                 _socket.NoDelay = true;
                 _socket.ReceiveTimeout = 5000;
@@ -76,6 +76,7 @@ namespace MVS.Realtime
             {
                 State = RealtimeSocketState.Connected;
                 peerBase.OnConnect();
+                
                 // new Thread(ReceiveLoop)
                 // {
                 //     IsBackground = true
@@ -216,12 +217,8 @@ namespace MVS.Realtime
             return true;
         }
 
-        // private static DateTime nowTime = new DateTime();
-        
         public override bool Send(byte[] data)
         {
-            // Console.WriteLine((DateTime.Now - nowTime).Milliseconds);
-            // nowTime = DateTime.Now;
             if(_socket != null && State == RealtimeSocketState.Connected)
                 _socket.Send(data, 0, data.Length, SocketFlags.None);
             return true;
