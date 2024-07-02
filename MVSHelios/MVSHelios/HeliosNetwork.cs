@@ -64,18 +64,7 @@ namespace MVS.Helios
         
         // public static string Region => (RealtimeClient != null) ? RealtimeClient.Region : "Not Connected";
 
-        public static bool IsConnectedToMaster
-        {
-            get
-            {
-                if (RealtimeClient == null)
-                {
-                    return false;
-                }
-
-                return RealtimeClient.IsConnectedToMaster;
-            }
-        }
+        public static bool IsConnectedToMaster = false;
 
         public static bool IsConnected
         {
@@ -316,6 +305,7 @@ namespace MVS.Helios
             RealtimeClient.MasterServerAddress = HeliosSettings.AppSettings.IsUsingNameServer
                 ? await RealtimeClient.OpGetMvmAddress()
                 : HeliosSettings.AppSettings.MVM;
+            IsConnectedToMaster = true;
             return HeliosSettings.AppSettings.MVM;
         }
 

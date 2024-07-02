@@ -117,8 +117,6 @@ namespace MVS.Realtime
         }
 
         public bool IsConnected => RealtimePeer != null && State != ClientState.Created && State != ClientState.DisConnected;
-        
-        public bool IsConnectedToMaster = false;
 
         public bool IsConnectedAndReady
         {
@@ -752,13 +750,13 @@ namespace MVS.Realtime
                 var res2 = JsonConvert.DeserializeObject<MVMResponse>(res);
                 MVSDebug(DebugLevel.INFO, res2.ResponseMessage[0].Hostname.ToString());
                 MasterServerAddress = res2.ResponseMessage[0].IpAddress;
-                IsConnectedToMaster = true;
+                ConnectionCallbacksTarget.OnConnectedToMasterServer();
             
                 return MasterServerAddress;
             }
             else
             {
-                IsConnectedToMaster = true;
+                ConnectionCallbacksTarget.OnConnectedToMasterServer();
                 return MasterServerAddress;
             }
         }
@@ -981,6 +979,8 @@ namespace MVS.Realtime
 
     public interface IConnectionCallbacks
     {
+        void OnConnectedToMasterServer();
+        
         void OnConnected();
 
         void OnDisconnected();
@@ -1049,6 +1049,16 @@ namespace MVS.Realtime
         public ConnectionCallbacksContainer(RealtimeClient client)
         {
             _client = client;
+        }
+        
+        public void OnConnectedToMasterServer()
+        {
+            _client.UpdateCallbackTargets();
+            
+            foreach (IConnectionCallbacks target in this)
+            {
+                target.OnConnectedToMasterServer();
+            }
         }
 
         public void OnConnected()

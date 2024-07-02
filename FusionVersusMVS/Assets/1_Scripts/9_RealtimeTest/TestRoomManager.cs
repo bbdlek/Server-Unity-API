@@ -41,6 +41,11 @@ public class TestRoomManager : Singleton<TestRoomManager>, IMakingRoomCallbacks,
         
     }
 
+    public void OnConnectedToMasterServer()
+    {
+        
+    }
+
     public void OnConnected()
     {
         Debug.Log("OnConnected");

@@ -191,6 +191,11 @@ namespace MVS.Helios
             }
         }
 
+        public void OnConnectedToMasterServer()
+        {
+            
+        }
+
         public void OnConnected()
         {
             

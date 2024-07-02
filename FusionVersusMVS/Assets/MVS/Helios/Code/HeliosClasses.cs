@@ -501,6 +501,10 @@ namespace MVS.Helios
         {
             HeliosNetwork.RemoveCallbackTarget(this);
         }
+        
+        public virtual void OnConnectedToMasterServer()
+        {
+        }
 
         public virtual void OnConnected()
         {
