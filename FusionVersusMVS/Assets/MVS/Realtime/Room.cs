@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Protocol;
 
 namespace MVS.Realtime
 {
@@ -38,6 +37,14 @@ namespace MVS.Realtime
             player.RoomReference = this;
 
             return player;
+        }
+
+        public virtual void RemovePlayer(Player player)
+        {
+            if (PlayerList.ContainsKey(player.UserId))
+            {
+                PlayerList.Remove(player.UserId);
+            }
         }
 
         public Player GetPlayer(ulong playerId, bool findMaster = false)

@@ -35,6 +35,14 @@ namespace MVS.Realtime
             player.GroupReference = this;
         }
 
+        public virtual void RemovePlayer(Player player)
+        {
+            if (PlayerList.ContainsKey(player.UserId))
+            {
+                PlayerList.Remove(player.UserId);
+            }
+        }
+
         public Player GetPlayer(ulong playerId, bool findMaster = false)
         {
             ulong id = findMaster && playerId == 0 ? MasterClientId : playerId;

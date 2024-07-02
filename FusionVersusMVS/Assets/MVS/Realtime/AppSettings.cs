@@ -1,4 +1,5 @@
 using System;
+using UnityEngine.Serialization;
 
 namespace MVS.Realtime
 {
@@ -23,7 +24,7 @@ namespace MVS.Realtime
         public string NameServer = "";
         
         /// <summary>
-        /// MV Master IP for Join MVS GameRoom
+        /// MV Master IP for Join MVM
         /// </summary>
         public string MVM = ""; 
         
@@ -33,9 +34,7 @@ namespace MVS.Realtime
         /// <summary> Server Port for MVS Application </summary>
         public int Port = 0;
 
-        public bool IsUseNameServer;
-
-        public bool IsDirectToMVS;
+        public bool IsUsingNameServer;
 
         /// <summary> Connection Protocol for MVS Application </summary>
         public ConnectionProtocol Protocol = ConnectionProtocol.Tcp;

@@ -48,8 +48,8 @@ namespace MVS.Helios
         public Dictionary<int, HeliosMonoBehavior> attributeMonoBehaviors = new Dictionary<int, HeliosMonoBehavior>();
         public Dictionary<int, object> initialHeliosValues = new Dictionary<int, object>();
 
-        public Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior, string>> RPCMethods =
-            new Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior, string>>();
+        public Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior, string, uint[]>> RPCMethods =
+            new Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior, string, uint[]>>();
         
 
         public ObjectInfo ObjectInfo = new ObjectInfo
@@ -97,7 +97,9 @@ namespace MVS.Helios
             {
                 objectID = ObjectInfo.ObjectID;
             }
-            HeliosNetwork.RPC(objectID, methodName, args);
+            var hash = HeliosUtility.Compute64BitHash(methodName);
+            var targetPlayers = RPCMethods[hash].Item4;
+            HeliosNetwork.RPC(objectID, methodName, targetPlayers, args);
         }
 
         public void ExecuteRpc(ulong methodNameHash, byte[] methodArgs)
@@ -309,23 +311,41 @@ namespace MVS.Helios
             {
                 HeliosRPCAttribute attribute =
                     (HeliosRPCAttribute)Attribute.GetCustomAttribute(method, typeof(HeliosRPCAttribute));
+                
                 if (attribute != null)
                 {
+                    if (attribute.Target == "Player" && attribute.TargetPlayerIDs.Length == 0)
+                    {
+                        Debug.LogError($"Method {method.Name} in {this.name} class, TargetPlayerID is required when Target is 'Player'");
+                    }
+                    
+                    if (attribute.Target == "Player" && attribute.TargetPlayerIDs.Contains<uint>(0))
+                    {
+                        Debug.LogError($"Method {method.Name} in {this.name} class, TargetPlayerID 0 should never be used when Target is 'Player'");
+                    }
+
+                    if (attribute.Target == "ALL" && attribute.TargetPlayerIDs.Length > 0)
+                    {
+                        Debug.LogError($"Method {method.Name} in {this.name} class, TargetPlayerID must be null when Target is 'ALL'");
+                    }
+                    
                     if (GetComponent<HeliosObject>())
                     {
                         string methodName = method.Name;
                         string target = attribute.Target;
+                        uint[] targetPlayers = attribute.TargetPlayerIDs;
                         var hash = HeliosUtility.Compute64BitHash(methodName);
                         
-                        GetComponent<HeliosObject>().RPCMethods.Add(hash, Tuple.Create(method, this, target));
+                        GetComponent<HeliosObject>().RPCMethods.Add(hash, Tuple.Create(method, this, target, targetPlayers));
                     }
                     else
                     {
                         string methodName = method.Name;
                         string target = attribute.Target;
+                        uint[] targetPlayers = attribute.TargetPlayerIDs;
                         var hash = HeliosUtility.Compute64BitHash(methodName);
                        
-                        RPCMethods.Add(hash, Tuple.Create(method, this, target));
+                        RPCMethods.Add(hash, Tuple.Create(method, this, target, targetPlayers));
                     }
                 }
             }
@@ -488,7 +508,7 @@ namespace MVS.Helios
 
         public virtual void OnDisconnected()
         {
-            HeliosNetwork.RemoveMyObjects();
+            // HeliosNetwork.RemoveMyObjects();
         }
 
         public virtual void OnCustomAuthenticationResponse(Dictionary<string, object> data)

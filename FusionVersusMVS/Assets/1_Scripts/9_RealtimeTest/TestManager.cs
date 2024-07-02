@@ -17,8 +17,7 @@ public class TestManager : Singleton<TestManager>
             FixedRegion = "FixedRegion",
             Server = "222.122.186.49",
             Port = 80,
-            IsUseNameServer = false,
-            IsDirectToMVS = true,
+            IsUsingNameServer = false,
             Protocol = ConnectionProtocol.WebSocket,
             DebugLevel = DebugLevel.ALL
         };

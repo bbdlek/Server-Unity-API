@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Newtonsoft.Json;
 using Protocol;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
 namespace MVS.Realtime
@@ -239,7 +237,7 @@ namespace MVS.Realtime
 
             AppId = appSettings.AppId;
             AppVersion = appSettings.AppVersion;
-            IsUsingNameServer = appSettings.IsUseNameServer;
+            IsUsingNameServer = appSettings.IsUsingNameServer;
             ConnectionProtocol = appSettings.Protocol;
             NameServerAddress = appSettings.NameServer;
             MasterServerAddress = appSettings.MVM;
@@ -435,8 +433,8 @@ namespace MVS.Realtime
                     var data = Packs.Parser.ParseFrom(eventData.FixedData).SOtherClientGroupLeave;
                     Player otherPlayer = new Player(data.PlayerInfo);
                     //TODO: Remove Player
-                    //CurrentGroup.StorePlayer(otherPlayer);
-                    //CurrentRoom.StorePlayer(otherPlayer);
+                    CurrentGroup.RemovePlayer(otherPlayer);
+                    CurrentRoom.RemovePlayer(otherPlayer);
                     InGroupCallbacksTarget.OnPlayerLeftGroup(otherPlayer);
                 }   break;
                 case EventCode.PKT_S_UPDATE_NETWORK_OBJECTS:
@@ -733,21 +731,24 @@ namespace MVS.Realtime
 
         public async Task<string> OpGetMvmAddress()
         {
-            // 이하 2줄 테스트용 todo: remove
-            MasterServerAddress = "192.168.154.131:8091";
-            return MasterServerAddress;
-            
-            var res = await httpModule.GetAsync($"http://{NameServerAddress}/ns/api/v1/app/7e7f4f49-9ae7-4ef8-900c-d2c66635c4e2");
-            if (res == null)
+            if (IsUsingNameServer)
             {
-                MVSDebug(DebugLevel.ERROR, "Get MVM Address request fail");
-                return null;
-            }
-            var res2 = JsonConvert.DeserializeObject<MVMResponse>(res);
-            MVSDebug(DebugLevel.INFO, res2.ResponseMessage[0].Hostname.ToString());
-            MasterServerAddress = res2.ResponseMessage[0].IpAddress;
+                var res = await httpModule.GetAsync($"http://{NameServerAddress}/ns/api/v1/app/{AppId}");
+                if (res == null)
+                {
+                    MVSDebug(DebugLevel.ERROR, "Get MVM Address request fail");
+                    return null;
+                }
+                var res2 = JsonConvert.DeserializeObject<MVMResponse>(res);
+                MVSDebug(DebugLevel.INFO, res2.ResponseMessage[0].Hostname.ToString());
+                MasterServerAddress = res2.ResponseMessage[0].IpAddress;
             
-            return MasterServerAddress;
+                return MasterServerAddress;
+            }
+            else
+            {
+                return MasterServerAddress;
+            }
         }
         
         /// <summary>
@@ -816,15 +817,16 @@ namespace MVS.Realtime
                 MVSDebug(DebugLevel.WARNING, "Already Created RoomId");
                 return default;
             }
-
+            
             var address = res.ResponseMessage.MvsUrl.Split("/");
             RoomJoinInfo.IP = address[0];
             RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
             RoomJoinInfo.RoomID = res.ResponseMessage.RoomId;
             RoomJoinInfo.MvsUserID = res.ResponseMessage.UserId;
+            LocalPlayer.PlayerInfo.PlayerID = RoomJoinInfo.MvsUserID;
             RoomJoinInfo.MvsUserToken = res.ResponseMessage.Token;
             
-            Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
+            await Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
 
             return RoomJoinInfo;
         }
@@ -1007,8 +1009,6 @@ namespace MVS.Realtime
         void OnPlayerEnteredRoom(Player newPlayer);
         
         void OnPlayerLeftRoom(Player otherPlayer);
-        
-        void OnMasterClientSwitched(Player newMasterClient);
     }
     
     public interface IInGroupCallbacks
@@ -1016,6 +1016,8 @@ namespace MVS.Realtime
         void OnPlayerEnteredGroup(Player newPlayer);
         
         void OnPlayerLeftGroup(Player otherPlayer);
+        
+        void OnMasterClientSwitched(Player newMasterClient);
     }
 
     public interface IOnEventCallbacks
@@ -1226,16 +1228,6 @@ namespace MVS.Realtime
                 target.OnPlayerLeftRoom(otherPlayer);
             }
         }
-
-        public void OnMasterClientSwitched(Player newMasterClient)
-        {
-            _client.UpdateCallbackTargets();
-
-            foreach (IInRoomCallbacks target in this)
-            {
-                target.OnMasterClientSwitched(newMasterClient);
-            }
-        }
     }
     
     internal class InGroupCallbacksContainer : List<IInGroupCallbacks>, IInGroupCallbacks
@@ -1264,6 +1256,16 @@ namespace MVS.Realtime
             foreach (IInGroupCallbacks target in this)
             {
                 target.OnPlayerLeftGroup(otherPlayer);
+            }
+        }
+        
+        public void OnMasterClientSwitched(Player newMasterClient)
+        {
+            _client.UpdateCallbackTargets();
+
+            foreach (IInGroupCallbacks target in this)
+            {
+                target.OnMasterClientSwitched(newMasterClient);
             }
         }
     }

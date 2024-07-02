@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using MVS.Realtime;
 using Protocol;
+using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
 using OperationCode = MVS.Realtime.OperationCode;
 
@@ -126,6 +127,7 @@ namespace MVS.Helios
                     {
                         CurrentGroup.IsLocalGroupOwner = true;
                     }
+                    RealtimeClient.InGroupCallbacksTarget.OnMasterClientSwitched(CurrentGroup.GetPlayer(dataGroupOwner.PlayerInfo.PlayerID));
                     break;
                 case (int)Protocol.EventCode.Rpc:
                     var dataRpc = Packs.Parser.ParseFrom(eventData.FixedData).CRpc;

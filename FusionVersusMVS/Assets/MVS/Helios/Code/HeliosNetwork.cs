@@ -274,7 +274,7 @@ namespace MVS.Helios
         }
         
         // TODO : RPC
-        public static bool RPC(ObjectID objectID, string methodName, params object[] args)
+        public static bool RPC(ObjectID objectID, string methodName, uint[] targetPlayers, params object[] args)
         {
             // Debug.Log($"CI : {objectID.ClientInstanceID}, I : {objectID.InstanceID}");
             var fixedData = new C_RPC
@@ -283,13 +283,26 @@ namespace MVS.Helios
                 MethodName = HeliosUtility.Compute64BitHash(methodName),
                 MethodArgs = ByteString.CopyFrom(HeliosUtility.SerializeParameters(args))
             };
+            if (targetPlayers.Length == 0)
+            {
+                fixedData.Receivers.Add(0);
+            }
+            else
+            {
+                foreach (var target in targetPlayers)
+                {
+                    fixedData.Receivers.Add(target);
+                }
+            }
             return RaiseEvent((int)Protocol.EventCode.Rpc, fixedData);
         }
 
         public static async Task<string> GetMvmAddress()
         {
             RealtimeClient.NameServerAddress = HeliosSettings.AppSettings.NameServer;
-            HeliosSettings.AppSettings.MVM =  await RealtimeClient.OpGetMvmAddress();
+            RealtimeClient.MasterServerAddress = HeliosSettings.AppSettings.IsUsingNameServer
+                ? await RealtimeClient.OpGetMvmAddress()
+                : HeliosSettings.AppSettings.MVM;
             return HeliosSettings.AppSettings.MVM;
         }
 

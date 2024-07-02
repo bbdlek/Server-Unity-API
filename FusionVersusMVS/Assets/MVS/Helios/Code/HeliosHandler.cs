@@ -198,7 +198,7 @@ namespace MVS.Helios
 
         public void OnDisconnected()
         {
-            
+            HeliosNetwork.RemoveMyObjects();
         }
 
         public void OnCustomAuthenticationResponse(Dictionary<string, object> data)

@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         score3 += added2;
     }
 
-    [HeliosRPC("All")]
+    [HeliosRPC("Player", 85)]
     public void ChangeVec2()
     {
         testVec2.x++;
@@ -144,10 +144,13 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     {
         HeliosNetwork.JoinOrCreateRoom("auth", 1, 1, "Dummy");
     }
+
+    public uint sceneNumber = 1;
+    public uint channelID = 1;
     
     public void OnClickJoinGroupBtn()
     {
-        HeliosNetwork.JoinGroup(1, 1);
+        HeliosNetwork.JoinGroup(sceneNumber, channelID);
     }
 
     public void OnClickCreateObjectBrn()
@@ -197,6 +200,12 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         Debug.Log("JoinedRoom");
     }
 
+    public override void OnJoinedGroup()
+    {
+        base.OnJoinedGroup();
+        Debug.Log($"Joined Group {HeliosNetwork.CurrentGroup.GroupInfo.GroupID.SceneNumber}");
+    }
+
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         base.OnPlayerEnteredRoom(newPlayer);
@@ -209,14 +218,31 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         Debug.Log(newPlayer.NickName);
     }
 
+    public override void OnPlayerLeftGroup(Player leftPlayer)
+    {
+        base.OnPlayerLeftGroup(leftPlayer);
+        Debug.Log(leftPlayer.NickName);
+    }
+
+    public override void OnMasterClientSwitched(Player masterClient)
+    {
+        base.OnMasterClientSwitched(masterClient);
+        Debug.Log($"NickName : {masterClient.NickName}, {masterClient.PlayerInfo.PlayerID}");
+        Debug.Log($"Am I Master? {HeliosNetwork.CurrentGroup.IsLocalGroupOwner}");
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
             RPC("AddScore", 3, 6);
-            RPC("ChangeVec2");
             // AddScore();
             AddTest();
+        }
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            RPC("ChangeVec2");
         }
     }
 }
