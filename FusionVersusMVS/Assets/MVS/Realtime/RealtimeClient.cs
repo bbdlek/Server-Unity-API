@@ -457,6 +457,14 @@ namespace MVS.Realtime
                         }
                     }
                     break;
+                case EventCode.PKT_S_CHANGE_GROUP_OWNER:
+                    var dataGroupOwner = Packs.Parser.ParseFrom(eventData.FixedData).SChangeGroupOwner;
+                    if (dataGroupOwner.PlayerInfo.PlayerID == LocalPlayer.UserId)
+                    {
+                        CurrentGroup.IsLocalGroupOwner = true;
+                    }
+                    InGroupCallbacksTarget.OnMasterClientSwitched(CurrentGroup.GetPlayer(dataGroupOwner.PlayerInfo.PlayerID));
+                    break;
             }
             UpdateCallbackTargets();
             if (EventReceived != null)
@@ -818,7 +826,7 @@ namespace MVS.Realtime
                 return default;
             }
             
-            var address = res.ResponseMessage.MvsUrl.Split("/");
+            var address = res.ResponseMessage.MvsUrl.Split('/');
             RoomJoinInfo.IP = address[0];
             RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
             RoomJoinInfo.RoomID = res.ResponseMessage.RoomId;
@@ -865,7 +873,7 @@ namespace MVS.Realtime
                 return default;
             }
 
-            var address = res.ResponseMessage.MvsUrl.Split("/");
+            var address = res.ResponseMessage.MvsUrl.Split('/');
             RoomJoinInfo.IP = address[0];
             RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
             RoomJoinInfo.RoomID = res.ResponseMessage.RoomId;

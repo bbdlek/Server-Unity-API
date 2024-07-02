@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using MVS.Realtime;
 using Protocol;
+using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
 using OperationCode = MVS.Realtime.OperationCode;
 
@@ -56,7 +57,7 @@ namespace MVS.Helios
                             case ObjectSyncType.PersonalOwn:
                                 NetworkInstantiate(objectInfo);
                                 break;
-                            case ObjectSyncType.GlobalOwn:
+                            case ObjectSyncType.GroupOwn:
                                 var obj = HeliosObjectList.Find(x =>
                                     x.ObjectInfo.ObjectID.ClientInstanceID == objectInfo.ObjectID.ClientInstanceID);
                                 // obj.ObjectInfo = objectInfo;
@@ -71,7 +72,7 @@ namespace MVS.Helios
                     var data = Packs.Parser.ParseFrom(eventData.FixedData).SAddNetworkObjects;
                     foreach (var objectInfo in data.ObjectInfos)
                     {
-                        if (objectInfo.SyncType == ObjectSyncType.GlobalOwn)
+                        if (objectInfo.SyncType == ObjectSyncType.GroupOwn)
                         {
                             var obj = HeliosObjectList.Find(x =>
                                 x.ObjectInfo.ObjectID.ClientInstanceID ==
@@ -144,7 +145,7 @@ namespace MVS.Helios
                         foreach (var obj in HeliosObjectList)
                         {
                             if(obj.ObjectInfo.SyncType == ObjectSyncType.PersonalOwn) continue;
-                            obj.ObjectInfo.SyncType = ObjectSyncType.GlobalOwn;
+                            obj.ObjectInfo.SyncType = ObjectSyncType.GroupOwn;
                             obj.ObjectInfo.OwnerPlayerID = 0;
                             pkt.ObjectInfos.Add(obj.ObjectInfo);
                         }

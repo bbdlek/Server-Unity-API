@@ -104,11 +104,11 @@ namespace MVS.Helios
                     var _objectInfo = new ObjectInfo
                     {
                         ObjectID = _heliosObject.ObjectInfo.ObjectID,
-                        SyncType = ObjectSyncType.PersonalOwn,
+                        SyncType = _heliosObject.ObjectInfo.SyncType,
                         OwnerPlayerID = _heliosObject.ObjectInfo.OwnerPlayerID
                     };
 
-                    _objectInfo.TestValues.Add(new HeliosVariable
+                    _objectInfo.Values.Add(new HeliosVariable
                     {
                         Key = CustomVariablesUnity.PosKey,
                         NVector = new Protocol.Vector3
@@ -119,7 +119,7 @@ namespace MVS.Helios
                         }
                     });
                     
-                    _objectInfo.TestValues.Add(new HeliosVariable
+                    _objectInfo.Values.Add(new HeliosVariable
                     {
                         Key = CustomVariablesUnity.RotKey,
                         NVector = new Protocol.Vector3
@@ -130,7 +130,7 @@ namespace MVS.Helios
                         }
                     });
                     
-                    _objectInfo.TestValues.Add(new HeliosVariable
+                    _objectInfo.Values.Add(new HeliosVariable
                     {
                         Key = CustomVariablesUnity.ScaleKey,
                         NVector = new Protocol.Vector3

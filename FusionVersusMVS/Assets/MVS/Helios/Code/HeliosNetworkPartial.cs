@@ -121,14 +121,6 @@ namespace MVS.Helios
                         NetworkRemoveObject(id);
                     }
                     break;
-                case EventCode.PKT_S_CHANGE_GROUP_OWNER:
-                    var dataGroupOwner = Packs.Parser.ParseFrom(eventData.FixedData).SChangeGroupOwner;
-                    if (dataGroupOwner.PlayerInfo.PlayerID == LocalPlayer.UserId)
-                    {
-                        CurrentGroup.IsLocalGroupOwner = true;
-                    }
-                    RealtimeClient.InGroupCallbacksTarget.OnMasterClientSwitched(CurrentGroup.GetPlayer(dataGroupOwner.PlayerInfo.PlayerID));
-                    break;
                 case (int)Protocol.EventCode.Rpc:
                     var dataRpc = Packs.Parser.ParseFrom(eventData.FixedData).CRpc;
                     var rpcObj = FindObjectById(dataRpc.ObjectID.InstanceID);

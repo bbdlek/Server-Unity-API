@@ -48,14 +48,14 @@ namespace MVS.Helios
         public Dictionary<int, HeliosMonoBehavior> attributeMonoBehaviors = new Dictionary<int, HeliosMonoBehavior>();
         public Dictionary<int, object> initialHeliosValues = new Dictionary<int, object>();
 
-        public Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior, string>> RPCMethods =
-            new Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior, string>>();
+        public Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior, string, uint[]>> RPCMethods =
+            new Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior, string, uint[]>>();
         
 
         public ObjectInfo ObjectInfo = new ObjectInfo
         {
             ObjectID = new ObjectID(),
-            SyncType = ObjectSyncType.GlobalOwn,
+            SyncType = ObjectSyncType.GroupOwn,
             OwnerPlayerID = 0,
         };
         
@@ -97,7 +97,9 @@ namespace MVS.Helios
             {
                 objectID = ObjectInfo.ObjectID;
             }
-            HeliosNetwork.RPC(objectID, methodName, args);
+            var hash = HeliosUtility.Compute64BitHash(methodName);
+            var targetPlayers = RPCMethods[hash].Item4;
+            HeliosNetwork.RPC(objectID, methodName, targetPlayers, args);
         }
 
         public void ExecuteRpc(ulong methodNameHash, byte[] methodArgs)
@@ -214,10 +216,10 @@ namespace MVS.Helios
                         attribute.Owner = ho;
                         
                         //HELIOSVARIABLE
-                        var key = ho.ObjectInfo.TestValues.Count;
+                        var key = ho.ObjectInfo.Values.Count;
                         if (key == 0)
                         {
-                            ho.ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+                            ho.ObjectInfo.Values.Add(new Protocol.HeliosVariable
                             {
                                 Key = CustomVariablesUnity.PosKey,
                                 NVector = new Protocol.Vector3
@@ -227,7 +229,7 @@ namespace MVS.Helios
                                     Z = 0
                                 }
                             });
-                            ho.ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+                            ho.ObjectInfo.Values.Add(new Protocol.HeliosVariable
                             {
                                 Key = CustomVariablesUnity.RotKey,
                                 NVector = new Protocol.Vector3
@@ -237,7 +239,7 @@ namespace MVS.Helios
                                     Z = 0
                                 }
                             });
-                            ho.ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+                            ho.ObjectInfo.Values.Add(new Protocol.HeliosVariable
                             {
                                 Key = CustomVariablesUnity.ScaleKey,
                                 NVector = new Protocol.Vector3
@@ -248,10 +250,10 @@ namespace MVS.Helios
                                 }
                             });
                         }
-                        key = ho.ObjectInfo.TestValues.Count;
+                        key = ho.ObjectInfo.Values.Count;
                         hv.Key = key;
-                        if(!ho.ObjectInfo.TestValues.Contains(hv))
-                            ho.ObjectInfo.TestValues.Add(hv);
+                        if(!ho.ObjectInfo.Values.Contains(hv))
+                            ho.ObjectInfo.Values.Add(hv);
                         
                         //ATTRIBUTE
                         if(!ho.heliosAttributes.ContainsKey(key))
@@ -269,18 +271,18 @@ namespace MVS.Helios
                         
                         //HELIOSVARIABLE
                         int requiredCount = CustomVariablesUnity.ScaleKey + 2;
-                        int currentCount = ObjectInfo.TestValues.Count;
+                        int currentCount = ObjectInfo.Values.Count;
 
                         if (currentCount < requiredCount)
                         {
                             int elementsToAdd = requiredCount - currentCount - 1;
-                            ObjectInfo.TestValues.AddRange(Enumerable.Repeat(new HeliosVariable(), elementsToAdd));
+                            ObjectInfo.Values.AddRange(Enumerable.Repeat(new HeliosVariable(), elementsToAdd));
                         }
                         
-                        var key = ObjectInfo.TestValues.Count;
+                        var key = ObjectInfo.Values.Count;
                         hv.Key = key;
                         
-                        ObjectInfo.TestValues.Add(hv);
+                        ObjectInfo.Values.Add(hv);
                         
                         //ATTRIBUTE
                         if(!heliosAttributes.ContainsKey(key))
@@ -309,23 +311,41 @@ namespace MVS.Helios
             {
                 HeliosRPCAttribute attribute =
                     (HeliosRPCAttribute)Attribute.GetCustomAttribute(method, typeof(HeliosRPCAttribute));
+                
                 if (attribute != null)
                 {
+                    if (attribute.Target == "Player" && attribute.TargetPlayerIDs.Length == 0)
+                    {
+                        Debug.LogError($"Method {method.Name} in {this.name} class, TargetPlayerID is required when Target is 'Player'");
+                    }
+                    
+                    if (attribute.Target == "Player" && attribute.TargetPlayerIDs.Contains<uint>(0))
+                    {
+                        Debug.LogError($"Method {method.Name} in {this.name} class, TargetPlayerID 0 should never be used when Target is 'Player'");
+                    }
+
+                    if (attribute.Target == "ALL" && attribute.TargetPlayerIDs.Length > 0)
+                    {
+                        Debug.LogError($"Method {method.Name} in {this.name} class, TargetPlayerID must be null when Target is 'ALL'");
+                    }
+                    
                     if (GetComponent<HeliosObject>())
                     {
                         string methodName = method.Name;
                         string target = attribute.Target;
+                        uint[] targetPlayers = attribute.TargetPlayerIDs;
                         var hash = HeliosUtility.Compute64BitHash(methodName);
                         
-                        GetComponent<HeliosObject>().RPCMethods.Add(hash, Tuple.Create(method, this, target));
+                        GetComponent<HeliosObject>().RPCMethods.Add(hash, Tuple.Create(method, this, target, targetPlayers));
                     }
                     else
                     {
                         string methodName = method.Name;
                         string target = attribute.Target;
+                        uint[] targetPlayers = attribute.TargetPlayerIDs;
                         var hash = HeliosUtility.Compute64BitHash(methodName);
                        
-                        RPCMethods.Add(hash, Tuple.Create(method, this, target));
+                        RPCMethods.Add(hash, Tuple.Create(method, this, target, targetPlayers));
                     }
                 }
             }
@@ -333,7 +353,7 @@ namespace MVS.Helios
 
         public void UpdateCustomData(ObjectInfo updatedObjectInfo)
         {
-            foreach (var customData in updatedObjectInfo.TestValues)
+            foreach (var customData in updatedObjectInfo.Values)
             {
                 var key = customData.Key;
                 if(key < 3) continue;
@@ -486,13 +506,9 @@ namespace MVS.Helios
         {
         }
 
-        public virtual void OnConnectedToMaster()
-        {
-        }
-
         public virtual void OnDisconnected()
         {
-            HeliosNetwork.RemoveMyObjects();
+            // HeliosNetwork.RemoveMyObjects();
         }
 
         public virtual void OnCustomAuthenticationResponse(Dictionary<string, object> data)

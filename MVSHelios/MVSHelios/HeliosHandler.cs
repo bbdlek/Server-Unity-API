@@ -72,7 +72,7 @@ namespace MVS.Helios
         private void CheckAndUpdateVariables()
         {
             var data = new C_UPDATE_NETWORK_OBJECTS();
-            foreach (var ho in HeliosNetwork.HeliosObjectList.FindAll(x => x.hasUpdate && (x.IsMine|| x.ObjectInfo.SyncType == ObjectSyncType.GlobalOwn)))
+            foreach (var ho in HeliosNetwork.HeliosObjectList.FindAll(x => x.hasUpdate && (x.IsMine|| (x.ObjectInfo.SyncType == ObjectSyncType.GroupOwn && HeliosNetwork.CurrentGroup.IsLocalGroupOwner))))
             {
                 ObjectInfo updateObject = new ObjectInfo();
                 if (GetComponent<HeliosObject>())
@@ -82,7 +82,7 @@ namespace MVS.Helios
                     updateObject.OwnerPlayerID = GetComponent<HeliosObject>().ObjectInfo.OwnerPlayerID;
                     for (int var = 0; var < 3; var++)
                     {
-                        updateObject.TestValues.Add(GetComponent<HeliosObject>().ObjectInfo.TestValues[var]);
+                        updateObject.Values.Add(GetComponent<HeliosObject>().ObjectInfo.Values[var]);
                     }
                 }
                 else
@@ -108,7 +108,7 @@ namespace MVS.Helios
                             continue;
                     }
                     HeliosVariable hv = new HeliosVariable();
-                    hv.Key = ho.ObjectInfo.TestValues[i].Key;
+                    hv.Key = ho.ObjectInfo.Values[i].Key;
                     switch (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]))
                     {
                         case int value:
@@ -176,14 +176,14 @@ namespace MVS.Helios
                             
                             break;
                     }
-                    ho.ObjectInfo.TestValues[i] = hv;
+                    ho.ObjectInfo.Values[i] = hv;
                     if (HeliosUtility.IsListType(ho.initialHeliosValues[i].GetType()))
                     {
                         ho.initialHeliosValues[i] =
                             DeepCopyHelper.DeepCopy(ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]));
                     }
                     else ho.initialHeliosValues[i] = ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]);
-                    updateObject.TestValues.Add(hv);
+                    updateObject.Values.Add(hv);
                 }
                 // data.ObjectInfos.Add(ho.ObjectInfo);
                 data.ObjectInfos.Add(updateObject);
@@ -196,14 +196,9 @@ namespace MVS.Helios
             
         }
 
-        public void OnConnectedToMaster()
-        {
-            
-        }
-
         public void OnDisconnected()
         {
-            
+            HeliosNetwork.RemoveMyObjects();
         }
 
         public void OnCustomAuthenticationResponse(Dictionary<string, object> data)
