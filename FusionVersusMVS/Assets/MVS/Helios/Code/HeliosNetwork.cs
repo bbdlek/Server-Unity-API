@@ -64,6 +64,19 @@ namespace MVS.Helios
         
         // public static string Region => (RealtimeClient != null) ? RealtimeClient.Region : "Not Connected";
 
+        public static bool IsConnectedToMaster
+        {
+            get
+            {
+                if (RealtimeClient == null)
+                {
+                    return false;
+                }
+
+                return RealtimeClient.IsConnectedToMaster;
+            }
+        }
+
         public static bool IsConnected
         {
             get
@@ -115,7 +128,7 @@ namespace MVS.Helios
         
         public static float MinimalTimeScaleToDispatchInFixedUpdate = -1f;
 
-        public static List<RoomInfo> RoomList => RealtimeClient == null ? null : RealtimeClient.MvsRoomInfos;
+        public static List<Room> RoomList => RealtimeClient == null ? null : RealtimeClient.MvsRoomInfos;
 
         public static Room CurrentRoom => RealtimeClient == null ? null : RealtimeClient.CurrentRoom;
 
@@ -306,7 +319,7 @@ namespace MVS.Helios
             return HeliosSettings.AppSettings.MVM;
         }
 
-        public static async Task<List<RoomInfo>> GetRoomList()
+        public static async Task<List<Room>> GetRoomList()
         {
             var res = await RealtimeClient.OpGetRoomList();
             return res;

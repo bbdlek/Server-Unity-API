@@ -118,7 +118,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         Debug.Log("[ROOM LIST]");
         foreach (var room in HeliosNetwork.RoomList)
         {
-            Debug.Log($"\tRoomID : {room.RoomID}, RoomName : {room.Name}");
+            Debug.Log($"\tRoomID : {room.RoomInfo.RoomID}, RoomName : {room.RoomInfo.Name}");
         }
     }
 
@@ -162,7 +162,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         await HeliosNetwork.GetGroupList();
         foreach (var group in HeliosNetwork.GroupList)
         {
-            Debug.Log(group.GroupInfo.GroupID);
+            Debug.Log(group.GroupInfo.GroupID.SceneNumber);
         }
     }
 

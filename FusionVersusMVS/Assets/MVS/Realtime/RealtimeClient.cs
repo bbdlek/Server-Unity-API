@@ -88,7 +88,7 @@ namespace MVS.Realtime
         public string MasterServerAddress { get; set; }
         
         // roominfo from mvm
-        public List<RoomInfo> MvsRoomInfos { get; set; }
+        public List<Room> MvsRoomInfos { get; set; }
         public RoomInfo SelectedRoomInfo;
         
         public string MVSAddress { get; set; }
@@ -117,6 +117,8 @@ namespace MVS.Realtime
         }
 
         public bool IsConnected => RealtimePeer != null && State != ClientState.Created && State != ClientState.DisConnected;
+        
+        public bool IsConnectedToMaster = false;
 
         public bool IsConnectedAndReady
         {
@@ -543,9 +545,9 @@ namespace MVS.Realtime
                     var dataGroupList = Packs.Parser.ParseFrom(operationResponse.FixedData).SGroupList;
                     if(dataGroupList.GroupInfos.Count > 0)
                     {
+                        CurrentRoom.GroupList.Clear();
                         foreach (var groupInfo in dataGroupList.GroupInfos)
                         {
-                            CurrentRoom.GroupList.Clear();
                             CurrentRoom.GroupList.Add(new Group(groupInfo, CurrentRoom));
                         }
 
@@ -750,11 +752,13 @@ namespace MVS.Realtime
                 var res2 = JsonConvert.DeserializeObject<MVMResponse>(res);
                 MVSDebug(DebugLevel.INFO, res2.ResponseMessage[0].Hostname.ToString());
                 MasterServerAddress = res2.ResponseMessage[0].IpAddress;
+                IsConnectedToMaster = true;
             
                 return MasterServerAddress;
             }
             else
             {
+                IsConnectedToMaster = true;
                 return MasterServerAddress;
             }
         }
@@ -763,7 +767,7 @@ namespace MVS.Realtime
         /// Send RoomList Req to MVM
         /// </summary>
         /// <returns></returns>
-        public async Task<List<RoomInfo>> OpGetRoomList()
+        public async Task<List<Room>> OpGetRoomList()
         {
             var res = await httpModule.GetAsync($"http://{MasterServerAddress}/mvm/api/rooms");
             if (res == null)
@@ -773,15 +777,15 @@ namespace MVS.Realtime
             }
             var res2 = JsonConvert.DeserializeObject<RoomListResponse>(res);
             MVSDebug(DebugLevel.INFO, res2.ResponseMessage.ToString());
-            MvsRoomInfos = new List<RoomInfo>();
+            MvsRoomInfos = new List<Room>();
             foreach (var roomRes in res2.ResponseMessage)
             {
                 MvsRoomInfos.Add(
-                    new RoomInfo()
+                    new Room(new RoomInfo
                     {
                         RoomID = roomRes.RoomId,
                         Name = roomRes.RoomName
-                    }
+                    })
                 );
 
                 MVSDebug(DebugLevel.INFO,($"room id : {roomRes.RoomId}, ip : {roomRes.Url}, name : {roomRes.RoomName}"));
@@ -789,7 +793,7 @@ namespace MVS.Realtime
 
             if (MvsRoomInfos.Count > 0)
             {
-                SelectedRoomInfo = MvsRoomInfos[0];
+                SelectedRoomInfo = MvsRoomInfos[0].RoomInfo;
             }
 
             return MvsRoomInfos;
