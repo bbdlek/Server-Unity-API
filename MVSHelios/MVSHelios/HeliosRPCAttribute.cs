@@ -6,12 +6,10 @@ namespace MVS.Helios
     public class HeliosRPCAttribute : Attribute
     {
         public string Target { get; }
-        public uint[] TargetPlayerIDs { get; }
 
-        public HeliosRPCAttribute(string target, params uint[] targetPlayerIDs)
+        public HeliosRPCAttribute(string target)
         {
             Target = target;
-            TargetPlayerIDs = targetPlayerIDs;
         }
     }
 }

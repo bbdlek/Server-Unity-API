@@ -688,6 +688,7 @@ namespace MVS.Realtime
             State = ClientState.JoinedGroup;
             if (data.Result == Result.SuccessGroupCreate)
             {
+                CurrentGroup.IsLocalGroupOwner = true;
                 MakingGroupCallbacksTarget.OnCreatedGroup();
                 MakingGroupCallbacksTarget.OnJoinedGroup();
             }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HeliosServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppId: 8f9dfaba-1d6b-47e4-bb0c-966e0070f652
+    AppId: 
     AppVersion: 
     FixedRegion: 
     NameServer: 222.122.186.49
@@ -22,7 +22,7 @@ MonoBehaviour:
     Port: 30001
     IsUsingNameServer: 1
     Protocol: 2
-    DebugLevel: 4
+    DebugLevel: 3
   SendRate: 30
   RunInBackground: 1
   NetworkPrefabs:

@@ -68,6 +68,9 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     [HNSync] public Dictionary<int, string> testDic = new Dictionary<int, string>();
 
+    public TMP_Text Txt_UserId;
+    public TMP_Text Txt_IsMaster;
+
     public enum EnumTest
     {
         test1, test2
@@ -82,7 +85,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         score3 += added2;
     }
 
-    [HeliosRPC("Player", 85)]
+    [HeliosRPC("Player")]
     public void ChangeVec2()
     {
         testVec2.x++;
@@ -106,6 +109,12 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         HeliosNetwork.ConnectUsingSettings();
     }
 
+    [Command]
+    public void SetAppKey(string appKey)
+    {
+        HeliosNetwork.HeliosSettings.AppSettings.AppId = appKey;
+    }
+
     public async void OnClickGetMasterServer()
     {
         var res = await HeliosNetwork.GetMvmAddress();
@@ -120,6 +129,8 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         {
             Debug.Log($"\tRoomID : {room.RoomInfo.RoomID}, RoomName : {room.RoomInfo.Name}");
         }
+        GameObject.Find("RoomCreate").GetComponent<Button>().interactable = true;
+        GameObject.Find("RoomJoin").GetComponent<Button>().interactable = true;
     }
 
     public async void OnClickRoomCreate()
@@ -198,12 +209,17 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     {
         base.OnJoinedRoom();
         Debug.Log("JoinedRoom");
+        Txt_UserId.text = $"UserId : {HeliosNetwork.LocalPlayer.UserId}";
+        GameObject.Find("GroupJoinBtn").GetComponent<Button>().interactable = true;
+        GameObject.Find("GroupTaskBtn").GetComponent<Button>().interactable = true;
     }
 
     public override void OnJoinedGroup()
     {
         base.OnJoinedGroup();
         Debug.Log($"Joined Group {HeliosNetwork.CurrentGroup.GroupInfo.GroupID.SceneNumber}");
+        Txt_IsMaster.text = $"IsMaster? : {HeliosNetwork.CurrentGroup.IsLocalGroupOwner}";
+        GameObject.Find("CreateObject").GetComponent<Button>().interactable = true;
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -235,20 +251,21 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     {
         base.OnConnectedToMasterServer();
         Debug.Log("OnConnectedToMasterServer");
+        GameObject.Find("GetRoomInfo").GetComponent<Button>().interactable = true;
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            RPC("AddScore", 3, 6);
+            RPC("AddScore", targetPlayerIDs: null, 3, 6);
             // AddScore();
             AddTest();
         }
 
         if (Input.GetKeyDown(KeyCode.O))
         {
-            RPC("ChangeVec2");
+            RPC("ChangeVec2", new uint[] { (uint)HeliosNetwork.LocalPlayer.UserId });
         }
     }
 }

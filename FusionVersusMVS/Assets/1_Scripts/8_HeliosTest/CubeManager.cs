@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CubeManager : HeliosMonoBehavior
 {
-    [HeliosRPC("TargetAll")]
+    [HeliosRPC("ALL")]
     public void AddScore()
     {
         Debug.Log("AddScore");
