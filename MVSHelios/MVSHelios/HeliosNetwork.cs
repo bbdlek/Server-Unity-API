@@ -100,21 +100,6 @@ namespace MVS.Helios
 
         public static float SendRate = 33.0f;
         
-        public static bool IsMessageQueueRunning
-        {
-            get
-            {
-                return _isMessageQueueRunning;
-            }
-
-            set
-            {
-                _isMessageQueueRunning = value;
-            }
-        }
-        
-        private static bool _isMessageQueueRunning = true;
-        
         public static float MinimalTimeScaleToDispatchInFixedUpdate = -1f;
 
         public static List<Room> RoomList => RealtimeClient == null ? null : RealtimeClient.MvsRoomInfos;
@@ -245,8 +230,7 @@ namespace MVS.Helios
             RealtimeClient.RealtimePeer.TransportProtocol = appSettings.Protocol;
             RealtimeClient.ConnectionProtocol = null;
             // RealtimeClient.AuthMode = appSettings.;
-
-            IsMessageQueueRunning = true;
+            
             RealtimeClient.AppId = appSettings.AppId;
             AppVersion = appSettings.AppVersion;
 
@@ -301,12 +285,16 @@ namespace MVS.Helios
 
         public static async Task<string> GetMvmAddress()
         {
+            RealtimeClient.AppId = HeliosSettings.AppSettings.AppId;
+            RealtimeClient.AppVersion = HeliosSettings.AppSettings.AppVersion;
+            RealtimeClient.AppSettingsDebug = HeliosSettings.AppSettings.DebugLevel;
+            RealtimeClient.IsUsingNameServer = HeliosSettings.AppSettings.IsUsingNameServer;
             RealtimeClient.NameServerAddress = HeliosSettings.AppSettings.NameServer;
             RealtimeClient.MasterServerAddress = HeliosSettings.AppSettings.IsUsingNameServer
                 ? await RealtimeClient.OpGetMvmAddress()
                 : HeliosSettings.AppSettings.MVM;
             IsConnectedToMaster = true;
-            return HeliosSettings.AppSettings.MVM;
+            return RealtimeClient.MasterServerAddress;
         }
 
         public static async Task<List<Room>> GetRoomList()
@@ -317,9 +305,6 @@ namespace MVS.Helios
 
         public static async Task<UInt64> RoomCreateToMaster(string roomName = default, UInt64 roomId = 0)
         {
-            // MVM으로 바로 접속하는 케이스가 없다면 삭제
-            RealtimeClient.MasterServerAddress = HeliosSettings.AppSettings.MVM;
-            
             var res = await RealtimeClient.OpCreateAndJoinRoomToMvm(new RoomInfo(){Name = roomName, RoomID = roomId});
             if (res.IP.IsNullOrEmpty()) return 0;
             HeliosSettings.AppSettings.Server = res.IP;

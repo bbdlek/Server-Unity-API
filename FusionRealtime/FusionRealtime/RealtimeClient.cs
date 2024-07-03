@@ -805,6 +805,11 @@ namespace MVS.Realtime
         /// <returns></returns>
         public async Task<RoomJoinInfoStruct> OpCreateAndJoinRoomToMvm(RoomInfo roomInfo = default, bool isPassword = false)
         {
+            if (CurrentRoom != null)
+            {
+                MVSDebug(DebugLevel.INFO, "Already Entered Room");
+                return default;
+            }
             HttpRequest.RoomCreateRequest roomReq;
             roomReq = new HttpRequest.RoomCreateRequest()
             {
@@ -828,11 +833,13 @@ namespace MVS.Realtime
                 return default;
             }
             
+            Debug.Log(res.ResponseMessage.MvsUrl);
             var address = res.ResponseMessage.MvsUrl.Split('/');
             RoomJoinInfo.IP = address[0];
             RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
             RoomJoinInfo.RoomID = res.ResponseMessage.RoomId;
             RoomJoinInfo.MvsUserID = res.ResponseMessage.UserId;
+            Debug.Log(res.ResponseMessage.UserId);
             LocalPlayer.PlayerInfo.PlayerID = RoomJoinInfo.MvsUserID;
             RoomJoinInfo.MvsUserToken = res.ResponseMessage.Token;
             
@@ -882,6 +889,7 @@ namespace MVS.Realtime
             RoomJoinInfo.MvsUserID = res.ResponseMessage.UserId;
             RoomJoinInfo.MvsUserToken = res.ResponseMessage.Token;
 
+            Debug.Log(res.ResponseMessage.UserId);
             LocalPlayer.PlayerInfo.PlayerID = res.ResponseMessage.UserId;
 
             if(state!= ClientState.ConnectingToMVS)

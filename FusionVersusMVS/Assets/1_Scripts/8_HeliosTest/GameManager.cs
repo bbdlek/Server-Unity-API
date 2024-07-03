@@ -231,6 +231,12 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         Debug.Log($"Am I Master? {HeliosNetwork.CurrentGroup.IsLocalGroupOwner}");
     }
 
+    public override void OnConnectedToMasterServer()
+    {
+        base.OnConnectedToMasterServer();
+        Debug.Log("OnConnectedToMasterServer");
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
