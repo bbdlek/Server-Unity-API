@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HeliosServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppId: 
+    AppId: 3c9dfaba-1d6b-47e4-bb0c-966e0070f652
     AppVersion: 
     FixedRegion: 
     NameServer: 222.122.186.49

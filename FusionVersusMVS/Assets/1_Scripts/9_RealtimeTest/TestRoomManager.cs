@@ -21,7 +21,7 @@ public class TestRoomManager : Singleton<TestRoomManager>, IMakingRoomCallbacks,
         Debug.Log("OnCreatedRoom");
     }
 
-    public void OnCreatedRoomFailed(short failCode, string message)
+    public void OnCreatedRoomFailed(string message)
     {
         
     }
@@ -31,7 +31,7 @@ public class TestRoomManager : Singleton<TestRoomManager>, IMakingRoomCallbacks,
         Debug.Log("OnJoinedRoom");
     }
 
-    public void OnJoinedRoomFailed(short failCode, string message)
+    public void OnJoinedRoomFailed(string message)
     {
         
     }

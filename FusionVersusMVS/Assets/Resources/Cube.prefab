@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prefabId: 5
-  _instanceId: 11
+  _instanceId: 0
   _clientInstanceId: 0
   heliosTransform: {fileID: 0}
 --- !u!54 &-2500174006590929170

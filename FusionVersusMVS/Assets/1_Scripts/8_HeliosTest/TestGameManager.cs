@@ -9,7 +9,7 @@ public class TestGameManager : HeliosMonoBehavior
 {
     [HNSync] public int score = 0;
 
-    [HeliosRPC("ALL")]
+    [HeliosRPC]
     private void Test()
     {
         Debug.Log("TEST");

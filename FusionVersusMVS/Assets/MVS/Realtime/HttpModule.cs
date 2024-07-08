@@ -11,25 +11,25 @@ namespace MVS.Realtime
         private static readonly HttpClient client = new HttpClient();
 
         // GET 요청 메소드
-        public async Task<string> GetAsync(string url)
+        public async Task<(string responseBody, HttpRequestException exception)> GetAsync(string url)
         {
             try
             {
                 HttpResponseMessage response = await client.GetAsync(url);
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
-                return responseBody;
+                return (responseBody, null);
             }
             catch (HttpRequestException e)
             {
                 Console.WriteLine("\nException Caught!");
                 Console.WriteLine("Message :{0} ", e.Message);
-                return null;
+                return (null, e);
             }
         }
 
         // POST 요청 메소드
-        public async Task<TResponse> PostAsync<TRequest, TResponse>(string url, TRequest requestData)
+        public async Task<(TResponse, HttpRequestException exception)> PostAsync<TRequest, TResponse>(string url, TRequest requestData)
         {
             try
             {
@@ -39,13 +39,13 @@ namespace MVS.Realtime
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
                 TResponse postResponse = JsonConvert.DeserializeObject<TResponse>(responseBody);
-                return postResponse;
+                return (postResponse, null);
             }
             catch (HttpRequestException e)
             {
                 Console.WriteLine("\nException Caught!");
                 Console.WriteLine("Message :{0} ", e.Message);
-                return default(TResponse);
+                return (default, e);
             }
         }
     }

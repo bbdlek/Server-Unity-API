@@ -67,6 +67,8 @@ namespace MVS.Realtime
         
         public ulong RoomId { get; set; }
         
+        public string RoomName { get; set; }
+        
         public string Token { get; set; }
 
         public string MvsUrl { get; set; }
@@ -75,7 +77,7 @@ namespace MVS.Realtime
 
         public override string ToString()
         {
-            return $"MvsUrl : {MvsUrl}, UserId : {UserId}, RoomId : {RoomId}, UserToken : {Token}, CreationFlag : {CreationFlag}";
+            return $"MvsUrl : {MvsUrl}, UserId : {UserId}, RoomId : {RoomId}, RoomName : {RoomName}, UserToken : {Token}, CreationFlag : {CreationFlag}";
         }
     }
 

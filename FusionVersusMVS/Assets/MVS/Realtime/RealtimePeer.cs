@@ -12,6 +12,7 @@ namespace MVS.Realtime
         public string IP { get; set; }
         public string Port { get; set; }
         public UInt64 RoomID { get; set; }
+        public string RoomName { get; set; }
         public UInt64 MvsUserID { get; set; }
         public string MvsUserToken { get; set; }   
     }

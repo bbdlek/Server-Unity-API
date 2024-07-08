@@ -78,14 +78,14 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     [HNSync] public EnumTest enumTest = EnumTest.test1;
 
-    [HeliosRPC(target: "ALL")]
+    [HeliosRPC]
     public void AddScore(int added1, int added2)
     {
         score2 += added1;
         score3 += added2;
     }
 
-    [HeliosRPC("Player")]
+    [HeliosRPC]
     public void ChangeVec2()
     {
         testVec2.x++;
@@ -201,55 +201,117 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     public override void OnConnected()
     {
-        base.OnConnected();
         Debug.Log("OnConnected");
+    }
+
+    public override void OnDisconnected()
+    {
+        
+    }
+
+    public override void OnCustomAuthenticationResponse(Dictionary<string, object> data)
+    {
+        
+    }
+
+    public override void OnCustomAuthenticationFailed(string debugMessage)
+    {
+        
+    }
+
+    public override void OnCreatedRoom()
+    {
+        
+    }
+
+    public override void OnCreatedRoomFailed(string message)
+    {
+        
     }
 
     public override void OnJoinedRoom()
     {
-        base.OnJoinedRoom();
         Debug.Log("JoinedRoom");
         Txt_UserId.text = $"UserId : {HeliosNetwork.LocalPlayer.UserId}";
         GameObject.Find("GroupJoinBtn").GetComponent<Button>().interactable = true;
         GameObject.Find("GroupTaskBtn").GetComponent<Button>().interactable = true;
     }
 
+    public override void OnJoinedRoomFailed(string message)
+    {
+        
+    }
+
+    public override void OnLeftRoom()
+    {
+        
+    }
+
+    public override void OnCreatedGroupFailed(string message)
+    {
+        
+    }
+
     public override void OnJoinedGroup()
     {
-        base.OnJoinedGroup();
         Debug.Log($"Joined Group {HeliosNetwork.CurrentGroup.GroupInfo.GroupID.SceneNumber}");
         Txt_IsMaster.text = $"IsMaster? : {HeliosNetwork.CurrentGroup.IsLocalGroupOwner}";
         GameObject.Find("CreateObject").GetComponent<Button>().interactable = true;
     }
 
+    public override void OnJoinedGroupFailed(string message)
+    {
+        
+    }
+
+    public override void OnLeftGroup()
+    {
+        
+    }
+
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        base.OnPlayerEnteredRoom(newPlayer);
         Debug.Log(newPlayer.NickName);
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        
     }
 
     public override void OnPlayerEnteredGroup(Player newPlayer)
     {
-        base.OnPlayerEnteredGroup(newPlayer);
         Debug.Log(newPlayer.NickName);
     }
 
     public override void OnPlayerLeftGroup(Player leftPlayer)
     {
-        base.OnPlayerLeftGroup(leftPlayer);
         Debug.Log(leftPlayer.NickName);
+    }
+
+    public override void OnEvent(EventData eventData)
+    {
+        
+    }
+
+    public override void OnErrorInfo(string errorInfo)
+    {
+        
     }
 
     public override void OnMasterClientSwitched(Player masterClient)
     {
-        base.OnMasterClientSwitched(masterClient);
         Debug.Log($"NickName : {masterClient.NickName}, {masterClient.PlayerInfo.PlayerID}");
         Debug.Log($"Am I Master? {HeliosNetwork.CurrentGroup.IsLocalGroupOwner}");
     }
 
+    public override void OnCreatedGroup()
+    {
+        
+    }
+
     public override void OnConnectedToMasterServer()
     {
-        base.OnConnectedToMasterServer();
         Debug.Log("OnConnectedToMasterServer");
         GameObject.Find("GetRoomInfo").GetComponent<Button>().interactable = true;
     }
@@ -259,6 +321,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         if (Input.GetKeyDown(KeyCode.P))
         {
             RPC("AddScore", targetPlayerIDs: null, 3, 6);
+            RPC("AddScore", targetPlayerIDs: new uint[] {100, 200, 300}, 3, 6);
             // AddScore();
             AddTest();
         }
