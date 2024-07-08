@@ -48,8 +48,8 @@ namespace MVS.Helios
         public Dictionary<int, HeliosMonoBehavior> attributeMonoBehaviors = new Dictionary<int, HeliosMonoBehavior>();
         public Dictionary<int, object> initialHeliosValues = new Dictionary<int, object>();
 
-        public Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior, string>> RPCMethods =
-            new Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior, string>>();
+        public Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior>> RPCMethods =
+            new Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior>>();
         
 
         public ObjectInfo ObjectInfo = new ObjectInfo
@@ -322,18 +322,16 @@ namespace MVS.Helios
                     if (GetComponent<HeliosObject>())
                     {
                         string methodName = method.Name;
-                        string target = attribute.Target;
                         var hash = HeliosUtility.Compute64BitHash(methodName);
                         
-                        GetComponent<HeliosObject>().RPCMethods.Add(hash, Tuple.Create(method, this, target));
+                        GetComponent<HeliosObject>().RPCMethods.Add(hash, Tuple.Create(method, this));
                     }
                     else
                     {
                         string methodName = method.Name;
-                        string target = attribute.Target;
                         var hash = HeliosUtility.Compute64BitHash(methodName);
                        
-                        RPCMethods.Add(hash, Tuple.Create(method, this, target));
+                        RPCMethods.Add(hash, Tuple.Create(method, this));
                     }
                 }
             }
@@ -477,7 +475,7 @@ namespace MVS.Helios
         }
     }
 
-    public class MonoBehaviorHeliosCallbacks : HeliosMonoBehavior, IConnectionCallbacks, IMakingRoomCallbacks,
+    public abstract class MonoBehaviorHeliosCallbacks : HeliosMonoBehavior, IConnectionCallbacks, IMakingRoomCallbacks,
         IInRoomCallbacks, IMakingGroupCallbacks, IInGroupCallbacks, IOnEventCallbacks, IErrorInfoCallbacks
     {
         public virtual void OnEnable()
@@ -489,94 +487,48 @@ namespace MVS.Helios
         {
             HeliosNetwork.RemoveCallbackTarget(this);
         }
-        
-        public virtual void OnConnectedToMasterServer()
-        {
-        }
 
-        public virtual void OnConnected()
-        {
-        }
+        public abstract void OnConnectedToMasterServer();
 
-        public virtual void OnDisconnected()
-        {
-            // HeliosNetwork.RemoveMyObjects();
-        }
+        public abstract void OnConnected();
 
-        public virtual void OnCustomAuthenticationResponse(Dictionary<string, object> data)
-        {
-        }
+        public abstract void OnDisconnected();
 
-        public virtual void OnCustomAuthenticationFailed(string debugMessage)
-        {
-        }
+        public abstract void OnCustomAuthenticationResponse(Dictionary<string, object> data);
 
-        public virtual void OnCreatedRoom()
-        {
-        }
+        public abstract void OnCustomAuthenticationFailed(string debugMessage);
 
-        public virtual void OnCreatedRoomFailed(short failCode, string message)
-        {
-        }
+        public abstract void OnCreatedRoom();
 
-        public virtual void OnJoinedRoom()
-        {
-        }
+        public abstract void OnCreatedRoomFailed(string message);
 
-        public virtual void OnJoinedRoomFailed(short failCode, string message)
-        {
-        }
+        public abstract void OnJoinedRoom();
+        public abstract void OnJoinedRoomFailed(string message);
 
-        public virtual void OnLeftRoom()
-        {
-        }
+        public abstract void OnLeftRoom();
 
-        public virtual void OnPlayerEnteredRoom(Player newPlayer)
-        {
-        }
+        public abstract void OnPlayerEnteredRoom(Player newPlayer);
 
-        public virtual void OnPlayerLeftRoom(Player otherPlayer)
-        {
-        }
+        public abstract void OnPlayerLeftRoom(Player otherPlayer);
 
-        public virtual void OnMasterClientSwitched(Player newMasterClient)
-        {
-        }
+        public abstract void OnMasterClientSwitched(Player newMasterClient);
 
-        public virtual void OnCreatedGroup()
-        {
-        }
+        public abstract void OnCreatedGroup();
 
-        public virtual void OnCreatedGroupFailed(short failCode, string message)
-        {
-        }
+        public abstract void OnCreatedGroupFailed(string message);
 
-        public virtual void OnJoinedGroup()
-        {
-        }
+        public abstract void OnJoinedGroup();
 
-        public virtual void OnJoinedGroupFailed(short failCode, string message)
-        {
-        }
+        public abstract void OnJoinedGroupFailed(string message);
 
-        public virtual void OnLeftGroup()
-        {
-        }
+        public abstract void OnLeftGroup();
 
-        public virtual void OnPlayerEnteredGroup(Player newPlayer)
-        {
-        }
+        public abstract void OnPlayerEnteredGroup(Player newPlayer);
 
-        public virtual void OnPlayerLeftGroup(Player otherPlayer)
-        {
-        }
+        public abstract void OnPlayerLeftGroup(Player otherPlayer);
 
-        public virtual void OnEvent(EventData eventData)
-        {
-        }
+        public abstract void OnEvent(EventData eventData);
 
-        public virtual void OnErrorInfo(string errorInfo)
-        {
-        }
+        public abstract void OnErrorInfo(string errorInfo);
     }
 }

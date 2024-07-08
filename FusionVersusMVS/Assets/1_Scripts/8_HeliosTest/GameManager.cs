@@ -135,12 +135,12 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     public async void OnClickRoomCreate()
     {
-        await HeliosNetwork.RoomCreateToMaster();
+        await HeliosNetwork.RoomCreateToMaster("TestRoom");
     }
     
     public async void OnClickRoomJoin()
     {
-        await HeliosNetwork.RoomJoinToMaster();
+        await HeliosNetwork.RoomJoinToMaster(1);
     }
 
     public async void OnClickConnectBtn()
@@ -231,7 +231,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     public override void OnJoinedRoom()
     {
-        Debug.Log("JoinedRoom");
+        Debug.Log($"JoinedRoom : {HeliosNetwork.CurrentRoom.RoomInfo.Name}");
         Txt_UserId.text = $"UserId : {HeliosNetwork.LocalPlayer.UserId}";
         GameObject.Find("GroupJoinBtn").GetComponent<Button>().interactable = true;
         GameObject.Find("GroupTaskBtn").GetComponent<Button>().interactable = true;

@@ -354,6 +354,9 @@ namespace MVS.Realtime
 
         public virtual void MVSDebug(DebugLevel debugLevel, string msg)
         {
+            if(debugLevel == DebugLevel.ERROR)
+                ErrorInfoCallbacksTarget.OnErrorInfo(msg);
+            
             if(debugLevel <= AppSettingsDebug)
             {
                 if (debugLevel == DebugLevel.ERROR)
@@ -639,12 +642,12 @@ namespace MVS.Realtime
             
             if (data.Result == Result.Failed)
             {
-                MakingRoomCallbacksTarget.OnCreatedRoomFailed((short)Protocol.Result.Failed, "RoomCreateFailed");
-                MakingRoomCallbacksTarget.OnJoinedRoomFailed((short)Protocol.Result.Failed, "RoomJoinFailed");
+                MakingRoomCallbacksTarget.OnCreatedRoomFailed("RoomCreateFailed");
+                MakingRoomCallbacksTarget.OnJoinedRoomFailed( "RoomJoinFailed");
                 return;
             }
             
-            CurrentRoom = CreateRoom(SelectedRoomInfo);
+            // CurrentRoom = CreateRoom(SelectedRoomInfo);
             CurrentRoom.RealtimeClient = this;
             CurrentRoom.StorePlayer(LocalPlayer);
 
@@ -669,9 +672,6 @@ namespace MVS.Realtime
 
         private void JoinGroup(OperationResponse operationResponse)
         {
-            /*var pkt = new C_PLAYER_ID();
-            RealtimePeer.SendOperation(Protocol.OperationCode.PlayerId, pkt);*/
-            
             var data = Packs.Parser.ParseFrom(operationResponse.FixedData).SGroupJoin;
             GroupInfo groupInfo = data.GroupInfo;
             Group newGroup = new Group(groupInfo, CurrentRoom);
@@ -699,8 +699,8 @@ namespace MVS.Realtime
 
             if (data.Result >= Result.FailedGroupNotExistsGroup && data.Result <= Result.FailedGroupAlreadyExistsPlayer)
             {
-                MakingRoomCallbacksTarget.OnCreatedRoomFailed((short)data.Result, data.Result.ToString());
-                MakingRoomCallbacksTarget.OnJoinedRoomFailed((short)data.Result, data.Result.ToString());
+                MakingRoomCallbacksTarget.OnCreatedRoomFailed( data.Result.ToString());
+                MakingRoomCallbacksTarget.OnJoinedRoomFailed( data.Result.ToString());
             }
         }
 
@@ -743,23 +743,21 @@ namespace MVS.Realtime
             if (IsUsingNameServer)
             {
                 var res = await httpModule.GetAsync($"http://{NameServerAddress}/ns/api/v1/app/{AppId}");
-                if (res == null)
+                if (res.exception != null)
                 {
-                    MVSDebug(DebugLevel.ERROR, "Get MVM Address request fail");
+                    MVSDebug(DebugLevel.ERROR, $"Get MVM Address request fail, Error : {res.exception.Message}");
                     return null;
                 }
-                var res2 = JsonConvert.DeserializeObject<MVMResponse>(res);
-                MVSDebug(DebugLevel.INFO, res2.ResponseMessage[0].Hostname.ToString());
-                MasterServerAddress = res2.ResponseMessage[0].IpAddress;
-                ConnectionCallbacksTarget.OnConnectedToMasterServer();
-            
-                return MasterServerAddress;
+                else
+                {
+                    var res2 = JsonConvert.DeserializeObject<MVMResponse>(res.responseBody);
+                    MVSDebug(DebugLevel.INFO, res2.ResponseMessage[0].Hostname.ToString());
+                    MasterServerAddress = res2.ResponseMessage[0].IpAddress;
+                    ConnectionCallbacksTarget.OnConnectedToMasterServer();
+                }
+                
             }
-            else
-            {
-                ConnectionCallbacksTarget.OnConnectedToMasterServer();
-                return MasterServerAddress;
-            }
+            return MasterServerAddress;
         }
         
         /// <summary>
@@ -769,12 +767,12 @@ namespace MVS.Realtime
         public async Task<List<Room>> OpGetRoomList()
         {
             var res = await httpModule.GetAsync($"http://{MasterServerAddress}/mvm/api/rooms");
-            if (res == null)
+            if (res.exception != null)
             {
-                MVSDebug(DebugLevel.ERROR, "GetRoomList Request Fail");
+                MVSDebug(DebugLevel.ERROR, $"GetRoomList Request Fail, Error : {res.exception.Message}");
                 return null;
             }
-            var res2 = JsonConvert.DeserializeObject<RoomListResponse>(res);
+            var res2 = JsonConvert.DeserializeObject<RoomListResponse>(res.responseBody);
             MVSDebug(DebugLevel.INFO, res2.ResponseMessage.ToString());
             MvsRoomInfos = new List<Room>();
             foreach (var roomRes in res2.ResponseMessage)
@@ -821,29 +819,35 @@ namespace MVS.Realtime
             
             var res = await httpModule.PostAsync<HttpRequest.RoomCreateRequest, RoomCreateResponse>(
                 $"http://{MasterServerAddress}/mvm/api/rooms", roomReq);
-            if (res == null)
+            if (res.exception != null)
             {
-                MVSDebug(DebugLevel.ERROR, "Room Create Req Fail");
+                MakingRoomCallbacksTarget.OnCreatedRoomFailed($"Room Create Req Fail, Error : {res.exception.Message}");
+                MVSDebug(DebugLevel.ERROR, $"Room Create Req Fail, Error : {res.exception.Message}");
                 return default;
             }
             
             // 이미 방이 만들어 져서 join response가 온경우
-            if (!res.ResponseMessage.CreationFlag)
+            if (!res.Item1.ResponseMessage.CreationFlag)
             {
                 MVSDebug(DebugLevel.WARNING, "Already Created RoomId");
                 return default;
             }
             
-            Debug.Log(res.ResponseMessage.MvsUrl);
-            var address = res.ResponseMessage.MvsUrl.Split('/');
+            var address = res.Item1.ResponseMessage.MvsUrl.Split('/');
             RoomJoinInfo.IP = address[0];
             RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
-            RoomJoinInfo.RoomID = res.ResponseMessage.RoomId;
-            RoomJoinInfo.MvsUserID = res.ResponseMessage.UserId;
-            Debug.Log(res.ResponseMessage.UserId);
+            RoomJoinInfo.RoomID = res.Item1.ResponseMessage.RoomId;
+            RoomJoinInfo.RoomName = res.Item1.ResponseMessage.RoomName;
+            RoomJoinInfo.MvsUserID = res.Item1.ResponseMessage.UserId;
             LocalPlayer.PlayerInfo.PlayerID = RoomJoinInfo.MvsUserID;
-            RoomJoinInfo.MvsUserToken = res.ResponseMessage.Token;
-            
+            RoomJoinInfo.MvsUserToken = res.Item1.ResponseMessage.Token;
+
+            CurrentRoom = CreateRoom(new RoomInfo
+            {
+                Name = RoomJoinInfo.RoomName,
+                RoomID = RoomJoinInfo.RoomID
+            });
+
             await Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
 
             return RoomJoinInfo;
@@ -870,28 +874,28 @@ namespace MVS.Realtime
             
             var res = await httpModule.PostAsync<HttpRequest.RoomJoinRequest, RoomJoinResponse>(
                 $"http://{MasterServerAddress}/mvm/api/rooms", roomReq);
-            if (res == null)
+            if (res.exception != null)
             {
-                MVSDebug(DebugLevel.ERROR, "Room Join Req Fail");
+                MakingRoomCallbacksTarget.OnJoinedRoomFailed($"Room Join Req Fail, Error : {res.exception.Message}");
+                MVSDebug(DebugLevel.ERROR, $"Room Join Req Fail, Error : {res.exception.Message}");
                 return default;
             }
             
             // join request를 보냈는데 create response가 온경우
-            if (res.ResponseMessage.CreationFlag)
+            if (res.Item1.ResponseMessage.CreationFlag)
             {
-                MVSDebug(DebugLevel.WARNING, "Join Request but Room Created");
+                MVSDebug(DebugLevel.WARNING, $"Join Request but Room Created");
                 return default;
             }
 
-            var address = res.ResponseMessage.MvsUrl.Split('/');
+            var address = res.Item1.ResponseMessage.MvsUrl.Split('/');
             RoomJoinInfo.IP = address[0];
             RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
-            RoomJoinInfo.RoomID = res.ResponseMessage.RoomId;
-            RoomJoinInfo.MvsUserID = res.ResponseMessage.UserId;
-            RoomJoinInfo.MvsUserToken = res.ResponseMessage.Token;
-
-            Debug.Log(res.ResponseMessage.UserId);
-            LocalPlayer.PlayerInfo.PlayerID = res.ResponseMessage.UserId;
+            RoomJoinInfo.RoomID = res.Item1.ResponseMessage.RoomId;
+            RoomJoinInfo.MvsUserID = res.Item1.ResponseMessage.UserId;
+            RoomJoinInfo.MvsUserToken = res.Item1.ResponseMessage.Token;
+            
+            LocalPlayer.PlayerInfo.PlayerID = res.Item1.ResponseMessage.UserId;
 
             if(state!= ClientState.ConnectingToMVS)
                 Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
@@ -1003,11 +1007,11 @@ namespace MVS.Realtime
     {
         void OnCreatedRoom();
 
-        void OnCreatedRoomFailed(short failCode, string message);
+        void OnCreatedRoomFailed(string message);
 
         void OnJoinedRoom();
 
-        void OnJoinedRoomFailed(short failCode, string message);
+        void OnJoinedRoomFailed(string message);
 
         void OnLeftRoom();
     }
@@ -1016,11 +1020,11 @@ namespace MVS.Realtime
     {
         void OnCreatedGroup();
 
-        void OnCreatedGroupFailed(short failCode, string message);
+        void OnCreatedGroupFailed(string message);
 
         void OnJoinedGroup();
 
-        void OnJoinedGroupFailed(short failCode, string message);
+        void OnJoinedGroupFailed(string message);
 
         void OnLeftGroup();
     }
@@ -1130,13 +1134,13 @@ namespace MVS.Realtime
             }
         }
 
-        public void OnCreatedRoomFailed(short failCode, string message)
+        public void OnCreatedRoomFailed(string message)
         {
             _client.UpdateCallbackTargets();
 
             foreach (IMakingRoomCallbacks target in this)
             {
-                target.OnCreatedRoomFailed(failCode, message);
+                target.OnCreatedRoomFailed(message);
             }
         }
 
@@ -1150,13 +1154,13 @@ namespace MVS.Realtime
             }
         }
 
-        public void OnJoinedRoomFailed(short failCode, string message)
+        public void OnJoinedRoomFailed(string message)
         {
             _client.UpdateCallbackTargets();
 
             foreach (IMakingRoomCallbacks target in this)
             {
-                target.OnJoinedRoomFailed(failCode, message);
+                target.OnJoinedRoomFailed(message);
             }
         }
 
@@ -1190,13 +1194,13 @@ namespace MVS.Realtime
             }
         }
 
-        public void OnCreatedGroupFailed(short failCode, string message)
+        public void OnCreatedGroupFailed(string message)
         {
             _client.UpdateCallbackTargets();
 
             foreach (IMakingGroupCallbacks target in this)
             {
-                target.OnCreatedGroupFailed(failCode, message);
+                target.OnCreatedGroupFailed(message);
             }
         }
 
@@ -1210,13 +1214,13 @@ namespace MVS.Realtime
             }
         }
 
-        public void OnJoinedGroupFailed(short failCode, string message)
+        public void OnJoinedGroupFailed(string message)
         {
             _client.UpdateCallbackTargets();
 
             foreach (IMakingGroupCallbacks target in this)
             {
-                target.OnJoinedGroupFailed(failCode, message);
+                target.OnJoinedGroupFailed(message);
             }
         }
 

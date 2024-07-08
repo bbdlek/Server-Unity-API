@@ -182,6 +182,13 @@ namespace MVS.Helios
             if(RealtimeClient == null)
                 RealtimeClient = new RealtimeClient(protocol);
             
+            RealtimeClient.AppId = HeliosSettings.AppSettings.AppId;
+            RealtimeClient.AppVersion = HeliosSettings.AppSettings.AppVersion;
+            RealtimeClient.AppSettingsDebug = HeliosSettings.AppSettings.DebugLevel;
+            RealtimeClient.IsUsingNameServer = HeliosSettings.AppSettings.IsUsingNameServer;
+            RealtimeClient.NameServerAddress = HeliosSettings.AppSettings.NameServer;
+            RealtimeClient.MasterServerAddress = HeliosSettings.AppSettings.MVM;
+            
             RealtimeClient.EventReceived -= OnEvent;
             RealtimeClient.EventReceived += OnEvent;
             RealtimeClient.OpResponseReceived -= OnOperation;
@@ -285,14 +292,7 @@ namespace MVS.Helios
 
         public static async Task<string> GetMvmAddress()
         {
-            RealtimeClient.AppId = HeliosSettings.AppSettings.AppId;
-            RealtimeClient.AppVersion = HeliosSettings.AppSettings.AppVersion;
-            RealtimeClient.AppSettingsDebug = HeliosSettings.AppSettings.DebugLevel;
-            RealtimeClient.IsUsingNameServer = HeliosSettings.AppSettings.IsUsingNameServer;
-            RealtimeClient.NameServerAddress = HeliosSettings.AppSettings.NameServer;
-            RealtimeClient.MasterServerAddress = HeliosSettings.AppSettings.IsUsingNameServer
-                ? await RealtimeClient.OpGetMvmAddress()
-                : HeliosSettings.AppSettings.MVM;
+            RealtimeClient.MasterServerAddress = await RealtimeClient.OpGetMvmAddress();
             IsConnectedToMaster = true;
             return RealtimeClient.MasterServerAddress;
         }

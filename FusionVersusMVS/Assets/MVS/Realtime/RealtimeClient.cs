@@ -647,7 +647,7 @@ namespace MVS.Realtime
                 return;
             }
             
-            CurrentRoom = CreateRoom(SelectedRoomInfo);
+            // CurrentRoom = CreateRoom(SelectedRoomInfo);
             CurrentRoom.RealtimeClient = this;
             CurrentRoom.StorePlayer(LocalPlayer);
 
@@ -841,7 +841,13 @@ namespace MVS.Realtime
             RoomJoinInfo.MvsUserID = res.Item1.ResponseMessage.UserId;
             LocalPlayer.PlayerInfo.PlayerID = RoomJoinInfo.MvsUserID;
             RoomJoinInfo.MvsUserToken = res.Item1.ResponseMessage.Token;
-            
+
+            CurrentRoom = CreateRoom(new RoomInfo
+            {
+                Name = RoomJoinInfo.RoomName,
+                RoomID = RoomJoinInfo.RoomID
+            });
+
             await Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
 
             return RoomJoinInfo;
