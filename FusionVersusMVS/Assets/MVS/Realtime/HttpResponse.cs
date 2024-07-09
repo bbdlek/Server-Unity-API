@@ -33,11 +33,11 @@ namespace MVS.Realtime
         public ulong RoomId { get; set; }
         public string Url { get; set; }
         public bool IsPending { get; set; }
-        public string RoomName { get; set; }
+        public string Name { get; set; }
 
         public override string ToString()
         {
-            return $"RoomId : {RoomId}, Url : {Url}, IsPending : {IsPending}, RoomName : {RoomName}";
+            return $"RoomId : {RoomId}, Url : {Url}, IsPending : {IsPending}, RoomName : {Name}";
         }
     }
 

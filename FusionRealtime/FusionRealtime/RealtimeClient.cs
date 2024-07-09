@@ -647,7 +647,7 @@ namespace MVS.Realtime
                 return;
             }
             
-            // CurrentRoom = CreateRoom(SelectedRoomInfo);
+            CurrentRoom = CreateRoom(SelectedRoomInfo);
             CurrentRoom.RealtimeClient = this;
             CurrentRoom.StorePlayer(LocalPlayer);
 
@@ -781,11 +781,11 @@ namespace MVS.Realtime
                     new Room(new RoomInfo
                     {
                         RoomID = roomRes.RoomId,
-                        Name = roomRes.RoomName
+                        Name = roomRes.Name
                     })
                 );
 
-                MVSDebug(DebugLevel.INFO,($"room id : {roomRes.RoomId}, ip : {roomRes.Url}, name : {roomRes.RoomName}"));
+                MVSDebug(DebugLevel.INFO,($"room id : {roomRes.RoomId}, ip : {roomRes.Url}, name : {roomRes.Name}"));
             }
 
             if (MvsRoomInfos.Count > 0)
@@ -892,8 +892,15 @@ namespace MVS.Realtime
             RoomJoinInfo.IP = address[0];
             RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
             RoomJoinInfo.RoomID = res.Item1.ResponseMessage.RoomId;
+            RoomJoinInfo.RoomName = res.Item1.ResponseMessage.RoomName;
             RoomJoinInfo.MvsUserID = res.Item1.ResponseMessage.UserId;
             RoomJoinInfo.MvsUserToken = res.Item1.ResponseMessage.Token;
+            
+            CurrentRoom = CreateRoom(new RoomInfo
+            {
+                Name = RoomJoinInfo.RoomName,
+                RoomID = RoomJoinInfo.RoomID
+            });
             
             LocalPlayer.PlayerInfo.PlayerID = res.Item1.ResponseMessage.UserId;
 
