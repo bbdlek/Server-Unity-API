@@ -1,5 +1,5 @@
 using System;
-using UnityEngine.Serialization;
+using UnityEngine;
 
 namespace MVS.Realtime
 {
@@ -26,14 +26,19 @@ namespace MVS.Realtime
         /// <summary>
         /// MV Master IP for Join MVM
         /// </summary>
+        [HideInInspector]
         public string MVM = ""; 
         
         /// <summary> Server IP for MVS Application </summary>
+        [HideInInspector]
         public string Server = "";
 
         /// <summary> Server Port for MVS Application </summary>
+        [HideInInspector]
         public int Port = 0;
 
+        // 현재는 안쓰임
+        [HideInInspector]
         public bool IsUsingNameServer;
 
         /// <summary> Connection Protocol for MVS Application </summary>

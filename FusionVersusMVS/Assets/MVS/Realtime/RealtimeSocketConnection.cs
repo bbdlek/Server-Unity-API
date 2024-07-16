@@ -12,8 +12,7 @@ namespace MVS.Realtime
         protected IRealtimePeerListener Listener => peerBase.Listener;
         public RealtimeSocketState State { get; protected set; }
         public bool Connected => State == RealtimeSocketState.Connected;
-        public string ServerAddress { get; protected set; }
-        public static string ServerIpAddress { get; protected set; }
+        public static string ServerAddress { get; protected set; }
         public static string ServerPort { get; protected set; }
 
         public RealtimeSocketConnection(PeerBase peerBase)
@@ -33,17 +32,21 @@ namespace MVS.Realtime
 
             if (peerBase == null || Protocol != peerBase.Protocol)
                 return false;
-
-            RealtimeSocketConnection.ServerIpAddress = string.Empty;
-            if(!TryParseAddress(peerBase.ServerAddress, out var address, out var port))
+            
+            
+            UnityEngine.Debug.Log(Protocol != ConnectionProtocol.WebSocketSecure);
+            if(Protocol != ConnectionProtocol.WebSocket && Protocol != ConnectionProtocol.WebSocketSecure)
             {
-                peerBase.Listener.MVSDebug(DebugLevel.ERROR, $"Failed To Parsing Address: {peerBase.ServerAddress}");
-                return false;
+                if (!TryParseAddress(peerBase.ServerAddress, out var address, out var port))
+                {
+                    peerBase.Listener.MVSDebug(DebugLevel.ERROR,
+                        $"Failed To Parsing Address: {peerBase.ServerAddress}");
+                    return false;
+                }
+                ServerAddress = address;
+                ServerPort = port;
             }
-
-            ServerAddress = address;
-            ServerPort = port;
-            peerBase.Listener.MVSDebug(DebugLevel.ALL, $"Socket.Connect() {ServerAddress}:{ServerPort}, Protocol : {Protocol.ToString()}");
+            peerBase.Listener.MVSDebug(DebugLevel.ALL, $"Socket.Connect() {peerBase.ServerAddress}, Protocol : {Protocol.ToString()}");
             return true;
         }
         

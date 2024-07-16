@@ -4243,6 +4243,7 @@ MonoBehaviour:
   Txt_UserId: {fileID: 1998560275}
   Txt_IsMaster: {fileID: 1292339562}
   enumTest: 0
+  joinRoomID: 0
   sceneNumber: 1
   channelID: 1
 --- !u!1 &1742886492

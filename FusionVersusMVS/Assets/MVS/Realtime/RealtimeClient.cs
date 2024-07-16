@@ -295,8 +295,19 @@ namespace MVS.Realtime
                     break;
 
             }
-            
-            bool connecting = RealtimePeer.Connect(serverAddress + ":" + serverPort, appId, serverType);
+
+            bool connecting = false;
+            switch (ConnectionProtocol)
+            {
+                case Realtime.ConnectionProtocol.Tcp:
+                case Realtime.ConnectionProtocol.Udp:
+                    connecting = RealtimePeer.Connect(serverAddress + ":" + serverPort, appId, serverType);
+                    break;
+                case Realtime.ConnectionProtocol.WebSocket:
+                case Realtime.ConnectionProtocol.WebSocketSecure:
+                    connecting = RealtimePeer.Connect(serverAddress + "/" + serverPort, appId, serverType);
+                    break;
+            }
             if (connecting)
             {
                 Server = serverType;
@@ -647,7 +658,7 @@ namespace MVS.Realtime
                 return;
             }
             
-            CurrentRoom = CreateRoom(SelectedRoomInfo);
+            // CurrentRoom = CreateRoom(SelectedRoomInfo);
             CurrentRoom.RealtimeClient = this;
             CurrentRoom.StorePlayer(LocalPlayer);
 
@@ -751,7 +762,6 @@ namespace MVS.Realtime
                 else
                 {
                     var res2 = JsonConvert.DeserializeObject<MVMResponse>(res.responseBody);
-                    MVSDebug(DebugLevel.INFO, res2.ResponseMessage[0].Hostname.ToString());
                     MasterServerAddress = res2.ResponseMessage[0].IpAddress;
                     ConnectionCallbacksTarget.OnConnectedToMasterServer();
                 }
@@ -773,7 +783,6 @@ namespace MVS.Realtime
                 return null;
             }
             var res2 = JsonConvert.DeserializeObject<RoomListResponse>(res.responseBody);
-            MVSDebug(DebugLevel.INFO, res2.ResponseMessage.ToString());
             MvsRoomInfos = new List<Room>();
             foreach (var roomRes in res2.ResponseMessage)
             {
@@ -784,8 +793,6 @@ namespace MVS.Realtime
                         Name = roomRes.Name
                     })
                 );
-
-                MVSDebug(DebugLevel.INFO,($"room id : {roomRes.RoomId}, ip : {roomRes.Url}, name : {roomRes.Name}"));
             }
 
             if (MvsRoomInfos.Count > 0)
@@ -835,7 +842,19 @@ namespace MVS.Realtime
             
             var address = res.Item1.ResponseMessage.MvsUrl.Split('/');
             RoomJoinInfo.IP = address[0];
-            RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
+            switch (ConnectionProtocol)
+            {
+                case Realtime.ConnectionProtocol.Tcp:
+                    RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
+                    break;
+                case Realtime.ConnectionProtocol.Udp:
+                    RoomJoinInfo.Port = address[1].Replace("mvs", "4000");
+                    break;
+                case Realtime.ConnectionProtocol.WebSocket:
+                case Realtime.ConnectionProtocol.WebSocketSecure:
+                    RoomJoinInfo.Port = address[1];
+                    break;
+            }
             RoomJoinInfo.RoomID = res.Item1.ResponseMessage.RoomId;
             RoomJoinInfo.RoomName = res.Item1.ResponseMessage.RoomName;
             RoomJoinInfo.MvsUserID = res.Item1.ResponseMessage.UserId;
@@ -890,7 +909,19 @@ namespace MVS.Realtime
 
             var address = res.Item1.ResponseMessage.MvsUrl.Split('/');
             RoomJoinInfo.IP = address[0];
-            RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
+            switch (ConnectionProtocol)
+            {
+                case Realtime.ConnectionProtocol.Tcp:
+                    RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
+                    break;
+                case Realtime.ConnectionProtocol.Udp:
+                    RoomJoinInfo.Port = address[1].Replace("mvs", "4000");
+                    break;
+                case Realtime.ConnectionProtocol.WebSocket:
+                case Realtime.ConnectionProtocol.WebSocketSecure:
+                    RoomJoinInfo.Port = address[1];
+                    break;
+            }
             RoomJoinInfo.RoomID = res.Item1.ResponseMessage.RoomId;
             RoomJoinInfo.RoomName = res.Item1.ResponseMessage.RoomName;
             RoomJoinInfo.MvsUserID = res.Item1.ResponseMessage.UserId;
@@ -905,7 +936,7 @@ namespace MVS.Realtime
             LocalPlayer.PlayerInfo.PlayerID = res.Item1.ResponseMessage.UserId;
 
             if(state!= ClientState.ConnectingToMVS)
-                Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
+                await Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
             
             return RoomJoinInfo;
         }
