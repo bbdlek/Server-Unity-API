@@ -106,13 +106,18 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     {
         HeliosNetwork.HeliosSettings.AppSettings.Server = url;
         HeliosNetwork.HeliosSettings.AppSettings.Port = port;
-        HeliosNetwork.ConnectUsingSettings();
+        // HeliosNetwork.ConnectUsingSettings();
     }
 
     [Command]
     public void SetAppKey(string appKey)
     {
         HeliosNetwork.HeliosSettings.AppSettings.AppId = appKey;
+    }
+
+    private void Start()
+    {
+        Debug.Log(HeliosNetwork.HeliosSettings.AppSettings.AppId);
     }
 
     public async void OnClickGetMasterServer()
@@ -123,7 +128,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     public async void OnClickRoomTaskBtn()
     {
-        await HeliosNetwork.GetRoomList();
+        HeliosNetwork.GetRoomList();
         Debug.Log("[ROOM LIST]");
         foreach (var room in HeliosNetwork.RoomList)
         {
@@ -135,19 +140,19 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     public async void OnClickRoomCreate()
     {
-        await HeliosNetwork.RoomCreateToMaster("TestRoom");
+        HeliosNetwork.RoomCreateToMaster("TestRoom", joinRoomID);
     }
 
     public ulong joinRoomID;
     
     public async void OnClickRoomJoin()
     {
-        await HeliosNetwork.RoomJoinToMaster(joinRoomID);
+        HeliosNetwork.RoomJoinToMaster(joinRoomID);
     }
 
     public async void OnClickConnectBtn()
     {
-        await HeliosNetwork.ConnectUsingSettings();
+        // await HeliosNetwork.ConnectUsingSettings();
     }
 
     /// <summary>
@@ -256,6 +261,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     public override void OnJoinedGroup()
     {
+        Debug.Log(HeliosNetwork.IsMasterClient);
         Debug.Log($"Joined Group {HeliosNetwork.CurrentGroup.GroupInfo.GroupID.SceneNumber}");
         Txt_IsMaster.text = $"IsMaster? : {HeliosNetwork.CurrentGroup.IsLocalGroupOwner}";
         GameObject.Find("CreateObject").GetComponent<Button>().interactable = true;
@@ -323,7 +329,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         if (Input.GetKeyDown(KeyCode.P))
         {
             RPC("AddScore", targetPlayerIDs: null, 3, 6);
-            RPC("AddScore", targetPlayerIDs: new uint[] {100, 200, 300}, 3, 6);
+            // RPC("AddScore", targetPlayerIDs: new uint[] {100, 200, 300}, 3, 6);
             // AddScore();
             AddTest();
         }

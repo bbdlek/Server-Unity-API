@@ -17,6 +17,7 @@ namespace MVS.Realtime
         [Preserve]
         public MVSTcpSocket(PeerBase peerBase) : base(peerBase)
         {
+            Listener.MVSDebug(DebugLevel.INFO, $"{peerBase.ServerAddress}:{ServerPort}");
             Listener.MVSDebug(DebugLevel.INFO, "SocketTcp, .Net, Unity");
             
             // 데이터 수신을 폴링하지 않음
@@ -51,7 +52,7 @@ namespace MVS.Realtime
                 _socket.SendTimeout = 5000;
                 // _socket.ReceiveTimeout = peerBase.DisconnectTimeout;
                 // _socket.SendTimeout = peerBase.DisconnectTimeout;
-
+                
                 _socket.Connect(ServerAddress, int.Parse(ServerPort));
                 Listener.MVSDebug(DebugLevel.INFO, "Connected To Server With TCP");
             }

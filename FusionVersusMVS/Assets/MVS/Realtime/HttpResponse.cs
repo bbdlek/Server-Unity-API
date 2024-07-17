@@ -1,83 +1,88 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 namespace MVS.Realtime
 {
+    [Serializable]
     public class MVMResponse
     {
-        public List<MVMRes> ResponseMessage { get; set; }
-        public DateTime Timestamp { get; set; }
-        
+        public List<MVMRes> responseMessage;
+        public DateTime timestamp;
+
     }
 
+    [Serializable]
     public class MVMRes
     {
-        public string Hostname { get; set; }
-        public string RegionCode { get; set; }
-        public string IpAddress { get; set; }
+        public string hostname;
+        public string regionCode;
+        public string ipAddress;
 
         public override string ToString()
         {
-            return $"Hostname : {Hostname}, RegionCode : {RegionCode}, IpAddress : {IpAddress}";
+            return $"Hostname : {hostname}, RegionCode : {regionCode}, IpAddress : {ipAddress}";
         }
     }
     
+    [Serializable]
     public class RoomListResponse
     {
-        public List<RoomRes> ResponseMessage { get; set; }
-        public DateTime Timestamp { get; set; }
+        public List<RoomRes> responseMessage;
+        public DateTime timestamp;
     }
 
+    [Serializable]
     public class RoomRes
     {
-        public ulong RoomId { get; set; }
-        public string Url { get; set; }
-        public bool IsPending { get; set; }
-        public string Name { get; set; }
+        public ulong roomId;
+        public string url;
+        public bool isPending;
+        public string name;
 
         public override string ToString()
         {
-            return $"RoomId : {RoomId}, Url : {Url}, IsPending : {IsPending}, RoomName : {Name}";
+            return $"RoomId : {roomId}, Url : {url}, IsPending : {isPending}, RoomName : {name}";
         }
     }
 
+    [Serializable]
     public class RoomCreateResponse
     {
-        public RoomResponseMessage ResponseMessage { get; set; }
+        public RoomResponseMessage responseMessage;
+        public string timestamp;
 
         public override string ToString()
         {
-            return $"Response : {ResponseMessage}";
+            return $"Response : {responseMessage}, Timestamp: {timestamp}";
         }
     }
     
+    [Serializable]
     public class RoomJoinResponse
     {
-        public RoomResponseMessage ResponseMessage { get; set; }
+        public RoomResponseMessage responseMessage;
+        public string timestamp;
         
         public override string ToString()
         {
-            return $"Response : {ResponseMessage}";
+            return $"Response : {responseMessage}, Timestamp: {timestamp}";
         }
     }
 
+    [Serializable]
     public class RoomResponseMessage
     {
-        public ulong UserId { get; set; }
-        
-        public ulong RoomId { get; set; }
-        
-        public string RoomName { get; set; }
-        
-        public string Token { get; set; }
-
-        public string MvsUrl { get; set; }
-        
-        public bool CreationFlag { get; set; }
+        public ulong userId;
+        public string token;
+        public string mvsUrl;
+        public string roomName;
+        public ulong roomId;
+        public bool creationFlag;
 
         public override string ToString()
         {
-            return $"MvsUrl : {MvsUrl}, UserId : {UserId}, RoomId : {RoomId}, RoomName : {RoomName}, UserToken : {Token}, CreationFlag : {CreationFlag}";
+            return $"MvsUrl : {mvsUrl}, UserId : {userId}, RoomId : {roomId}, RoomName : {roomName}, UserToken : {token}, CreationFlag : {creationFlag}";
         }
     }
 

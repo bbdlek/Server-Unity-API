@@ -1,42 +1,65 @@
 ﻿using System;
+using System.Collections;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace MVS.Realtime
 {
-    public class HttpModule
+    public class HttpModule : MonoBehaviour
     {
-        // GET 요청 메소드
-        public async Task<(string responseBody, Exception exception)> GetAsync(string url)
+        // GET 요청 메소드 (Coroutine)
+        public static Coroutine GetAsync(MonoBehaviour owner, string url, Action<string, Exception> callback)
+        {
+            return owner.StartCoroutine(GetCoroutine(url, callback));
+        }
+
+        private static IEnumerator GetCoroutine(string url, Action<string, Exception> callback)
         {
             using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {
-                var operation = webRequest.SendWebRequest();
-
-                while (!operation.isDone)
-                {
-                    await Task.Yield();
-                }
+                yield return webRequest.SendWebRequest();
 
                 if (webRequest.result == UnityWebRequest.Result.Success)
                 {
-                    return (webRequest.downloadHandler.text, null);
+                    callback?.Invoke(webRequest.downloadHandler.text, null);
                 }
                 else
                 {
                     Debug.LogError($"Error: {webRequest.error}");
-                    return (null, new Exception(webRequest.error));
+                    callback?.Invoke(null, new Exception(webRequest.error));
                 }
             }
         }
-
-        // POST 요청 메소드
-        public async Task<(TResponse response, Exception exception)> PostAsync<TRequest, TResponse>(string url, TRequest requestData)
+        
+        // Task 기반 비동기 GET 요청 메소드
+        public static Task<string> GetAsync(string url)
         {
-            string jsonData = JsonConvert.SerializeObject(requestData);
+            var tcs = new TaskCompletionSource<string>();
+            GetAsync(ConnectionHandler.Instance, url, (result, exception) =>
+            {
+                if (exception != null)
+                {
+                    tcs.SetException(exception);
+                }
+                else
+                {
+                    tcs.SetResult(result);
+                }
+            });
+            return tcs.Task;
+        }
+
+        // POST 요청 메소드 (Coroutine)
+        public static Coroutine PostAsync<TRequest, TResponse>(MonoBehaviour owner, string url, TRequest requestData, Action<TResponse, Exception> callback)
+        {
+            return owner.StartCoroutine(PostCoroutine<TRequest, TResponse>(url, requestData, callback));
+        }
+
+        private static IEnumerator PostCoroutine<TRequest, TResponse>(string url, TRequest requestData, Action<TResponse, Exception> callback)
+        {
+            string jsonData = JsonUtility.ToJson(requestData);
             byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
 
             using (UnityWebRequest webRequest = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST))
@@ -45,25 +68,38 @@ namespace MVS.Realtime
                 webRequest.downloadHandler = new DownloadHandlerBuffer();
                 webRequest.SetRequestHeader("Content-Type", "application/json");
 
-                var operation = webRequest.SendWebRequest();
-
-                while (!operation.isDone)
-                {
-                    await Task.Yield();
-                }
+                yield return webRequest.SendWebRequest();
 
                 if (webRequest.result == UnityWebRequest.Result.Success)
                 {
                     string responseBody = webRequest.downloadHandler.text;
-                    TResponse postResponse = JsonConvert.DeserializeObject<TResponse>(responseBody);
-                    return (postResponse, null);
+                    TResponse postResponse = JsonUtility.FromJson<TResponse>(responseBody);
+                    callback?.Invoke(postResponse, null);
                 }
                 else
                 {
                     Debug.LogError($"Error: {webRequest.error}");
-                    return (default(TResponse), new Exception(webRequest.error));
+                    callback?.Invoke(default(TResponse), new Exception(webRequest.error));
                 }
             }
+        }
+        
+        // Task 기반 비동기 POST 요청 메소드
+        public static Task<TResponse> PostAsync<TRequest, TResponse>(string url, TRequest requestData)
+        {
+            var tcs = new TaskCompletionSource<TResponse>();
+            PostAsync<TRequest, TResponse>(ConnectionHandler.Instance, url, requestData, (response, exception) =>
+            {
+                if (exception != null)
+                {
+                    tcs.SetException(exception);
+                }
+                else
+                {
+                    tcs.SetResult(response);
+                }
+            });
+            return tcs.Task;
         }
     }
 }

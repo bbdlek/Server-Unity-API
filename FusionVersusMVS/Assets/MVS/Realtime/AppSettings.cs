@@ -26,7 +26,6 @@ namespace MVS.Realtime
         /// <summary>
         /// MV Master IP for Join MVM
         /// </summary>
-        [HideInInspector]
         public string MVM = ""; 
         
         /// <summary> Server IP for MVS Application </summary>
@@ -39,7 +38,7 @@ namespace MVS.Realtime
 
         // 현재는 안쓰임
         [HideInInspector]
-        public bool IsUsingNameServer;
+        public bool IsUsingNameServer = true;
 
         /// <summary> Connection Protocol for MVS Application </summary>
         public ConnectionProtocol Protocol = ConnectionProtocol.Tcp;

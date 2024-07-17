@@ -165,7 +165,7 @@ namespace MVS.Helios
             StaticReInitialize();
 #else
             if(RealtimeClient == null)
-                RealtimeClient = new RealtimeClient();
+                RealtimeClient = new RealtimeClient(HeliosSettings.AppSettings.Protocol);
 #endif
         }
 
@@ -178,6 +178,10 @@ namespace MVS.Helios
             if(!EditorApplication.isPlayingOrWillChangePlaymode) return;
             #endif
             
+            #if UNITY_WEBGL && !UNITY_EDITOR
+            HeliosSettings.AppSettings.Protocol = ConnectionProtocol.WebSocket;
+            #endif
+            
             ConnectionProtocol protocol = HeliosSettings.AppSettings.Protocol;
             if(RealtimeClient == null)
                 RealtimeClient = new RealtimeClient(protocol);
@@ -188,6 +192,8 @@ namespace MVS.Helios
             RealtimeClient.IsUsingNameServer = HeliosSettings.AppSettings.IsUsingNameServer;
             RealtimeClient.NameServerAddress = HeliosSettings.AppSettings.NameServer;
             RealtimeClient.MasterServerAddress = HeliosSettings.AppSettings.MVM;
+            RealtimeClient.RealtimePeer.TransportProtocol = HeliosSettings.AppSettings.Protocol;
+            RealtimeClient.ConnectionProtocol = HeliosSettings.AppSettings.Protocol;
             
             RealtimeClient.EventReceived -= OnEvent;
             RealtimeClient.EventReceived += OnEvent;
@@ -235,7 +241,7 @@ namespace MVS.Helios
             }
 
             RealtimeClient.RealtimePeer.TransportProtocol = appSettings.Protocol;
-            RealtimeClient.ConnectionProtocol = null;
+            RealtimeClient.ConnectionProtocol = appSettings.Protocol;
             // RealtimeClient.AuthMode = appSettings.;
             
             RealtimeClient.AppId = appSettings.AppId;
@@ -297,30 +303,24 @@ namespace MVS.Helios
             return RealtimeClient.MasterServerAddress;
         }
 
-        public static async Task<List<Room>> GetRoomList()
+        public static List<Room> GetRoomList()
         {
-            var res = await RealtimeClient.OpGetRoomList();
+            var res = RealtimeClient.OpGetRoomList();
             return res;
         }
 
-        public static async Task<UInt64> RoomCreateToMaster(string roomName = default, UInt64 roomId = 0)
+        public static void RoomCreateToMaster(string roomName = default, UInt64 roomId = 0)
         {
-            var res = await RealtimeClient.OpCreateAndJoinRoomToMvm(new RoomInfo(){Name = roomName, RoomID = roomId});
-            if (res.IP.IsNullOrEmpty()) return 0;
+            var res = RealtimeClient.OpCreateAndJoinRoomToMvm(new RoomInfo(){Name = roomName, RoomID = roomId});
+            if (res.IP.IsNullOrEmpty()) return;
             HeliosSettings.AppSettings.Server = res.IP;
-            HeliosSettings.AppSettings.Port = int.Parse(res.Port);
-
-            return res.MvsUserID;
         }
 
-        public static async Task<UInt64> RoomJoinToMaster(UInt64 roomId = 0)
+        public static void RoomJoinToMaster(UInt64 roomId = 0)
         {
-            var res = await RealtimeClient.OpJoinRoomToMvm(roomId);
-            if (res.IP.IsNullOrEmpty()) return 0;
+            var res = RealtimeClient.OpJoinRoomToMvm(roomId);
+            if (res.IP.IsNullOrEmpty()) return;
             HeliosSettings.AppSettings.Server = res.IP;
-            HeliosSettings.AppSettings.Port = int.Parse(res.Port);
-
-            return res.MvsUserID;
         }
 
         /// <summary>

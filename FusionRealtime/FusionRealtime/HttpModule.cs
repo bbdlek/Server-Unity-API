@@ -1,51 +1,68 @@
 ﻿using System;
-using System.Net.Http;
+using System.Collections;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using UnityEngine;
+using UnityEngine.Networking;
 
 namespace MVS.Realtime
 {
-    public class HttpModule
+    public class HttpModule : MonoBehaviour
     {
-        private static readonly HttpClient client = new HttpClient();
-
-        // GET 요청 메소드
-        public async Task<(string responseBody, HttpRequestException exception)> GetAsync(string url)
+        // GET 요청 메소드 (Coroutine)
+        public static Coroutine GetAsync(MonoBehaviour owner, string url, Action<string, Exception> callback)
         {
-            try
+            return owner.StartCoroutine(GetCoroutine(url, callback));
+        }
+
+        private static IEnumerator GetCoroutine(string url, Action<string, Exception> callback)
+        {
+            using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {
-                HttpResponseMessage response = await client.GetAsync(url);
-                response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
-                return (responseBody, null);
-            }
-            catch (HttpRequestException e)
-            {
-                Console.WriteLine("\nException Caught!");
-                Console.WriteLine("Message :{0} ", e.Message);
-                return (null, e);
+                yield return webRequest.SendWebRequest();
+
+                if (webRequest.result == UnityWebRequest.Result.Success)
+                {
+                    callback?.Invoke(webRequest.downloadHandler.text, null);
+                }
+                else
+                {
+                    Debug.LogError($"Error: {webRequest.error}");
+                    callback?.Invoke(null, new Exception(webRequest.error));
+                }
             }
         }
 
-        // POST 요청 메소드
-        public async Task<(TResponse, HttpRequestException exception)> PostAsync<TRequest, TResponse>(string url, TRequest requestData)
+        // POST 요청 메소드 (Coroutine)
+        public static Coroutine PostAsync<TRequest, TResponse>(MonoBehaviour owner, string url, TRequest requestData, Action<TResponse, Exception> callback)
         {
-            try
+            return owner.StartCoroutine(PostCoroutine<TRequest, TResponse>(url, requestData, callback));
+        }
+
+        private static IEnumerator PostCoroutine<TRequest, TResponse>(string url, TRequest requestData, Action<TResponse, Exception> callback)
+        {
+            string jsonData = JsonUtility.ToJson(requestData);
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
+
+            using (UnityWebRequest webRequest = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST))
             {
-                string jsonData = JsonConvert.SerializeObject(requestData);
-                StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync(url, content);
-                response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
-                TResponse postResponse = JsonConvert.DeserializeObject<TResponse>(responseBody);
-                return (postResponse, null);
-            }
-            catch (HttpRequestException e)
-            {
-                Console.WriteLine("\nException Caught!");
-                Console.WriteLine("Message :{0} ", e.Message);
-                return (default, e);
+                webRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
+                webRequest.downloadHandler = new DownloadHandlerBuffer();
+                webRequest.SetRequestHeader("Content-Type", "application/json");
+
+                yield return webRequest.SendWebRequest();
+
+                if (webRequest.result == UnityWebRequest.Result.Success)
+                {
+                    string responseBody = webRequest.downloadHandler.text;
+                    TResponse postResponse = JsonUtility.FromJson<TResponse>(responseBody);
+                    callback?.Invoke(postResponse, null);
+                }
+                else
+                {
+                    Debug.LogError($"Error: {webRequest.error}");
+                    callback?.Invoke(default(TResponse), new Exception(webRequest.error));
+                }
             }
         }
     }

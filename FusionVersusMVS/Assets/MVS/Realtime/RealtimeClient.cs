@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Google.Protobuf;
-using Newtonsoft.Json;
 using Protocol;
 using UnityEngine;
 
@@ -88,7 +87,7 @@ namespace MVS.Realtime
         public string MasterServerAddress { get; set; }
         
         // roominfo from mvm
-        public List<Room> MvsRoomInfos { get; set; }
+        public List<Room> MvsRoomInfos = new List<Room>();
         public RoomInfo SelectedRoomInfo;
         
         public string MVSAddress { get; set; }
@@ -267,7 +266,6 @@ namespace MVS.Realtime
             {
                 Server = ServerConnection.MasterServer;
                 State = ClientState.WaitMasterServerRes;
-                var res = await OpGetRoomList();
             }
 
             return true;
@@ -747,25 +745,25 @@ namespace MVS.Realtime
             return sent;
         }
 
-        static HttpModule httpModule = new HttpModule();
+        // static HttpModule httpModule = new HttpModule();
 
         public async Task<string> OpGetMvmAddress()
         {
             if (IsUsingNameServer)
             {
-                var res = await httpModule.GetAsync($"http://{NameServerAddress}/ns/api/v1/app/{AppId}");
-                if (res.exception != null)
+                try
                 {
-                    MVSDebug(DebugLevel.ERROR, $"Get MVM Address request fail, Error : {res.exception.Message}");
-                    return null;
-                }
-                else
-                {
-                    var res2 = JsonConvert.DeserializeObject<MVMResponse>(res.responseBody);
-                    MasterServerAddress = res2.ResponseMessage[0].IpAddress;
+                    var res = await HttpModule.GetAsync($"http://{NameServerAddress}/ns/api/v1/app/{AppId}");
+                    var res2 = JsonUtility.FromJson<MVMResponse>(res);
+                    MasterServerAddress = res2.responseMessage[0].ipAddress;
+                    Debug.Log(MasterServerAddress);
                     ConnectionCallbacksTarget.OnConnectedToMasterServer();
                 }
-                
+                catch (Exception ex)
+                {
+                    MVSDebug(DebugLevel.ERROR, $"Get MVM Address request fail, Error : {ex.Message}");
+                    return null;
+                }
             }
             return MasterServerAddress;
         }
@@ -774,32 +772,36 @@ namespace MVS.Realtime
         /// Send RoomList Req to MVM
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Room>> OpGetRoomList()
+        public List<Room> OpGetRoomList()
         {
-            var res = await httpModule.GetAsync($"http://{MasterServerAddress}/mvm/api/rooms");
-            if (res.exception != null)
-            {
-                MVSDebug(DebugLevel.ERROR, $"GetRoomList Request Fail, Error : {res.exception.Message}");
-                return null;
-            }
-            var res2 = JsonConvert.DeserializeObject<RoomListResponse>(res.responseBody);
-            MvsRoomInfos = new List<Room>();
-            foreach (var roomRes in res2.ResponseMessage)
-            {
-                MvsRoomInfos.Add(
-                    new Room(new RoomInfo
+            HttpModule.GetAsync(ConnectionHandler.Instance, $"http://{MasterServerAddress}/mvm/api/rooms",
+                (res, exception) =>
+                {
+                    if (exception != null)
                     {
-                        RoomID = roomRes.RoomId,
-                        Name = roomRes.Name
-                    })
-                );
-            }
-
-            if (MvsRoomInfos.Count > 0)
-            {
-                SelectedRoomInfo = MvsRoomInfos[0].RoomInfo;
-            }
-
+                        MVSDebug(DebugLevel.ERROR, $"GetRoomList Request Fail, Error : {exception.Message}");
+                    }
+                    else
+                    {
+                        Debug.Log(res);
+                        var res2 = JsonUtility.FromJson<RoomListResponse>(res);
+                        MvsRoomInfos = new List<Room>();
+                        foreach (var roomRes in res2.responseMessage)
+                        {
+                            MvsRoomInfos.Add(
+                                new Room(new RoomInfo
+                                {
+                                    RoomID = roomRes.roomId,
+                                    Name = roomRes.name
+                                })
+                            );
+                        }
+                    }
+                    if (MvsRoomInfos.Count > 0)
+                    {
+                        SelectedRoomInfo = MvsRoomInfos[0].RoomInfo;
+                    }
+                });
             return MvsRoomInfos;
         }
         
@@ -809,7 +811,7 @@ namespace MVS.Realtime
         /// 현재 Password는 구현되어 있지 않음.
         /// </summary>
         /// <returns></returns>
-        public async Task<RoomJoinInfoStruct> OpCreateAndJoinRoomToMvm(RoomInfo roomInfo = default, bool isPassword = false)
+        public RoomJoinInfoStruct OpCreateAndJoinRoomToMvm(RoomInfo roomInfo = default, bool isPassword = false)
         {
             if (CurrentRoom != null)
             {
@@ -819,60 +821,60 @@ namespace MVS.Realtime
             HttpRequest.RoomCreateRequest roomReq;
             roomReq = new HttpRequest.RoomCreateRequest()
             {
-                RoomId = roomInfo.RoomID.ToString(),
-                Name = roomInfo.Name,
-                IsPassword = isPassword
+                roomId = roomInfo.RoomID.ToString(),
+                name = roomInfo.Name,
+                isPassword = isPassword
             };
             
-            var res = await httpModule.PostAsync<HttpRequest.RoomCreateRequest, RoomCreateResponse>(
-                $"http://{MasterServerAddress}/mvm/api/rooms", roomReq);
-            if (res.exception != null)
-            {
-                MakingRoomCallbacksTarget.OnCreatedRoomFailed($"Room Create Req Fail, Error : {res.exception.Message}");
-                MVSDebug(DebugLevel.ERROR, $"Room Create Req Fail, Error : {res.exception.Message}");
-                return default;
-            }
+            HttpModule.PostAsync<HttpRequest.RoomCreateRequest, RoomCreateResponse>(ConnectionHandler.Instance, $"http://{MasterServerAddress}/mvm/api/rooms", roomReq, async (res, exception) =>
+                {
+                    if (exception != null)
+                    {
+                        MakingRoomCallbacksTarget.OnCreatedRoomFailed($"Room Create Req Fail, Error : {exception.Message}");
+                        MVSDebug(DebugLevel.ERROR, $"Room Create Req Fail, Error : {exception.Message}");
+                    }
+                    else
+                    {
+                        if (!res.responseMessage.creationFlag)
+                        {
+                            MVSDebug(DebugLevel.WARNING, "Already Created RoomId");
+                        }
             
-            // 이미 방이 만들어 져서 join response가 온경우
-            if (!res.Item1.ResponseMessage.CreationFlag)
-            {
-                MVSDebug(DebugLevel.WARNING, "Already Created RoomId");
-                return default;
-            }
-            
-            var address = res.Item1.ResponseMessage.MvsUrl.Split('/');
-            RoomJoinInfo.IP = address[0];
-            switch (ConnectionProtocol)
-            {
-                case Realtime.ConnectionProtocol.Tcp:
-                    RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
-                    break;
-                case Realtime.ConnectionProtocol.Udp:
-                    RoomJoinInfo.Port = address[1].Replace("mvs", "4000");
-                    break;
-                case Realtime.ConnectionProtocol.WebSocket:
-                case Realtime.ConnectionProtocol.WebSocketSecure:
-                    RoomJoinInfo.Port = address[1];
-                    break;
-            }
-            RoomJoinInfo.RoomID = res.Item1.ResponseMessage.RoomId;
-            RoomJoinInfo.RoomName = res.Item1.ResponseMessage.RoomName;
-            RoomJoinInfo.MvsUserID = res.Item1.ResponseMessage.UserId;
-            LocalPlayer.PlayerInfo.PlayerID = RoomJoinInfo.MvsUserID;
-            RoomJoinInfo.MvsUserToken = res.Item1.ResponseMessage.Token;
+                        var address = res.responseMessage.mvsUrl.Split('/');
+                        Debug.Log(address);
+                        RoomJoinInfo.IP = address[0];
+                        switch (ConnectionProtocol)
+                        {
+                            case Realtime.ConnectionProtocol.Tcp:
+                                RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
+                                break;
+                            case Realtime.ConnectionProtocol.Udp:
+                                RoomJoinInfo.Port = address[1].Replace("mvs", "4000");
+                                break;
+                            case Realtime.ConnectionProtocol.WebSocket:
+                            case Realtime.ConnectionProtocol.WebSocketSecure:
+                                RoomJoinInfo.Port = address[1];
+                                break;
+                        }
+                        RoomJoinInfo.RoomID = res.responseMessage.roomId;
+                        RoomJoinInfo.RoomName = res.responseMessage.roomName;
+                        RoomJoinInfo.MvsUserID = res.responseMessage.userId;
+                        LocalPlayer.PlayerInfo.PlayerID = RoomJoinInfo.MvsUserID;
+                        RoomJoinInfo.MvsUserToken = res.responseMessage.token;
+                    }
+                    
+                    CurrentRoom = CreateRoom(new RoomInfo
+                    {
+                        Name = RoomJoinInfo.RoomName,
+                        RoomID = RoomJoinInfo.RoomID,
+                    });
 
-            CurrentRoom = CreateRoom(new RoomInfo
-            {
-                Name = RoomJoinInfo.RoomName,
-                RoomID = RoomJoinInfo.RoomID
-            });
-
-            await Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
-
-            return RoomJoinInfo;
+                    await Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
+                });
+            return default;
         }
 
-        public async Task<RoomJoinInfoStruct> OpJoinRoomToMvm(UInt64 roomId = default)
+        public RoomJoinInfoStruct OpJoinRoomToMvm(UInt64 roomId = default)
         {
             HttpRequest.RoomJoinRequest roomReq;
             if (roomId == 0)
@@ -880,63 +882,63 @@ namespace MVS.Realtime
                 // Use SelectedRoomInfo
                 roomReq = new HttpRequest.RoomJoinRequest()
                 {
-                    RoomId = SelectedRoomInfo.RoomID.ToString()
+                    roomId = SelectedRoomInfo.RoomID.ToString()
                 };
             }
             else
             {
                 roomReq = new HttpRequest.RoomJoinRequest()
                 {
-                    RoomId = roomId.ToString()
+                    roomId = roomId.ToString()
                 };
             }
-            
-            var res = await httpModule.PostAsync<HttpRequest.RoomJoinRequest, RoomJoinResponse>(
-                $"http://{MasterServerAddress}/mvm/api/rooms", roomReq);
-            if (res.exception != null)
-            {
-                MakingRoomCallbacksTarget.OnJoinedRoomFailed($"Room Join Req Fail, Error : {res.exception.Message}");
-                MVSDebug(DebugLevel.ERROR, $"Room Join Req Fail, Error : {res.exception.Message}");
-                return default;
-            }
-            
-            // join request를 보냈는데 create response가 온경우
-            if (res.Item1.ResponseMessage.CreationFlag)
-            {
-                MVSDebug(DebugLevel.WARNING, $"Join Request but Room Created");
-                return default;
-            }
 
-            var address = res.Item1.ResponseMessage.MvsUrl.Split('/');
-            RoomJoinInfo.IP = address[0];
-            switch (ConnectionProtocol)
-            {
-                case Realtime.ConnectionProtocol.Tcp:
-                    RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
-                    break;
-                case Realtime.ConnectionProtocol.Udp:
-                    RoomJoinInfo.Port = address[1].Replace("mvs", "4000");
-                    break;
-                case Realtime.ConnectionProtocol.WebSocket:
-                case Realtime.ConnectionProtocol.WebSocketSecure:
-                    RoomJoinInfo.Port = address[1];
-                    break;
-            }
-            RoomJoinInfo.RoomID = res.Item1.ResponseMessage.RoomId;
-            RoomJoinInfo.RoomName = res.Item1.ResponseMessage.RoomName;
-            RoomJoinInfo.MvsUserID = res.Item1.ResponseMessage.UserId;
-            RoomJoinInfo.MvsUserToken = res.Item1.ResponseMessage.Token;
+            HttpModule.PostAsync<HttpRequest.RoomJoinRequest, RoomJoinResponse>(ConnectionHandler.Instance,
+                $"http://{MasterServerAddress}/mvm/api/rooms", roomReq, async (res, exception) =>
+                {
+                    if (exception != null)
+                    {
+                        MakingRoomCallbacksTarget.OnJoinedRoomFailed($"Room Join Req Fail, Error : {exception.Message}");
+                        MVSDebug(DebugLevel.ERROR, $"Room Join Req Fail, Error : {exception.Message}");
+                    }
+                    
+                    // join request를 보냈는데 create response가 온경우
+                    if (res.responseMessage.creationFlag)
+                    {
+                        MVSDebug(DebugLevel.WARNING, $"Join Request but Room Created");
+                    }
+                    
+                    var address = res.responseMessage.mvsUrl.Split('/');
+                    RoomJoinInfo.IP = address[0];
+                    switch (ConnectionProtocol)
+                    {
+                        case Realtime.ConnectionProtocol.Tcp:
+                            RoomJoinInfo.Port = address[1].Replace("mvs", "3000");
+                            break;
+                        case Realtime.ConnectionProtocol.Udp:
+                            RoomJoinInfo.Port = address[1].Replace("mvs", "4000");
+                            break;
+                        case Realtime.ConnectionProtocol.WebSocket:
+                        case Realtime.ConnectionProtocol.WebSocketSecure:
+                            RoomJoinInfo.Port = address[1];
+                            break;
+                    }
+                    RoomJoinInfo.RoomID = res.responseMessage.roomId;
+                    RoomJoinInfo.RoomName = res.responseMessage.roomName;
+                    RoomJoinInfo.MvsUserID = res.responseMessage.userId;
+                    RoomJoinInfo.MvsUserToken = res.responseMessage.token;
             
-            CurrentRoom = CreateRoom(new RoomInfo
-            {
-                Name = RoomJoinInfo.RoomName,
-                RoomID = RoomJoinInfo.RoomID
-            });
+                    CurrentRoom = CreateRoom(new RoomInfo
+                    {
+                        Name = RoomJoinInfo.RoomName,
+                        RoomID = RoomJoinInfo.RoomID
+                    });
             
-            LocalPlayer.PlayerInfo.PlayerID = res.Item1.ResponseMessage.UserId;
-
-            if(state!= ClientState.ConnectingToMVS)
-                await Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
+                    LocalPlayer.PlayerInfo.PlayerID = res.responseMessage.userId;
+                    
+                    if(state!= ClientState.ConnectingToMVS)
+                        await Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
+                });
             
             return RoomJoinInfo;
         }

@@ -153,8 +153,7 @@ namespace MVS.Helios
         // TODO : Background Alive??
 
         public static bool IsMasterClient =>
-            RealtimeClient.CurrentRoom != null &&
-            RealtimeClient.CurrentRoom.MasterClientId == LocalPlayer.UserId;
+            RealtimeClient.CurrentGroup?.IsLocalGroupOwner ?? false;
         
         // TODO : Count Of Players, Rooms, Groups ETC
         
@@ -187,6 +186,7 @@ namespace MVS.Helios
                 RealtimeClient = new RealtimeClient(protocol);
             
             RealtimeClient.AppId = HeliosSettings.AppSettings.AppId;
+            Debug.Log(RealtimeClient.AppId);
             RealtimeClient.AppVersion = HeliosSettings.AppSettings.AppVersion;
             RealtimeClient.AppSettingsDebug = HeliosSettings.AppSettings.DebugLevel;
             RealtimeClient.IsUsingNameServer = HeliosSettings.AppSettings.IsUsingNameServer;
@@ -215,18 +215,18 @@ namespace MVS.Helios
 
         }
         
-        public static async Task<bool> ConnectUsingSettings()
-        {
-            if (HeliosSettings == null)
-            {
-                Debug.LogError("Can't connect: Loading settings failed. ServerSettings asset must be in any 'Resources' folder as: " + HeliosSettingsFileName);
-                return false;
-            }
+        // public static async Task<bool> ConnectUsingSettings()
+        // {
+        //     if (HeliosSettings == null)
+        //     {
+        //         Debug.LogError("Can't connect: Loading settings failed. ServerSettings asset must be in any 'Resources' folder as: " + HeliosSettingsFileName);
+        //         return false;
+        //     }
+        //
+        //     return await ConnectUsingSettings(HeliosSettings.AppSettings);
+        // }
 
-            return await ConnectUsingSettings(HeliosSettings.AppSettings);
-        }
-
-        public static async Task<bool> ConnectUsingSettings(AppSettings appSettings)
+        private static async Task<bool> ConnectUsingSettings(AppSettings appSettings)
         {
             if (RealtimeClient.RealtimePeer.PeerState != PeerState.Disconnected)
             {
@@ -298,33 +298,39 @@ namespace MVS.Helios
 
         public static async Task<string> GetMvmAddress()
         {
-            RealtimeClient.MasterServerAddress = await RealtimeClient.OpGetMvmAddress();
+            _heliosSettings.AppSettings.MVM = await RealtimeClient.OpGetMvmAddress();
+            Debug.Log(_heliosSettings.AppSettings.MVM);
             IsConnectedToMaster = true;
-            return RealtimeClient.MasterServerAddress;
+            return _heliosSettings.AppSettings.MVM;
         }
 
-        public static async Task<List<Room>> GetRoomList()
+        public static List<Room> GetRoomList()
         {
-            var res = await RealtimeClient.OpGetRoomList();
+            List<Room> res = new List<Room>();
+            try
+            {
+                res = RealtimeClient.OpGetRoomList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
             return res;
         }
 
-        public static async Task<UInt64> RoomCreateToMaster(string roomName = default, UInt64 roomId = 0)
+        public static void RoomCreateToMaster(string roomName = default, UInt64 roomId = 0)
         {
-            var res = await RealtimeClient.OpCreateAndJoinRoomToMvm(new RoomInfo(){Name = roomName, RoomID = roomId});
-            if (res.IP.IsNullOrEmpty()) return 0;
+            var res = RealtimeClient.OpCreateAndJoinRoomToMvm(new RoomInfo(){Name = roomName, RoomID = roomId});
+            if (res.IP.IsNullOrEmpty()) return;
             HeliosSettings.AppSettings.Server = res.IP;
-
-            return res.MvsUserID;
         }
 
-        public static async Task<UInt64> RoomJoinToMaster(UInt64 roomId = 0)
+        public static void RoomJoinToMaster(UInt64 roomId = 0)
         {
-            var res = await RealtimeClient.OpJoinRoomToMvm(roomId);
-            if (res.IP.IsNullOrEmpty()) return 0;
+            var res = RealtimeClient.OpJoinRoomToMvm(roomId);
+            if (res.IP.IsNullOrEmpty()) return;
             HeliosSettings.AppSettings.Server = res.IP;
-
-            return res.MvsUserID;
         }
 
         /// <summary>
@@ -597,7 +603,7 @@ namespace MVS.Helios
             FindObjectById(id).UpdateCustomData(objectInfo);
         }
 
-        public static void NetworkRemoveObject(uint id)
+        internal static void NetworkRemoveObject(uint id)
         {
             _prefabPool.Destroy(id);
         }

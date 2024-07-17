@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using UnityEngine.Scripting;
@@ -96,7 +94,7 @@ namespace MVS.Realtime
                 protocol = "wss";
             }
 
-            string url = $"{protocol}://{ServerAddress}:{ServerPort}";
+            string url = $"{protocol}://{peerBase.ServerAddress}";
             Listener.MVSDebug(DebugLevel.INFO, url);
             ws = new WebSocketSharp.WebSocket(url);
 

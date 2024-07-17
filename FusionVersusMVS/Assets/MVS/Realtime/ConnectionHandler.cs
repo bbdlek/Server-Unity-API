@@ -5,6 +5,26 @@ namespace MVS.Realtime
 {
     public class ConnectionHandler : MonoBehaviour
     {
+        private static ConnectionHandler _instance;
+
+        public static ConnectionHandler Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = FindObjectOfType<ConnectionHandler>();
+
+                    if (_instance == null)
+                    {
+                        GameObject singletonObject = new GameObject("ConnectionHandler");
+                        _instance = singletonObject.AddComponent<ConnectionHandler>();
+                    }
+                }
+                return _instance;
+            }
+        }
+        
         public bool ApplyDontDestroyOnLoad = true;
         
         [NonSerialized]

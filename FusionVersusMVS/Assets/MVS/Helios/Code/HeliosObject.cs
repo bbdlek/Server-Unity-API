@@ -61,7 +61,8 @@ namespace MVS.Helios
 
         private void OnDestroy()
         {
-            HeliosNetwork.NetworkRemoveObject(ObjectInfo.ObjectID.InstanceID);
+            if(IsMine)
+                HeliosNetwork.NetworkRemoveObject(ObjectInfo.ObjectID.InstanceID);
         }
     }
 }

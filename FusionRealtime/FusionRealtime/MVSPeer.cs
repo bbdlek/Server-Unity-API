@@ -23,13 +23,9 @@ namespace MVS.Realtime
                 return this.peerBase.peerConnectionState == ConnectionStateValue.Connected && !this.peerBase.ApplicationIsInitialized ? PeerState.InitializingApplication : (PeerState) this.peerBase.peerConnectionState;
             }
         }
-        
-        public ConnectionProtocol UsedProtocol => this.peerBase.Protocol;
-        
+
         public ConnectionProtocol TransportProtocol { get; set; }
 
-        public string PeerID => peerBase.PeerID;
-        
         public Dictionary<ConnectionProtocol, Type> SocketImplementationConfig;
         public Type SocketImplementation { get; internal set; }
         
@@ -43,8 +39,13 @@ namespace MVS.Realtime
             SocketImplementationConfig[ConnectionProtocol.Sap] = typeof(MVSWebSocket);
             SocketImplementationConfig[ConnectionProtocol.Tcp] = typeof(MVSTcpSocket);
             SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(MVSRudpSocket);
+#if UNITY_WEBGL && !UNITY_EDITOR
+            SocketImplementationConfig[ConnectionProtocol.WebSocket] = typeof(MVSWebGLSocket);
+            SocketImplementationConfig[ConnectionProtocol.WebSocketSecure] = typeof(MVSWebGLSocket);
+#else
             SocketImplementationConfig[ConnectionProtocol.WebSocket] = typeof(MVSWebSocket);
             SocketImplementationConfig[ConnectionProtocol.WebSocketSecure] = typeof(MVSWebSocket);
+#endif
             CreatePeerBase();
         }
 
@@ -67,10 +68,22 @@ namespace MVS.Realtime
                 return false;
             }
             SocketImplementation = type;
-            
             try
             {
-                this.peerBase.realtimeSocket = (RealtimeSocketConnection) Activator.CreateInstance(SocketImplementation, peerBase);
+                if (SocketImplementation == null)
+                {
+                    throw new ArgumentNullException(nameof(SocketImplementation), "SocketImplementation cannot be null.");
+                }
+
+                if (peerBase == null)
+                {
+                    throw new ArgumentNullException(nameof(peerBase), "peerBase cannot be null.");
+                }
+                
+                UnityEngine.Debug.Log($"SocketImplementation Type: {SocketImplementation}");
+                UnityEngine.Debug.Log($"peerBase Type: {peerBase.GetType()}");
+
+                this.peerBase.realtimeSocket = (RealtimeSocketConnection)Activator.CreateInstance(SocketImplementation, peerBase);
             }
             catch (Exception ex)
             {
@@ -95,6 +108,7 @@ namespace MVS.Realtime
                 case ConnectionProtocol.Udp:
                 case ConnectionProtocol.Sap:
                 case ConnectionProtocol.WebSocket:
+                case ConnectionProtocol.WebSocketSecure:
                     if (!(peerBase is TPeer tpeer))
                     {
                         tpeer = new TPeer();

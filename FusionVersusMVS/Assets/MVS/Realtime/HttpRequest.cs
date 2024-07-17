@@ -1,17 +1,22 @@
-﻿namespace MVS.Realtime
+﻿using System;
+
+namespace MVS.Realtime
 {
+    [Serializable]
     public class HttpRequest
     {
+        [Serializable]
         public class RoomCreateRequest
         {
-            public string RoomId { get; set; }
-            public bool IsPassword { get; set; }
-            public string Name { get; set; }
+            public string roomId;
+            public bool isPassword;
+            public string name;
         }
 
+        [Serializable]
         public class RoomJoinRequest
         {
-            public string RoomId { get; set; }
+            public string roomId;
         }
     }
 }

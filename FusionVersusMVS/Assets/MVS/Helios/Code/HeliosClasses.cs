@@ -463,14 +463,22 @@ namespace MVS.Helios
         public void Destroy(uint id)
         {
             var obj = HeliosNetwork.HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.InstanceID == id);
+
             if (obj)
             {
-                var RemovePkt = new C_REMOVE_NETWORK_OBJECTS();
-                ObjectInfo objectInfo = obj.ObjectInfo;
-                RemovePkt.ObjectInfos.Add(objectInfo);
-                HeliosNetwork.RaiseEvent(EventCode.PKT_C_REMOVE_NETWORK_OBJECTS, RemovePkt);
-                HeliosNetwork.HeliosObjectList.Remove(obj);
-                GameObject.Destroy(obj.gameObject);
+                if (obj.IsMine)
+                {
+                    var RemovePkt = new C_REMOVE_NETWORK_OBJECTS();
+                    ObjectInfo objectInfo = obj.ObjectInfo;
+                    RemovePkt.ObjectInfos.Add(objectInfo);
+                    HeliosNetwork.RaiseEvent(EventCode.PKT_C_REMOVE_NETWORK_OBJECTS, RemovePkt);
+                    HeliosNetwork.HeliosObjectList.Remove(obj);
+                    GameObject.Destroy(obj.gameObject);
+                }
+                else
+                {
+                    GameObject.Destroy(obj.gameObject);
+                }
             }
         }
     }

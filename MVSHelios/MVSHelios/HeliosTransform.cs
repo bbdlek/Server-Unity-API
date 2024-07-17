@@ -45,6 +45,7 @@ namespace MVS.Helios
         public bool syncRotation = true;
         public bool syncScale = true;
 
+        [Range(1, 100)]
         public float smoothness;
 
         private bool _isMine;
