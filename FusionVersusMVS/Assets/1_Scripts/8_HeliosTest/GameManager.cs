@@ -354,7 +354,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         
         if (Input.GetKeyDown(KeyCode.P))
         {
-            RPC(nameof(PendulumRPC), null);
+            RPC(nameof(PendulumRPC), null, new GameObject());
             RPC("AddScore", targetPlayerIDs: null, 3, 6);
             // RPC("AddScore", targetPlayerIDs: new uint[] {100, 200, 300}, 3, 6);
             // AddScore();

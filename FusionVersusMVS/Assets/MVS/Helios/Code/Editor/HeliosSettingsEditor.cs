@@ -24,6 +24,8 @@ namespace MVS.Helios
 
         private void AddHeliosObjectPrefabs(HeliosSettings settings)
         {
+            settings.NetworkPrefabs.Prefabs = new List<HeliosObject>();
+            
             string[] guids = AssetDatabase.FindAssets("t:GameObject");
             List<GameObject> prefabsToAdd = new List<GameObject>();
             foreach (var guid in guids)
@@ -46,7 +48,6 @@ namespace MVS.Helios
                     {
                         settings.NetworkPrefabs.Prefabs.Add(comp);
                         comp.PrefabId = (uint)settings.NetworkPrefabs.FindNetworkIdByPrefab(comp);
-                        Debug.Log(comp.PrefabId);
                     }
 
                     EditorUtility.SetDirty(settings);

@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
 using Google.Protobuf;
+using UnityEngine;
 
 namespace MVS.Helios.Utility
 {
@@ -26,11 +28,27 @@ namespace MVS.Helios.Utility
         
         public static byte[] SerializeParameters(params object[] parameters)
         {
-            using (MemoryStream memoryStream = new MemoryStream())
+            try
             {
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(memoryStream, parameters);
-                return memoryStream.ToArray();
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    binaryFormatter.Serialize(memoryStream, parameters);
+                    return memoryStream.ToArray();
+                }
+            }
+            catch (SerializationException e)
+            {
+                Debug.LogError($"직렬화 가능한 변수만이 파라미터에 들어갈 수 있습니다. Serialization failed: {e.Message}");
+
+                // Log details about each parameter
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    Debug.LogError($"Parameter {i}: {parameters[i]} (Type: {parameters[i]?.GetType().Name})");
+                }
+
+                // Optionally rethrow the exception or handle it as needed
+                throw;
             }
         }
 
