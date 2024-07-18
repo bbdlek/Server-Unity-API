@@ -47,18 +47,12 @@ namespace MVS.Realtime
             }
         }
 
-        public Player GetPlayer(ulong playerId, bool findMaster = false)
+        public Player GetPlayer(ulong playerId)
         {
-            ulong id = findMaster && playerId == 0 ? MasterClientId : playerId;
-
             Player result;
-            PlayerList.TryGetValue(id, out result);
+            PlayerList.TryGetValue(playerId, out result);
 
             return result;
         }
-
-        public ulong masterClientId;
-
-        public ulong MasterClientId => masterClientId;
     }
 }

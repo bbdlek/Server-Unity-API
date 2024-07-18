@@ -1,5 +1,6 @@
 using System;
 using HybridWebSocket;
+using MVS.Helios;
 using UnityEngine.Scripting;
 
 namespace MVS.Realtime
@@ -56,10 +57,12 @@ namespace MVS.Realtime
             try
             {
                 string protocol = "ws";
-                if (peerBase.Protocol == ConnectionProtocol.WebSocketSecure)
+                if (HeliosNetwork.HeliosSettings.AppSettings.Protocol == ConnectionProtocol.WebSocketSecure)
                 {
                     protocol = "wss";
                 }
+                
+                peerBase.Listener.MVSDebug(DebugLevel.INFO, $"{protocol}://" + ConnectAddress);
                 
                 _socket = WebSocketFactory.CreateInstance($"{protocol}://" + ConnectAddress);
                 

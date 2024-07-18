@@ -60,6 +60,9 @@
             <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
         </Reference>
         <Reference Include="System.Xml"/>
+        <Reference Include="UnityEditor">
+          <HintPath>..\..\..\..\Program Files\Unity\Hub\Editor\2022.3.3f1\Editor\Data\Managed\UnityEditor.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine">
           <HintPath>..\..\..\..\..\Unity\Hub\Editor\2022.3.3f1\Editor\Data\Managed\UnityEngine.dll</HintPath>
         </Reference>

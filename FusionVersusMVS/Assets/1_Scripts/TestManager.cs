@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using MVS.Helios;
 using MVS.Realtime;
+using Protocol;
 
 public class TestManager : MonoBehaviorHeliosCallbacks
 {
@@ -35,6 +36,13 @@ public class TestManager : MonoBehaviorHeliosCallbacks
     public override void OnErrorInfo(string errorInfo) { }
 
     public override void OnMasterClientSwitched(Player newMasterClient) { }
+    public override void OnObjectInstantiated(ObjectInfo objectInfo)
+    {
+    }
+
+    public override void OnObjectDestroyed(ObjectInfo objectInfo)
+    {
+    }
 
     public override void OnCreatedGroup() { }
 

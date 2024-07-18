@@ -339,30 +339,33 @@ namespace MVS.Helios
 
         public void UpdateCustomData(ObjectInfo updatedObjectInfo)
         {
+            bool isPersonal = updatedObjectInfo.SyncType == ObjectSyncType.PersonalOwn;
+            
             foreach (var customData in updatedObjectInfo.Values)
             {
                 var key = customData.Key;
                 if(key < 3) continue;
-                var field = heliosAttributes[key];
+                var field = isPersonal? GetComponent<HeliosObject>().heliosAttributes[key] : heliosAttributes[key];
+                var mb = isPersonal? GetComponent<HeliosObject>().attributeMonoBehaviors[key] : attributeMonoBehaviors[key];
                 switch (customData.ValueCase)
                 {
                     case Protocol.HeliosVariable.ValueOneofCase.NInt32:
-                        field.SetValue(attributeMonoBehaviors[key], customData.NInt32);
+                        field.SetValue(mb, customData.NInt32);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NInt64:
-                        field.SetValue(attributeMonoBehaviors[key], customData.NInt64); 
+                        field.SetValue(mb, customData.NInt64); 
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NFloat:
-                        field.SetValue(attributeMonoBehaviors[key], customData.NFloat);
+                        field.SetValue(mb, customData.NFloat);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NBool:
-                        field.SetValue(attributeMonoBehaviors[key], customData.NBool);
+                        field.SetValue(mb, customData.NBool);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NDouble:
-                        field.SetValue(attributeMonoBehaviors[key], customData.NDouble);
+                        field.SetValue(mb, customData.NDouble);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NString:
-                        field.SetValue(attributeMonoBehaviors[key], customData.NString);
+                        field.SetValue(mb, customData.NString);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NVector:
                         if (field.FieldType == typeof(Vector2))
@@ -371,7 +374,7 @@ namespace MVS.Helios
                                 new Vector2(
                                     (float)customData.NVector.X,
                                     (float)customData.NVector.Y);
-                            field.SetValue(attributeMonoBehaviors[key], val);
+                            field.SetValue(mb, val);
                         } else if (field.FieldType == typeof(UnityEngine.Vector3))
                         {
                             UnityEngine.Vector3 val =
@@ -379,7 +382,7 @@ namespace MVS.Helios
                                     (float)customData.NVector.X,
                                     (float)customData.NVector.Y,
                                     (float)customData.NVector.Z);
-                            field.SetValue(attributeMonoBehaviors[key], val);
+                            field.SetValue(mb, val);
                         } else if (field.FieldType == typeof(Quaternion))
                         {
                             UnityEngine.Vector3 val =
@@ -387,7 +390,7 @@ namespace MVS.Helios
                                     (float)customData.NVector.X,
                                     (float)customData.NVector.Y,
                                     (float)customData.NVector.Z);
-                            field.SetValue(attributeMonoBehaviors[key], Quaternion.Euler(val));
+                            field.SetValue(mb, Quaternion.Euler(val));
                         }
                         break;
                     default:
@@ -402,10 +405,18 @@ namespace MVS.Helios
                             ColorUtility.TryParseHtmlString("#" + value, out Color loadedColor);
                             value = (Color32)loadedColor;
                         }
-                        field.SetValue(attributeMonoBehaviors[key], value);
+                        field.SetValue(mb, value);
                         break;
                 }
-            initialHeliosValues[key] = field.GetValue(attributeMonoBehaviors[key]);
+
+                if (isPersonal)
+                {
+                    GetComponent<HeliosObject>().initialHeliosValues[key] = field.GetValue(mb);
+                }
+                else
+                {
+                    initialHeliosValues[key] = field.GetValue(mb);   
+                }
             }
         }
     }
@@ -435,8 +446,8 @@ namespace MVS.Helios
             if(isActive) go.SetActive(false);
 
             GameObject instance = GameObject.Instantiate(go, position, rotation);
+            instance.SetActive(false);
             
-            if(isActive) go.SetActive(true);
             return instance;
         }
 
@@ -462,13 +473,20 @@ namespace MVS.Helios
         
         public void Destroy(uint id)
         {
-            var obj = HeliosNetwork.HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.InstanceID == id);
+            List<HeliosMonoBehavior> des = new List<HeliosMonoBehavior>(HeliosNetwork.HeliosObjectList);
+            var obj = des.Find(x => x.ObjectInfo.ObjectID.InstanceID == id);
+            // if(obj == null) return;
+
             if (obj)
             {
-                var RemovePkt = new C_REMOVE_NETWORK_OBJECTS();
-                ObjectInfo objectInfo = obj.ObjectInfo;
-                RemovePkt.ObjectInfos.Add(objectInfo);
-                HeliosNetwork.RaiseEvent(EventCode.PKT_C_REMOVE_NETWORK_OBJECTS, RemovePkt);
+                HeliosNetwork.RealtimeClient.OnObjectDestroyed(obj.GetComponent<HeliosObject>().ObjectInfo);
+                if (obj.IsMine)
+                {
+                    var RemovePkt = new C_REMOVE_NETWORK_OBJECTS();
+                    ObjectInfo objectInfo = obj.GetComponent<HeliosObject>().ObjectInfo;
+                    RemovePkt.ObjectInfos.Add(objectInfo);
+                    HeliosNetwork.RaiseEvent(EventCode.PKT_C_REMOVE_NETWORK_OBJECTS, RemovePkt);
+                }
                 HeliosNetwork.HeliosObjectList.Remove(obj);
                 GameObject.Destroy(obj.gameObject);
             }
@@ -512,6 +530,8 @@ namespace MVS.Helios
         public abstract void OnPlayerLeftRoom(Player otherPlayer);
 
         public abstract void OnMasterClientSwitched(Player newMasterClient);
+        public abstract void OnObjectInstantiated(ObjectInfo objectInfo);
+        public abstract void OnObjectDestroyed(ObjectInfo objectInfo);
 
         public abstract void OnCreatedGroup();
 

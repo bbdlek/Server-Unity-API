@@ -205,12 +205,12 @@ namespace MVS.Realtime
                 Listener.MVSDebug(DebugLevel.ERROR, $"packet result : {packet.Result}");
                 return false;
             }
-
             OperationResponse opData = new OperationResponse
             {
                 OperationCode = (OperationCode)packet.OperationCode,
                 ReturnCode = 0,
-                FixedData = packet.FixedData.ToByteArray()
+                FixedData = packet.FixedData.ToByteArray(),
+                Sender = new Player(packet.Sender)
             };
             foreach (var hv in packet.CustomData)
             {

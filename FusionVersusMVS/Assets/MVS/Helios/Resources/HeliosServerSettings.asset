@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: HeliosServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppId: 8f9dfaba-1d6b-47e4-bb0c-966e0070f652
+    AppId: 5b67d791-7bd0-4f2c-b523-a66e8e0a4e57
     AppVersion: 
     FixedRegion: 
     NameServer: 222.122.186.49
-    MVM: 127.0.0.1:8091
+    MVM: 222.122.186.54
     Server: 192.168.154.130
     Port: 30001
     IsUsingNameServer: 1

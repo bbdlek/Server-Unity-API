@@ -14,10 +14,17 @@ public class CubeManager : HeliosMonoBehavior
     public int score = 1;
     [HNSync] public int score2 = 3;
 
+    public override void Awake()
+    {
+        base.Awake();
+        if(IsMine)
+            RPC("AddScore");
+    }
+
     private void Start()
     {
-        // if(IsMine)
-            // RPC("AddScore");
+        if(IsMine)
+            RPC("AddScore");
     }
 
     private void Update()

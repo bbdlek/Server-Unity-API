@@ -47,8 +47,6 @@ namespace MVS.Helios
 
         [Range(1, 100)]
         public float smoothness;
-
-        private bool _isMine;
         
         private HeliosObject _heliosObject;
         
@@ -57,7 +55,7 @@ namespace MVS.Helios
         private void Awake()
         {
             _heliosObject = GetComponent<HeliosObject>();
-            _isMine = _heliosObject.IsMine;
+            
             _storedPosition = transform.position;
             networkPosition = _storedPosition;
 
@@ -71,7 +69,7 @@ namespace MVS.Helios
         private void Update()
         {
             //Read?
-            if(!_isMine)
+            if(!IsMine)
             {
                 if(syncPosition)
                 {
@@ -100,7 +98,7 @@ namespace MVS.Helios
             
             if (_elapsedTime >= 1f / HeliosNetwork.SendRate)
             {
-                if (_isMine && (HasPositionChanged(transform.position) || HasRotationChanged(transform.rotation) || HasScaleChanged(transform.localScale))) {
+                if (IsMine && (HasPositionChanged(transform.position) || HasRotationChanged(transform.rotation) || HasScaleChanged(transform.localScale))) {
                     var fixedData = new C_UPDATE_NETWORK_OBJECTS();
                     var _objectInfo = new ObjectInfo
                     {

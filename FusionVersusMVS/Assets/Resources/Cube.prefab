@@ -23,7 +23,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6674065332816796317
 Transform:
   m_ObjectHideFlags: 0
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefabId: 5
   _instanceId: 0
-  _clientInstanceId: 0
+  _clientInstanceId: 4294967295
   heliosTransform: {fileID: 0}
 --- !u!54 &-2500174006590929170
 Rigidbody:
@@ -188,7 +188,7 @@ MonoBehaviour:
   syncPosition: 1
   syncRotation: 1
   syncScale: 1
-  smoothness: 0
+  smoothness: 10
 --- !u!114 &-5747347219559409451
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -98,6 +98,8 @@ namespace MVS.Helios
                                     heliosMonoBehavior.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
                                     // heliosMonoBehavior.hasInstanceId = true;
                                 }
+                                obj.gameObject.SetActive(true);
+                                RealtimeClient.OnObjectInstantiated(objectInfo);
                             }   
                         }
                     }
@@ -151,8 +153,6 @@ namespace MVS.Helios
                         RaiseEvent(EventCode.PKT_C_ADD_NETWORK_OBJECTS, pkt);
                     }
                     break;
-                case OperationCode.PLAYER_ID:
-                    break;
             }
         }
 
@@ -175,10 +175,15 @@ namespace MVS.Helios
 
         public static void RemoveMyObjects()
         {
-            foreach (var obj in HeliosObjectList)
+            List<HeliosMonoBehavior> removeObjects = new List<HeliosMonoBehavior>(HeliosObjectList);
+            
+            foreach (var obj in removeObjects)
             {
-                if(obj.GetComponent<HeliosObject>().IsMine)
-                    NetworkRemoveObject(obj.ObjectInfo.ObjectID.InstanceID);
+                if(obj.GetComponent<HeliosObject>())
+                {
+                    if (obj.GetComponent<HeliosObject>().IsMine)
+                        NetworkRemoveObject(obj.ObjectInfo.ObjectID.InstanceID);
+                }
             }
         }
     }

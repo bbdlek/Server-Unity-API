@@ -32,6 +32,24 @@ namespace MVS.Realtime
                 }
             }
         }
+        
+        // Task 기반 비동기 GET 요청 메소드
+        public static Task<string> GetAsync(string url)
+        {
+            var tcs = new TaskCompletionSource<string>();
+            GetAsync(ConnectionHandler.Instance, url, (result, exception) =>
+            {
+                if (exception != null)
+                {
+                    tcs.SetException(exception);
+                }
+                else
+                {
+                    tcs.SetResult(result);
+                }
+            });
+            return tcs.Task;
+        }
 
         // POST 요청 메소드 (Coroutine)
         public static Coroutine PostAsync<TRequest, TResponse>(MonoBehaviour owner, string url, TRequest requestData, Action<TResponse, Exception> callback)
@@ -64,6 +82,24 @@ namespace MVS.Realtime
                     callback?.Invoke(default(TResponse), new Exception(webRequest.error));
                 }
             }
+        }
+        
+        // Task 기반 비동기 POST 요청 메소드
+        public static Task<TResponse> PostAsync<TRequest, TResponse>(string url, TRequest requestData)
+        {
+            var tcs = new TaskCompletionSource<TResponse>();
+            PostAsync<TRequest, TResponse>(ConnectionHandler.Instance, url, requestData, (response, exception) =>
+            {
+                if (exception != null)
+                {
+                    tcs.SetException(exception);
+                }
+                else
+                {
+                    tcs.SetResult(response);
+                }
+            });
+            return tcs.Task;
         }
     }
 }

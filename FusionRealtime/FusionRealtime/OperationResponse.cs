@@ -9,7 +9,7 @@ namespace MVS.Realtime
 
         public short ReturnCode;
         
-        private ulong _sender;
+        public Player Sender;
 
         public byte[] FixedData;
         

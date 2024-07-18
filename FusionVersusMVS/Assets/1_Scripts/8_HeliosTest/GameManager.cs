@@ -1,13 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using MVS.Helios;
 using MVS.Realtime;
+using Protocol;
 using QFSW.QC;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using Vector3 = UnityEngine.Vector3;
 
 [Serializable]
 public class Costume
@@ -85,6 +88,14 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         score3 += added2;
     }
 
+    public GameObject testCube;
+    
+    [HeliosRPC]
+    private void PendulumRPC()
+    {
+        testCube.transform.DOLocalMoveY(Random.Range(-1f, 1f), 0.1f);
+    }
+
     [HeliosRPC]
     public void ChangeVec2()
     {
@@ -128,9 +139,9 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     public async void OnClickRoomTaskBtn()
     {
-        HeliosNetwork.GetRoomList();
         Debug.Log("[ROOM LIST]");
-        foreach (var room in HeliosNetwork.RoomList)
+        // Debug.Log(HeliosNetwork.RoomList);
+        foreach (var room in await HeliosNetwork.GetRoomList())
         {
             Debug.Log($"\tRoomID : {room.RoomInfo.RoomID}, RoomName : {room.RoomInfo.Name}");
         }
@@ -280,16 +291,20 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Debug.Log(newPlayer.NickName);
+        Debug.Log(HeliosNetwork.PlayerList.Count);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        
+        Debug.Log(otherPlayer.NickName);
+        Debug.Log(HeliosNetwork.PlayerList.Count);
     }
 
     public override void OnPlayerEnteredGroup(Player newPlayer)
     {
         Debug.Log(newPlayer.NickName);
+        Debug.Log(HeliosNetwork.PlayerList.Count);
+        RPC("AddScore", targetPlayerIDs: null, 3, 6);
     }
 
     public override void OnPlayerLeftGroup(Player leftPlayer)
@@ -313,6 +328,16 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         Debug.Log($"Am I Master? {HeliosNetwork.CurrentGroup.IsLocalGroupOwner}");
     }
 
+    public override void OnObjectInstantiated(ObjectInfo objectInfo)
+    {
+        Debug.Log(objectInfo.ObjectID);
+    }
+
+    public override void OnObjectDestroyed(ObjectInfo objectInfo)
+    {
+        Debug.Log(objectInfo.ObjectID);
+    }
+
     public override void OnCreatedGroup()
     {
         
@@ -326,8 +351,10 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     private void Update()
     {
+        
         if (Input.GetKeyDown(KeyCode.P))
         {
+            RPC(nameof(PendulumRPC));
             RPC("AddScore", targetPlayerIDs: null, 3, 6);
             // RPC("AddScore", targetPlayerIDs: new uint[] {100, 200, 300}, 3, 6);
             // AddScore();

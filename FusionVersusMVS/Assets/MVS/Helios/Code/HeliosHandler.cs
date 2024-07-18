@@ -231,6 +231,16 @@ namespace MVS.Helios
             
         }
 
+        public void OnObjectInstantiated(ObjectInfo objectInfo)
+        {
+            
+        }
+
+        public void OnObjectDestroyed(ObjectInfo objectInfo)
+        {
+            
+        }
+
         public void OnPlayerEnteredGroup(Player newPlayer)
         {
             

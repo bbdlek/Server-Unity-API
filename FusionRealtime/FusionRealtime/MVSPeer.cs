@@ -42,7 +42,7 @@ namespace MVS.Realtime
 #if UNITY_WEBGL && !UNITY_EDITOR
             SocketImplementationConfig[ConnectionProtocol.WebSocket] = typeof(MVSWebGLSocket);
             SocketImplementationConfig[ConnectionProtocol.WebSocketSecure] = typeof(MVSWebGLSocket);
-#else
+#elif UNITY_WEBGL && UNITY_EDITOR
             SocketImplementationConfig[ConnectionProtocol.WebSocket] = typeof(MVSWebSocket);
             SocketImplementationConfig[ConnectionProtocol.WebSocketSecure] = typeof(MVSWebSocket);
 #endif

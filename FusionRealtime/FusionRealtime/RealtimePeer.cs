@@ -32,6 +32,7 @@ namespace MVS.Realtime
 
         private void ConfigUnitySockets()
         {
+            
             Type websocketType = null;
             websocketType = Type.GetType("MVS.Realtime.MVSWebGLSocket, MVSWebSocket", false);
             if (websocketType == null)
