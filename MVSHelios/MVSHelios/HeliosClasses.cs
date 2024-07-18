@@ -111,9 +111,34 @@ namespace MVS.Helios
             var parameters = HeliosUtility.DeserializeParameters(methodArgs);
             var method = RPCMethods[methodNameHash].Item1;
             var ho = RPCMethods[methodNameHash].Item2;
+            
+            var parameterInfos = method.GetParameters();
+            object[] finalParameters = new object[parameterInfos.Length];
+            
+            for (int i = 0; i < parameterInfos.Length; i++)
+            {
+                if (i < parameters.Length)
+                {
+                    finalParameters[i] = parameters[i];
+                }
+                else
+                {
+                    // 기본값이 있는 매개변수일 경우 기본값 적용
+                    if (parameterInfos[i].IsOptional)
+                    {
+                        finalParameters[i] = parameterInfos[i].DefaultValue;
+                    }
+                    else
+                    {
+                        Debug.LogError($"매개변수 {i}번째에 값이 제공되지 않았으며 기본값도 없습니다.");
+                        return;
+                    }
+                }
+            }
+            
             try
             {
-                method.Invoke(ho, parameters);
+                method.Invoke(ho, finalParameters);
             }
             catch (Exception e)
             {

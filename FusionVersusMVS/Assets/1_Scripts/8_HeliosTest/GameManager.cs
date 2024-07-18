@@ -91,9 +91,9 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     public GameObject testCube;
     
     [HeliosRPC]
-    private void PendulumRPC()
+    private void PendulumRPC(float max = 1f, float min = 2f)
     {
-        testCube.transform.DOLocalMoveY(Random.Range(-1f, 1f), 0.1f);
+        Debug.Log($"max : {max}, min : {min}");
     }
 
     [HeliosRPC]
@@ -354,7 +354,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         
         if (Input.GetKeyDown(KeyCode.P))
         {
-            RPC(nameof(PendulumRPC));
+            RPC(nameof(PendulumRPC), null);
             RPC("AddScore", targetPlayerIDs: null, 3, 6);
             // RPC("AddScore", targetPlayerIDs: new uint[] {100, 200, 300}, 3, 6);
             // AddScore();
