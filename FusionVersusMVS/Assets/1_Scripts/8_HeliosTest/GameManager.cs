@@ -58,9 +58,14 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     public int score2;
     public int score3;
-    [HNSync] public int test;
+    [HNSync, OnChanged(nameof(OnChangedVec))] public int test;
 
     [HNSync] public Vector2 testVec2 = new Vector2(2, 3);
+
+    private void OnChangedVec()
+    {
+        Debug.Log("OnChangedVec");
+    }
 
     [HNSync] public List<int> testList = new List<int>(){1, 2, 3};
 
@@ -371,7 +376,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
         if (Input.GetKeyDown(KeyCode.O))
         {
-            RPC("ChangeVec2", new[] { HeliosNetwork.LocalPlayer.UserId });
+            RPC("ChangeVec2");
         }
     }
 }

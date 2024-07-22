@@ -45,6 +45,9 @@ namespace MVS.Helios
         }
 
         public Dictionary<int, FieldInfo> heliosAttributes = new Dictionary<int, FieldInfo>();
+
+        public Dictionary<int, Tuple<string, HeliosMonoBehavior>> heliosAttributeCallbacks =
+            new Dictionary<int, Tuple<string, HeliosMonoBehavior>>();
         public Dictionary<int, HeliosMonoBehavior> attributeMonoBehaviors = new Dictionary<int, HeliosMonoBehavior>();
         public Dictionary<int, object> initialHeliosValues = new Dictionary<int, object>();
 
@@ -288,6 +291,14 @@ namespace MVS.Helios
                         if(!ho.heliosAttributes.ContainsKey(key))
                             ho.heliosAttributes.Add(key, field);
                         
+                        OnChangedAttribute callbackAttribute =
+                            (OnChangedAttribute)Attribute.GetCustomAttribute(field, typeof(OnChangedAttribute));
+                        if (callbackAttribute != null)
+                        {
+                            if(!ho.heliosAttributeCallbacks.ContainsKey(key))
+                                ho.heliosAttributeCallbacks.Add(key, Tuple.Create(callbackAttribute.MethodName, this));
+                        }
+                        
                         if(!ho.attributeMonoBehaviors.ContainsKey(key))
                             ho.attributeMonoBehaviors.Add(key, this);
                         
@@ -316,6 +327,14 @@ namespace MVS.Helios
                         //ATTRIBUTE
                         if(!heliosAttributes.ContainsKey(key))
                             heliosAttributes.Add(key, field);
+                        
+                        OnChangedAttribute callbackAttribute =
+                            (OnChangedAttribute)Attribute.GetCustomAttribute(field, typeof(OnChangedAttribute));
+                        if (callbackAttribute != null)
+                        {
+                            if(!heliosAttributeCallbacks.ContainsKey(key))
+                                heliosAttributeCallbacks.Add(key, Tuple.Create(callbackAttribute.MethodName, this));
+                        }
                         
                         if(!attributeMonoBehaviors.ContainsKey(key))
                             attributeMonoBehaviors.Add(key, this);
@@ -436,12 +455,43 @@ namespace MVS.Helios
 
                 if (isPersonal)
                 {
-                    GetComponent<HeliosObject>().initialHeliosValues[key] = field.GetValue(mb);
+                    var ho = GetComponent<HeliosObject>(); 
+                    ho.initialHeliosValues[key] = field.GetValue(mb);
+                    if (ho.heliosAttributeCallbacks.ContainsKey(key))
+                    {
+                        CallMethodByName(ho.heliosAttributeCallbacks[key].Item2, ho.heliosAttributeCallbacks[key].Item1);
+                    }
                 }
                 else
                 {
-                    initialHeliosValues[key] = field.GetValue(mb);   
+                    initialHeliosValues[key] = field.GetValue(mb);
+                    if (heliosAttributeCallbacks.ContainsKey(key))
+                    {
+                        CallMethodByName(heliosAttributeCallbacks[key].Item2, heliosAttributeCallbacks[key].Item1);
+                    }
                 }
+                
+                
+            }
+        }
+        
+        internal void CallMethodByName(HeliosMonoBehavior behavior, string methodName)
+        {
+            // Get the type of the current class
+            Type type = behavior.GetType();
+
+            // Get the method information using the method name
+            var methodInfo = type.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
+
+            // Check if the method exists and is not null
+            if (methodInfo != null)
+            {
+                // Invoke the method on the current instance
+                methodInfo.Invoke(behavior, null);
+            }
+            else
+            {
+                Debug.LogWarning("Method " + methodName + " not found in " + type);
             }
         }
     }

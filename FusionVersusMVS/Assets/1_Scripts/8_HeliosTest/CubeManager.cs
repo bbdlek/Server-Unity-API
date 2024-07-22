@@ -12,7 +12,12 @@ public class CubeManager : HeliosMonoBehavior
     }
 
     public int score = 1;
-    [HNSync] public int score2 = 3;
+    [HNSync, OnChanged(nameof(OnChangeScore2))] public int score2 = 3;
+
+    private void OnChangeScore2()
+    {
+        Debug.Log($"OnChangeScore2 {score2}");
+    }
 
     public override void Awake()
     {

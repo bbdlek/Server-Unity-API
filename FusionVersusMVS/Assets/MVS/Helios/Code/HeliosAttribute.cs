@@ -7,4 +7,15 @@ namespace MVS.Helios
     {
         public HeliosMonoBehavior Owner;
     }
+    
+    [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Property | AttributeTargets.Field)]
+    public class OnChangedAttribute : Attribute
+    {
+        public string MethodName { get; }
+
+        public OnChangedAttribute(string methodName)
+        {
+            MethodName = methodName;
+        }
+    }
 }
