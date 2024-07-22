@@ -102,7 +102,7 @@ namespace MVS.Helios
         
         public static float MinimalTimeScaleToDispatchInFixedUpdate = -1f;
 
-        // public static List<Room> RoomList => GetRoomList();
+        // public static List<Room> RoomList => RealtimeClient.MvsRoomInfos;
 
         public static Room CurrentRoom => RealtimeClient == null ? null : RealtimeClient.CurrentRoom;
 
@@ -273,7 +273,7 @@ namespace MVS.Helios
         }
         
         // TODO : RPC
-        public static bool RPC(ObjectID objectID, string methodName, uint[] targetPlayers, params object[] args)
+        public static bool RPC(ObjectID objectID, string methodName, ulong[] targetPlayers, params object[] args)
         {
             // Debug.Log($"CI : {objectID.ClientInstanceID}, I : {objectID.InstanceID}");
             var fixedData = new C_RPC
@@ -521,7 +521,7 @@ namespace MVS.Helios
                 HeliosObjectList.Add(go.GetComponent<HeliosObject>());
                 FindObjectById(instantiateParams.instanceId).UpdateCustomData(saveObjInfo);
                 RealtimeClient.OnObjectInstantiated(saveObjInfo);
-                go.SetActive(true);
+                go.SetActive(_prefabPool.GetPrefabPoolActive(instantiateParams.ObjectInfo.ObjectID.PrefabID));
             }
             
             

@@ -86,7 +86,7 @@ namespace MVS.Helios
             }
         }
 
-        public void RPC(string methodName, uint[] targetPlayerIDs = null, params object[] args)
+        public void RPC(string methodName, ulong[] targetPlayerIDs = null, params object[] args)
         {
             ObjectID objectID;
             if (GetComponent<HeliosObject>())
@@ -100,7 +100,7 @@ namespace MVS.Helios
 
             if (targetPlayerIDs == null)
             {
-                targetPlayerIDs = new uint[] {0};
+                targetPlayerIDs = new ulong[] {0};
             }
             
             HeliosNetwork.RPC(objectID, methodName, targetPlayerIDs, args);
@@ -445,10 +445,11 @@ namespace MVS.Helios
             }
         }
     }
-
+    
     public class DefaultPrefabPool : IHeliosPrefabPool
     {
-        public readonly Dictionary<uint, GameObject> GOCache = new Dictionary<uint, GameObject>();
+        private readonly Dictionary<uint, GameObject> GOCache = new Dictionary<uint, GameObject>();
+        private readonly Dictionary<uint, bool> BooleanCache = new Dictionary<uint, bool>(); 
         
         public GameObject Instantiate(uint prefabId, Vector3 position, Quaternion rotation)
         {
@@ -464,6 +465,7 @@ namespace MVS.Helios
                 else
                 {
                     GOCache.Add(prefabId, go);
+                    BooleanCache.Add(prefabId, go.activeSelf);
                 }
             }
 
@@ -471,6 +473,7 @@ namespace MVS.Helios
             if(isActive) go.SetActive(false);
 
             GameObject instance = GameObject.Instantiate(go, position, rotation);
+            SetActivePrefabPool(prefabId);
             instance.SetActive(false);
             
             return instance;
@@ -515,6 +518,18 @@ namespace MVS.Helios
                 HeliosNetwork.HeliosObjectList.Remove(obj);
                 GameObject.Destroy(obj.gameObject);
             }
+        }
+
+        private void SetActivePrefabPool(uint prefabId)
+        {
+            var go = HeliosNetwork.HeliosSettings.NetworkPrefabs.FindPrefabByNetworkId(prefabId).gameObject;
+            go.SetActive(BooleanCache[prefabId]);
+        }
+
+        public bool GetPrefabPoolActive(uint prefabId)
+        {
+            var go = HeliosNetwork.HeliosSettings.NetworkPrefabs.FindPrefabByNetworkId(prefabId).gameObject;
+            return go.activeSelf;
         }
     }
 

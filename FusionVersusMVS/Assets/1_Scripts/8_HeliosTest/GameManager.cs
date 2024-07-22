@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     [HNSync] public List<int> testList = new List<int>(){1, 2, 3};
 
-    [HNSync] public Costume costume = default;
+    public Costume costume = default;
     
     // [HNSync] public Color color = new Color();
     // [HNSync] public Color32 color32 = new Color32();
@@ -86,6 +86,12 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     {
         score2 += added1;
         score3 += added2;
+    }
+    
+    [HeliosRPC]
+    private void ChangeCostume(Costume ct)
+    {
+        Debug.Log(ct);
     }
 
     public GameObject testCube;
@@ -129,6 +135,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     private void Start()
     {
         Debug.Log(HeliosNetwork.HeliosSettings.AppSettings.AppId);
+        Instantiate(testCube);
     }
 
     public async void OnClickGetMasterServer()
@@ -354,16 +361,17 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         
         if (Input.GetKeyDown(KeyCode.P))
         {
-            RPC(nameof(PendulumRPC), null, new GameObject());
+            RPC(nameof(PendulumRPC), null);
             RPC("AddScore", targetPlayerIDs: null, 3, 6);
             // RPC("AddScore", targetPlayerIDs: new uint[] {100, 200, 300}, 3, 6);
             // AddScore();
             AddTest();
+            RPC(nameof(ChangeCostume), null, costume);
         }
 
         if (Input.GetKeyDown(KeyCode.O))
         {
-            RPC("ChangeVec2", new uint[] { (uint)HeliosNetwork.LocalPlayer.UserId });
+            RPC("ChangeVec2", new[] { HeliosNetwork.LocalPlayer.UserId });
         }
     }
 }

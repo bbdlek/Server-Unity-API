@@ -17,8 +17,14 @@ public class CubeManager : HeliosMonoBehavior
     public override void Awake()
     {
         base.Awake();
+        Debug.Log(IsMine);
         if(IsMine)
             RPC("AddScore");
+    }
+
+    private void OnEnable()
+    {
+        Debug.Log("Im Enbled");
     }
 
     private void Start()

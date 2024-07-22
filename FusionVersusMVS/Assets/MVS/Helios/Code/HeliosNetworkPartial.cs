@@ -98,7 +98,9 @@ namespace MVS.Helios
                                     heliosMonoBehavior.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
                                     // heliosMonoBehavior.hasInstanceId = true;
                                 }
-                                obj.gameObject.SetActive(true);
+                                
+                                bool isActive = _prefabPool.GetPrefabPoolActive(objectInfo.ObjectID.PrefabID);;
+                                obj.gameObject.SetActive(isActive);
                                 RealtimeClient.OnObjectInstantiated(objectInfo);
                             }   
                         }
