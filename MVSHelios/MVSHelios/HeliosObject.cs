@@ -43,7 +43,7 @@ namespace MVS.Helios
             }
         }
         
-        protected bool isMine = false;
+        public bool isMine = false;
         
         public bool IsMine
         {

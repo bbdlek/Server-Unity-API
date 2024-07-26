@@ -184,6 +184,9 @@ namespace MVS.Helios
                     }
                     else ho.initialHeliosValues[i] = ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]);
                     updateObject.Values.Add(hv);
+
+                    if(ho.heliosAttributeCallbacks.ContainsKey(i))
+                        ho.CallMethodByName(ho.heliosAttributeCallbacks[i].Item2, ho.heliosAttributeCallbacks[i].Item1);
                 }
                 // data.ObjectInfos.Add(ho.ObjectInfo);
                 data.ObjectInfos.Add(updateObject);
