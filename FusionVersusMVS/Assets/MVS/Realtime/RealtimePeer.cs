@@ -19,14 +19,15 @@ namespace MVS.Realtime
     
     public class RealtimePeer : MVSPeer
     {
+        
         public RealtimePeer(ConnectionProtocol protocol) : base(protocol)
         {
-            this.ConfigUnitySockets();
+            ConfigUnitySockets();
         }
         
         public RealtimePeer(IRealtimePeerListener listener, ConnectionProtocol protocol) : this(protocol)
         {
-            base.Listener = listener;
+            Listener = listener;
             Listener.MVSDebug(DebugLevel.INFO, "RealtimePeer Created");
         }
 
@@ -45,14 +46,14 @@ namespace MVS.Realtime
 #if UNITY_WEBGL
             if (websocketType == null)
             {
-                this.Listener.MVSDebug(DebugLevel.WARNING, "SocketWebTcp type not found in the usual Assemblies. This is required as wrapper for the browser WebSocket API. Make sure to make the PhotonLibs\\WebSocket code available.");
+                UnityEngine.Debug.LogWarning("SocketWebTcp type not found in the usual Assemblies. This is required as wrapper for the browser WebSocket API. Make sure to make the PhotonLibs\\WebSocket code available.");
             }
 #endif
 
             if (websocketType != null)
             {
                 UnityEngine.Debug.Log("ConfigUnitySockets()" + websocketType);
-                this.SocketImplementationConfig[ConnectionProtocol.WebSocket] = websocketType;
+                SocketImplementationConfig[ConnectionProtocol.WebSocket] = websocketType;
             }
         }
 
@@ -84,6 +85,11 @@ namespace MVS.Realtime
         public virtual bool OpJoinGroup(C_GROUP_JOIN groupJoinPkt)
         {
             return SendOperation(Protocol.OperationCode.GroupJoin, groupJoinPkt);
+        }
+
+        public virtual bool OpHeartBeat(C_HEART_BEAT heartBeatPkt)
+        {
+            return SendOperation(Protocol.OperationCode.HeartBeat, heartBeatPkt);
         }
 
         public virtual bool OpAddNetworkObject(C_ADD_NETWORK_OBJECTS addNetworkObjectsPkt)

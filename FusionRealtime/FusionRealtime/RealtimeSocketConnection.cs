@@ -33,8 +33,6 @@ namespace MVS.Realtime
             if (peerBase == null || Protocol != peerBase.Protocol)
                 return false;
             
-            
-            UnityEngine.Debug.Log(Protocol != ConnectionProtocol.WebSocketSecure);
             if(Protocol != ConnectionProtocol.WebSocket && Protocol != ConnectionProtocol.WebSocketSecure)
             {
                 if (!TryParseAddress(peerBase.ServerAddress, out var address, out var port))

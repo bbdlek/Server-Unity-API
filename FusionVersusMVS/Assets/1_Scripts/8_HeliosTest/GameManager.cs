@@ -378,5 +378,10 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         {
             RPC("ChangeVec2");
         }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            HeliosNetwork.Disconnect();
+        }
     }
 }

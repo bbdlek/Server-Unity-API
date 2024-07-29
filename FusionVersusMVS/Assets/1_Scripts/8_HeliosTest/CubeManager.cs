@@ -33,7 +33,7 @@ public class CubeManager : HeliosMonoBehavior
 
     private void OnEnable()
     {
-        Debug.Log("Im Enbled");
+        
     }
 
     private void Start()

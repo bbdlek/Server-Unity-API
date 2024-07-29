@@ -80,8 +80,8 @@ namespace MVS.Realtime
                     throw new ArgumentNullException(nameof(peerBase), "peerBase cannot be null.");
                 }
                 
-                UnityEngine.Debug.Log($"SocketImplementation Type: {SocketImplementation}");
-                UnityEngine.Debug.Log($"peerBase Type: {peerBase.GetType()}");
+                peerBase.Listener.MVSDebug(DebugLevel.INFO, $"SocketImplementation Type: {SocketImplementation}");
+                peerBase.Listener.MVSDebug(DebugLevel.INFO, $"peerBase Type: {peerBase.GetType()}");
 
                 this.peerBase.realtimeSocket = (RealtimeSocketConnection)Activator.CreateInstance(SocketImplementation, peerBase);
             }

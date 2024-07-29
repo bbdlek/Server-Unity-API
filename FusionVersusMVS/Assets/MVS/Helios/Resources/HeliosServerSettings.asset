@@ -18,11 +18,11 @@ MonoBehaviour:
     FixedRegion: 
     NameServer: 222.122.186.49
     MVM: 222.122.186.54
-    Server: 192.168.154.130
+    Server: 222.122.186.54
     Port: 30001
     IsUsingNameServer: 1
     Protocol: 2
-    DebugLevel: 4
+    DebugLevel: 3
   SendRate: 30
   RunInBackground: 1
   NetworkPrefabs:

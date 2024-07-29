@@ -28,11 +28,6 @@ public class TestClient : RealtimeClient
         }
     }
 
-    public override async Task<bool> ConnectUsingSettings(AppSettings appSettings)
-    {
-        return await base.ConnectUsingSettings(appSettings);
-    }
-
     public override void MVSDebug(DebugLevel debugLevel, string msg)
     {
         base.MVSDebug(debugLevel, msg);

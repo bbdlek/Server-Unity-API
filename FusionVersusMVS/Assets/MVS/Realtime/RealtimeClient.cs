@@ -220,7 +220,7 @@ namespace MVS.Realtime
 
         #region Operations and Commands
 
-        public virtual async Task<bool> ConnectUsingSettings(AppSettings appSettings)
+        private async Task<bool> ConnectUsingSettings(AppSettings appSettings)
         {
             if (RealtimePeer.PeerState != PeerState.Disconnected)
             {
@@ -414,8 +414,9 @@ namespace MVS.Realtime
                             MVSDebug(DebugLevel.INFO, "DisconnectedFromMVS");
                             break;
                     }
-
-                    // State = ClientState.DisConnected;
+                    CurrentGroup = null;
+                    CurrentRoom = null;
+                    State = ClientState.DisConnected;
                     ConnectionCallbacksTarget.OnDisconnected();
                     break;
                 case StatusCode.Exception:
@@ -658,8 +659,6 @@ namespace MVS.Realtime
             CurrentRoom.RealtimeClient = this;
             await OpGroupTask();
             
-            Debug.Log(CurrentRoom.GroupList.Count);
-            
             foreach (var group in CurrentRoom.GroupList)
             {
                 foreach (var player in group.GroupInfo.PlayerInfos)
@@ -751,7 +750,7 @@ namespace MVS.Realtime
                     var res = await HttpModule.GetAsync($"http://{NameServerAddress}/ns/api/v1/app/{AppId}");
                     var res2 = JsonUtility.FromJson<MVMResponse>(res);
                     MasterServerAddress = res2.responseMessage[0].ipAddress;
-                    Debug.Log(MasterServerAddress);
+                    MVSDebug(DebugLevel.INFO, MasterServerAddress);
                     ConnectionCallbacksTarget.OnConnectedToMasterServer();
                 }
                 catch (Exception ex)
@@ -1023,6 +1022,12 @@ namespace MVS.Realtime
             }
 
             return RealtimePeer.SendEvent(EventCode, pkt, customData);
+        }
+
+        public void OpSendHeartBeat()
+        {
+            C_HEART_BEAT heartBeatPkt = new C_HEART_BEAT();
+            RealtimePeer.OpHeartBeat(heartBeatPkt);
         }
     }
 

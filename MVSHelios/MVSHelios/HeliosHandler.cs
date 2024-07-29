@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MVS.Helios.Utility;
 using MVS.Realtime;
@@ -43,6 +44,27 @@ namespace MVS.Helios
             else
             {
                 Destroy(this);
+            }
+        }
+        
+        private float pingInterval = 5.0f; // 5초마다 Ping 메시지 전송
+        private float timeSinceLastPing = 0.0f;
+
+        private void SendPing()
+        {
+            HeliosNetwork.RealtimeClient.OpSendHeartBeat();
+        }
+
+        private void Update()
+        {
+            if (HeliosNetwork.IsConnected)
+            {
+                timeSinceLastPing += Time.deltaTime;
+                if (timeSinceLastPing >= pingInterval)
+                {
+                    SendPing();
+                    timeSinceLastPing = 0.0f;
+                }
             }
         }
 

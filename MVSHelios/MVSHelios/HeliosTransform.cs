@@ -46,7 +46,7 @@ namespace MVS.Helios
         public bool syncScale = true;
 
         [Range(1, 100)]
-        public float smoothness;
+        public float smoothness = 50f;
         
         private HeliosObject _heliosObject;
         

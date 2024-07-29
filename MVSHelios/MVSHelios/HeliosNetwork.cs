@@ -186,7 +186,7 @@ namespace MVS.Helios
                 RealtimeClient = new RealtimeClient(protocol);
             
             RealtimeClient.AppId = HeliosSettings.AppSettings.AppId;
-            Debug.Log(RealtimeClient.AppId);
+            RealtimeClient.MVSDebug(DebugLevel.INFO, HeliosSettings.AppSettings.AppId);
             RealtimeClient.AppVersion = HeliosSettings.AppSettings.AppVersion;
             RealtimeClient.AppSettingsDebug = HeliosSettings.AppSettings.DebugLevel;
             RealtimeClient.IsUsingNameServer = HeliosSettings.AppSettings.IsUsingNameServer;
@@ -256,7 +256,7 @@ namespace MVS.Helios
         public static void Disconnect()
         {
             if(RealtimeClient == null) return;
-            
+            RemoveAllObjects();
             RealtimeClient.Disconnect();
         }
         
@@ -299,7 +299,6 @@ namespace MVS.Helios
         public static async Task<string> GetMvmAddress()
         {
             _heliosSettings.AppSettings.MVM = await RealtimeClient.OpGetMvmAddress();
-            Debug.Log(_heliosSettings.AppSettings.MVM);
             IsConnectedToMaster = true;
             return _heliosSettings.AppSettings.MVM;
         }
@@ -312,6 +311,11 @@ namespace MVS.Helios
 
         public static void RoomCreateToMaster(string roomName = default, UInt64 roomId = 0)
         {
+            if (CurrentRoom != null)
+            {
+                RealtimeClient.MVSDebug(DebugLevel.WARNING, "You Already In Room");
+                return;
+            }
             var res = RealtimeClient.OpCreateAndJoinRoomToMvm(new RoomInfo(){Name = roomName, RoomID = roomId});
             if (res.IP.IsNullOrEmpty()) return;
             HeliosSettings.AppSettings.Server = res.IP;
@@ -319,6 +323,11 @@ namespace MVS.Helios
 
         public static void RoomJoinToMaster(UInt64 roomId = 0)
         {
+            if (CurrentRoom != null)
+            {
+                RealtimeClient.MVSDebug(DebugLevel.WARNING, "You Already In Room");
+                return;
+            }
             var res = RealtimeClient.OpJoinRoomToMvm(roomId);
             if (res.IP.IsNullOrEmpty()) return;
             HeliosSettings.AppSettings.Server = res.IP;
@@ -351,10 +360,16 @@ namespace MVS.Helios
         {
             // if (!IsConnectedAndReady) return false;
             // Debug.Log(CurrentGroup);
+            if (CurrentRoom == null)
+            {
+                RealtimeClient.MVSDebug(DebugLevel.WARNING, "You're not in Room");
+                return false;
+            }
+            
             if (CurrentGroup.GroupInfo.GroupID.SceneNumber != sceneNumber ||
                 CurrentGroup.GroupInfo.GroupID.ChannelID != channelID)
             {
-                // RemoveMyObjects();
+                RemoveMyObjects();
                 
                 List<HeliosMonoBehavior> removeObjects = new List<HeliosMonoBehavior>(HeliosObjectList);
                 foreach (var obj in removeObjects)

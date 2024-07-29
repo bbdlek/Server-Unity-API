@@ -181,10 +181,31 @@ namespace MVS.Helios
             
             foreach (var obj in removeObjects)
             {
+                if (obj == null)
+                {
+                    continue;
+                }
                 if(obj.GetComponent<HeliosObject>())
                 {
                     if (obj.GetComponent<HeliosObject>().IsMine)
                         NetworkRemoveObject(obj.ObjectInfo.ObjectID.InstanceID);
+                }
+            }
+        }
+
+        public static void RemoveAllObjects()
+        {
+            List<HeliosMonoBehavior> removeObjects = new List<HeliosMonoBehavior>(HeliosObjectList);
+            
+            foreach (var obj in removeObjects)
+            {
+                if (obj == null)
+                {
+                    continue;
+                }
+                if(obj.GetComponent<HeliosObject>())
+                {
+                    NetworkRemoveObject(obj.ObjectInfo.ObjectID.InstanceID);
                 }
             }
         }
