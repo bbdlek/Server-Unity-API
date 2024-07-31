@@ -4,23 +4,21 @@ namespace MVS.Realtime
 {
     public class Room
     {
-        public RealtimeClient RealtimeClient { get; set; }
-        public Room(RoomInfo roomInfo)
+        internal RealtimeClient RealtimeClient { get; set; }
+        internal Room(RoomInfo roomInfo)
         {
             RoomInfo = roomInfo;
         }
-        
-        private RoomInfo _roomInfo;
-        
-        public RoomInfo RoomInfo
-        {
-            get => _roomInfo;
-            set => _roomInfo = value;
-        }
+
+        internal RoomInfo RoomInfo { get; private set; }
 
         private List<Group> _groupList = new List<Group>();
 
         public List<Group> GroupList => _groupList;
+
+        public string RoomName => RoomInfo.Name;
+
+        public ulong RoomID => RoomInfo.RoomID;
 
         private Dictionary<ulong, Player> _playerList = new Dictionary<ulong, Player>();
 

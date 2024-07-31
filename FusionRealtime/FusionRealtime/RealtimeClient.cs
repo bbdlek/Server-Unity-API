@@ -768,6 +768,7 @@ namespace MVS.Realtime
         /// <returns></returns>
         public async Task OpGetRoomList()
         {
+            MvsRoomInfos.Clear();
             try
             {
                 var res = await HttpModule.GetAsync($"http://{MasterServerAddress}/mvm/api/rooms");
@@ -965,6 +966,15 @@ namespace MVS.Realtime
             }
 
             bool sent = RealtimePeer.OpJoinGroup(JoinGroupPkt);
+
+            return sent;
+        }
+
+        public bool OpInitialObjects()
+        {
+            var InitialObjectPkt = new C_INITIAL_OBJECTS();
+
+            bool sent = RealtimePeer.OpInitialObjects(InitialObjectPkt);
 
             return sent;
         }

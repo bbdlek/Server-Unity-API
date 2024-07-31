@@ -7,11 +7,15 @@ namespace MVS.Realtime
     {
         public RealtimeClient RealtimeClient { get; set; }
         
-        public GroupInfo GroupInfo { get; set; }
+        internal GroupInfo GroupInfo { get; set; }
+
+        public uint SceneNumber => GroupInfo.GroupID.SceneNumber;
+
+        public uint ChannelID => GroupInfo.GroupID.ChannelID;
         
         public bool IsLocalGroupOwner { get; set; }
 
-        public Group(GroupInfo groupInfo, Room roomReference)
+        internal Group(GroupInfo groupInfo, Room roomReference)
         {
             RoomReference = roomReference;
             GroupInfo = groupInfo;
@@ -29,13 +33,13 @@ namespace MVS.Realtime
             return PlayerList;
         }
 
-        public virtual void StorePlayer(Player player)
+        internal virtual void StorePlayer(Player player)
         {
             PlayerList[player.UserId] = player;
             player.GroupReference = this;
         }
 
-        public virtual void RemovePlayer(Player player)
+        internal virtual void RemovePlayer(Player player)
         {
             if (PlayerList.ContainsKey(player.UserId))
             {
@@ -53,8 +57,8 @@ namespace MVS.Realtime
             return result;
         }
 
-        public ulong masterClientId;
+        internal ulong masterClientId;
 
-        public ulong MasterClientId => masterClientId;
+        internal ulong MasterClientId => masterClientId;
     }
 }

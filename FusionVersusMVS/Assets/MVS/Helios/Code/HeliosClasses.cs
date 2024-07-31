@@ -27,6 +27,11 @@ namespace MVS.Helios
                         b = !HeliosUtility.CheckListEquals(heliosAttributes[i].GetValue(attributeMonoBehaviors[i]),
                             initialHeliosValues[i]);
                     }
+                    else if (HeliosUtility.IsDictionaryType(heliosAttributes[i].FieldType))
+                    {
+                        b = !HeliosUtility.CheckDictionariesEqual(heliosAttributes[i].GetValue(attributeMonoBehaviors[i]),
+                            initialHeliosValues[i]);
+                    }
                     else 
                     {
                         try
@@ -450,6 +455,8 @@ namespace MVS.Helios
                         break;
                 }
             initialHeliosValues[key] = field.GetValue(attributeMonoBehaviors[key]);
+            if(heliosAttributeCallbacks.ContainsKey(key))
+                CallMethodByName(heliosAttributeCallbacks[key].Item2, heliosAttributeCallbacks[key].Item1);
             }
         }
         

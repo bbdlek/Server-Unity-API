@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using EventCode = MVS.Realtime.EventCode;
 using HeliosVariable = Protocol.HeliosVariable;
 using Vector3 = Protocol.Vector3;
@@ -46,7 +48,73 @@ namespace MVS.Helios
                 Destroy(this);
             }
         }
+
+        private void OnEnable()
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.activeSceneChanged += OnActiveSceneChanged;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.activeSceneChanged -= OnActiveSceneChanged;
+            SceneManager.sceneUnloaded -= OnSceneUnloaded;
+        }
         
+        
+        private void OnSceneUnloaded(Scene scene)
+        {
+            Debug.Log("SceneUnLoaded");
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            Debug.Log($"Scene changed to: " + scene.name);
+            HeliosNetwork.InitiateObjects();
+        }
+        
+        private void OnActiveSceneChanged(Scene previousScene, Scene newScene)
+        {
+            Debug.Log("Active scene changed from: " + previousScene.name + " to: " + newScene.name);
+        }
+        
+        
+        public IEnumerator LoadScene(string name)
+        {
+            yield return null;
+        
+            int sceneIndex = -1;
+            for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+            {
+                string path = SceneUtility.GetScenePathByBuildIndex(i);
+                string sceneName = System.IO.Path.GetFileNameWithoutExtension(path);
+                if (sceneName == name)
+                {
+                    sceneIndex = i;
+                }
+            }
+
+            HeliosNetwork.JoinGroup((uint)sceneIndex, 0);
+        
+            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneIndex);
+            asyncOperation.allowSceneActivation = false;
+
+            while (!asyncOperation.isDone)
+            {
+                Debug.Log(asyncOperation.progress);
+                Debug.Log(HeliosNetwork.CurrentGroup.SceneNumber);
+                if (asyncOperation.progress >= 0.9f && HeliosNetwork.CurrentGroup.SceneNumber == (uint)sceneIndex)
+                {
+                    Debug.Log(HeliosNetwork.CurrentGroup.SceneNumber);
+                    asyncOperation.allowSceneActivation = true;
+                }
+                yield return null;
+            }
+        }
+
         private float pingInterval = 5.0f; // 5초마다 Ping 메시지 전송
         private float timeSinceLastPing = 0.0f;
 
@@ -124,6 +192,13 @@ namespace MVS.Helios
                         if (listEquals)
                             continue;
                     }
+                    else if (HeliosUtility.IsDictionaryType(ho.heliosAttributes[i].FieldType))
+                    {
+                        bool dicEquals = HeliosUtility.CheckDictionariesEqual(ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]),
+                            ho.initialHeliosValues[i]);
+                        if (dicEquals)
+                            continue;
+                    }
                     else
                     {
                         if (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]).Equals(ho.initialHeliosValues[i]))
@@ -199,7 +274,7 @@ namespace MVS.Helios
                             break;
                     }
                     ho.ObjectInfo.Values[i] = hv;
-                    if (HeliosUtility.IsListType(ho.initialHeliosValues[i].GetType()))
+                    if (HeliosUtility.IsListType(ho.initialHeliosValues[i].GetType()) || HeliosUtility.IsDictionaryType(ho.initialHeliosValues[i].GetType()))
                     {
                         ho.initialHeliosValues[i] =
                             DeepCopyHelper.DeepCopy(ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]));

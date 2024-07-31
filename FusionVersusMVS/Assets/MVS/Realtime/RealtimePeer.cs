@@ -92,6 +92,11 @@ namespace MVS.Realtime
             return SendOperation(Protocol.OperationCode.HeartBeat, heartBeatPkt);
         }
 
+        public virtual bool OpInitialObjects(C_INITIAL_OBJECTS initialObjectsPkt)
+        {
+            return SendEvent(EventCode.PKT_C_INITIAL_OBJECTS, initialObjectsPkt);
+        }
+
         public virtual bool OpAddNetworkObject(C_ADD_NETWORK_OBJECTS addNetworkObjectsPkt)
         {
             return SendEvent(EventCode.PKT_C_ADD_NETWORK_OBJECTS, addNetworkObjectsPkt);

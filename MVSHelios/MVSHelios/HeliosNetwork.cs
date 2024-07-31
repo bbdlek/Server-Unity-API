@@ -125,20 +125,6 @@ namespace MVS.Helios
                 return new List<Player>();
             }
         }
-
-        public static List<Player> OtherPlayerList
-        {
-            get
-            {
-                Room room = CurrentRoom;
-                if (room != null)
-                {
-                    return new List<Player>(room.PlayerList.Values.OrderBy(x => x.UserId).Where(x => !x.IsLocal));
-                }
-
-                return new List<Player>();
-            }
-        }
         
         // TODO : SyncScene??
 
@@ -366,8 +352,8 @@ namespace MVS.Helios
                 return false;
             }
             
-            if (CurrentGroup.GroupInfo.GroupID.SceneNumber != sceneNumber ||
-                CurrentGroup.GroupInfo.GroupID.ChannelID != channelID)
+            if (CurrentGroup.SceneNumber != sceneNumber ||
+                CurrentGroup.ChannelID != channelID)
             {
                 RemoveMyObjects();
                 
@@ -391,6 +377,15 @@ namespace MVS.Helios
             }
 
             return RealtimeClient.OpJoinGroup(sceneNumber, channelID);
+        }
+
+        [Obsolete]
+        public static bool InitiateObjects()
+        {
+            if (CurrentGroup == null)
+                return false;
+            
+            return RealtimeClient.OpInitialObjects();
         }
 
         public static bool RaiseEvent(int eventCode, IMessage fixedData = null, List<Protocol.HeliosVariable> customData = null)

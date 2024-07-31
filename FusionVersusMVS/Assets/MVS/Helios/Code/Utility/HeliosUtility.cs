@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -74,17 +75,6 @@ namespace MVS.Helios.Utility
             }
 
             return ByteString.CopyFrom(mStream.ToArray());
-            
-            // int iSize = Marshal.SizeOf(obj);
-            //
-            // byte[] arr = new byte[iSize];
-            //
-            // IntPtr ptr = Marshal.AllocHGlobal(iSize);
-            // Marshal.StructureToPtr(obj, ptr, false);
-            // Marshal.Copy(ptr, arr, 0, iSize);
-            // Marshal.FreeHGlobal(ptr);
-            //
-            // return ByteString.CopyFrom(arr);
         }
 
         public static object ByteToObject(ByteString buffer)
@@ -123,6 +113,41 @@ namespace MVS.Helios.Utility
             }
 
             // 모든 요소가 같으면 true 반환
+            return true;
+        }
+        
+        public static bool CheckDictionariesEqual(object obj1, object obj2)
+        {
+            // 두 객체가 모두 Dictionary인지 확인
+            if (!(obj1 is IDictionary) || !(obj2 is IDictionary))
+            {
+                throw new ArgumentException("Both parameters must be dictionaries.");
+            }
+
+            IDictionary dict1 = (IDictionary)obj1;
+            IDictionary dict2 = (IDictionary)obj2;
+
+            // Dictionary의 키-값 쌍의 개수가 같은지 확인
+            if (dict1.Count != dict2.Count)
+            {
+                return false;
+            }
+
+            // 각 키에 대한 값이 같은지 확인
+            foreach (DictionaryEntry entry in dict1)
+            {
+                if (!dict2.Contains(entry.Key))
+                {
+                    return false;
+                }
+
+                if (!object.Equals(entry.Value, dict2[entry.Key]))
+                {
+                    return false;
+                }
+            }
+
+            // 모든 키-값 쌍이 같으면 true 반환
             return true;
         }
         

@@ -27,6 +27,11 @@ namespace MVS.Helios
                         b = !HeliosUtility.CheckListEquals(heliosAttributes[i].GetValue(attributeMonoBehaviors[i]),
                             initialHeliosValues[i]);
                     }
+                    else if (HeliosUtility.IsDictionaryType(heliosAttributes[i].FieldType))
+                    {
+                        b = !HeliosUtility.CheckDictionariesEqual(heliosAttributes[i].GetValue(attributeMonoBehaviors[i]),
+                            initialHeliosValues[i]);
+                    }
                     else 
                     {
                         try
@@ -383,33 +388,30 @@ namespace MVS.Helios
 
         public void UpdateCustomData(ObjectInfo updatedObjectInfo)
         {
-            bool isPersonal = updatedObjectInfo.SyncType == ObjectSyncType.PersonalOwn;
-            
             foreach (var customData in updatedObjectInfo.Values)
             {
                 var key = customData.Key;
                 if(key < 3) continue;
-                var field = isPersonal? GetComponent<HeliosObject>().heliosAttributes[key] : heliosAttributes[key];
-                var mb = isPersonal? GetComponent<HeliosObject>().attributeMonoBehaviors[key] : attributeMonoBehaviors[key];
+                var field = heliosAttributes[key];
                 switch (customData.ValueCase)
                 {
                     case Protocol.HeliosVariable.ValueOneofCase.NInt32:
-                        field.SetValue(mb, customData.NInt32);
+                        field.SetValue(attributeMonoBehaviors[key], customData.NInt32);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NInt64:
-                        field.SetValue(mb, customData.NInt64); 
+                        field.SetValue(attributeMonoBehaviors[key], customData.NInt64); 
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NFloat:
-                        field.SetValue(mb, customData.NFloat);
+                        field.SetValue(attributeMonoBehaviors[key], customData.NFloat);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NBool:
-                        field.SetValue(mb, customData.NBool);
+                        field.SetValue(attributeMonoBehaviors[key], customData.NBool);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NDouble:
-                        field.SetValue(mb, customData.NDouble);
+                        field.SetValue(attributeMonoBehaviors[key], customData.NDouble);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NString:
-                        field.SetValue(mb, customData.NString);
+                        field.SetValue(attributeMonoBehaviors[key], customData.NString);
                         break;
                     case Protocol.HeliosVariable.ValueOneofCase.NVector:
                         if (field.FieldType == typeof(Vector2))
@@ -418,7 +420,7 @@ namespace MVS.Helios
                                 new Vector2(
                                     (float)customData.NVector.X,
                                     (float)customData.NVector.Y);
-                            field.SetValue(mb, val);
+                            field.SetValue(attributeMonoBehaviors[key], val);
                         } else if (field.FieldType == typeof(UnityEngine.Vector3))
                         {
                             UnityEngine.Vector3 val =
@@ -426,7 +428,7 @@ namespace MVS.Helios
                                     (float)customData.NVector.X,
                                     (float)customData.NVector.Y,
                                     (float)customData.NVector.Z);
-                            field.SetValue(mb, val);
+                            field.SetValue(attributeMonoBehaviors[key], val);
                         } else if (field.FieldType == typeof(Quaternion))
                         {
                             UnityEngine.Vector3 val =
@@ -434,7 +436,7 @@ namespace MVS.Helios
                                     (float)customData.NVector.X,
                                     (float)customData.NVector.Y,
                                     (float)customData.NVector.Z);
-                            field.SetValue(mb, Quaternion.Euler(val));
+                            field.SetValue(attributeMonoBehaviors[key], Quaternion.Euler(val));
                         }
                         break;
                     default:
@@ -449,29 +451,12 @@ namespace MVS.Helios
                             ColorUtility.TryParseHtmlString("#" + value, out Color loadedColor);
                             value = (Color32)loadedColor;
                         }
-                        field.SetValue(mb, value);
+                        field.SetValue(attributeMonoBehaviors[key], value);
                         break;
                 }
-
-                if (isPersonal)
-                {
-                    var ho = GetComponent<HeliosObject>(); 
-                    ho.initialHeliosValues[key] = field.GetValue(mb);
-                    if (ho.heliosAttributeCallbacks.ContainsKey(key))
-                    {
-                        CallMethodByName(ho.heliosAttributeCallbacks[key].Item2, ho.heliosAttributeCallbacks[key].Item1);
-                    }
-                }
-                else
-                {
-                    initialHeliosValues[key] = field.GetValue(mb);
-                    if (heliosAttributeCallbacks.ContainsKey(key))
-                    {
-                        CallMethodByName(heliosAttributeCallbacks[key].Item2, heliosAttributeCallbacks[key].Item1);
-                    }
-                }
-                
-                
+            initialHeliosValues[key] = field.GetValue(attributeMonoBehaviors[key]);
+            if(heliosAttributeCallbacks.ContainsKey(key))
+                CallMethodByName(heliosAttributeCallbacks[key].Item2, heliosAttributeCallbacks[key].Item1);
             }
         }
         

@@ -8,6 +8,7 @@ using Protocol;
 using QFSW.QC;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
@@ -74,7 +75,14 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     // [HNSync] public Color color = new Color();
     // [HNSync] public Color32 color32 = new Color32();
 
-    [HNSync] public Dictionary<int, string> testDic = new Dictionary<int, string>();
+    [HNSync, OnChanged(nameof(OnChangedDic))] public Dictionary<int, string> testDic = new Dictionary<int, string>();
+
+    private void OnChangedDic()
+    {
+        Debug.Log("DICCCCC");
+        if(testDic.Count > 0)
+            Debug.Log(testDic[0]);
+    }
 
     public TMP_Text Txt_UserId;
     public TMP_Text Txt_IsMaster;
@@ -120,6 +128,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         test++; 
         testList.Add(10);
         testDic[0] = test.ToString();
+        Debug.Log(testDic[0]);
         enumTest = EnumTest.test2;
     }
 
@@ -334,10 +343,13 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         
     }
 
+    [HNSync] public ulong masterClientID;
+
     public override void OnMasterClientSwitched(Player masterClient)
     {
         Debug.Log($"NickName : {masterClient.NickName}, {masterClient.PlayerInfo.PlayerID}");
         Debug.Log($"Am I Master? {HeliosNetwork.CurrentGroup.IsLocalGroupOwner}");
+        masterClientID = masterClient.PlayerInfo.PlayerID;
     }
 
     public override void OnObjectInstantiated(ObjectInfo objectInfo)
@@ -377,11 +389,19 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         if (Input.GetKeyDown(KeyCode.O))
         {
             RPC("ChangeVec2");
+            // StartCoroutine(HeliosHandler.Instance.LoadScene("AdditiveScene")); 
         }
 
         if (Input.GetKeyDown(KeyCode.T))
         {
             HeliosNetwork.Disconnect();
         }
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        Debug.Log("OnDisabled");
+        
     }
 }

@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using EventCode = MVS.Realtime.EventCode;
 using HeliosVariable = Protocol.HeliosVariable;
 using Vector3 = Protocol.Vector3;
@@ -124,6 +126,13 @@ namespace MVS.Helios
                         if (listEquals)
                             continue;
                     }
+                    else if (HeliosUtility.IsDictionaryType(ho.heliosAttributes[i].FieldType))
+                    {
+                        bool dicEquals = HeliosUtility.CheckDictionariesEqual(ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]),
+                            ho.initialHeliosValues[i]);
+                        if (dicEquals)
+                            continue;
+                    }
                     else
                     {
                         if (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]).Equals(ho.initialHeliosValues[i]))
@@ -191,6 +200,12 @@ namespace MVS.Helios
                             }
                             else
                             {
+                                if (HeliosUtility.IsDictionaryType(ho.heliosAttributes[i].FieldType))
+                                {
+                                    hv.NCustom = HeliosUtility.ObjectToBytes(ho.heliosAttributes[i]
+                                        .GetValue(ho.attributeMonoBehaviors[i]));
+                                }
+                                
                                 hv.NCustom =
                                     HeliosUtility.ObjectToBytes(ho.heliosAttributes[i]
                                         .GetValue(ho.attributeMonoBehaviors[i]));    
@@ -199,7 +214,7 @@ namespace MVS.Helios
                             break;
                     }
                     ho.ObjectInfo.Values[i] = hv;
-                    if (HeliosUtility.IsListType(ho.initialHeliosValues[i].GetType()))
+                    if (HeliosUtility.IsListType(ho.initialHeliosValues[i].GetType()) || HeliosUtility.IsDictionaryType(ho.initialHeliosValues[i].GetType()))
                     {
                         ho.initialHeliosValues[i] =
                             DeepCopyHelper.DeepCopy(ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]));
