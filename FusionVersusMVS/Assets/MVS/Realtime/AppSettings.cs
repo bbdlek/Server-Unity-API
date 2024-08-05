@@ -10,6 +10,7 @@ namespace MVS.Realtime
     public class AppSettings
     {
         /// <summary> AppId for MVS Application </summary>
+        [ReadOnly]
         public string AppId;
 
         /// <summary> AppVersion for MVS Application </summary>
@@ -21,11 +22,13 @@ namespace MVS.Realtime
         /// <summary>
         /// NameServer IP for get MVM address
         /// </summary>
+        [ReadOnly]
         public string NameServer = "";
         
         /// <summary>
         /// MV Master IP for Join MVM
         /// </summary>
+        [ReadOnly]
         public string MVM = ""; 
         
         /// <summary> Server IP for MVS Application </summary>
