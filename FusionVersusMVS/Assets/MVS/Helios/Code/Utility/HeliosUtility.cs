@@ -32,12 +32,7 @@ namespace MVS.Helios.Utility
         {
             try
             {
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    BinaryFormatter binaryFormatter = new BinaryFormatter();
-                    binaryFormatter.Serialize(memoryStream, parameters);
-                    return memoryStream.ToArray();
-                }
+                return Encoding.UTF8.GetBytes(parameters.Serialize().json);
             }
             catch (SerializationException e)
             {
@@ -56,11 +51,7 @@ namespace MVS.Helios.Utility
 
         public static object[] DeserializeParameters(byte[] data)
         {
-            using (MemoryStream memoryStream = new MemoryStream(data))
-            {
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                return (object[])binaryFormatter.Deserialize(memoryStream);
-            }
+            return (object[])new SerializationData(Encoding.UTF8.GetString(data)).Deserialize();
         }
 
         public static string ObjectToString(object obj)
