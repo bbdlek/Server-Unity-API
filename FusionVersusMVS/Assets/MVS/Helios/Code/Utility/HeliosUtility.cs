@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
 using Google.Protobuf;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace MVS.Helios.Utility
@@ -60,6 +61,31 @@ namespace MVS.Helios.Utility
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
                 return (object[])binaryFormatter.Deserialize(memoryStream);
             }
+        }
+
+        public static string ObjectToString(object obj)
+        {
+            return obj.Serialize().json;
+        }
+
+        public static object StringToObject(string data)
+        {
+            return new SerializationData(data).Deserialize();
+        }
+        
+        public static ByteString ObjectToBytes2(object obj)
+        {
+            var jsonString = obj.Serialize().json;
+            Debug.Log(ByteString.CopyFrom(Encoding.UTF8.GetBytes(jsonString)));
+            return ByteString.CopyFrom(Encoding.UTF8.GetBytes(jsonString));
+        }
+
+        public static object BytesToObject2(ByteString bytes)
+        {
+            object result = null;
+            var jsonString = Encoding.UTF8.GetString(bytes.ToByteArray());
+            Debug.Log(bytes.ToByteArray());
+            return new SerializationData(jsonString).Deserialize();
         }
         
         public static ByteString ObjectToBytes(object obj)

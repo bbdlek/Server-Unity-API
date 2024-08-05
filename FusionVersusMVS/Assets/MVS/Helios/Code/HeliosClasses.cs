@@ -5,7 +5,9 @@ using System.Reflection;
 using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
+using Unity.VisualScripting;
 using UnityEngine;
+using ColorUtility = UnityEngine.ColorUtility;
 using EventCode = MVS.Realtime.EventCode;
 using HeliosVariable = Protocol.HeliosVariable;
 using Vector3 = UnityEngine.Vector3;
@@ -229,23 +231,28 @@ namespace MVS.Helios
                     }
                     else
                     {
-                        if (field.FieldType.IsSerializable)
-                        {
-                            hv.NCustom = HeliosUtility.ObjectToBytes(obj);   
-                        }
-                        else
-                        {
-                            if (field.FieldType == typeof(Color))
-                            {
-                                var objColor = ColorUtility.ToHtmlStringRGBA((Color)obj);
-                                hv.NCustom = HeliosUtility.ObjectToBytes(objColor); 
-                            } 
-                            else if (field.FieldType == typeof(Color32))
-                            {
-                                var objColor32 = ColorUtility.ToHtmlStringRGBA((Color32)obj);
-                                hv.NCustom = HeliosUtility.ObjectToBytes(objColor32); 
-                            }
-                        }
+                        hv.NCustom = HeliosUtility.ObjectToBytes2(obj);
+
+                        // hv.NString = HeliosUtility.ObjectToString(obj);
+
+
+                        // if (field.FieldType.IsSerializable)
+                        // {
+                        //     hv.NCustom = HeliosUtility.ObjectToBytes(obj);   
+                        // }
+                        // else
+                        // {
+                        //     if (field.FieldType == typeof(Color))
+                        //     {
+                        //         var objColor = ColorUtility.ToHtmlStringRGBA((Color)obj);
+                        //         hv.NCustom = HeliosUtility.ObjectToBytes(objColor); 
+                        //     } 
+                        //     else if (field.FieldType == typeof(Color32))
+                        //     {
+                        //         var objColor32 = ColorUtility.ToHtmlStringRGBA((Color32)obj);
+                        //         hv.NCustom = HeliosUtility.ObjectToBytes(objColor32); 
+                        //     }
+                        // }
                     }
                     if (GetComponent<HeliosObject>())
                     {
@@ -393,6 +400,7 @@ namespace MVS.Helios
                 var key = customData.Key;
                 if(key < 3) continue;
                 var field = heliosAttributes[key];
+                Debug.Log(field.Name);
                 switch (customData.ValueCase)
                 {
                     case Protocol.HeliosVariable.ValueOneofCase.NInt32:
@@ -440,17 +448,19 @@ namespace MVS.Helios
                         }
                         break;
                     default:
-                        var value = HeliosUtility.ByteToObject(customData.NCustom);
-                        if (field.FieldType == typeof(Color))
-                        {
-                            ColorUtility.TryParseHtmlString("#" + value, out Color loadedColor);
-                            value = loadedColor;
-                        }
-                        else if (field.FieldType == typeof(Color32))
-                        {
-                            ColorUtility.TryParseHtmlString("#" + value, out Color loadedColor);
-                            value = (Color32)loadedColor;
-                        }
+                        // var value = HeliosUtility.ByteToObject(customData.NCustom);
+                        // if (field.FieldType == typeof(Color))
+                        // {
+                        //     ColorUtility.TryParseHtmlString("#" + value, out Color loadedColor);
+                        //     value = loadedColor;
+                        // }
+                        // else if (field.FieldType == typeof(Color32))
+                        // {
+                        //     ColorUtility.TryParseHtmlString("#" + value, out Color loadedColor);
+                        //     value = (Color32)loadedColor;
+                        // }
+                        Debug.Log(customData.NCustom);
+                        var value = HeliosUtility.BytesToObject2(customData.NCustom); 
                         field.SetValue(attributeMonoBehaviors[key], value);
                         break;
                 }

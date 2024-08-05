@@ -68,7 +68,8 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         Debug.Log("OnChangedVec");
     }
 
-    [HNSync] public List<int> testList = new List<int>(){1, 2, 3};
+    // [HNSync]
+    public List<int> testList = new List<int>(){1, 2, 3};
 
     public Costume costume = default;
     
@@ -92,7 +93,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         test1, test2
     }
 
-    [HNSync] public EnumTest enumTest = EnumTest.test1;
+    public EnumTest enumTest = EnumTest.test1;
 
     [HeliosRPC]
     public void AddScore(int added1, int added2)

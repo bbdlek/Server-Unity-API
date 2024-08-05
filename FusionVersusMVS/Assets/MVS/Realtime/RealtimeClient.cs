@@ -855,6 +855,8 @@ namespace MVS.Realtime
                         RoomID = RoomJoinInfo.RoomID,
                     });
 
+                    Debug.Log(RoomJoinInfo.IP);
+                    Debug.Log(RoomJoinInfo.Port);
                     await Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
                 });
             return default;
