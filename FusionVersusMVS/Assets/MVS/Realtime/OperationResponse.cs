@@ -15,7 +15,7 @@ namespace MVS.Realtime
         
         public List<Protocol.HeliosVariable> CustomData;
 
-        public string ToString()
+        public override string ToString()
         {
             return $"OperationCode: {OperationCode}, ReturnCode: {ReturnCode}";
         }

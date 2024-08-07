@@ -17,7 +17,6 @@ namespace MVS.Realtime
         [Preserve]
         public MVSTcpSocket(PeerBase peerBase) : base(peerBase)
         {
-            Listener.MVSDebug(DebugLevel.INFO, $"{peerBase.ServerAddress}");
             Listener.MVSDebug(DebugLevel.INFO, "SocketTcp, .Net, Unity");
             
             // 데이터 수신을 폴링하지 않음
@@ -214,6 +213,7 @@ namespace MVS.Realtime
                     }
                 }
                 State = RealtimeSocketState.Disconnected;
+                Listener.OnStatusChanged(StatusCode.Disconnect);
             }
             return true;
         }

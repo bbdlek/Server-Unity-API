@@ -45,7 +45,7 @@ namespace MVS.Helios
         
         public bool isMine = false;
         
-        public bool IsMine
+        public new bool IsMine
         {
             get
             {

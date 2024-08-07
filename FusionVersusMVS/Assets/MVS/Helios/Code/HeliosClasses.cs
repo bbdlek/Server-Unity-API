@@ -231,28 +231,28 @@ namespace MVS.Helios
                     }
                     else
                     {
-                        hv.NCustom = HeliosUtility.ObjectToBytes2(obj);
+                        // hv.NCustom = HeliosUtility.ObjectToBytes2(obj);
 
                         // hv.NString = HeliosUtility.ObjectToString(obj);
 
 
-                        // if (field.FieldType.IsSerializable)
-                        // {
-                        //     hv.NCustom = HeliosUtility.ObjectToBytes(obj);   
-                        // }
-                        // else
-                        // {
-                        //     if (field.FieldType == typeof(Color))
-                        //     {
-                        //         var objColor = ColorUtility.ToHtmlStringRGBA((Color)obj);
-                        //         hv.NCustom = HeliosUtility.ObjectToBytes(objColor); 
-                        //     } 
-                        //     else if (field.FieldType == typeof(Color32))
-                        //     {
-                        //         var objColor32 = ColorUtility.ToHtmlStringRGBA((Color32)obj);
-                        //         hv.NCustom = HeliosUtility.ObjectToBytes(objColor32); 
-                        //     }
-                        // }
+                        if (field.FieldType.IsSerializable)
+                        {
+                            hv.NCustom = HeliosUtility.ObjectToBytes(obj);   
+                        }
+                        else
+                        {
+                            if (field.FieldType == typeof(Color))
+                            {
+                                var objColor = ColorUtility.ToHtmlStringRGBA((Color)obj);
+                                hv.NCustom = HeliosUtility.ObjectToBytes(objColor); 
+                            } 
+                            else if (field.FieldType == typeof(Color32))
+                            {
+                                var objColor32 = ColorUtility.ToHtmlStringRGBA((Color32)obj);
+                                hv.NCustom = HeliosUtility.ObjectToBytes(objColor32); 
+                            }
+                        }
                     }
                     if (GetComponent<HeliosObject>())
                     {
@@ -460,7 +460,7 @@ namespace MVS.Helios
                         //     value = (Color32)loadedColor;
                         // }
                         Debug.Log(customData.NCustom);
-                        var value = HeliosUtility.BytesToObject2(customData.NCustom); 
+                        var value = HeliosUtility.ByteToObject(customData.NCustom); 
                         field.SetValue(attributeMonoBehaviors[key], value);
                         break;
                 }

@@ -31,6 +31,12 @@ public class CubeManager : HeliosMonoBehavior
             RPC("AddScore");
     }
 
+    public void RPC_AddScore()
+    {
+        if(IsMine)
+            RPC("AddScore");
+    }
+
     private void OnEnable()
     {
         

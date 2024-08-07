@@ -188,13 +188,13 @@ namespace MVS.Helios
                         default:
                             if (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]) is Color)
                             {
-                                hv.NCustom = HeliosUtility.ObjectToBytes2(ColorUtility.ToHtmlStringRGBA((Color)ho
+                                hv.NCustom = HeliosUtility.ObjectToBytes(ColorUtility.ToHtmlStringRGBA((Color)ho
                                     .heliosAttributes[i]
                                     .GetValue(ho.attributeMonoBehaviors[i])));
                             }
                             else if (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]) is Color32)
                             {
-                                hv.NCustom = HeliosUtility.ObjectToBytes2(ColorUtility.ToHtmlStringRGBA((Color32)ho
+                                hv.NCustom = HeliosUtility.ObjectToBytes(ColorUtility.ToHtmlStringRGBA((Color32)ho
                                     .heliosAttributes[i]
                                     .GetValue(ho.attributeMonoBehaviors[i])));
                             }
@@ -202,12 +202,12 @@ namespace MVS.Helios
                             {
                                 if (HeliosUtility.IsDictionaryType(ho.heliosAttributes[i].FieldType))
                                 {
-                                    hv.NCustom = HeliosUtility.ObjectToBytes2(ho.heliosAttributes[i]
+                                    hv.NCustom = HeliosUtility.ObjectToBytes(ho.heliosAttributes[i]
                                         .GetValue(ho.attributeMonoBehaviors[i]));
                                 }
                                 
                                 hv.NCustom =
-                                    HeliosUtility.ObjectToBytes2(ho.heliosAttributes[i]
+                                    HeliosUtility.ObjectToBytes(ho.heliosAttributes[i]
                                         .GetValue(ho.attributeMonoBehaviors[i]));    
                             }
                             

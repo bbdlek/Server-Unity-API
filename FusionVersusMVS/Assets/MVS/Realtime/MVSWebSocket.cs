@@ -93,7 +93,7 @@ namespace MVS.Realtime
             {
                 protocol = "wss";
             }
-
+            
             string url = $"{protocol}://{peerBase.ServerAddress}";
             peerBase.Listener.MVSDebug(DebugLevel.INFO, url);
             ws = new WebSocketSharp.WebSocket(url);

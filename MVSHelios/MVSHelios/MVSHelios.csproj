@@ -84,7 +84,6 @@
         <Compile Include="HeliosObjectTable.cs" />
         <Compile Include="HeliosNetwork.cs" />
         <Compile Include="HeliosClasses.cs" />
-        <Compile Include="Utility/HeliosStruct.cs" />
         <Compile Include="Utility/DeepCopyHelper.cs" />
         <Compile Include="Utility/HeliosUtility.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>

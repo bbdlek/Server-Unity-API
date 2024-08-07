@@ -62,9 +62,9 @@ namespace MVS.Realtime
                     protocol = "wss";
                 }
                 
-                peerBase.Listener.MVSDebug(DebugLevel.INFO, $"{protocol}://" + ConnectAddress);
+                // peerBase.Listener.MVSDebug(DebugLevel.INFO, $"{protocol}://" + peerBase.ServerAddress);
                 
-                _socket = WebSocketFactory.CreateInstance($"{protocol}://" + ConnectAddress);
+                _socket = WebSocketFactory.CreateInstance($"{protocol}://" + peerBase.ServerAddress);
                 
                 _socket.OnMessage += (byte[] msg) =>
                 {

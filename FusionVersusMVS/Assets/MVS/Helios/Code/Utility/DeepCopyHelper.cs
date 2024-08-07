@@ -57,13 +57,11 @@ namespace MVS.Helios.Utility
                 }
                 catch (Exception e)
                 {
-                    // Debug.Log(e);
+                    // Debug.LogError(e);
                     var newObject = obj;
                     return newObject;
                 }   
             }
-
-            return default;
         }
     }
 }

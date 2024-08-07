@@ -7,7 +7,6 @@ using Type = System.Type;
 
 namespace MVS.Realtime
 {
-    #nullable disable
     public class MVSPeer
     {
         internal PeerBase peerBase;
@@ -20,7 +19,7 @@ namespace MVS.Realtime
         {
             get
             {
-                return this.peerBase.peerConnectionState == ConnectionStateValue.Connected && !this.peerBase.ApplicationIsInitialized ? PeerState.InitializingApplication : (PeerState) this.peerBase.peerConnectionState;
+                return peerBase.peerConnectionState == ConnectionStateValue.Connected && !peerBase.ApplicationIsInitialized ? PeerState.InitializingApplication : (PeerState) peerBase.peerConnectionState;
             }
         }
 
@@ -29,8 +28,7 @@ namespace MVS.Realtime
         public Dictionary<ConnectionProtocol, Type> SocketImplementationConfig;
         public Type SocketImplementation { get; internal set; }
         
-        private Stopwatch trafficStatsStopwatch;
-        private bool trafficStatsEnabled = false;
+        private Stopwatch _trafficStatsStopwatch;
 
         public MVSPeer(ConnectionProtocol protocol)
         {
@@ -54,7 +52,7 @@ namespace MVS.Realtime
             string appId,
             ServerConnection serverType)
         {
-            if (this.peerBase != null && this.peerBase.peerConnectionState != 0)
+            if (peerBase != null && peerBase.peerConnectionState != 0)
             {
                 Listener.MVSDebug(DebugLevel.WARNING, "Connect() can't be called if peer is not Disconnected. Not connecting.");
                 return false;
@@ -83,7 +81,7 @@ namespace MVS.Realtime
                 peerBase.Listener.MVSDebug(DebugLevel.INFO, $"SocketImplementation Type: {SocketImplementation}");
                 peerBase.Listener.MVSDebug(DebugLevel.INFO, $"peerBase Type: {peerBase.GetType()}");
 
-                this.peerBase.realtimeSocket = (RealtimeSocketConnection)Activator.CreateInstance(SocketImplementation, peerBase);
+                peerBase.realtimeSocket = (RealtimeSocketConnection)Activator.CreateInstance(SocketImplementation, peerBase);
             }
             catch (Exception ex)
             {
@@ -117,28 +115,26 @@ namespace MVS.Realtime
                     tpeer.DoFraming = TransportProtocol == ConnectionProtocol.Tcp;
                     
                     break;
-                default:
-                    break;
             }
 
             peerBase.mvsPeer = this;
             peerBase.Protocol = TransportProtocol;
         }
 
-        public virtual void Service()
+        public void Service()
         {
             do
-                ;
-            while (this.ProcessIncomingData());
+            {
+            } while (ProcessIncomingData());
             do
-                ;
-            while (this.ProcessOutgoingData());
+            {
+            } while (ProcessOutgoingData());
         }
         
 
         public virtual void Disconnect()
         {
-            Listener.OnStatusChanged(StatusCode.Disconnect);
+            // Listener.OnStatusChanged(StatusCode.Disconnect);
             peerBase.Disconnect();
         }
 
@@ -160,7 +156,7 @@ namespace MVS.Realtime
             return peerBase.ProcessOutgoingData();
         }
 
-        public virtual bool SendEvent(int eventCode, IMessage fixedData = null, List<Protocol.HeliosVariable> customData = null)
+        public virtual bool SendEvent(int eventCode, IMessage fixedData = null, List<HeliosVariable> customData = null)
         {
             var packs = new Packs();
             var pkt = new C_EVENT
@@ -182,9 +178,9 @@ namespace MVS.Realtime
                     StopwatchList[SequenceNum].Start();
                     if (customData == null)
                     {
-                        customData = new List<Protocol.HeliosVariable>();
+                        customData = new List<HeliosVariable>();
                     }
-                    customData.Add(new Protocol.HeliosVariable
+                    customData.Add(new HeliosVariable
                     {
                         Key = 10000,
                         NInt32 = SequenceNum,
@@ -213,13 +209,13 @@ namespace MVS.Realtime
             return true;
         }
         
-        public static int SequenceNum = 0;
+        public static int SequenceNum;
         public Dictionary<int, Stopwatch> StopwatchList = new Dictionary<int, Stopwatch>();
 
         public virtual bool SendOperation(
             Protocol.OperationCode operationCode,
             IMessage fixedData,
-            List<Protocol.HeliosVariable> customData = null
+            List<HeliosVariable> customData = null
         )
         {
             (byte[] data, int size) = peerBase.SerializeOperationToPacket(operationCode, fixedData, customData);

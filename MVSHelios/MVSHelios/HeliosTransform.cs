@@ -52,8 +52,9 @@ namespace MVS.Helios
         
         // TODO : Local Lossy
 
-        private void Awake()
+        public override void Awake()
         {
+            base.Awake();
             _heliosObject = GetComponent<HeliosObject>();
             
             _storedPosition = transform.position;

@@ -14,6 +14,11 @@ namespace MVS.Helios
         {
             return HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.InstanceID == (int)id);
         }
+
+        public static HeliosMonoBehavior FindObjectByClientID(uint id)
+        {
+            return HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.ClientInstanceID == (int)id);
+        }
         
         public static void AddCallbackTarget(object target)
         {
@@ -126,8 +131,17 @@ namespace MVS.Helios
                     break;
                 case (int)Protocol.EventCode.Rpc:
                     var dataRpc = Packs.Parser.ParseFrom(eventData.FixedData).CRpc;
-                    var rpcObj = FindObjectById(dataRpc.ObjectID.InstanceID);
-                    rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());
+                    if (eventData.Sender == LocalPlayer.UserId)
+                    {
+                        var rpcObj = FindObjectByClientID(dataRpc.ObjectID.ClientInstanceID);
+                        rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());
+                    }
+                    else
+                    {
+                        RealtimeClient.MVSDebug(DebugLevel.INFO, dataRpc.ObjectID.InstanceID.ToString());
+                        var rpcObj = FindObjectById(dataRpc.ObjectID.InstanceID);
+                        rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());    
+                    }
                     break;
             }
         }

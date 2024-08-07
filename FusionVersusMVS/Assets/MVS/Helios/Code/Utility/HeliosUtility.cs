@@ -7,7 +7,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
 using Google.Protobuf;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace MVS.Helios.Utility
@@ -32,7 +31,12 @@ namespace MVS.Helios.Utility
         {
             try
             {
-                return Encoding.UTF8.GetBytes(parameters.Serialize().json);
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    binaryFormatter.Serialize(memoryStream, parameters);
+                    return memoryStream.ToArray();
+                }
             }
             catch (SerializationException e)
             {
@@ -51,32 +55,11 @@ namespace MVS.Helios.Utility
 
         public static object[] DeserializeParameters(byte[] data)
         {
-            return (object[])new SerializationData(Encoding.UTF8.GetString(data)).Deserialize();
-        }
-
-        public static string ObjectToString(object obj)
-        {
-            return obj.Serialize().json;
-        }
-
-        public static object StringToObject(string data)
-        {
-            return new SerializationData(data).Deserialize();
-        }
-        
-        public static ByteString ObjectToBytes2(object obj)
-        {
-            var jsonString = obj.Serialize().json;
-            Debug.Log(ByteString.CopyFrom(Encoding.UTF8.GetBytes(jsonString)));
-            return ByteString.CopyFrom(Encoding.UTF8.GetBytes(jsonString));
-        }
-
-        public static object BytesToObject2(ByteString bytes)
-        {
-            object result = null;
-            var jsonString = Encoding.UTF8.GetString(bytes.ToByteArray());
-            Debug.Log(bytes.ToByteArray());
-            return new SerializationData(jsonString).Deserialize();
+            using (MemoryStream memoryStream = new MemoryStream(data))
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                return (object[])binaryFormatter.Deserialize(memoryStream);
+            }
         }
         
         public static ByteString ObjectToBytes(object obj)

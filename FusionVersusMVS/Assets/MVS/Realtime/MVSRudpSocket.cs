@@ -96,6 +96,7 @@ namespace MVS.Realtime
             _server.Disconnect(0);
             _client.Dispose();
             Library.Deinitialize();
+            Listener.OnStatusChanged(StatusCode.Disconnect);
 
             return true;
         }

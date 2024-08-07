@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -74,17 +75,6 @@ namespace MVS.Helios.Utility
             }
 
             return ByteString.CopyFrom(mStream.ToArray());
-            
-            // int iSize = Marshal.SizeOf(obj);
-            //
-            // byte[] arr = new byte[iSize];
-            //
-            // IntPtr ptr = Marshal.AllocHGlobal(iSize);
-            // Marshal.StructureToPtr(obj, ptr, false);
-            // Marshal.Copy(ptr, arr, 0, iSize);
-            // Marshal.FreeHGlobal(ptr);
-            //
-            // return ByteString.CopyFrom(arr);
         }
 
         public static object ByteToObject(ByteString buffer)

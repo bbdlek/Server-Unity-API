@@ -171,7 +171,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
         GameObject.Find("RoomJoin").GetComponent<Button>().interactable = true;
     }
 
-    public async void OnClickRoomCreate()
+    public void OnClickRoomCreate()
     {
         HeliosNetwork.RoomCreateToMaster("TestRoom", joinRoomID);
     }
@@ -207,6 +207,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     public void OnClickCreateObjectBrn()
     {
          GameObject cubeObject = HeliosNetwork.Instantiate(prefabsForSpawn[Random.Range(0, prefabsForSpawn.Length)], Vector3.zero, Quaternion.identity);
+         cubeObject.GetComponent<CubeManager>().RPC_AddScore();
     }
     public async void OnClickGroupTaskBtn()
     {

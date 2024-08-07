@@ -327,7 +327,7 @@ namespace MVS.Realtime
                 State = ClientState.Disconnecting;
                 DisconnectedReason = disconnectedReason;
                 RealtimePeer.Disconnect();
-                ConnectionCallbacksTarget.OnDisconnected();
+                // ConnectionCallbacksTarget.OnDisconnected();
             }
         }
 
@@ -417,6 +417,7 @@ namespace MVS.Realtime
                     CurrentGroup = null;
                     CurrentRoom = null;
                     State = ClientState.DisConnected;
+                    Debug.Log("disDisDisConnected");
                     ConnectionCallbacksTarget.OnDisconnected();
                     break;
                 case StatusCode.Exception:
@@ -506,10 +507,10 @@ namespace MVS.Realtime
                     if (operationResponse.ReturnCode != 0)
                     {
                         MVSDebug(DebugLevel.ERROR, operationResponse.ToString());
-                        switch (operationResponse.ReturnCode)
-                        {
-                            //ErrorCode
-                        }
+                        // switch (operationResponse.ReturnCode)
+                        // {
+                        //     //ErrorCode
+                        // }
                         Disconnect(DisconnectedReason);
                     }
 
@@ -535,7 +536,6 @@ namespace MVS.Realtime
                 case OperationCode.OTHER_CLIENT_ROOM_JOINED:
                     var dataOtherClientRoomJoined =
                         Packs.Parser.ParseFrom(operationResponse.FixedData).SOtherClientRoomJoined;
-                    Debug.Log(dataOtherClientRoomJoined.PlayerInfo);
                     Player otherJoinedPlayer = new Player(dataOtherClientRoomJoined.PlayerInfo);
                     CurrentRoom.StorePlayer(otherJoinedPlayer);
                     InRoomCallbacksTarget.OnPlayerEnteredRoom(otherJoinedPlayer);
@@ -750,7 +750,6 @@ namespace MVS.Realtime
                     var res = await HttpModule.GetAsync($"http://{NameServerAddress}/ns/api/v1/app/{AppId}");
                     var res2 = JsonUtility.FromJson<MVMResponse>(res);
                     MasterServerAddress = res2.responseMessage[0].ipAddress;
-                    MVSDebug(DebugLevel.INFO, MasterServerAddress);
                     ConnectionCallbacksTarget.OnConnectedToMasterServer();
                 }
                 catch (Exception ex)
@@ -827,7 +826,6 @@ namespace MVS.Realtime
                         }
             
                         var address = res.responseMessage.mvsUrl.Split('/');
-                        Debug.Log(address);
                         RoomJoinInfo.IP = address[0];
                         switch (ConnectionProtocol)
                         {
@@ -854,7 +852,7 @@ namespace MVS.Realtime
                         Name = RoomJoinInfo.RoomName,
                         RoomID = RoomJoinInfo.RoomID,
                     });
-
+                    
                     await Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
                 });
             return default;

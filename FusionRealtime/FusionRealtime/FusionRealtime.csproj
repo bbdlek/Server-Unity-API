@@ -102,6 +102,7 @@
         <Compile Include="Plugins/Enet.cs" />
         <Compile Include="StatusCode.cs" />
         <Compile Include="TPeer.cs" />
+        <Compile Include="RealtimeAttributes.cs" />
         <Compile Include="Packets/Protocol.cs" />
         <Compile Include="Packets/Struct.cs" />
         <Compile Include="Packets/Enum.cs" />

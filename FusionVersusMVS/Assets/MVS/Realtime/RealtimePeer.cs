@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Google.Protobuf;
 using Protocol;
+using UnityEngine;
 using Type = System.Type;
 
 namespace MVS.Realtime
@@ -34,21 +35,41 @@ namespace MVS.Realtime
         private void ConfigUnitySockets()
         {
             Type websocketType = null;
-            websocketType = Type.GetType("MVS.Realtime.MVSWebGLSocket, MVSWebSocket", false);
-            if (websocketType == null)
+            bool isWebGL = Application.platform == RuntimePlatform.WebGLPlayer;
+            bool isEditor = Application.isEditor;
+
+            websocketType = Type.GetType("MVS.Realtime.MVSWebSocket, MVSWebSocket", false);
+            if (isWebGL && isEditor)
             {
-                websocketType = Type.GetType("MVS.Realtime.MVSWebGLSocket, Assembly-CSharp-firstpass", false);
+                if (websocketType == null)
+                {
+                    websocketType = Type.GetType("MVS.Realtime.MVSWebSocket, Assembly-CSharp-firstpass", false);
+                }
+                if (websocketType == null)
+                {
+                    websocketType = Type.GetType("MVS.Realtime.MVSWebSocket, Assembly-CSharp", false);
+                }
             }
-            if (websocketType == null)
+            else if (isWebGL && !isEditor)
             {
-                websocketType = Type.GetType("MVS.Realtime.MVSWebGLSocket, Assembly-CSharp", false);
+                if (websocketType == null)
+                {
+                    websocketType = Type.GetType("MVS.Realtime.MVSWebGLSocket, MVSWebGLSocket", false);
+                    // this.Listener.MVSDebug(DebugLevel.WARNING, "SocketWebTcp type not found in the usual Assemblies. This is required as wrapper for the browser WebSocket API. Make sure to make the PhotonLibs\\WebSocket code available.");
+                }
+
+                if (websocketType == null)
+                {
+                    websocketType = Type.GetType("MVS.Realtime.MVSWebGLSocket, Assembly-CSharp-firstpass", false);
+                    // this.Listener.MVSDebug(DebugLevel.WARNING, "SocketWebTcp type not found in the usual Assemblies. This is required as wrapper for the browser WebSocket API. Make sure to make the PhotonLibs\\WebSocket code available.");
+                }
+
+                if (websocketType == null)
+                {
+                    websocketType = Type.GetType("MVS.Realtime.MVSWebGLSocket, Assembly-CSharp", false);
+                    // this.Listener.MVSDebug(DebugLevel.WARNING, "SocketWebTcp type not found in the usual Assemblies. This is required as wrapper for the browser WebSocket API. Make sure to make the PhotonLibs\\WebSocket code available.");
+                }
             }
-#if UNITY_WEBGL
-            if (websocketType == null)
-            {
-                UnityEngine.Debug.LogWarning("SocketWebTcp type not found in the usual Assemblies. This is required as wrapper for the browser WebSocket API. Make sure to make the PhotonLibs\\WebSocket code available.");
-            }
-#endif
 
             if (websocketType != null)
             {

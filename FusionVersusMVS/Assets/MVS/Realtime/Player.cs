@@ -1,3 +1,4 @@
+using System;
 using Protocol;
 
 namespace MVS.Realtime
@@ -15,7 +16,7 @@ namespace MVS.Realtime
         
         protected internal Group GroupReference { get; set; }
 
-        private string nickName = string.Empty;
+        private readonly string _nickName = string.Empty;
 
         public string NickName => PlayerInfo.Name;
 
