@@ -16,7 +16,7 @@ public class TestHNSync : HeliosMonoBehavior
     [HNSync, OnChanged(nameof(OnChangedMastersComment))]
     public string mastersComment = "";
     [HNSync, OnChanged(nameof(OnChangedTestDic))]
-    public Dictionary<int, Color> testStringDic = new Dictionary<int, Color>();
+    public Dictionary<int, string> testStringDic = new Dictionary<int, string>();
     
     private byte[] ObjectToBytes(object obj)
     {
@@ -76,8 +76,8 @@ public class TestHNSync : HeliosMonoBehavior
 
     private void InitTestDic()
     {
-        testStringDic[10] = new Color(Random.Range(0, 255), 0, 0);
         mastersComment = "졸림" + Random.Range(0, 1f);;
+        testStringDic[10] = mastersComment;
         Debug.Log("InitTestDic 완료");
     }
 

@@ -20,7 +20,8 @@ namespace MVS.Helios.Utility
             {
                 return default(T);
             }
-
+            Type objType = obj.GetType();
+            
             if (HeliosUtility.IsListType(obj.GetType()))
             {
                 IList list = (IList)obj;
@@ -43,6 +44,20 @@ namespace MVS.Helios.Utility
                 }
                 return (T)copiedList;
             }
+            else if (typeof(IDictionary).IsAssignableFrom(objType))
+            {
+                IDictionary dict = (IDictionary)obj;
+                IDictionary copiedDict = (IDictionary)Activator.CreateInstance(obj.GetType());
+                
+                foreach (DictionaryEntry entry in dict)
+                {
+                    object keyCopy = entry.Key is ICloneable ? ((ICloneable)entry.Key).Clone() : DeepCopy(entry.Key);
+                    object valueCopy = entry.Value is ICloneable ? ((ICloneable)entry.Value).Clone() : DeepCopy(entry.Value);
+
+                    copiedDict.Add(keyCopy, valueCopy);
+                }
+                return (T)copiedDict;
+            }
             else
             {
                 try
@@ -57,7 +72,7 @@ namespace MVS.Helios.Utility
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError(e);
+                    // Debug.LogError(e);
                     var newObject = obj;
                     return newObject;
                 }   

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Google.Protobuf;
 using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
-using Unity.VisualScripting;
 using UnityEngine;
 using ColorUtility = UnityEngine.ColorUtility;
 using EventCode = MVS.Realtime.EventCode;
@@ -20,26 +20,35 @@ namespace MVS.Helios
         {
             get
             {
-                bool b = false;
                 if (heliosAttributes.Count == 0) return false;
+        
                 for (int i = CustomVariablesUnity.ScaleKey + 1; i < heliosAttributes.Count + CustomVariablesUnity.ScaleKey + 1; i++)
                 {
+                    var currentValue = heliosAttributes[i].GetValue(attributeMonoBehaviors[i]);
+                    var initialValue = initialHeliosValues[i];
+
                     if (HeliosUtility.IsListType(heliosAttributes[i].FieldType))
                     {
-                        b = !HeliosUtility.CheckListEquals(heliosAttributes[i].GetValue(attributeMonoBehaviors[i]),
-                            initialHeliosValues[i]);
+                        if (!HeliosUtility.CheckListEquals(currentValue, initialValue))
+                        {
+                            return true;
+                        }
                     }
                     else if (HeliosUtility.IsDictionaryType(heliosAttributes[i].FieldType))
                     {
-                        b = !HeliosUtility.CheckDictionariesEqual(heliosAttributes[i].GetValue(attributeMonoBehaviors[i]),
-                            initialHeliosValues[i]);
+                        if (!HeliosUtility.CheckDictionariesEqual(currentValue, initialValue))
+                        {
+                            return true;
+                        }
                     }
-                    else 
+                    else
                     {
                         try
                         {
-                            if (!heliosAttributes[i].GetValue(attributeMonoBehaviors[i]).Equals(initialHeliosValues[i]))
-                                b = true;
+                            if (!currentValue.Equals(initialValue))
+                            {
+                                return true;
+                            }
                         }
                         catch (Exception e)
                         {
@@ -47,9 +56,11 @@ namespace MVS.Helios
                         }
                     }
                 }
-                return b;
+        
+                return false;
             }
         }
+
 
         public Dictionary<int, FieldInfo> heliosAttributes = new Dictionary<int, FieldInfo>();
 
@@ -231,28 +242,7 @@ namespace MVS.Helios
                     }
                     else
                     {
-                        // hv.NCustom = HeliosUtility.ObjectToBytes2(obj);
-
-                        // hv.NString = HeliosUtility.ObjectToString(obj);
-
-
-                        if (field.FieldType.IsSerializable)
-                        {
-                            hv.NCustom = HeliosUtility.ObjectToBytes(obj);   
-                        }
-                        else
-                        {
-                            if (field.FieldType == typeof(Color))
-                            {
-                                var objColor = ColorUtility.ToHtmlStringRGBA((Color)obj);
-                                hv.NCustom = HeliosUtility.ObjectToBytes(objColor); 
-                            } 
-                            else if (field.FieldType == typeof(Color32))
-                            {
-                                var objColor32 = ColorUtility.ToHtmlStringRGBA((Color32)obj);
-                                hv.NCustom = HeliosUtility.ObjectToBytes(objColor32); 
-                            }
-                        }
+                        hv.NCustom = ByteString.CopyFrom(HeliosUtility.ToTypedJson(obj));
                     }
                     if (GetComponent<HeliosObject>())
                     {
@@ -344,6 +334,7 @@ namespace MVS.Helios
                             (OnChangedAttribute)Attribute.GetCustomAttribute(field, typeof(OnChangedAttribute));
                         if (callbackAttribute != null)
                         {
+                            Debug.Log($"{field.Name}'s Callback : {callbackAttribute.MethodName}");
                             if(!heliosAttributeCallbacks.ContainsKey(key))
                                 heliosAttributeCallbacks.Add(key, Tuple.Create(callbackAttribute.MethodName, this));
                         }
@@ -448,6 +439,7 @@ namespace MVS.Helios
                         }
                         break;
                     default:
+                        var value = HeliosUtility.FromTypedJson(customData.NCustom.ToByteArray());
                         // var value = HeliosUtility.ByteToObject(customData.NCustom);
                         // if (field.FieldType == typeof(Color))
                         // {
@@ -459,15 +451,16 @@ namespace MVS.Helios
                         //     ColorUtility.TryParseHtmlString("#" + value, out Color loadedColor);
                         //     value = (Color32)loadedColor;
                         // }
-                        Debug.Log(customData.NCustom);
-                        var value = HeliosUtility.ByteToObject(customData.NCustom); 
                         field.SetValue(attributeMonoBehaviors[key], value);
                         break;
                 }
             initialHeliosValues[key] = field.GetValue(attributeMonoBehaviors[key]);
             if(heliosAttributeCallbacks.ContainsKey(key))
-                CallMethodByName(heliosAttributeCallbacks[key].Item2, heliosAttributeCallbacks[key].Item1);
+                {
+                    CallMethodByName(heliosAttributeCallbacks[key].Item2, heliosAttributeCallbacks[key].Item1);
+                }
             }
+            
         }
         
         internal void CallMethodByName(HeliosMonoBehavior behavior, string methodName)

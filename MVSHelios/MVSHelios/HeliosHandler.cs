@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf;
 using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
@@ -85,11 +86,27 @@ namespace MVS.Helios
         {
             if(!HeliosNetwork.InGroup) return;
             _elapsedTime += Time.deltaTime;
+            
+            // CheckAndRestoreVariables();
 
             if (_elapsedTime >= 1f / HeliosNetwork.SendRate)
             {
                 CheckAndUpdateVariables();
                 _elapsedTime = 0f;
+            }
+        }
+
+        private void CheckAndRestoreVariables()
+        {
+            foreach (var ho in HeliosNetwork.HeliosObjectList.FindAll(x =>
+                         x.hasUpdate && (!x.IsMine || (x.ObjectInfo.SyncType == ObjectSyncType.GroupOwn && !HeliosNetwork.CurrentGroup.IsLocalGroupOwner))))
+            {
+                for (int i = CustomVariablesUnity.ScaleKey + 1;
+                     i < ho.heliosAttributes.Count + CustomVariablesUnity.ScaleKey + 1;
+                     i++)
+                {
+                    ho.heliosAttributes[i].SetValue(ho.attributeMonoBehaviors[i], ho.initialHeliosValues[i]);
+                }
             }
         }
 
@@ -186,30 +203,9 @@ namespace MVS.Helios
                             };
                             break;
                         default:
-                            if (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]) is Color)
-                            {
-                                hv.NCustom = HeliosUtility.ObjectToBytes(ColorUtility.ToHtmlStringRGBA((Color)ho
-                                    .heliosAttributes[i]
+                            hv.NCustom =
+                                ByteString.CopyFrom(HeliosUtility.ToTypedJson(ho.heliosAttributes[i]
                                     .GetValue(ho.attributeMonoBehaviors[i])));
-                            }
-                            else if (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]) is Color32)
-                            {
-                                hv.NCustom = HeliosUtility.ObjectToBytes(ColorUtility.ToHtmlStringRGBA((Color32)ho
-                                    .heliosAttributes[i]
-                                    .GetValue(ho.attributeMonoBehaviors[i])));
-                            }
-                            else
-                            {
-                                if (HeliosUtility.IsDictionaryType(ho.heliosAttributes[i].FieldType))
-                                {
-                                    hv.NCustom = HeliosUtility.ObjectToBytes(ho.heliosAttributes[i]
-                                        .GetValue(ho.attributeMonoBehaviors[i]));
-                                }
-                                
-                                hv.NCustom =
-                                    HeliosUtility.ObjectToBytes(ho.heliosAttributes[i]
-                                        .GetValue(ho.attributeMonoBehaviors[i]));    
-                            }
                             
                             break;
                     }
@@ -221,9 +217,10 @@ namespace MVS.Helios
                     }
                     else ho.initialHeliosValues[i] = ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]);
                     updateObject.Values.Add(hv);
-
                     if(ho.heliosAttributeCallbacks.ContainsKey(i))
+                    {
                         ho.CallMethodByName(ho.heliosAttributeCallbacks[i].Item2, ho.heliosAttributeCallbacks[i].Item1);
+                    }
                 }
                 // data.ObjectInfos.Add(ho.ObjectInfo);
                 data.ObjectInfos.Add(updateObject);

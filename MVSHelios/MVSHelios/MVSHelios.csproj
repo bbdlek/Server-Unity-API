@@ -43,6 +43,9 @@
         <Reference Include="mscorlib">
           <HintPath>..\..\..\..\..\Unity\Hub\Editor\2022.3.3f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\mscorlib.dll</HintPath>
         </Reference>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\..\FusionVersusMVS\Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
+        </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Buffers">
           <HintPath>..\..\..\..\..\Unity\Hub\Editor\2022.3.3f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Buffers.dll</HintPath>
@@ -72,7 +75,6 @@
     <ItemGroup>
         <Compile Include="HeliosHandler.cs" />
         <Compile Include="IHeliosCallbacks.cs" />
-        <Compile Include="HeliosVariable.cs" />
         <Compile Include="HeliosAttribute.cs" />
         <Compile Include="InstantiateParams.cs" />
         <Compile Include="CustomVariablesUnity.cs" />
