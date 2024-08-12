@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: -2500174006590929170}
   - component: {fileID: 7551403675085834006}
   - component: {fileID: -5747347219559409451}
-  - component: {fileID: 8294053081529930721}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -208,24 +207,3 @@ MonoBehaviour:
   testVec1: {x: 0, y: 0}
   testVec2: {x: 1, y: 1}
   testBool: 0
---- !u!95 &8294053081529930721
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8931026403998881570}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 6fd7eb0666fb18a08872179fef94a5f8, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0

@@ -13,6 +13,26 @@ namespace MVS.Helios.Utility
 {
     public static class HeliosUtility
     {
+        public static T GetComponentInSelfOrParent<T>(this GameObject obj) where T : Component
+        {
+            // 현재 오브젝트에서 컴포넌트를 찾습니다.
+            T component = obj.GetComponent<T>();
+        
+            // 현재 오브젝트에 컴포넌트가 없으면 부모에서 찾습니다.
+            if (component == null)
+            {
+                component = obj.GetComponentInParent<T>(true);
+            }
+        
+            return component;
+        }
+
+        public static T GetComponentInSelfOrParent<T>(this Component comp) where T : Component
+        {
+            // Component에서 GameObject를 가져와서 위 메서드를 호출합니다.
+            return comp.gameObject.GetComponentInSelfOrParent<T>();
+        }
+        
         public static ulong Compute64BitHash(string input)
         {
             using (SHA256 sha256 = SHA256.Create())

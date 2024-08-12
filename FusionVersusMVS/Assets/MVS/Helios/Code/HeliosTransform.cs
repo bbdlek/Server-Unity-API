@@ -1,3 +1,4 @@
+using MVS.Helios.Utility;
 using Protocol;
 using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
@@ -52,7 +53,7 @@ namespace MVS.Helios
         public override void Awake()
         {
             base.Awake();
-            _heliosObject = GetComponent<HeliosObject>();
+            _heliosObject = this.GetComponentInSelfOrParent<HeliosObject>();
             
             _storedPosition = transform.position;
             networkPosition = _storedPosition;

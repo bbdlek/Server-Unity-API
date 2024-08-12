@@ -73,6 +73,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="HeliosAnimator.cs" />
         <Compile Include="HeliosHandler.cs" />
         <Compile Include="IHeliosCallbacks.cs" />
         <Compile Include="HeliosAttribute.cs" />

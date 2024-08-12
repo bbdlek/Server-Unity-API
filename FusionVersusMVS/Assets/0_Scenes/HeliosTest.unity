@@ -501,6 +501,8 @@ MonoBehaviour:
   ccolor:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
+  playerPrefab: {fileID: 5635070773522920093, guid: c51189c6eab28bd4eb6a89f376b633ea,
+    type: 3}
 --- !u!4 &174426210
 Transform:
   m_ObjectHideFlags: 0

@@ -59,28 +59,6 @@ public class CubeManager : HeliosMonoBehavior
         {
             score2++;
         }
-        
-        
-        //Animator Test
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            _animator.SetBool("TestBool", !_animator.GetBool("TestBool"));
-        }
-        
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            _animator.SetTrigger("TestTrigger");
-        }
-        
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            _animator.SetFloat("TestFloat", Random.Range(1f, 10f));
-        }
-        
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            _animator.SetInteger("TestInt", Random.Range(1, 10));
-        }
     }
     
 

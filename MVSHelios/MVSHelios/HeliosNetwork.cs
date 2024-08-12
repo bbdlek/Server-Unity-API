@@ -365,7 +365,7 @@ namespace MVS.Helios
                         continue; // obj가 null이면 다음 반복으로 넘어갑니다.
                     }
 
-                    var heliosObject = obj.GetComponent<HeliosObject>();
+                    var heliosObject = obj.GetComponentInSelfOrParent<HeliosObject>();
                     if (heliosObject != null)
                     {
                         if (!heliosObject.IsMine)
@@ -401,7 +401,7 @@ namespace MVS.Helios
         {
             if (CurrentRoom == null)
                 return null;
-            var comp = prefab.GetComponent<HeliosObject>();
+            var comp = prefab.GetComponentInSelfOrParent<HeliosObject>();
             if (comp != null)
                 return Instantiate(comp.PrefabId, position, rotation);
             else
@@ -463,7 +463,7 @@ namespace MVS.Helios
 
             bool isLocalInstantiate = !instantiateEvent && LocalPlayer.Equals(instantiateParams.creator);
             
-            go.GetComponent<HeliosObject>().ObjectInfo.Values.Add(new Protocol.HeliosVariable
+            go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.Values.Add(new Protocol.HeliosVariable
             {
                 Key = CustomVariables.GetKeyByName("position"),
                 NVector = new Protocol.Vector3
@@ -473,7 +473,7 @@ namespace MVS.Helios
                     Z = instantiateParams.position.z
                 }
             });
-            go.GetComponent<HeliosObject>().ObjectInfo.Values.Add(new Protocol.HeliosVariable
+            go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.Values.Add(new Protocol.HeliosVariable
             {
                 Key = CustomVariables.GetKeyByName("rotation"),
                 NVector = new Protocol.Vector3
@@ -483,7 +483,7 @@ namespace MVS.Helios
                     Z = instantiateParams.rotation.z
                 }
             });
-            go.GetComponent<HeliosObject>().ObjectInfo.Values.Add(new Protocol.HeliosVariable
+            go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.Values.Add(new Protocol.HeliosVariable
             {
                 Key = CustomVariables.GetKeyByName("scale"),
                 NVector = new Protocol.Vector3
@@ -497,38 +497,38 @@ namespace MVS.Helios
             // TODO : IF Local Instantiate
             if (isLocalInstantiate)
             {
-                go.GetComponent<HeliosObject>().IsMine = true;
-                go.GetComponent<HeliosObject>().ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
-                go.GetComponent<HeliosObject>().ObjectInfo.OwnerPlayerID = instantiateParams.creator.UserId;
-                go.GetComponent<HeliosObject>().ObjectInfo.ObjectID.PrefabID = instantiateParams.prefabId;
-                HeliosObjectList.Add(go.GetComponent<HeliosObject>());
-                go.GetComponent<HeliosObject>().ClientInstanceId = (uint)HeliosObjectList.LastIndexOf(go.GetComponent<HeliosObject>());
-                instantiateParams.clientInstanceID = go.GetComponent<HeliosObject>().ClientInstanceId;
+                go.GetComponentInSelfOrParent<HeliosObject>().IsMine = true;
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.OwnerPlayerID = instantiateParams.creator.UserId;
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.ObjectID.PrefabID = instantiateParams.prefabId;
+                HeliosObjectList.Add(go.GetComponentInSelfOrParent<HeliosObject>());
+                go.GetComponentInSelfOrParent<HeliosObject>().ClientInstanceId = (uint)HeliosObjectList.LastIndexOf(go.GetComponentInSelfOrParent<HeliosObject>());
+                instantiateParams.clientInstanceID = go.GetComponentInSelfOrParent<HeliosObject>().ClientInstanceId;
                 foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
                 {
                     heliosMonoBehavior.FindNetworkedVariables();
                     heliosMonoBehavior.FindRPCMethods();
                 }
-                instantiateParams.ObjectInfo = go.GetComponent<HeliosObject>().ObjectInfo;
+                instantiateParams.ObjectInfo = go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo;
                 SendInstantiate(instantiateParams, isRoomObject);
             }
             else
             {
-                go.GetComponent<HeliosObject>().IsMine = false;
-                go.GetComponent<HeliosObject>().ObjectInfo = instantiateParams.ObjectInfo;
-                go.GetComponent<HeliosObject>().InstanceId = instantiateParams.instanceId;
-                go.GetComponent<HeliosObject>().ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
-                go.GetComponent<HeliosObject>().ObjectInfo.OwnerPlayerID = instantiateParams.creator.UserId;
-                go.GetComponent<HeliosObject>().ObjectInfo.ObjectID.PrefabID = instantiateParams.prefabId;
+                go.GetComponentInSelfOrParent<HeliosObject>().IsMine = false;
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo = instantiateParams.ObjectInfo;
+                go.GetComponentInSelfOrParent<HeliosObject>().InstanceId = instantiateParams.instanceId;
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.OwnerPlayerID = instantiateParams.creator.UserId;
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.ObjectID.PrefabID = instantiateParams.prefabId;
                 var saveObjInfo = new ObjectInfo(instantiateParams.ObjectInfo);
-                go.GetComponent<HeliosObject>().ObjectInfo.Values.Clear();
-                go.GetComponent<HeliosObject>().ClientInstanceId = instantiateParams.clientInstanceID;
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.Values.Clear();
+                go.GetComponentInSelfOrParent<HeliosObject>().ClientInstanceId = instantiateParams.clientInstanceID;
                 foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
                 {
                     heliosMonoBehavior.FindNetworkedVariables();
                     heliosMonoBehavior.FindRPCMethods();
                 }
-                HeliosObjectList.Add(go.GetComponent<HeliosObject>());
+                HeliosObjectList.Add(go.GetComponentInSelfOrParent<HeliosObject>());
                 FindObjectById(instantiateParams.instanceId).UpdateCustomData(saveObjInfo);
                 RealtimeClient.OnObjectInstantiated(saveObjInfo);
                 go.SetActive(_prefabPool.GetPrefabPoolActive(instantiateParams.ObjectInfo.ObjectID.PrefabID));

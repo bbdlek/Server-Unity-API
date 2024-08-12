@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
 using EventCode = MVS.Realtime.EventCode;
@@ -96,8 +97,8 @@ namespace MVS.Helios
                                 var obj = HeliosObjectList.Find(x =>
                                     x.ObjectInfo.ObjectID.ClientInstanceID ==
                                     (int)objectInfo.ObjectID.ClientInstanceID);
-                                obj.GetComponent<HeliosObject>().InstanceId = objectInfo.ObjectID.InstanceID;
-                                // obj.GetComponent<HeliosObject>().hasInstanceId = true;
+                                obj.GetComponentInSelfOrParent<HeliosObject>().InstanceId = objectInfo.ObjectID.InstanceID;
+                                // obj.GetComponentInSelfOrParent<HeliosObject>().hasInstanceId = true;
                                 foreach (var heliosMonoBehavior in obj.GetComponentsInChildren<HeliosMonoBehavior>())
                                 {
                                     heliosMonoBehavior.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
@@ -199,9 +200,9 @@ namespace MVS.Helios
                 {
                     continue;
                 }
-                if(obj.GetComponent<HeliosObject>())
+                if(obj.GetComponentInSelfOrParent<HeliosObject>())
                 {
-                    if (obj.GetComponent<HeliosObject>().IsMine)
+                    if (obj.GetComponentInSelfOrParent<HeliosObject>().IsMine)
                         NetworkRemoveObject(obj.ObjectInfo.ObjectID.InstanceID);
                 }
             }
@@ -217,7 +218,7 @@ namespace MVS.Helios
                 {
                     continue;
                 }
-                if(obj.GetComponent<HeliosObject>())
+                if(obj.GetComponentInSelfOrParent<HeliosObject>())
                 {
                     NetworkRemoveObject(obj.ObjectInfo.ObjectID.InstanceID);
                 }

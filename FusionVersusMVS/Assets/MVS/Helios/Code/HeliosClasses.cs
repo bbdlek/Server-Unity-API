@@ -84,9 +84,9 @@ namespace MVS.Helios
         {
             get
             {
-                if (GetComponent<HeliosObject>())
+                if (this.GetComponentInSelfOrParent<HeliosObject>())
                 {
-                    return GetComponent<HeliosObject>().IsMine;
+                    return this.GetComponentInSelfOrParent<HeliosObject>().IsMine;
                 }
                 return false;
             }
@@ -100,7 +100,7 @@ namespace MVS.Helios
             FindNetworkedVariables();
             FindRPCMethods();
             
-            if(!GetComponentInChildren<HeliosObject>())
+            if(!this.GetComponentInSelfOrParent<HeliosObject>())
             {
                 HeliosNetwork.HeliosObjectList.Add(this);
                 ObjectInfo.ObjectID.ClientInstanceID = (uint)HeliosNetwork.HeliosObjectList.LastIndexOf(this);
@@ -110,9 +110,9 @@ namespace MVS.Helios
         public void RPC(string methodName, ulong[] targetPlayerIDs = null, params object[] args)
         {
             ObjectID objectID;
-            if (GetComponent<HeliosObject>())
+            if (this.GetComponentInSelfOrParent<HeliosObject>())
             {
-                objectID = GetComponent<HeliosObject>().ObjectInfo.ObjectID;
+                objectID = this.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.ObjectID;
             }
             else
             {
@@ -244,9 +244,9 @@ namespace MVS.Helios
                     {
                         hv.NCustom = ByteString.CopyFrom(HeliosUtility.ToTypedJson(obj));
                     }
-                    if (GetComponent<HeliosObject>())
+                    if (this.GetComponentInSelfOrParent<HeliosObject>())
                     {
-                        var ho = GetComponent<HeliosObject>();
+                        var ho = this.GetComponentInSelfOrParent<HeliosObject>();
                         attribute.Owner = ho;
                         
                         //HELIOSVARIABLE
@@ -288,10 +288,11 @@ namespace MVS.Helios
                         hv.Key = key;
                         if(!ho.ObjectInfo.Values.Contains(hv))
                             ho.ObjectInfo.Values.Add(hv);
-                        
                         //ATTRIBUTE
                         if(!ho.heliosAttributes.ContainsKey(key))
+                        {
                             ho.heliosAttributes.Add(key, field);
+                        }
                         
                         OnChangedAttribute callbackAttribute =
                             (OnChangedAttribute)Attribute.GetCustomAttribute(field, typeof(OnChangedAttribute));
@@ -366,12 +367,12 @@ namespace MVS.Helios
                 if (attribute != null)
                 {
                     
-                    if (GetComponent<HeliosObject>())
+                    if (this.GetComponentInSelfOrParent<HeliosObject>())
                     {
                         string methodName = method.Name;
                         var hash = HeliosUtility.Compute64BitHash(methodName);
                         
-                        GetComponent<HeliosObject>().RPCMethods.Add(hash, Tuple.Create(method, this));
+                        this.GetComponentInSelfOrParent<HeliosObject>().RPCMethods.Add(hash, Tuple.Create(method, this));
                     }
                     else
                     {
@@ -391,7 +392,6 @@ namespace MVS.Helios
                 var key = customData.Key;
                 if(key < 3) continue;
                 var field = heliosAttributes[key];
-                Debug.Log(field.Name);
                 switch (customData.ValueCase)
                 {
                     case Protocol.HeliosVariable.ValueOneofCase.NInt32:
@@ -526,14 +526,14 @@ namespace MVS.Helios
                 ObjectID = new ObjectID
                 {
                     PrefabID = 0,
-                    InstanceID = gameObject.GetComponent<HeliosObject>().InstanceId
+                    InstanceID = gameObject.GetComponentInSelfOrParent<HeliosObject>().InstanceId
                 },
                 SyncType = ObjectSyncType.PersonalOwn,
                 OwnerPlayerID = HeliosNetwork.LocalPlayer.UserId
             };
             RemovePkt.ObjectInfos.Add(objectInfo);
             HeliosNetwork.RaiseEvent(EventCode.PKT_C_REMOVE_NETWORK_OBJECTS, RemovePkt);
-            HeliosNetwork.HeliosObjectList.RemoveAt((int)gameObject.GetComponent<HeliosObject>().InstanceId);
+            HeliosNetwork.HeliosObjectList.RemoveAt((int)gameObject.GetComponentInSelfOrParent<HeliosObject>().InstanceId);
             GameObject.Destroy(gameObject);
         }
         
@@ -545,11 +545,11 @@ namespace MVS.Helios
 
             if (obj)
             {
-                HeliosNetwork.RealtimeClient.OnObjectDestroyed(obj.GetComponent<HeliosObject>().ObjectInfo);
+                HeliosNetwork.RealtimeClient.OnObjectDestroyed(obj.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo);
                 if (obj.IsMine)
                 {
                     var RemovePkt = new C_REMOVE_NETWORK_OBJECTS();
-                    ObjectInfo objectInfo = obj.GetComponent<HeliosObject>().ObjectInfo;
+                    ObjectInfo objectInfo = obj.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo;
                     RemovePkt.ObjectInfos.Add(objectInfo);
                     HeliosNetwork.RaiseEvent(EventCode.PKT_C_REMOVE_NETWORK_OBJECTS, RemovePkt);
                 }

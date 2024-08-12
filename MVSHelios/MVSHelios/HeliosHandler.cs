@@ -116,14 +116,14 @@ namespace MVS.Helios
             foreach (var ho in HeliosNetwork.HeliosObjectList.FindAll(x => x.hasUpdate && (x.IsMine|| (x.ObjectInfo.SyncType == ObjectSyncType.GroupOwn && HeliosNetwork.CurrentGroup.IsLocalGroupOwner))))
             {
                 ObjectInfo updateObject = new ObjectInfo();
-                if (GetComponent<HeliosObject>())
+                if (this.GetComponentInSelfOrParent<HeliosObject>())
                 {
-                    updateObject.ObjectID = GetComponent<HeliosObject>().ObjectInfo.ObjectID;
-                    updateObject.SyncType = GetComponent<HeliosObject>().ObjectInfo.SyncType;
-                    updateObject.OwnerPlayerID = GetComponent<HeliosObject>().ObjectInfo.OwnerPlayerID;
+                    updateObject.ObjectID = this.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.ObjectID;
+                    updateObject.SyncType = this.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.SyncType;
+                    updateObject.OwnerPlayerID = this.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.OwnerPlayerID;
                     for (int var = 0; var < 3; var++)
                     {
-                        updateObject.Values.Add(GetComponent<HeliosObject>().ObjectInfo.Values[var]);
+                        updateObject.Values.Add(this.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.Values[var]);
                     }
                 }
                 else

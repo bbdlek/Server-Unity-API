@@ -207,7 +207,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     public void OnClickCreateObjectBrn()
     {
          GameObject cubeObject = HeliosNetwork.Instantiate(prefabsForSpawn[Random.Range(0, prefabsForSpawn.Length)], Vector3.zero, Quaternion.identity);
-         cubeObject.GetComponent<CubeManager>().RPC_AddScore();
+         // cubeObject.GetComponent<CubeManager>().RPC_AddScore();
     }
     public async void OnClickGroupTaskBtn()
     {

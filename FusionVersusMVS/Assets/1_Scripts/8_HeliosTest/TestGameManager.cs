@@ -47,6 +47,8 @@ public class TestGameManager : HeliosMonoBehavior, IConnectionCallbacks
         if(testVec.Count > 0)
             Debug.Log(testVec[0][testVec[0].Count-1]);
     }
+
+    public GameObject playerPrefab;
     
     private void Update()
     {
@@ -72,6 +74,11 @@ public class TestGameManager : HeliosMonoBehavior, IConnectionCallbacks
             testDic[0] = innderDic;
             RPC(nameof(TestRPC), null, testDic);
             // testInt.Add(testInt.Count + 1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            HeliosNetwork.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         }
     }
 
