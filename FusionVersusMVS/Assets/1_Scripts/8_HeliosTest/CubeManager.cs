@@ -27,12 +27,13 @@ public class CubeManager : HeliosMonoBehavior
         base.Awake();
         _animator = GetComponent<Animator>();
         Debug.Log(IsMine);
-        if(IsMine)
-            RPC("AddScore");
+        // if(IsMine)
+        //     RPC("AddScore");
     }
 
     public void RPC_AddScore()
     {
+        Debug.Log($"RPC_AddScore! {GetComponent<HeliosObject>().InstanceId}");
         if(IsMine)
             RPC("AddScore");
     }
@@ -44,8 +45,8 @@ public class CubeManager : HeliosMonoBehavior
 
     private void Start()
     {
-        if(IsMine)
-            RPC("AddScore");
+        // if(IsMine)
+        //     RPC("AddScore");
     }
 
     private void Update()

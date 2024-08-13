@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
+using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
 using OperationCode = MVS.Realtime.OperationCode;
 
@@ -135,13 +137,25 @@ namespace MVS.Helios
                     if (eventData.Sender == LocalPlayer.UserId)
                     {
                         var rpcObj = FindObjectByClientID(dataRpc.ObjectID.ClientInstanceID);
-                        rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());
+                        if (dataRpc.ObjectID.InstanceID == 0)
+                        {
+                            rpcObj.RPC(rpcObj.RPCMethods[dataRpc.MethodName].Item1.Name, dataRpc.Receivers.ToArray(), HeliosUtility.DeserializeParameters(dataRpc.MethodArgs.ToByteArray()));
+                        }
+                        else
+                        {
+                            rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());
+                        }
                     }
                     else
                     {
                         RealtimeClient.MVSDebug(DebugLevel.INFO, dataRpc.ObjectID.InstanceID.ToString());
-                        var rpcObj = FindObjectById(dataRpc.ObjectID.InstanceID);
-                        rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());    
+                        // TODO : InstanceID 다른 방법
+                        
+                        if (dataRpc.ObjectID.InstanceID != 0)
+                        {
+                            var rpcObj = FindObjectById(dataRpc.ObjectID.InstanceID);
+                            rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());
+                        }
                     }
                     break;
             }

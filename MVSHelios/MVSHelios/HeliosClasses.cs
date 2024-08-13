@@ -14,6 +14,22 @@ using Vector3 = UnityEngine.Vector3;
 
 namespace MVS.Helios
 {
+    [Serializable]
+    public struct RPCMethodEntry
+    {
+        public ulong hash;
+        public string methodName;
+        public HeliosMonoBehavior owner;
+
+        public RPCMethodEntry(ulong hash, string methodName, HeliosMonoBehavior owner)
+        {
+            this.hash = hash;
+            this.methodName = methodName;
+            this.owner = owner;
+        }
+    }
+    
+    [ExecuteInEditMode]
     public class HeliosMonoBehavior : MonoBehaviour
     {
         public bool hasUpdate
@@ -72,6 +88,9 @@ namespace MVS.Helios
         public Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior>> RPCMethods =
             new Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior>>();
         
+        [SerializeField]
+        private List<RPCMethodEntry> serializedRPCMethods = new List<RPCMethodEntry>();
+        
 
         public ObjectInfo ObjectInfo = new ObjectInfo
         {
@@ -91,14 +110,28 @@ namespace MVS.Helios
                 return false;
             }
         }
-        
+
+        private void OnValidate()
+        {
+            RPCMethods.Clear();
+            serializedRPCMethods.Clear();
+            // if(this.GetComponentInSelfOrParent<HeliosObject>() != null)
+            // {
+            //     this.GetComponentInSelfOrParent<HeliosObject>().RPCMethods.Clear();
+            //     this.GetComponentInSelfOrParent<HeliosObject>().serializedRPCMethods.Clear();
+            // }
+            FindRPCMethods();
+        }
+
         public virtual void Awake()
         {
+            RestoreRPCMethodsFromSerializedData();
+            
             if(ObjectInfo == null)
                 ObjectInfo = new ObjectInfo();
             
             FindNetworkedVariables();
-            FindRPCMethods();
+            // FindRPCMethods();
             
             if(!this.GetComponentInSelfOrParent<HeliosObject>())
             {
@@ -335,7 +368,6 @@ namespace MVS.Helios
                             (OnChangedAttribute)Attribute.GetCustomAttribute(field, typeof(OnChangedAttribute));
                         if (callbackAttribute != null)
                         {
-                            Debug.Log($"{field.Name}'s Callback : {callbackAttribute.MethodName}");
                             if(!heliosAttributeCallbacks.ContainsKey(key))
                                 heliosAttributeCallbacks.Add(key, Tuple.Create(callbackAttribute.MethodName, this));
                         }
@@ -354,9 +386,10 @@ namespace MVS.Helios
 
         public void FindRPCMethods()
         {
-            if(_isFindRPC) return;
+            // Debug.Log("FindRPCMethods");
+            // if(_isFindRPC) return;
             _isFindRPC = true;
-            Type classType = GetType();
+            Type classType = GetType(); 
             MethodInfo[] methods = classType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             foreach (var method in methods)
@@ -366,23 +399,48 @@ namespace MVS.Helios
                 
                 if (attribute != null)
                 {
-                    
-                    if (this.GetComponentInSelfOrParent<HeliosObject>())
-                    {
-                        string methodName = method.Name;
-                        var hash = HeliosUtility.Compute64BitHash(methodName);
-                        
-                        this.GetComponentInSelfOrParent<HeliosObject>().RPCMethods.Add(hash, Tuple.Create(method, this));
-                    }
-                    else
-                    {
-                        string methodName = method.Name;
-                        var hash = HeliosUtility.Compute64BitHash(methodName);
+                    string methodName = method.Name;
+                    var hash = HeliosUtility.Compute64BitHash(methodName);
                        
+                    if(!RPCMethods.ContainsKey(hash))
+                    {
                         RPCMethods.Add(hash, Tuple.Create(method, this));
+
+                        // 직렬화 리스트에 추가
+                        serializedRPCMethods.Add(new RPCMethodEntry(hash, methodName, this));
                     }
                 }
             }
+        }
+        
+        private void RestoreRPCMethodsFromSerializedData()
+        {
+            if (this.GetComponentInSelfOrParent<HeliosObject>() != null)
+            {
+                foreach (var entry in serializedRPCMethods)
+                {
+                    MethodInfo method = GetType().GetMethod(entry.methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    if (method != null)
+                    {
+                        if(!this.GetComponentInSelfOrParent<HeliosObject>().RPCMethods.ContainsKey(entry.hash))
+                            this.GetComponentInSelfOrParent<HeliosObject>().RPCMethods.Add(entry.hash, Tuple.Create(method, entry.owner));
+                    }
+                }
+            }
+            else
+            {
+                foreach (var entry in serializedRPCMethods)
+                {
+                    MethodInfo method = GetType().GetMethod(entry.methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    if (method != null)
+                    {
+                    
+                        if(!RPCMethods.ContainsKey(entry.hash))
+                            RPCMethods.Add(entry.hash, Tuple.Create(method, entry.owner));
+                    }
+                }
+            }
+            
         }
 
         public void UpdateCustomData(ObjectInfo updatedObjectInfo)

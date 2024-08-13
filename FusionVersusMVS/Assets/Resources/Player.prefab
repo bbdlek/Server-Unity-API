@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2354674083412762424}
   - component: {fileID: -5170549143447315427}
   - component: {fileID: -2351361095318754143}
+  - component: {fileID: 7585803403456639432}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -116,6 +117,28 @@ MonoBehaviour:
   syncRotation: 1
   syncScale: 1
   smoothness: 65
+--- !u!114 &7585803403456639432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5635070773522920093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81b40b32a0659c34689907bb29aa36e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  methodNames:
+  - TestRPC
+  - TestRPC
+  serializedRPCMethods:
+  - hash: 16720445601917653615
+    methodName: TestRPC
+    owner: {fileID: 7585803403456639432}
+  - hash: 16720445601917653615
+    methodName: TestRPC
+    owner: {fileID: 7585803403456639432}
 --- !u!1001 &6522528098295670998
 PrefabInstance:
   m_ObjectHideFlags: 0

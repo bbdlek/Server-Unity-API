@@ -122,6 +122,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cc5c69ee5d4a37058037d623abd4036, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializedRPCMethods:
+  - hash: 2011470102581987836
+    methodName: AddScore
+    owner: {fileID: 1020471132256078773}
   score: 1
   score2: 3
 --- !u!114 &8508066451922919660
@@ -136,6 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30e3e9e8305b4750ba301bdfe5e2dd78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializedRPCMethods: []
   _prefabId: 5
   _instanceId: 0
   _clientInstanceId: 4294967295
@@ -180,6 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af6d28e9808043349288f7352e4b25bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializedRPCMethods: []
   positionTolerance: 0.01
   rotationTolerance: 1
   scaleTolerance: 0.01
@@ -202,6 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab4e044b65acd63568eb1cf76ec423bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializedRPCMethods: []
   testFloat: 0
   testFloat2: 0
   testVec1: {x: 0, y: 0}

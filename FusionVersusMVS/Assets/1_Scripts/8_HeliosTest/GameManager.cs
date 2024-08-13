@@ -150,7 +150,7 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     private void Start()
     {
         Debug.Log(HeliosNetwork.HeliosSettings.AppSettings.AppId);
-        Instantiate(testCube);
+        // Instantiate(testCube);
     }
 
     public async void OnClickGetMasterServer()
@@ -207,7 +207,9 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     public void OnClickCreateObjectBrn()
     {
          GameObject cubeObject = HeliosNetwork.Instantiate(prefabsForSpawn[Random.Range(0, prefabsForSpawn.Length)], Vector3.zero, Quaternion.identity);
-         // cubeObject.GetComponent<CubeManager>().RPC_AddScore();
+         Debug.Log("HelloRPC1!");
+         cubeObject.GetComponent<CubeManager>().RPC_AddScore();
+         Debug.Log("HelloRPC2!");
     }
     public async void OnClickGroupTaskBtn()
     {

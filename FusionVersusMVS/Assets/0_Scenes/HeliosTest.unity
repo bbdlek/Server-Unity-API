@@ -477,6 +477,7 @@ GameObject:
   - component: {fileID: 174426209}
   - component: {fileID: 174426211}
   - component: {fileID: 174426212}
+  - component: {fileID: 174426213}
   m_Layer: 0
   m_Name: TestGameManager
   m_TagString: Untagged
@@ -496,6 +497,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9572d66defe85de2cbb5e5f4a7685785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializedRPCMethods:
+  - hash: 16720445601917653615
+    methodName: TestRPC
+    owner: {fileID: 174426209}
+  - hash: 975157505806708307
+    methodName: Test
+    owner: {fileID: 174426209}
   _testDefault: {fileID: 174426212}
   testInt: 
   ccolor:
@@ -530,6 +538,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64fcf10fcf5b8f843b4fcf9b9a838ea9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializedRPCMethods: []
   mastersComment: 
 --- !u!114 &174426212
 MonoBehaviour:
@@ -544,6 +553,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   go: {fileID: 2134972567}
+--- !u!114 &174426213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174426208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81b40b32a0659c34689907bb29aa36e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializedRPCMethods:
+  - hash: 16720445601917653615
+    methodName: TestRPC
+    owner: {fileID: 174426213}
 --- !u!1 &199828223
 GameObject:
   m_ObjectHideFlags: 0
@@ -4225,6 +4250,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1643932109}
   - component: {fileID: 1643932110}
+  - component: {fileID: 1643932111}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -4259,6 +4285,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab53856b4ac2c258e926cd94169b2221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializedRPCMethods:
+  - hash: 2011470102581987836
+    methodName: AddScore
+    owner: {fileID: 1643932110}
+  - hash: 5730650931301864399
+    methodName: ChangeCostume
+    owner: {fileID: 1643932110}
+  - hash: 17968255989455189001
+    methodName: PendulumRPC
+    owner: {fileID: 1643932110}
+  - hash: 17916708204823767376
+    methodName: ChangeVec2
+    owner: {fileID: 1643932110}
   prefabsForSpawn:
   - {fileID: 8931026403998881570, guid: 7182995e8b9816168a367c0ea6a2d403, type: 3}
   score2: 0
@@ -4283,6 +4322,22 @@ MonoBehaviour:
   sceneNumber: 1
   channelID: 1
   masterClientID: 0
+--- !u!114 &1643932111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1643932108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81b40b32a0659c34689907bb29aa36e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializedRPCMethods:
+  - hash: 16720445601917653615
+    methodName: TestRPC
+    owner: {fileID: 1643932111}
 --- !u!1 &1692739164
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using MVS.Helios.Utility;
@@ -504,12 +505,12 @@ namespace MVS.Helios
                 HeliosObjectList.Add(go.GetComponentInSelfOrParent<HeliosObject>());
                 go.GetComponentInSelfOrParent<HeliosObject>().ClientInstanceId = (uint)HeliosObjectList.LastIndexOf(go.GetComponentInSelfOrParent<HeliosObject>());
                 instantiateParams.clientInstanceID = go.GetComponentInSelfOrParent<HeliosObject>().ClientInstanceId;
-                foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
-                {
-                    heliosMonoBehavior.FindNetworkedVariables();
-                    heliosMonoBehavior.FindRPCMethods();
-                }
-                instantiateParams.ObjectInfo = go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo;
+                // foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
+                // {
+                //     heliosMonoBehavior.FindNetworkedVariables();
+                //     heliosMonoBehavior.FindRPCMethods();
+                // }
+                instantiateParams.ObjectInfo = go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo; 
                 SendInstantiate(instantiateParams, isRoomObject);
             }
             else
@@ -523,11 +524,11 @@ namespace MVS.Helios
                 var saveObjInfo = new ObjectInfo(instantiateParams.ObjectInfo);
                 go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.Values.Clear();
                 go.GetComponentInSelfOrParent<HeliosObject>().ClientInstanceId = instantiateParams.clientInstanceID;
-                foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
-                {
-                    heliosMonoBehavior.FindNetworkedVariables();
-                    heliosMonoBehavior.FindRPCMethods();
-                }
+                // foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
+                // {
+                //     heliosMonoBehavior.FindNetworkedVariables();
+                //     heliosMonoBehavior.FindRPCMethods();
+                // }
                 HeliosObjectList.Add(go.GetComponentInSelfOrParent<HeliosObject>());
                 FindObjectById(instantiateParams.instanceId).UpdateCustomData(saveObjInfo);
                 RealtimeClient.OnObjectInstantiated(saveObjInfo);
