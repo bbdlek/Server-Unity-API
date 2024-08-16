@@ -49,7 +49,24 @@ namespace MVS.Helios
                 Destroy(this);
             }
         }
-        
+
+        private void OnEnable()
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if(!HeliosNetwork.LoadedScene.Contains(scene.name))
+                HeliosNetwork.LoadedScene.Add(scene.name);
+        }
+
         private float pingInterval = 5.0f; // 5초마다 Ping 메시지 전송
         private float timeSinceLastPing = 0.0f;
 

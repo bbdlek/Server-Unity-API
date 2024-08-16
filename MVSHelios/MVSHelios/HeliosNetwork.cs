@@ -507,8 +507,8 @@ namespace MVS.Helios
                 instantiateParams.clientInstanceID = go.GetComponentInSelfOrParent<HeliosObject>().ClientInstanceId;
                 // foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
                 // {
-                //     heliosMonoBehavior.FindNetworkedVariables();
-                //     heliosMonoBehavior.FindRPCMethods();
+                //     // heliosMonoBehavior.FindNetworkedVariables();
+                //     // heliosMonoBehavior.FindRPCMethods();
                 // }
                 instantiateParams.ObjectInfo = go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo; 
                 SendInstantiate(instantiateParams, isRoomObject);
@@ -526,8 +526,8 @@ namespace MVS.Helios
                 go.GetComponentInSelfOrParent<HeliosObject>().ClientInstanceId = instantiateParams.clientInstanceID;
                 // foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
                 // {
-                //     heliosMonoBehavior.FindNetworkedVariables();
-                //     heliosMonoBehavior.FindRPCMethods();
+                //     // heliosMonoBehavior.FindNetworkedVariables();
+                //     // heliosMonoBehavior.FindRPCMethods();
                 // }
                 HeliosObjectList.Add(go.GetComponentInSelfOrParent<HeliosObject>());
                 FindObjectById(instantiateParams.instanceId).UpdateCustomData(saveObjInfo);

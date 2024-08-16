@@ -29,6 +29,62 @@ namespace MVS.Helios
         }
     }
     
+    [Serializable]
+    public struct HeliosAttributeEntry
+    {
+        public int key;
+        public string fieldName; // FieldInfo를 문자열로 변환하여 저장
+        public string fieldType;
+
+        public HeliosAttributeEntry(int key, string fieldName, string fieldType)
+        {
+            this.key = key;
+            this.fieldName = fieldName;
+            this.fieldType = fieldType;
+        }
+    }
+    
+    [Serializable]
+    public struct HeliosAttributeCallbackEntry
+    {
+        public int key;
+        public string methodName;
+        public HeliosMonoBehavior owner;
+
+        public HeliosAttributeCallbackEntry(int key, string methodName, HeliosMonoBehavior owner)
+        {
+            this.key = key;
+            this.methodName = methodName;
+            this.owner = owner;
+        }
+    }
+    
+    [Serializable]
+    public struct AttributeMonoBehaviorEntry
+    {
+        public int key;
+        public HeliosMonoBehavior monoBehavior;
+
+        public AttributeMonoBehaviorEntry(int key, HeliosMonoBehavior monoBehavior)
+        {
+            this.key = key;
+            this.monoBehavior = monoBehavior;
+        }
+    }
+    
+    [Serializable]
+    public struct InitialHeliosValueEntry
+    {
+        public int key;
+        public byte[] value; // object를 string으로 변환하여 저장
+
+        public InitialHeliosValueEntry(int key, object value)
+        {
+            this.key = key;
+            this.value = HeliosUtility.ToTypedJson(value);
+        }
+    }
+    
     [ExecuteInEditMode]
     public class HeliosMonoBehavior : MonoBehaviour
     {
@@ -89,6 +145,18 @@ namespace MVS.Helios
             new Dictionary<ulong, Tuple<MethodInfo, HeliosMonoBehavior>>();
         
         [SerializeField]
+        private List<HeliosAttributeEntry> serializedHeliosAttributes = new List<HeliosAttributeEntry>();
+        
+        [SerializeField]
+        private List<HeliosAttributeCallbackEntry> serializedHeliosAttributeCallbacks = new List<HeliosAttributeCallbackEntry>();
+        
+        [SerializeField]
+        private List<AttributeMonoBehaviorEntry> serializedAttributeMonoBehaviors = new List<AttributeMonoBehaviorEntry>();
+        
+        [SerializeField]
+        private List<InitialHeliosValueEntry> serializedInitialHeliosValues = new List<InitialHeliosValueEntry>();
+        
+        [SerializeField]
         private List<RPCMethodEntry> serializedRPCMethods = new List<RPCMethodEntry>();
         
 
@@ -113,31 +181,34 @@ namespace MVS.Helios
 
         private void OnValidate()
         {
-            RPCMethods.Clear();
+            serializedHeliosAttributes.Clear();
+            serializedHeliosAttributeCallbacks.Clear();
+            serializedAttributeMonoBehaviors.Clear();
+            serializedInitialHeliosValues.Clear();
             serializedRPCMethods.Clear();
-            // if(this.GetComponentInSelfOrParent<HeliosObject>() != null)
-            // {
-            //     this.GetComponentInSelfOrParent<HeliosObject>().RPCMethods.Clear();
-            //     this.GetComponentInSelfOrParent<HeliosObject>().serializedRPCMethods.Clear();
-            // }
             FindRPCMethods();
+            FindNetworkedVariables();
         }
 
         public virtual void Awake()
         {
-            RestoreRPCMethodsFromSerializedData();
-            
-            if(ObjectInfo == null)
-                ObjectInfo = new ObjectInfo();
-            
-            FindNetworkedVariables();
-            // FindRPCMethods();
-            
             if(!this.GetComponentInSelfOrParent<HeliosObject>())
             {
                 HeliosNetwork.HeliosObjectList.Add(this);
                 ObjectInfo.ObjectID.ClientInstanceID = (uint)HeliosNetwork.HeliosObjectList.LastIndexOf(this);
             }
+            
+            RestoreHeliosAttributeFromSerializedData();
+            RestoreHeliosAttributeCallbacksFromSerializedData();
+            RestoreAttributeMonoBehaviorsFromSerializedData();
+            RestoreInitialHeliosValuesFromSerializedData();
+            RestoreRPCMethodsFromSerializedData();
+            
+            if(ObjectInfo == null)
+                ObjectInfo = new ObjectInfo();
+            
+            // FindNetworkedVariables();
+            // FindRPCMethods();
         }
 
         public void RPC(string methodName, ulong[] targetPlayerIDs = null, params object[] args)
@@ -206,7 +277,7 @@ namespace MVS.Helios
         
         public void FindNetworkedVariables()
         {
-            if(_isFindNetworkedVariables) return;
+            // if(_isFindNetworkedVariables) return;
             _isFindNetworkedVariables = true;
             var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             
@@ -325,6 +396,7 @@ namespace MVS.Helios
                         if(!ho.heliosAttributes.ContainsKey(key))
                         {
                             ho.heliosAttributes.Add(key, field);
+                            serializedHeliosAttributes.Add(new HeliosAttributeEntry(key, field.Name, field.FieldType.ToString()));
                         }
                         
                         OnChangedAttribute callbackAttribute =
@@ -332,14 +404,23 @@ namespace MVS.Helios
                         if (callbackAttribute != null)
                         {
                             if(!ho.heliosAttributeCallbacks.ContainsKey(key))
+                            {
                                 ho.heliosAttributeCallbacks.Add(key, Tuple.Create(callbackAttribute.MethodName, this));
+                                serializedHeliosAttributeCallbacks.Add(new HeliosAttributeCallbackEntry(key, callbackAttribute.MethodName, this));
+                            }
                         }
                         
                         if(!ho.attributeMonoBehaviors.ContainsKey(key))
+                        {
                             ho.attributeMonoBehaviors.Add(key, this);
+                            serializedAttributeMonoBehaviors.Add(new AttributeMonoBehaviorEntry(key, this));
+                        }
                         
                         if(!ho.initialHeliosValues.ContainsKey(key))
+                        {
                             ho.initialHeliosValues.Add(key, DeepCopyHelper.DeepCopy(obj));
+                            serializedInitialHeliosValues.Add(new InitialHeliosValueEntry(key, DeepCopyHelper.DeepCopy(obj)));
+                        }
                     }
                     else
                     {
@@ -362,21 +443,33 @@ namespace MVS.Helios
                         
                         //ATTRIBUTE
                         if(!heliosAttributes.ContainsKey(key))
+                        {
                             heliosAttributes.Add(key, field);
+                            serializedHeliosAttributes.Add(new HeliosAttributeEntry(key, field.Name, field.FieldType.ToString()));
+                        }
                         
                         OnChangedAttribute callbackAttribute =
                             (OnChangedAttribute)Attribute.GetCustomAttribute(field, typeof(OnChangedAttribute));
                         if (callbackAttribute != null)
                         {
                             if(!heliosAttributeCallbacks.ContainsKey(key))
+                            {
                                 heliosAttributeCallbacks.Add(key, Tuple.Create(callbackAttribute.MethodName, this));
+                                serializedHeliosAttributeCallbacks.Add(new HeliosAttributeCallbackEntry(key, callbackAttribute.MethodName, this));
+                            }
                         }
                         
                         if(!attributeMonoBehaviors.ContainsKey(key))
+                        {
                             attributeMonoBehaviors.Add(key, this);
+                            serializedAttributeMonoBehaviors.Add(new AttributeMonoBehaviorEntry(key, this));
+                        }
                         
                         if(!initialHeliosValues.ContainsKey(key))
-                            initialHeliosValues.Add(key, DeepCopyHelper.DeepCopy(obj));    
+                        {
+                            initialHeliosValues.Add(key, DeepCopyHelper.DeepCopy(obj));
+                            serializedInitialHeliosValues.Add(new InitialHeliosValueEntry(key, DeepCopyHelper.DeepCopy(obj)));
+                        }    
                         
                     }
                 }
@@ -413,6 +506,114 @@ namespace MVS.Helios
             }
         }
         
+        private void RestoreHeliosAttributeFromSerializedData()
+        {
+            if (this.GetComponentInSelfOrParent<HeliosObject>() != null)
+            {
+                // this.GetComponentInSelfOrParent<HeliosObject>().heliosAttributes.Clear();
+                foreach (var entry in serializedHeliosAttributes)
+                {
+                    Type type = Type.GetType(entry.fieldType);
+                    if (type != null)
+                    {
+                        FieldInfo field = type.GetField(entry.fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                        if (field != null)
+                        {
+                            if(!this.GetComponentInSelfOrParent<HeliosObject>().heliosAttributes.ContainsKey(entry.key))
+                                this.GetComponentInSelfOrParent<HeliosObject>().heliosAttributes.Add(entry.key, field);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // heliosAttributes.Clear();
+                foreach (var entry in serializedHeliosAttributes)
+                {
+                    Type type = Type.GetType(entry.fieldType);
+                    if (type != null)
+                    {
+                        FieldInfo field = type.GetField(entry.fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                        if (field != null)
+                        {
+                            if(!heliosAttributes.ContainsKey(entry.key))
+                                heliosAttributes.Add(entry.key, field);
+                        }
+                    }
+                }
+            }
+        }
+        
+        private void RestoreHeliosAttributeCallbacksFromSerializedData()
+        {
+            if (this.GetComponentInSelfOrParent<HeliosObject>() != null)
+            {
+                // this.GetComponentInSelfOrParent<HeliosObject>().heliosAttributeCallbacks.Clear();
+                foreach (var entry in serializedHeliosAttributeCallbacks)
+                {
+                    if(!this.GetComponentInSelfOrParent<HeliosObject>().heliosAttributeCallbacks.ContainsKey(entry.key))
+                        this.GetComponentInSelfOrParent<HeliosObject>().heliosAttributeCallbacks.Add(entry.key, Tuple.Create(entry.methodName, entry.owner));
+                }
+            }
+            else
+            {
+                // heliosAttributeCallbacks.Clear(); // 초기화
+                foreach (var entry in serializedHeliosAttributeCallbacks)
+                {
+                    if(!heliosAttributeCallbacks.ContainsKey(entry.key))
+                        heliosAttributeCallbacks.Add(entry.key, Tuple.Create(entry.methodName, entry.owner));
+                }
+            }
+        }
+        
+        private void RestoreAttributeMonoBehaviorsFromSerializedData()
+        {
+            if (this.GetComponentInSelfOrParent<HeliosObject>() != null)
+            {
+                // this.GetComponentInSelfOrParent<HeliosObject>().attributeMonoBehaviors.Clear(); // 초기화
+
+                foreach (var entry in serializedAttributeMonoBehaviors)
+                {
+                    if(!this.GetComponentInSelfOrParent<HeliosObject>().attributeMonoBehaviors.ContainsKey(entry.key))
+                        this.GetComponentInSelfOrParent<HeliosObject>().attributeMonoBehaviors.Add(entry.key, entry.monoBehavior);
+                }
+            }
+            else
+            {
+                // attributeMonoBehaviors.Clear(); // 초기화
+
+                foreach (var entry in serializedAttributeMonoBehaviors)
+                {
+                    if(!attributeMonoBehaviors.ContainsKey(entry.key))
+                        attributeMonoBehaviors.Add(entry.key, entry.monoBehavior);
+                }
+            }
+        }
+
+        private void RestoreInitialHeliosValuesFromSerializedData()
+        {
+            if (this.GetComponentInSelfOrParent<HeliosObject>() != null)
+            {
+                // this.GetComponentInSelfOrParent<HeliosObject>().initialHeliosValues.Clear(); // 초기화
+
+                foreach (var entry in serializedInitialHeliosValues)
+                {
+                    if(!this.GetComponentInSelfOrParent<HeliosObject>().initialHeliosValues.ContainsKey(entry.key))
+                        this.GetComponentInSelfOrParent<HeliosObject>().initialHeliosValues.Add(entry.key, HeliosUtility.FromTypedJson(entry.value));
+                }
+            }
+            else
+            {
+                // initialHeliosValues.Clear(); // 초기화
+
+                foreach (var entry in serializedInitialHeliosValues)
+                {
+                    if(!initialHeliosValues.ContainsKey(entry.key))
+                        initialHeliosValues.Add(entry.key, HeliosUtility.FromTypedJson(entry.value));
+                }
+            }
+        }
+        
         private void RestoreRPCMethodsFromSerializedData()
         {
             if (this.GetComponentInSelfOrParent<HeliosObject>() != null)
@@ -440,7 +641,6 @@ namespace MVS.Helios
                     }
                 }
             }
-            
         }
 
         public void UpdateCustomData(ObjectInfo updatedObjectInfo)
