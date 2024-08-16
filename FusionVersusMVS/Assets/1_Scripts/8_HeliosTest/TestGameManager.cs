@@ -96,7 +96,7 @@ public class TestGameManager : HeliosMonoBehavior, IConnectionCallbacks
 
     public void OnConnectedToMasterServer()
     {
-        
+        Debug.Log("Hello??");
     }
 
     public void OnConnected()

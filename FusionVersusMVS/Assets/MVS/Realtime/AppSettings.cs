@@ -10,7 +10,7 @@ namespace MVS.Realtime
     public class AppSettings
     {
         /// <summary> AppId for MVS Application </summary>
-        [ReadOnly]
+        // [ReadOnly]
         public string AppId;
 
         /// <summary> AppVersion for MVS Application </summary>

@@ -68,6 +68,11 @@ namespace MVS.Realtime
                 address = parts[0];
                 port = parts[1];
                 return true;
+            }else if (parts.Length == 3)
+            {
+                address = parts[0];
+                port = parts[2];
+                return true;
             }
             return false;
         }

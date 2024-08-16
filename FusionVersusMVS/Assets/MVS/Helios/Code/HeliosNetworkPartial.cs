@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using EventCode = MVS.Realtime.EventCode;
 using OperationCode = MVS.Realtime.OperationCode;
 
@@ -12,6 +14,20 @@ namespace MVS.Helios
     public static partial class HeliosNetwork
     {
         public static List<HeliosMonoBehavior> HeliosObjectList = new List<HeliosMonoBehavior>();
+
+        public static List<string> LoadedScene = new List<string>();
+
+        public static bool IsLoadedScene()
+        {
+            return LoadedScene.Contains(SceneManager.GetActiveScene().name);
+        }
+        
+        public static bool AddToHeliosObjectListIfMatch(HeliosMonoBehavior heliosObject, string scriptName)
+        {
+            // heliosObject가 지정된 이름의 스크립트인지 확인
+            Type type = heliosObject.GetType();
+            return type.Name == scriptName;
+        }
 
         public static HeliosMonoBehavior FindObjectById(uint id)
         {
@@ -69,6 +85,7 @@ namespace MVS.Helios
                                     x.ObjectInfo.ObjectID.ClientInstanceID == objectInfo.ObjectID.ClientInstanceID);
                                 // obj.ObjectInfo = objectInfo;
                                 obj.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
+                                Debug.Log(obj.gameObject.name);
                                 obj.UpdateCustomData(objectInfo);
                                 break;
                         }
@@ -148,7 +165,6 @@ namespace MVS.Helios
                     }
                     else
                     {
-                        RealtimeClient.MVSDebug(DebugLevel.INFO, dataRpc.ObjectID.InstanceID.ToString());
                         // TODO : InstanceID 다른 방법
                         
                         if (dataRpc.ObjectID.InstanceID != 0)

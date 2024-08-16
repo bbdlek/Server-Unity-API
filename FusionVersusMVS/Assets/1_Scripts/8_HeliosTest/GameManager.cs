@@ -1,14 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
 using MVS.Helios;
 using MVS.Realtime;
 using Protocol;
 using QFSW.QC;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
@@ -145,6 +142,12 @@ public class GameManager : MonoBehaviorHeliosCallbacks
     public void SetAppKey(string appKey)
     {
         HeliosNetwork.HeliosSettings.AppSettings.AppId = appKey;
+    }
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        Debug.Log("OnEnabled");
     }
 
     private void Start()
@@ -358,12 +361,12 @@ public class GameManager : MonoBehaviorHeliosCallbacks
 
     public override void OnObjectInstantiated(ObjectInfo objectInfo)
     {
-        Debug.Log(objectInfo.ObjectID);
+        // Debug.Log(objectInfo.ObjectID);
     }
 
     public override void OnObjectDestroyed(ObjectInfo objectInfo)
     {
-        Debug.Log(objectInfo.ObjectID);
+        // Debug.Log(objectInfo.ObjectID);
     }
 
     public override void OnCreatedGroup()
