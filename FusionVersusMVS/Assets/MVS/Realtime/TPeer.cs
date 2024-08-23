@@ -22,8 +22,8 @@ namespace MVS.Realtime
         
         public struct Header
         {
-            public UInt16 id;
-            public UInt16 size;
+            public UInt32 id;
+            public UInt32 size;
         }
         
         private enum PacketState
@@ -39,7 +39,7 @@ namespace MVS.Realtime
             public byte[] data;
         }
         
-        private static int HeaderSize = 4; // Assuming 2 UInt16 for the header
+        private static int HeaderSize = 8; // Assuming 4 UInt32 for the header
         private const int MaxBufferSize = 1024 * 100; // 100KB, adjust as necessary
         
         // private MVSWebSocket _mvsWebSocket;
@@ -87,7 +87,7 @@ namespace MVS.Realtime
         {
             //TCP Data 생성
             Header header = new Header()
-                { id = (UInt16)PKT_ID.PKT_C_OPERATION, size = (UInt16)(data.Length + HeaderSize) };
+                { id = (UInt32)PKT_ID.PKT_C_OPERATION, size = (UInt32)(data.Length + HeaderSize) };
             
             sendStream.SetLength(0);
         
@@ -118,7 +118,7 @@ namespace MVS.Realtime
                 var id = job.header.id;
                 var size = job.header.size;
 
-                var result = handlerDic[(PKT_ID)id](job.data.SubArray(0, size - HeaderSize), size);
+                var result = handlerDic[(PKT_ID)id](job.data.SubArray(0, size - HeaderSize), (int)size);
                 PoolJob(job);
 
                 job = DequeueJob();
@@ -152,9 +152,9 @@ namespace MVS.Realtime
                     case PacketState.AwaitingHeader:
                         if (bufferEnd - bufferStart >= HeaderSize)
                         {
-                            currentHeader.id = BitConverter.ToUInt16(recvBuffer, bufferStart);
-                            currentHeader.size = BitConverter.ToUInt16(recvBuffer, bufferStart + 2);
-                            currentPacketDataSize = currentHeader.size - HeaderSize;
+                            currentHeader.id = BitConverter.ToUInt32(recvBuffer, bufferStart);
+                            currentHeader.size = BitConverter.ToUInt32(recvBuffer, bufferStart + 4);
+                            currentPacketDataSize = (int)(currentHeader.size - HeaderSize);
                             currentState = PacketState.AwaitingData;
                             bufferStart += HeaderSize;
                         }
@@ -226,7 +226,7 @@ namespace MVS.Realtime
             var packet = S_EVENT.Parser.ParseFrom(data);
             if (packet.Result != Result.Success)
             {
-                Listener.MVSDebug(DebugLevel.ERROR, $"packet result : {packet.Result}");
+                Listener.MVSDebug(DebugLevel.ERROR, $"packet EventCode : {packet.EventCode} packet result : {packet.Result}");
                 return false;
             }
             EventData eventData = new EventData

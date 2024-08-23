@@ -72,7 +72,7 @@ namespace MVS.Helios.Utility
                 }
                 catch (Exception e)
                 {
-                    // Debug.LogError(e);
+                    Console.Write(e);
                     var newObject = obj;
                     return newObject;
                 }   

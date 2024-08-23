@@ -160,9 +160,6 @@ MonoBehaviour:
   serializedInitialHeliosValues: []
   serializedRPCMethods: []
   _prefabId: 5
-  _instanceId: 0
-  _clientInstanceId: 4294967295
-  isMine: 0
   heliosTransform: {fileID: 0}
 --- !u!54 &-2500174006590929170
 Rigidbody:

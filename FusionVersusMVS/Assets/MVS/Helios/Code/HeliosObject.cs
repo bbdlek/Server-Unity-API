@@ -8,9 +8,7 @@ namespace MVS.Helios
     {
         [SerializeField]
         private uint _prefabId;
-        [SerializeField]
         private uint _instanceId;
-        [SerializeField]
         private uint _clientInstanceId;
         
         public uint PrefabId
@@ -43,18 +41,12 @@ namespace MVS.Helios
             }
         }
         
-        public bool isMine = false;
+        private bool _isMine = false;
         
         public new bool IsMine
         {
-            get
-            {
-                return isMine;
-            }
-            set
-            {
-                isMine = value;
-            }
+            get => _isMine;
+            set => _isMine = value;
         }
 
         public HeliosTransform heliosTransform;

@@ -213,7 +213,7 @@ namespace MVS.Helios
         //     return await ConnectUsingSettings(HeliosSettings.AppSettings);
         // }
 
-        private static async Task<bool> ConnectUsingSettings(AppSettings appSettings)
+        private static bool ConnectUsingSettings(AppSettings appSettings)
         {
             if (RealtimeClient.RealtimePeer.PeerState != PeerState.Disconnected)
             {
@@ -236,7 +236,7 @@ namespace MVS.Helios
 
             RealtimeClient.AppSettingsDebug = appSettings.DebugLevel;
 
-            return await RealtimeClient.Connect(appSettings.Server, appSettings.Port.ToString(), appSettings.AppId,
+            return RealtimeClient.Connect(appSettings.Server, appSettings.Port.ToString(), appSettings.AppId,
                 ServerConnection.MVS);
         }
 

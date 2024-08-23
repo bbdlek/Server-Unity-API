@@ -273,7 +273,7 @@ namespace MVS.Realtime
 
         #endregion
         
-        public async Task<bool> Connect(string serverAddress, string serverPort, string appId, ServerConnection serverType)
+        public bool Connect(string serverAddress, string serverPort, string appId, ServerConnection serverType)
         {
             if (State == ClientState.Disconnecting)
             {
@@ -417,7 +417,6 @@ namespace MVS.Realtime
                     CurrentGroup = null;
                     CurrentRoom = null;
                     State = ClientState.DisConnected;
-                    Debug.Log("disDisDisConnected");
                     ConnectionCallbacksTarget.OnDisconnected();
                     break;
                 case StatusCode.Exception:
@@ -448,6 +447,7 @@ namespace MVS.Realtime
                     var data = Packs.Parser.ParseFrom(eventData.FixedData).SOtherClientGroupLeave;
                     Player otherPlayer = new Player(data.PlayerInfo);
                     //TODO: Remove Player
+                    if(CurrentGroup == null) return;
                     CurrentGroup.RemovePlayer(otherPlayer);
                     InGroupCallbacksTarget.OnPlayerLeftGroup(otherPlayer);
                 }   break;
@@ -543,7 +543,8 @@ namespace MVS.Realtime
                 case OperationCode.OTHER_CLIENT_ROOM_LEAVE:
                     var dataOtherClientRoomLeaved =
                         Packs.Parser.ParseFrom(operationResponse.FixedData).SOtherClientRoomLeave;
-                    Player otherLeavedPlayer = CurrentRoom.GetPlayer(dataOtherClientRoomLeaved.PlayerInfo.PlayerID); 
+                    Player otherLeavedPlayer = CurrentRoom.GetPlayer(dataOtherClientRoomLeaved.PlayerInfo.PlayerID);
+                    if(CurrentRoom == null || otherLeavedPlayer == null) return;
                     CurrentRoom.RemovePlayer(otherLeavedPlayer);
                     InRoomCallbacksTarget.OnPlayerLeftRoom(otherLeavedPlayer);
                     break;
@@ -644,7 +645,7 @@ namespace MVS.Realtime
             }
         }
 
-        private async Task JoinRoom(OperationResponse operationResponse)
+        private void JoinRoom(OperationResponse operationResponse)
         {
             var data = Packs.Parser.ParseFrom(operationResponse.FixedData).SRoomJoinOrCreate;
             
@@ -657,7 +658,6 @@ namespace MVS.Realtime
             
             // CurrentRoom = CreateRoom(SelectedRoomInfo);
             CurrentRoom.RealtimeClient = this;
-            await OpGroupTask();
             
             foreach (var group in CurrentRoom.GroupList)
             {
@@ -853,7 +853,7 @@ namespace MVS.Realtime
                         RoomID = RoomJoinInfo.RoomID,
                     });
                     
-                    await Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
+                    Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
                 });
             return default;
         }
@@ -921,7 +921,7 @@ namespace MVS.Realtime
                     LocalPlayer.PlayerInfo.PlayerID = res.responseMessage.userId;
                     
                     if(state!= ClientState.ConnectingToMVS)
-                        await Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
+                        Connect(RoomJoinInfo.IP, RoomJoinInfo.Port, AppId, ServerConnection.MVS);
                 });
             
             return RoomJoinInfo;

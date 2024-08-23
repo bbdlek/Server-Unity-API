@@ -41,6 +41,9 @@ public class TestGameManager : HeliosMonoBehavior, IConnectionCallbacks
     [HNSync]
     public Bounds ccolor;
 
+    [HNSync] public float validateValue;
+    [HNSync] public float validateValue2;
+
     [HeliosRPC]
     private void TestRPC(Dictionary<int, List<Vector3>> testVec)
     {

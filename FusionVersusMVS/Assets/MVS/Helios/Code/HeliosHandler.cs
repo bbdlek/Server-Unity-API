@@ -15,33 +15,33 @@ namespace MVS.Helios
 {
     public class HeliosHandler : ConnectionHandler, IConnectionCallbacks, IInRoomCallbacks, IInGroupCallbacks
     {
-        private static HeliosHandler instance;
+        private static HeliosHandler _instance;
 
-        public static HeliosHandler Instance
+        public new static HeliosHandler Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = FindObjectOfType<HeliosHandler>();
-                    if (instance == null)
+                    _instance = FindObjectOfType<HeliosHandler>();
+                    if (_instance == null)
                     {
                         GameObject go = new GameObject();
                         go.name = "HeliosHandler";
-                        instance = go.AddComponent<HeliosHandler>();
+                        _instance = go.AddComponent<HeliosHandler>();
                     }
                 }
 
-                return instance;
+                return _instance;
             }
         }
 
 
-        private void Awake()
+        protected override void Awake()
         {
-            if (instance == null || ReferenceEquals(this, instance))
+            if (_instance == null || ReferenceEquals(this, _instance))
             {
-                instance = this;
+                _instance = this;
                 base.Awake();
             }
             else

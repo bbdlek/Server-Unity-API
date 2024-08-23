@@ -22,11 +22,18 @@ namespace MVS.Helios
             return LoadedScene.Contains(SceneManager.GetActiveScene().name);
         }
         
-        public static bool AddToHeliosObjectListIfMatch(HeliosMonoBehavior heliosObject, string scriptName)
+        public static bool IsInHeliosObjectList(string scriptName)
         {
             // heliosObject가 지정된 이름의 스크립트인지 확인
-            Type type = heliosObject.GetType();
-            return type.Name == scriptName;
+            foreach (var heliosMonoBehavior in HeliosObjectList)
+            {
+                if (heliosMonoBehavior.GetType().Name == scriptName)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static HeliosMonoBehavior FindObjectById(uint id)
@@ -36,7 +43,7 @@ namespace MVS.Helios
 
         public static HeliosMonoBehavior FindObjectByClientID(uint id)
         {
-            return HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.ClientInstanceID == (int)id);
+            return HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.ClientInstanceID == (int)id && x.IsMine);
         }
         
         public static void AddCallbackTarget(object target)
@@ -83,7 +90,7 @@ namespace MVS.Helios
                             case ObjectSyncType.GroupOwn:
                                 var obj = HeliosObjectList.Find(x =>
                                     x.ObjectInfo.ObjectID.ClientInstanceID == objectInfo.ObjectID.ClientInstanceID);
-                                // obj.ObjectInfo = objectInfo;
+                                if(obj == null) continue;
                                 obj.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
                                 Debug.Log(obj.gameObject.name);
                                 obj.UpdateCustomData(objectInfo);
@@ -153,25 +160,26 @@ namespace MVS.Helios
                     var dataRpc = Packs.Parser.ParseFrom(eventData.FixedData).CRpc;
                     if (eventData.Sender == LocalPlayer.UserId)
                     {
-                        var rpcObj = FindObjectByClientID(dataRpc.ObjectID.ClientInstanceID);
                         if (dataRpc.ObjectID.InstanceID == 0)
                         {
+                            var rpcObj = FindObjectByClientID(dataRpc.ObjectID.ClientInstanceID);
                             rpcObj.RPC(rpcObj.RPCMethods[dataRpc.MethodName].Item1.Name, dataRpc.Receivers.ToArray(), HeliosUtility.DeserializeParameters(dataRpc.MethodArgs.ToByteArray()));
                         }
                         else
                         {
-                            rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());
+                            var rpcObj = FindObjectById(dataRpc.ObjectID.InstanceID);
+                            if(rpcObj == null) return;
+                            rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());    
                         }
+                        
                     }
                     else
                     {
                         // TODO : InstanceID 다른 방법
                         
-                        if (dataRpc.ObjectID.InstanceID != 0)
-                        {
-                            var rpcObj = FindObjectById(dataRpc.ObjectID.InstanceID);
-                            rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());
-                        }
+                        var rpcObj = FindObjectById(dataRpc.ObjectID.InstanceID);
+                        if(rpcObj == null) return;
+                        rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());
                     }
                     break;
             }
