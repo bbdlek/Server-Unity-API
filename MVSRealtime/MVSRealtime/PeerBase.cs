@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Google.Protobuf;
 using Protocol;
 
@@ -14,7 +15,7 @@ namespace MVS.Realtime
 
         internal ConnectionProtocol Protocol;
 
-        internal ConnectionStateValue peerConnectionState = ConnectionStateValue.Disconnected;
+        public ConnectionStateValue peerConnectionState = ConnectionStateValue.Disconnected;
 
         internal short peerID = -1;
         
@@ -41,14 +42,16 @@ namespace MVS.Realtime
             Disconnect();
         }
 
-        public abstract void OnConnect();
+        public virtual void OnConnect()
+        {
+            mvsPeer.OnConnected();
+        }
 
         internal void InitCallback()
         {
             if (peerConnectionState == ConnectionStateValue.Connecting)
                 peerConnectionState = ConnectionStateValue.Connected;
             ApplicationIsInitialized = true;
-            Listener.OnStatusChanged(StatusCode.Connect);
         }
         
         internal abstract void Disconnect();
@@ -61,10 +64,12 @@ namespace MVS.Realtime
 
         internal abstract bool ProcessOutgoingData();
 
+        public abstract void ReceiveIncomingData(byte[] data);
+
         internal (byte[], int) SerializeOperationToPacket(
             Protocol.OperationCode operationCode,
             IMessage fixedData,
-            CustomDic customData = null)
+            List<Protocol.HeliosVariable> customData = null)
         {
             var pkt = new C_OPERATION
             {
@@ -76,8 +81,8 @@ namespace MVS.Realtime
                 {
                     C_HEART_BEAT data => new Packs { CHeartBeat = data },
                     C_ROOM_JOIN_OR_CREATE data => new Packs { CRoomJoinOrCreate = data },
-                    C_TEST_ROOM_LIST data => new Packs { CRoomList = data },
-                    C_PLAYER_ID data => new Packs { CPlayerId = data },
+                    //C_TEST_ROOM_LIST data => new Packs { CRoomList = data },
+                    //C_PLAYER_ID data => new Packs { CPlayerId = data },
                     C_GROUP_LIST data => new Packs { CGroupList = data },
                     C_GROUP_JOIN data => new Packs { CGroupJoin = data },
                     C_EVENT data => new Packs { CEvent = data },
@@ -86,7 +91,12 @@ namespace MVS.Realtime
             }
 
             if (customData != null)
-                pkt.CustomData = customData;
+            {
+                foreach (var data in customData)
+                {
+                    pkt.CustomData.Add(data);
+                }
+            }
 
             return (pkt.ToByteArray(), pkt.CalculateSize());
         }

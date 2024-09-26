@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MVSRealtime")]
+[assembly: AssemblyTitle("FusionRealtime")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MVSRealtime")]
+[assembly: AssemblyProduct("FusionRealtime")]
 [assembly: AssemblyCopyright("Copyright ©  2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("B809B224-1725-4484-8BFA-239825C1DAB2")]
+[assembly: Guid("236FC2AF-EA9F-4767-B5AA-2B359F6C38BA")]
 
 // Version information for an assembly consists of the following four values:
 //

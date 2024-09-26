@@ -1,23 +1,24 @@
 using System.Collections.Generic;
-using Protocol;
 
 namespace MVS.Realtime
 {
     public class Room
     {
-        public RealtimeClient RealtimeClient { get; set; }
-        public Room(RoomInfo roomInfo)
+        internal RealtimeClient RealtimeClient { get; set; }
+        internal Room(RoomInfo roomInfo)
         {
             RoomInfo = roomInfo;
         }
-        
-        private RoomInfo _roomInfo;
-        
-        public RoomInfo RoomInfo
-        {
-            get => _roomInfo;
-            set => _roomInfo = value;
-        }
+
+        internal RoomInfo RoomInfo { get; private set; }
+
+        private List<Group> _groupList = new List<Group>();
+
+        public List<Group> GroupList => _groupList;
+
+        public string RoomName => RoomInfo.Name;
+
+        public ulong RoomID => RoomInfo.RoomID;
 
         private Dictionary<ulong, Player> _playerList = new Dictionary<ulong, Player>();
 
@@ -36,18 +37,20 @@ namespace MVS.Realtime
             return player;
         }
 
-        public Player GetPlayer(ulong playerId, bool findMaster = false)
+        public virtual void RemovePlayer(Player player)
         {
-            ulong id = findMaster && playerId == 0 ? MasterClientId : playerId;
+            if (PlayerList.ContainsKey(player.UserId))
+            {
+                PlayerList.Remove(player.UserId);
+            }
+        }
 
+        public Player GetPlayer(ulong playerId)
+        {
             Player result;
-            PlayerList.TryGetValue(id, out result);
+            PlayerList.TryGetValue(playerId, out result);
 
             return result;
         }
-
-        public ulong masterClientId;
-
-        public ulong MasterClientId => masterClientId;
     }
 }

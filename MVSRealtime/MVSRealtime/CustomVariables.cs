@@ -16,7 +16,6 @@ namespace MVS.Realtime
         {
             if (VarDic.ContainsValue(variableName) || VarDic.ContainsKey(key))
             {
-                // HeliosNetwork.RealtimeClient.MVSDebug(DebugLevel.ERROR, $"Key {key} or VariableName {variableName} is Already Exists. Please Change");
                 return false;
             }
             VarDic.Add(key, variableName);

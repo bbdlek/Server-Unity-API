@@ -1,21 +1,30 @@
-#if UNITY_4_7 || UNITY_5 || UNITY_5_3_OR_NEWER
-#define SUPPORTED_UNITY
-#endif
+using System;
+using UnityEngine;
 
 namespace MVS.Realtime
 {
-    using System;
-    
-#if SUPPORTED_UNITY
-    using UnityEngine;
-#endif
-
-#if SUPPORTED_UNITY
     public class ConnectionHandler : MonoBehaviour
-#else
-    public class ConnectionHandler
-#endif
     {
+        private static ConnectionHandler _instance;
+
+        public static ConnectionHandler Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = FindObjectOfType<ConnectionHandler>();
+
+                    if (_instance == null)
+                    {
+                        GameObject singletonObject = new GameObject("ConnectionHandler");
+                        _instance = singletonObject.AddComponent<ConnectionHandler>();
+                    }
+                }
+                return _instance;
+            }
+        }
+        
         public bool ApplyDontDestroyOnLoad = true;
         
         [NonSerialized]
@@ -32,9 +41,13 @@ namespace MVS.Realtime
         
         public RealtimeClient Client { get; set; }
         
-#if SUPPORTED_UNITY
-
-#if UNITY_2019_4_OR_NEWER
+        protected virtual void Awake()
+        {
+            if (this.ApplyDontDestroyOnLoad)
+            {
+                DontDestroyOnLoad(this.gameObject);
+            }
+        }
         
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void StaticReset()
@@ -44,15 +57,6 @@ namespace MVS.Realtime
             AppPauseRecent = false;
             AppOutOfFocus = false;
             AppOutOfFocusRecent = false;
-        }
-#endif
-        
-        protected virtual void Awake()
-        {
-            if (this.ApplyDontDestroyOnLoad)
-            {
-                DontDestroyOnLoad(this.gameObject);
-            }
         }
         
         protected virtual void OnDisable()
@@ -73,6 +77,5 @@ namespace MVS.Realtime
         {
             AppQuits = true;
         }
-#endif
     }
 }
