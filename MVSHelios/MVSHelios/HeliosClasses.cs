@@ -199,10 +199,13 @@ namespace MVS.Helios
         {
             if(!this.GetComponentInSelfOrParent<HeliosObject>())
             {
+                // HeliosNetwork.HeliosObjectList.Add(this);
+                // ObjectInfo.ObjectID.ClientInstanceID = (uint)HeliosNetwork.HeliosObjectList.LastIndexOf(this);
                 if(!HeliosNetwork.IsInHeliosObjectList(GetType().Name))
                 {
                     HeliosNetwork.HeliosObjectList.Add(this);
                     ObjectInfo.ObjectID.ClientInstanceID = (uint)HeliosNetwork.HeliosObjectList.LastIndexOf(this);
+                    Debug.Log($"{name} is {ObjectInfo.ObjectID.ClientInstanceID}");
                 }
             }
             
@@ -221,6 +224,7 @@ namespace MVS.Helios
 
         public void RPC(string methodName, ulong[] targetPlayerIDs = null, params object[] args)
         {
+            Debug.Log(name);
             ObjectID objectID;
             if (this.GetComponentInSelfOrParent<HeliosObject>())
             {

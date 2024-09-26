@@ -201,6 +201,7 @@ namespace MVS.Helios
                         foreach (var obj in HeliosObjectList)
                         {
                             if(obj.ObjectInfo.SyncType == ObjectSyncType.PersonalOwn) continue;
+                            Debug.Log(obj.ObjectInfo.ObjectID);
                             obj.ObjectInfo.SyncType = ObjectSyncType.GroupOwn;
                             obj.ObjectInfo.OwnerPlayerID = 0;
                             pkt.ObjectInfos.Add(obj.ObjectInfo);

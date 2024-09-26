@@ -86,11 +86,11 @@ namespace MVS.Helios
             }
 
             // 루트 모션 초기화
-            // if(_animator.applyRootMotion)
-            // {
-            //     _syncRootPosition = transform.position;
-            //     _syncRootRotation = transform.rotation;
-            // }
+            if(_animator.applyRootMotion)
+            {
+                _syncRootPosition = transform.position;
+                _syncRootRotation = transform.rotation;
+            }
 
             // 애니메이터 속도 초기화
             _syncAnimatorSpeed = _animator.speed;
@@ -129,8 +129,11 @@ namespace MVS.Helios
             }
 
             // 루트 모션 동기화
-            // _syncRootPosition = transform.position;
-            // _syncRootRotation = transform.rotation;
+            if (_animator.applyRootMotion)
+            {
+                _syncRootPosition = transform.position;
+                _syncRootRotation = transform.rotation;
+            }
 
             // 애니메이터 속도 동기화
             _syncAnimatorSpeed = _animator.speed;
@@ -173,8 +176,11 @@ namespace MVS.Helios
             }
 
             // 루트 모션 적용
-            // transform.position = _syncRootPosition;
-            // transform.rotation = _syncRootRotation;
+            if (_animator.applyRootMotion)
+            {
+                transform.position = _syncRootPosition;
+                transform.rotation = _syncRootRotation;
+            }
 
             // 애니메이터 속도 적용
             _animator.speed = _syncAnimatorSpeed;
