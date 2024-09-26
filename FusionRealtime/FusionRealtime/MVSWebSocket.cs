@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using UnityEngine.Scripting;
@@ -19,7 +17,7 @@ namespace MVS.Realtime
         [Preserve]
         public MVSWebSocket(PeerBase peerBase) : base(peerBase)
         {
-            Listener.MVSDebug(DebugLevel.INFO, "MVSWebSocket, .Net, Unity");
+            peerBase.Listener.MVSDebug(DebugLevel.INFO, "MVSWebSocket, .Net, Unity");
             
             // 데이터 수신을 폴링하지 않음
             PollReceive = false;
@@ -52,7 +50,7 @@ namespace MVS.Realtime
 
         public override bool Disconnect()
         {
-            Listener.MVSDebug(DebugLevel.INFO, "SocketTCP.Disconnect()");
+            peerBase.Listener.MVSDebug(DebugLevel.INFO, "SocketTCP.Disconnect()");
             lock (syncer)
             {
                 State = RealtimeSocketState.Disconnecting;
@@ -95,9 +93,9 @@ namespace MVS.Realtime
             {
                 protocol = "wss";
             }
-
-            string url = $"{protocol}://{ServerAddress}:{ServerPort}";
-            Listener.MVSDebug(DebugLevel.INFO, url);
+            
+            string url = $"{protocol}://{peerBase.ServerAddress}";
+            peerBase.Listener.MVSDebug(DebugLevel.INFO, url);
             ws = new WebSocketSharp.WebSocket(url);
 
             ws.OnOpen += OnWebSocketOpen;

@@ -1,6 +1,4 @@
-using System;
-using System.Linq;
-using MVS.Realtime;
+using MVS.Helios.Utility;
 using Protocol;
 using UnityEngine;
 using EventCode = MVS.Realtime.EventCode;
@@ -45,18 +43,18 @@ namespace MVS.Helios
         public bool syncRotation = true;
         public bool syncScale = true;
 
-        public float smoothness;
-
-        private bool _isMine;
+        [Range(1, 100)]
+        public float smoothness = 50f;
         
         private HeliosObject _heliosObject;
         
         // TODO : Local Lossy
 
-        private void Awake()
+        public override void Awake()
         {
-            _heliosObject = GetComponent<HeliosObject>();
-            _isMine = _heliosObject.IsMine;
+            base.Awake();
+            _heliosObject = this.GetComponentInSelfOrParent<HeliosObject>();
+            
             _storedPosition = transform.position;
             networkPosition = _storedPosition;
 
@@ -70,7 +68,7 @@ namespace MVS.Helios
         private void Update()
         {
             //Read?
-            if(!_isMine)
+            if(!IsMine)
             {
                 if(syncPosition)
                 {
@@ -99,16 +97,16 @@ namespace MVS.Helios
             
             if (_elapsedTime >= 1f / HeliosNetwork.SendRate)
             {
-                if (_isMine && (HasPositionChanged(transform.position) || HasRotationChanged(transform.rotation) || HasScaleChanged(transform.localScale))) {
+                if (IsMine && (HasPositionChanged(transform.position) || HasRotationChanged(transform.rotation) || HasScaleChanged(transform.localScale))) {
                     var fixedData = new C_UPDATE_NETWORK_OBJECTS();
                     var _objectInfo = new ObjectInfo
                     {
                         ObjectID = _heliosObject.ObjectInfo.ObjectID,
-                        SyncType = ObjectSyncType.PersonalOwn,
+                        SyncType = _heliosObject.ObjectInfo.SyncType,
                         OwnerPlayerID = _heliosObject.ObjectInfo.OwnerPlayerID
                     };
 
-                    _objectInfo.TestValues.Add(new HeliosVariable
+                    _objectInfo.Values.Add(new HeliosVariable
                     {
                         Key = CustomVariablesUnity.PosKey,
                         NVector = new Protocol.Vector3
@@ -119,7 +117,7 @@ namespace MVS.Helios
                         }
                     });
                     
-                    _objectInfo.TestValues.Add(new HeliosVariable
+                    _objectInfo.Values.Add(new HeliosVariable
                     {
                         Key = CustomVariablesUnity.RotKey,
                         NVector = new Protocol.Vector3
@@ -130,7 +128,7 @@ namespace MVS.Helios
                         }
                     });
                     
-                    _objectInfo.TestValues.Add(new HeliosVariable
+                    _objectInfo.Values.Add(new HeliosVariable
                     {
                         Key = CustomVariablesUnity.ScaleKey,
                         NVector = new Protocol.Vector3

@@ -38,3 +38,16 @@ C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\obj\Release\Fusi
 C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\obj\Release\FusionRe.8B247C0A.Up2Date
 C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\obj\Release\HeliosRealtime.dll
 C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\obj\Release\HeliosRealtime.pdb
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\System.Net.Http.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\UnityEditor.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\Unity.Cecil.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\Bee.BeeDriver2.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\Bee.BinLog.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\PlayerBuildProgramLibrary.Data.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\Bee.TinyProfiler2.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\ExCSS.Unity.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\Unity.CompilationPipeline.Common.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\ScriptCompilationBuildProgram.Data.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\BeeBuildProgramCommon.Data.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\System.CodeDom.dll
+C:\Unity Projects\unityservertest\FusionRealtime\FusionRealtime\bin\Release\UnityEditor.xml

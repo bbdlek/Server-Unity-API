@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 4520983366914065623}
   - component: {fileID: 8508066451922919660}
   - component: {fileID: 2631683146492028902}
+  - component: {fileID: -1940775315109588381}
+  - component: {fileID: -5222077790957407087}
   m_Layer: 0
   m_Name: Cube 1
   m_TagString: Untagged
@@ -121,6 +123,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefabId: 0
   _instanceId: 0
+  _clientInstanceId: 0
+  isMine: 0
   heliosTransform: {fileID: 0}
 --- !u!114 &2631683146492028902
 MonoBehaviour:
@@ -134,7 +138,65 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af6d28e9808043349288f7352e4b25bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  positionTolerance: 0.01
+  rotationTolerance: 1
+  scaleTolerance: 0.01
   networkPosition: {x: 0, y: 0, z: 0}
   networkRotation: {x: 0, y: 0, z: 0, w: 0}
+  networkScale: {x: 0, y: 0, z: 0}
   syncPosition: 1
   syncRotation: 1
+  syncScale: 1
+  smoothness: 50
+--- !u!114 &-1940775315109588381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8931026403998881570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81b40b32a0659c34689907bb29aa36e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  methodNames:
+  - TestRPC
+  - TestRPC
+  - TestRPC
+  serializedRPCMethods:
+  - hash: 16720445601917653615
+    methodName: TestRPC
+    owner: {fileID: -1940775315109588381}
+  - hash: 16720445601917653615
+    methodName: TestRPC
+    owner: {fileID: -1940775315109588381}
+  - hash: 16720445601917653615
+    methodName: TestRPC
+    owner: {fileID: -1940775315109588381}
+--- !u!114 &-5222077790957407087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8931026403998881570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81b40b32a0659c34689907bb29aa36e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  methodNames:
+  - TestRPC
+  - TestRPC
+  - TestRPC
+  serializedRPCMethods:
+  - hash: 16720445601917653615
+    methodName: TestRPC
+    owner: {fileID: -5222077790957407087}
+  - hash: 16720445601917653615
+    methodName: TestRPC
+    owner: {fileID: -5222077790957407087}
+  - hash: 16720445601917653615
+    methodName: TestRPC
+    owner: {fileID: -5222077790957407087}

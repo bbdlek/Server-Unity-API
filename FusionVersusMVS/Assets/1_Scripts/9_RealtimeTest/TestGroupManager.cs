@@ -7,7 +7,7 @@ public class TestGroupManager : Singleton<TestGroupManager>, IMakingGroupCallbac
 {
     public void OnClickGroupJoinBtn()
     {
-        TestManager.Instance.Client.OpJoinGroup(1, 1);
+        // TestManager.Instance.Client.OpJoinGroup(1, 1);
     }
     
     public void OnCreatedGroup()
@@ -15,7 +15,7 @@ public class TestGroupManager : Singleton<TestGroupManager>, IMakingGroupCallbac
         Debug.Log("OnCreatedGroup");
     }
 
-    public void OnCreatedGroupFailed(short failCode, string message)
+    public void OnCreatedGroupFailed(string message)
     {
         
     }
@@ -25,7 +25,7 @@ public class TestGroupManager : Singleton<TestGroupManager>, IMakingGroupCallbac
         Debug.Log("OnJoinedGroup");
     }
 
-    public void OnJoinedGroupFailed(short failCode, string message)
+    public void OnJoinedGroupFailed(string message)
     {
         
     }

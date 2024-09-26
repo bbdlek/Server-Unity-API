@@ -1,10 +1,11 @@
 using System;
 using MVS.Helios;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class CubeManager : HeliosMonoBehavior
 {
-    [HeliosRPC("TargetAll")]
+    [HeliosRPC]
     public void AddScore()
     {
         Debug.Log("AddScore");
@@ -12,12 +13,40 @@ public class CubeManager : HeliosMonoBehavior
     }
 
     public int score = 1;
-    [HNSync] public int score2 = 3;
+    [HNSync, OnChanged(nameof(OnChangeScore2))] public int score2 = 3;
+
+    private void OnChangeScore2()
+    {
+        Debug.Log($"OnChangeScore2 {score2}");
+    }
+
+    private Animator _animator;
+    
+    public override void Awake()
+    {
+        base.Awake();
+        _animator = GetComponent<Animator>();
+        Debug.Log(IsMine);
+        // if(IsMine)
+        //     RPC("AddScore");
+    }
+
+    public void RPC_AddScore()
+    {
+        Debug.Log($"RPC_AddScore! {GetComponent<HeliosObject>().InstanceId}");
+        if(IsMine)
+            RPC("AddScore");
+    }
+
+    private void OnEnable()
+    {
+        
+    }
 
     private void Start()
     {
         // if(IsMine)
-            // RPC("AddScore");
+        //     RPC("AddScore");
     }
 
     private void Update()

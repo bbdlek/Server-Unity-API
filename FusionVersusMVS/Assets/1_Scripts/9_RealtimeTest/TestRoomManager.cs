@@ -7,13 +7,13 @@ public class TestRoomManager : Singleton<TestRoomManager>, IMakingRoomCallbacks,
 {
     public void OnClickRoomJoinBtn()
     {
-        TestManager.Instance.Client.OpCreateRoom(new JoinRoomParams
+        /*TestManager.Instance.Client.OpCreateRoom(new RoomJoinInfoStruct()
         {
             AuthToken = "null",
             AppID = 1,
             RoomID = 1,
             Name = "null"
-        });
+        });*/
     }
 
     public void OnCreatedRoom()
@@ -21,7 +21,7 @@ public class TestRoomManager : Singleton<TestRoomManager>, IMakingRoomCallbacks,
         Debug.Log("OnCreatedRoom");
     }
 
-    public void OnCreatedRoomFailed(short failCode, string message)
+    public void OnCreatedRoomFailed(string message)
     {
         
     }
@@ -31,7 +31,7 @@ public class TestRoomManager : Singleton<TestRoomManager>, IMakingRoomCallbacks,
         Debug.Log("OnJoinedRoom");
     }
 
-    public void OnJoinedRoomFailed(short failCode, string message)
+    public void OnJoinedRoomFailed(string message)
     {
         
     }
@@ -41,14 +41,14 @@ public class TestRoomManager : Singleton<TestRoomManager>, IMakingRoomCallbacks,
         
     }
 
+    public void OnConnectedToMasterServer()
+    {
+        
+    }
+
     public void OnConnected()
     {
         Debug.Log("OnConnected");
-    }
-
-    public void OnConnectedToMaster()
-    {
-        
     }
 
     public void OnDisconnected()

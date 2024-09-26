@@ -77,3 +77,6 @@ C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\obj\Release\MVSHelios.cspr
 C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\obj\Release\MVSHelios.csproj.Up2Date
 C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\obj\Release\MVSHelios.dll
 C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\obj\Release\MVSHelios.pdb
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\Newtonsoft.Json.dll
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\Newtonsoft.Json.pdb
+C:\Unity Projects\unityservertest\MVSHelios\MVSHelios\bin\Release\Newtonsoft.Json.xml

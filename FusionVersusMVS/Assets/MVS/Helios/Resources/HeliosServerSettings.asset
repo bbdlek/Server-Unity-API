@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: HeliosServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppId: 
+    AppId: gaia-prod-mvs
     AppVersion: 
     FixedRegion: 
-    Server: 192.168.154.130
-    Port: 30082
-    IsUseNameServer: 0
-    IsDirectToMVS: 1
-    Protocol: 2
-    DebugLevel: 4
+    NameServer: 222.122.186.49
+    MVM: wss://sag-gaia-prod-mvs.tmax-superapp.com
+    Server: 222.122.186.54
+    Port: 30001
+    IsUsingNameServer: 1
+    Protocol: 3
+    DebugLevel: 3
   SendRate: 60
   RunInBackground: 1
   NetworkPrefabs:
@@ -32,3 +33,4 @@ MonoBehaviour:
     - {fileID: 8508066451922919660, guid: 6be15f56eff1a08e68303540e82bb061, type: 3}
     - {fileID: 8508066451922919660, guid: 1a6a7149231017fc3b07eba052332156, type: 3}
     - {fileID: 8508066451922919660, guid: 7182995e8b9816168a367c0ea6a2d403, type: 3}
+    - {fileID: 6661629705440804679, guid: c51189c6eab28bd4eb6a89f376b633ea, type: 3}

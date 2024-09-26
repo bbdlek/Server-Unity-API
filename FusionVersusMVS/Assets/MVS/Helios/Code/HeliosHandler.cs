@@ -1,8 +1,12 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf;
 using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using EventCode = MVS.Realtime.EventCode;
 using HeliosVariable = Protocol.HeliosVariable;
 using Vector3 = Protocol.Vector3;
@@ -11,38 +15,76 @@ namespace MVS.Helios
 {
     public class HeliosHandler : ConnectionHandler, IConnectionCallbacks, IInRoomCallbacks, IInGroupCallbacks
     {
-        private static HeliosHandler instance;
+        private static HeliosHandler _instance;
 
-        public static HeliosHandler Instance
+        public new static HeliosHandler Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = FindObjectOfType<HeliosHandler>();
-                    if (instance == null)
+                    _instance = FindObjectOfType<HeliosHandler>();
+                    if (_instance == null)
                     {
                         GameObject go = new GameObject();
                         go.name = "HeliosHandler";
-                        instance = go.AddComponent<HeliosHandler>();
+                        _instance = go.AddComponent<HeliosHandler>();
                     }
                 }
 
-                return instance;
+                return _instance;
             }
         }
 
 
-        private void Awake()
+        protected override void Awake()
         {
-            if (instance == null || ReferenceEquals(this, instance))
+            if (_instance == null || ReferenceEquals(this, _instance))
             {
-                instance = this;
+                _instance = this;
                 base.Awake();
             }
             else
             {
                 Destroy(this);
+            }
+        }
+
+        private void OnEnable()
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if(!HeliosNetwork.LoadedScene.Contains(scene.name))
+                HeliosNetwork.LoadedScene.Add(scene.name);
+        }
+
+        private float pingInterval = 5.0f; // 5초마다 Ping 메시지 전송
+        private float timeSinceLastPing = 0.0f;
+
+        private void SendPing()
+        {
+            HeliosNetwork.RealtimeClient.OpSendHeartBeat();
+        }
+
+        private void Update()
+        {
+            if (HeliosNetwork.IsConnected)
+            {
+                timeSinceLastPing += Time.deltaTime;
+                if (timeSinceLastPing >= pingInterval)
+                {
+                    SendPing();
+                    timeSinceLastPing = 0.0f;
+                }
             }
         }
 
@@ -61,6 +103,8 @@ namespace MVS.Helios
         {
             if(!HeliosNetwork.InGroup) return;
             _elapsedTime += Time.deltaTime;
+            
+            // CheckAndRestoreVariables();
 
             if (_elapsedTime >= 1f / HeliosNetwork.SendRate)
             {
@@ -69,20 +113,34 @@ namespace MVS.Helios
             }
         }
 
+        private void CheckAndRestoreVariables()
+        {
+            foreach (var ho in HeliosNetwork.HeliosObjectList.FindAll(x =>
+                         x.hasUpdate && (!x.IsMine || (x.ObjectInfo.SyncType == ObjectSyncType.GroupOwn && !HeliosNetwork.CurrentGroup.IsLocalGroupOwner))))
+            {
+                for (int i = CustomVariablesUnity.ScaleKey + 1;
+                     i < ho.heliosAttributes.Count + CustomVariablesUnity.ScaleKey + 1;
+                     i++)
+                {
+                    ho.heliosAttributes[i].SetValue(ho.attributeMonoBehaviors[i], ho.initialHeliosValues[i]);
+                }
+            }
+        }
+
         private void CheckAndUpdateVariables()
         {
             var data = new C_UPDATE_NETWORK_OBJECTS();
-            foreach (var ho in HeliosNetwork.HeliosObjectList.FindAll(x => x.hasUpdate && (x.IsMine|| x.ObjectInfo.SyncType == ObjectSyncType.GlobalOwn)))
+            foreach (var ho in HeliosNetwork.HeliosObjectList.FindAll(x => x.hasUpdate && (x.IsMine|| (x.ObjectInfo.SyncType == ObjectSyncType.GroupOwn && HeliosNetwork.CurrentGroup.IsLocalGroupOwner))))
             {
                 ObjectInfo updateObject = new ObjectInfo();
-                if (GetComponent<HeliosObject>())
+                if (this.GetComponentInSelfOrParent<HeliosObject>())
                 {
-                    updateObject.ObjectID = GetComponent<HeliosObject>().ObjectInfo.ObjectID;
-                    updateObject.SyncType = GetComponent<HeliosObject>().ObjectInfo.SyncType;
-                    updateObject.OwnerPlayerID = GetComponent<HeliosObject>().ObjectInfo.OwnerPlayerID;
+                    updateObject.ObjectID = this.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.ObjectID;
+                    updateObject.SyncType = this.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.SyncType;
+                    updateObject.OwnerPlayerID = this.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.OwnerPlayerID;
                     for (int var = 0; var < 3; var++)
                     {
-                        updateObject.TestValues.Add(GetComponent<HeliosObject>().ObjectInfo.TestValues[var]);
+                        updateObject.Values.Add(this.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.Values[var]);
                     }
                 }
                 else
@@ -102,13 +160,20 @@ namespace MVS.Helios
                         if (listEquals)
                             continue;
                     }
+                    else if (HeliosUtility.IsDictionaryType(ho.heliosAttributes[i].FieldType))
+                    {
+                        bool dicEquals = HeliosUtility.CheckDictionariesEqual(ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]),
+                            ho.initialHeliosValues[i]);
+                        if (dicEquals)
+                            continue;
+                    }
                     else
                     {
                         if (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]).Equals(ho.initialHeliosValues[i]))
                             continue;
                     }
                     HeliosVariable hv = new HeliosVariable();
-                    hv.Key = ho.ObjectInfo.TestValues[i].Key;
+                    hv.Key = ho.ObjectInfo.Values[i].Key;
                     switch (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]))
                     {
                         case int value:
@@ -155,35 +220,24 @@ namespace MVS.Helios
                             };
                             break;
                         default:
-                            if (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]) is Color)
-                            {
-                                hv.NCustom = HeliosUtility.ObjectToBytes(ColorUtility.ToHtmlStringRGBA((Color)ho
-                                    .heliosAttributes[i]
+                            hv.NCustom =
+                                ByteString.CopyFrom(HeliosUtility.ToTypedJson(ho.heliosAttributes[i]
                                     .GetValue(ho.attributeMonoBehaviors[i])));
-                            }
-                            else if (ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]) is Color32)
-                            {
-                                hv.NCustom = HeliosUtility.ObjectToBytes(ColorUtility.ToHtmlStringRGBA((Color32)ho
-                                    .heliosAttributes[i]
-                                    .GetValue(ho.attributeMonoBehaviors[i])));
-                            }
-                            else
-                            {
-                                hv.NCustom =
-                                    HeliosUtility.ObjectToBytes(ho.heliosAttributes[i]
-                                        .GetValue(ho.attributeMonoBehaviors[i]));    
-                            }
                             
                             break;
                     }
-                    ho.ObjectInfo.TestValues[i] = hv;
-                    if (HeliosUtility.IsListType(ho.initialHeliosValues[i].GetType()))
+                    ho.ObjectInfo.Values[i] = hv;
+                    if (HeliosUtility.IsListType(ho.initialHeliosValues[i].GetType()) || HeliosUtility.IsDictionaryType(ho.initialHeliosValues[i].GetType()))
                     {
                         ho.initialHeliosValues[i] =
                             DeepCopyHelper.DeepCopy(ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]));
                     }
                     else ho.initialHeliosValues[i] = ho.heliosAttributes[i].GetValue(ho.attributeMonoBehaviors[i]);
-                    updateObject.TestValues.Add(hv);
+                    updateObject.Values.Add(hv);
+                    if(ho.heliosAttributeCallbacks.ContainsKey(i))
+                    {
+                        ho.CallMethodByName(ho.heliosAttributeCallbacks[i].Item2, ho.heliosAttributeCallbacks[i].Item1);
+                    }
                 }
                 // data.ObjectInfos.Add(ho.ObjectInfo);
                 data.ObjectInfos.Add(updateObject);
@@ -191,19 +245,19 @@ namespace MVS.Helios
             }
         }
 
-        public void OnConnected()
+        public void OnConnectedToMasterServer()
         {
             
         }
 
-        public void OnConnectedToMaster()
+        public void OnConnected()
         {
             
         }
 
         public void OnDisconnected()
         {
-            
+            HeliosNetwork.RemoveMyObjects();
         }
 
         public void OnCustomAuthenticationResponse(Dictionary<string, object> data)
@@ -227,6 +281,16 @@ namespace MVS.Helios
         }
 
         public void OnMasterClientSwitched(Player newMasterClient)
+        {
+            
+        }
+
+        public void OnObjectInstantiated(ObjectInfo objectInfo)
+        {
+            
+        }
+
+        public void OnObjectDestroyed(ObjectInfo objectInfo)
         {
             
         }

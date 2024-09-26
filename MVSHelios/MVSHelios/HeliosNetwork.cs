@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using MVS.Helios.Utility;
@@ -9,7 +11,9 @@ using Protocol;
 using UnityEditor;
 #endif
 using UnityEngine;
+using WebSocketSharp;
 using EventCode = MVS.Realtime.EventCode;
+using RoomInfo = MVS.Realtime.RoomInfo;
 using Vector3 = UnityEngine.Vector3;
 
 namespace MVS.Helios
@@ -61,6 +65,8 @@ namespace MVS.Helios
         
         // public static string Region => (RealtimeClient != null) ? RealtimeClient.Region : "Not Connected";
 
+        public static bool IsConnectedToMaster = false;
+
         public static bool IsConnected
         {
             get
@@ -95,24 +101,9 @@ namespace MVS.Helios
 
         public static float SendRate = 33.0f;
         
-        public static bool IsMessageQueueRunning
-        {
-            get
-            {
-                return _isMessageQueueRunning;
-            }
-
-            set
-            {
-                _isMessageQueueRunning = value;
-            }
-        }
-        
-        private static bool _isMessageQueueRunning = true;
-        
         public static float MinimalTimeScaleToDispatchInFixedUpdate = -1f;
 
-        public static List<Room> RoomList => RealtimeClient == null ? null : RealtimeClient.RoomList;
+        // public static List<Room> RoomList => RealtimeClient.MvsRoomInfos;
 
         public static Room CurrentRoom => RealtimeClient == null ? null : RealtimeClient.CurrentRoom;
 
@@ -135,20 +126,6 @@ namespace MVS.Helios
                 return new List<Player>();
             }
         }
-
-        public static List<Player> OtherPlayerList
-        {
-            get
-            {
-                Room room = CurrentRoom;
-                if (room != null)
-                {
-                    return new List<Player>(room.PlayerList.Values.OrderBy(x => x.UserId).Where(x => !x.IsLocal));
-                }
-
-                return new List<Player>();
-            }
-        }
         
         // TODO : SyncScene??
 
@@ -163,8 +140,7 @@ namespace MVS.Helios
         // TODO : Background Alive??
 
         public static bool IsMasterClient =>
-            RealtimeClient.CurrentRoom != null &&
-            RealtimeClient.CurrentRoom.MasterClientId == LocalPlayer.UserId;
+            RealtimeClient.CurrentGroup?.IsLocalGroupOwner ?? false;
         
         // TODO : Count Of Players, Rooms, Groups ETC
         
@@ -175,7 +151,7 @@ namespace MVS.Helios
             StaticReInitialize();
 #else
             if(RealtimeClient == null)
-                RealtimeClient = new RealtimeClient();
+                RealtimeClient = new RealtimeClient(HeliosSettings.AppSettings.Protocol);
 #endif
         }
 
@@ -188,9 +164,23 @@ namespace MVS.Helios
             if(!EditorApplication.isPlayingOrWillChangePlaymode) return;
             #endif
             
+            #if UNITY_WEBGL && !UNITY_EDITOR
+            HeliosSettings.AppSettings.Protocol = ConnectionProtocol.WebSocket;
+            #endif
+            
             ConnectionProtocol protocol = HeliosSettings.AppSettings.Protocol;
             if(RealtimeClient == null)
                 RealtimeClient = new RealtimeClient(protocol);
+            
+            RealtimeClient.AppId = HeliosSettings.AppSettings.AppId;
+            RealtimeClient.MVSDebug(DebugLevel.INFO, HeliosSettings.AppSettings.AppId);
+            RealtimeClient.AppVersion = HeliosSettings.AppSettings.AppVersion;
+            RealtimeClient.AppSettingsDebug = HeliosSettings.AppSettings.DebugLevel;
+            RealtimeClient.IsUsingNameServer = HeliosSettings.AppSettings.IsUsingNameServer;
+            RealtimeClient.NameServerAddress = HeliosSettings.AppSettings.NameServer;
+            RealtimeClient.MasterServerAddress = HeliosSettings.AppSettings.MVM;
+            RealtimeClient.RealtimePeer.TransportProtocol = HeliosSettings.AppSettings.Protocol;
+            RealtimeClient.ConnectionProtocol = HeliosSettings.AppSettings.Protocol;
             
             RealtimeClient.EventReceived -= OnEvent;
             RealtimeClient.EventReceived += OnEvent;
@@ -212,18 +202,18 @@ namespace MVS.Helios
 
         }
         
-        public static bool ConnectUsingSettings()
-        {
-            if (HeliosSettings == null)
-            {
-                Debug.LogError("Can't connect: Loading settings failed. ServerSettings asset must be in any 'Resources' folder as: " + HeliosSettingsFileName);
-                return false;
-            }
+        // public static async Task<bool> ConnectUsingSettings()
+        // {
+        //     if (HeliosSettings == null)
+        //     {
+        //         Debug.LogError("Can't connect: Loading settings failed. ServerSettings asset must be in any 'Resources' folder as: " + HeliosSettingsFileName);
+        //         return false;
+        //     }
+        //
+        //     return await ConnectUsingSettings(HeliosSettings.AppSettings);
+        // }
 
-            return ConnectUsingSettings(HeliosSettings.AppSettings);
-        }
-
-        public static bool ConnectUsingSettings(AppSettings appSettings)
+        private static bool ConnectUsingSettings(AppSettings appSettings)
         {
             if (RealtimeClient.RealtimePeer.PeerState != PeerState.Disconnected)
             {
@@ -238,16 +228,14 @@ namespace MVS.Helios
             }
 
             RealtimeClient.RealtimePeer.TransportProtocol = appSettings.Protocol;
-            RealtimeClient.ConnectionProtocol = null;
+            RealtimeClient.ConnectionProtocol = appSettings.Protocol;
             // RealtimeClient.AuthMode = appSettings.;
-
-            IsMessageQueueRunning = true;
+            
             RealtimeClient.AppId = appSettings.AppId;
             AppVersion = appSettings.AppVersion;
 
             RealtimeClient.AppSettingsDebug = appSettings.DebugLevel;
 
-            // TODO : Master, Name Server
             return RealtimeClient.Connect(appSettings.Server, appSettings.Port.ToString(), appSettings.AppId,
                 ServerConnection.MVS);
         }
@@ -255,7 +243,7 @@ namespace MVS.Helios
         public static void Disconnect()
         {
             if(RealtimeClient == null) return;
-            
+            RemoveAllObjects();
             RealtimeClient.Disconnect();
         }
         
@@ -272,7 +260,7 @@ namespace MVS.Helios
         }
         
         // TODO : RPC
-        public static bool RPC(ObjectID objectID, string methodName, params object[] args)
+        public static bool RPC(ObjectID objectID, string methodName, ulong[] targetPlayers, params object[] args)
         {
             // Debug.Log($"CI : {objectID.ClientInstanceID}, I : {objectID.InstanceID}");
             var fixedData = new C_RPC
@@ -281,26 +269,73 @@ namespace MVS.Helios
                 MethodName = HeliosUtility.Compute64BitHash(methodName),
                 MethodArgs = ByteString.CopyFrom(HeliosUtility.SerializeParameters(args))
             };
+            if (targetPlayers.Length == 0)
+            {
+                fixedData.Receivers.Add(0);
+            }
+            else
+            {
+                foreach (var target in targetPlayers)
+                {
+                    fixedData.Receivers.Add(target);
+                }
+            }
             return RaiseEvent((int)Protocol.EventCode.Rpc, fixedData);
         }
 
-        public static async Task GetRoomList()
+        public static async Task<string> GetMvmAddress()
         {
-            await RealtimeClient.OpRoomTask();
+            _heliosSettings.AppSettings.MVM = await RealtimeClient.OpGetMvmAddress();
+            IsConnectedToMaster = true;
+            return _heliosSettings.AppSettings.MVM;
         }
 
-        public static bool JoinOrCreateRoom(string AuthToken, long AppID, long WaplRoomID, string Name)
+        public static async Task<List<Room>> GetRoomList()
+        {
+            await RealtimeClient.OpGetRoomList();
+            return RealtimeClient.MvsRoomInfos;
+        }
+
+        public static void RoomCreateToMaster(string roomName = default, UInt64 roomId = 0)
+        {
+            if (CurrentRoom != null)
+            {
+                RealtimeClient.MVSDebug(DebugLevel.WARNING, "You Already In Room");
+                return;
+            }
+            var res = RealtimeClient.OpCreateAndJoinRoomToMvm(new RoomInfo(){Name = roomName, RoomID = roomId});
+            if (res.IP.IsNullOrEmpty()) return;
+            HeliosSettings.AppSettings.Server = res.IP;
+        }
+
+        public static void RoomJoinToMaster(UInt64 roomId = 0)
+        {
+            if (CurrentRoom != null)
+            {
+                RealtimeClient.MVSDebug(DebugLevel.WARNING, "You Already In Room");
+                return;
+            }
+            var res = RealtimeClient.OpJoinRoomToMvm(roomId);
+            if (res.IP.IsNullOrEmpty()) return;
+            HeliosSettings.AppSettings.Server = res.IP;
+        }
+
+        /// <summary>
+        /// Direct to MVS
+        /// </summary>
+        /// <returns></returns>
+        public static bool JoinOrCreateRoom(string IPAddress, ulong RoomID, ulong MvsUserID, string MvsUserToken)
         {
             // if (!IsConnectedAndReady) return false;
-            JoinRoomParams opParams = new JoinRoomParams
+            RoomJoinInfoStruct opParams = new RoomJoinInfoStruct
             {
-                AuthToken = AuthToken,
-                AppID = AppID,
-                RoomID = WaplRoomID,
-                Name = Name
+                IP = IPAddress,
+                RoomID = RoomID,
+                MvsUserID = MvsUserID,
+                MvsUserToken = MvsUserToken
             };
 
-            return RealtimeClient.OpCreateRoom(opParams);
+            return RealtimeClient.OpCreateOrJoinRoomToMvs(opParams);
         }
 
         public static async Task GetGroupList()
@@ -311,8 +346,47 @@ namespace MVS.Helios
         public static bool JoinGroup(uint sceneNumber, uint channelID)
         {
             // if (!IsConnectedAndReady) return false;
+            // Debug.Log(CurrentGroup);
+            if (CurrentRoom == null)
+            {
+                RealtimeClient.MVSDebug(DebugLevel.WARNING, "You're not in Room");
+                return false;
+            }
+            
+            if (CurrentGroup.SceneNumber != sceneNumber ||
+                CurrentGroup.ChannelID != channelID)
+            {
+                RemoveMyObjects();
+                
+                List<HeliosMonoBehavior> removeObjects = new List<HeliosMonoBehavior>(HeliosObjectList);
+                foreach (var obj in removeObjects)
+                {
+                    if (obj == null)
+                    {
+                        continue; // obj가 null이면 다음 반복으로 넘어갑니다.
+                    }
+
+                    var heliosObject = obj.GetComponentInSelfOrParent<HeliosObject>();
+                    if (heliosObject != null)
+                    {
+                        if (!heliosObject.IsMine)
+                        {
+                            GameObject.Destroy(obj.gameObject);
+                        }
+                    }
+                }
+            }
 
             return RealtimeClient.OpJoinGroup(sceneNumber, channelID);
+        }
+
+        [Obsolete]
+        public static bool InitiateObjects()
+        {
+            if (CurrentGroup == null)
+                return false;
+            
+            return RealtimeClient.OpInitialObjects();
         }
 
         public static bool RaiseEvent(int eventCode, IMessage fixedData = null, List<Protocol.HeliosVariable> customData = null)
@@ -328,7 +402,7 @@ namespace MVS.Helios
         {
             if (CurrentRoom == null)
                 return null;
-            var comp = prefab.GetComponent<HeliosObject>();
+            var comp = prefab.GetComponentInSelfOrParent<HeliosObject>();
             if (comp != null)
                 return Instantiate(comp.PrefabId, position, rotation);
             else
@@ -357,8 +431,8 @@ namespace MVS.Helios
 
         private static GameObject NetworkInstantiate(ObjectInfo objectInfo)
         {
-            var propPos = objectInfo.TestValues.Last(x => x.Key == CustomVariables.GetKeyByName("position")).NVector;
-            var propRot = objectInfo.TestValues.Last(x => x.Key == CustomVariables.GetKeyByName("rotation")).NVector;
+            var propPos = objectInfo.Values.Last(x => x.Key == CustomVariables.GetKeyByName("position")).NVector;
+            var propRot = objectInfo.Values.Last(x => x.Key == CustomVariables.GetKeyByName("rotation")).NVector;
             Vector3 position = new Vector3((float)propPos.X, (float)propPos.Y, (float)propPos.Z);
             Vector3 rotationV3 = new Vector3((float)propRot.X, (float)propRot.Y, (float)propRot.Z);
             Quaternion rotation = Quaternion.Euler(rotationV3);
@@ -390,7 +464,7 @@ namespace MVS.Helios
 
             bool isLocalInstantiate = !instantiateEvent && LocalPlayer.Equals(instantiateParams.creator);
             
-            go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+            go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.Values.Add(new Protocol.HeliosVariable
             {
                 Key = CustomVariables.GetKeyByName("position"),
                 NVector = new Protocol.Vector3
@@ -400,7 +474,7 @@ namespace MVS.Helios
                     Z = instantiateParams.position.z
                 }
             });
-            go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+            go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.Values.Add(new Protocol.HeliosVariable
             {
                 Key = CustomVariables.GetKeyByName("rotation"),
                 NVector = new Protocol.Vector3
@@ -410,7 +484,7 @@ namespace MVS.Helios
                     Z = instantiateParams.rotation.z
                 }
             });
-            go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
+            go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.Values.Add(new Protocol.HeliosVariable
             {
                 Key = CustomVariables.GetKeyByName("scale"),
                 NVector = new Protocol.Vector3
@@ -424,41 +498,42 @@ namespace MVS.Helios
             // TODO : IF Local Instantiate
             if (isLocalInstantiate)
             {
-                go.GetComponent<HeliosObject>().IsMine = true;
-                go.GetComponent<HeliosObject>().ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
-                go.GetComponent<HeliosObject>().ObjectInfo.OwnerPlayerID = instantiateParams.creator.UserId;
-                go.GetComponent<HeliosObject>().ObjectInfo.ObjectID.PrefabID = instantiateParams.prefabId;
-                HeliosObjectList.Add(go.GetComponent<HeliosObject>());
-                go.GetComponent<HeliosObject>().ClientInstanceId = (uint)HeliosObjectList.LastIndexOf(go.GetComponent<HeliosObject>());
-                instantiateParams.clientInstanceID = go.GetComponent<HeliosObject>().ClientInstanceId;
-                foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
-                {
-                    heliosMonoBehavior.FindNetworkedVariables();
-                    heliosMonoBehavior.FindRPCMethods();
-                }
-                instantiateParams.ObjectInfo = go.GetComponent<HeliosObject>().ObjectInfo;
+                go.GetComponentInSelfOrParent<HeliosObject>().IsMine = true;
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.OwnerPlayerID = instantiateParams.creator.UserId;
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.ObjectID.PrefabID = instantiateParams.prefabId;
+                HeliosObjectList.Add(go.GetComponentInSelfOrParent<HeliosObject>());
+                go.GetComponentInSelfOrParent<HeliosObject>().ClientInstanceId = (uint)HeliosObjectList.LastIndexOf(go.GetComponentInSelfOrParent<HeliosObject>());
+                instantiateParams.clientInstanceID = go.GetComponentInSelfOrParent<HeliosObject>().ClientInstanceId;
+                // foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
+                // {
+                //     // heliosMonoBehavior.FindNetworkedVariables();
+                //     // heliosMonoBehavior.FindRPCMethods();
+                // }
+                instantiateParams.ObjectInfo = go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo; 
                 SendInstantiate(instantiateParams, isRoomObject);
             }
             else
             {
-                go.GetComponent<HeliosObject>().IsMine = false;
-                go.GetComponent<HeliosObject>().ObjectInfo = instantiateParams.ObjectInfo;
-                go.GetComponent<HeliosObject>().InstanceId = instantiateParams.instanceId;
-                go.GetComponent<HeliosObject>().ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
-                go.GetComponent<HeliosObject>().ObjectInfo.OwnerPlayerID = instantiateParams.creator.UserId;
-                go.GetComponent<HeliosObject>().ObjectInfo.ObjectID.PrefabID = instantiateParams.prefabId;
-                go.GetComponent<HeliosObject>().ObjectInfo.TestValues.Clear();
-                go.GetComponent<HeliosObject>().ClientInstanceId = instantiateParams.clientInstanceID;
-                foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
-                {
-                    heliosMonoBehavior.FindNetworkedVariables();
-                    heliosMonoBehavior.FindRPCMethods();
-                }
-                go.GetComponent<HeliosObject>().UpdateCustomData(go.GetComponent<HeliosObject>().ObjectInfo);
-                HeliosObjectList.Add(go.GetComponent<HeliosObject>());
+                go.GetComponentInSelfOrParent<HeliosObject>().IsMine = false;
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo = instantiateParams.ObjectInfo;
+                go.GetComponentInSelfOrParent<HeliosObject>().InstanceId = instantiateParams.instanceId;
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.SyncType = ObjectSyncType.PersonalOwn;
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.OwnerPlayerID = instantiateParams.creator.UserId;
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.ObjectID.PrefabID = instantiateParams.prefabId;
+                var saveObjInfo = new ObjectInfo(instantiateParams.ObjectInfo);
+                go.GetComponentInSelfOrParent<HeliosObject>().ObjectInfo.Values.Clear();
+                go.GetComponentInSelfOrParent<HeliosObject>().ClientInstanceId = instantiateParams.clientInstanceID;
+                // foreach (var heliosMonoBehavior in go.GetComponentsInChildren<HeliosMonoBehavior>())
+                // {
+                //     // heliosMonoBehavior.FindNetworkedVariables();
+                //     // heliosMonoBehavior.FindRPCMethods();
+                // }
+                HeliosObjectList.Add(go.GetComponentInSelfOrParent<HeliosObject>());
+                FindObjectById(instantiateParams.instanceId).UpdateCustomData(saveObjInfo);
+                RealtimeClient.OnObjectInstantiated(saveObjInfo);
+                go.SetActive(_prefabPool.GetPrefabPoolActive(instantiateParams.ObjectInfo.ObjectID.PrefabID));
             }
-            
-            go.SetActive(true);
             
             
             return go;
@@ -467,47 +542,6 @@ namespace MVS.Helios
         internal static bool SendInstantiate(InstantiateParams instantiateParams, bool isRoomObject = false)
         {
             var pkt = new C_ADD_NETWORK_OBJECTS();
-            // var ObjectInfo = new ObjectInfo
-            // {
-            //     ObjectID = new ObjectID
-            //     {
-            //         PrefabID = instantiateParams.prefabId,
-            //         InstanceID = instantiateParams.instanceId,
-            //         ClientInstanceID = instantiateParams.clientInstanceID
-            //     },
-            //     SyncType = ObjectSyncType.PersonalOwn,
-            //     OwnerPlayerID = LocalPlayer.UserId,
-            // };
-            // ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
-            // {
-            //     Key = CustomVariables.GetKeyByName("position"),
-            //     NVector = new Protocol.Vector3
-            //     {
-            //         X = instantiateParams.position.x,
-            //         Y = instantiateParams.position.y,
-            //         Z = instantiateParams.position.z
-            //     }
-            // });
-            // ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
-            // {
-            //     Key = CustomVariables.GetKeyByName("rotation"),
-            //     NVector = new Protocol.Vector3
-            //     {
-            //         X = instantiateParams.rotation.x,
-            //         Y = instantiateParams.rotation.y,
-            //         Z = instantiateParams.rotation.z
-            //     }
-            // });
-            // ObjectInfo.TestValues.Add(new Protocol.HeliosVariable
-            // {
-            //     Key = CustomVariables.GetKeyByName("scale"),
-            //     NVector = new Protocol.Vector3
-            //     {
-            //         X = 1,
-            //         Y = 1,
-            //         Z = 1
-            //     }
-            // });
             pkt.ObjectInfos.Add(instantiateParams.ObjectInfo);
             return SendEventInternal(EventCode.PKT_C_ADD_NETWORK_OBJECTS, pkt);
         }
@@ -516,7 +550,7 @@ namespace MVS.Helios
 
         private static void NetworkUpdateObject(uint id, ObjectInfo objectInfo)
         {
-            if (objectInfo.SyncType == ObjectSyncType.GlobalOwn)
+            if (objectInfo.SyncType == ObjectSyncType.GroupOwn)
             {
                 foreach (var ho in HeliosObjectList)
                 {
@@ -529,9 +563,10 @@ namespace MVS.Helios
             else
             {
                 var obj = FindObjectById(id);
-                var propPos = objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("position"))?.NVector;
-                var propRot = objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("rotation"))?.NVector;
-                var propScale = objectInfo.TestValues.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("scale"))?.NVector;
+                if(obj == null) return;
+                var propPos = objectInfo.Values.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("position"))?.NVector;
+                var propRot = objectInfo.Values.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("rotation"))?.NVector;
+                var propScale = objectInfo.Values.LastOrDefault(x => x.Key == CustomVariables.GetKeyByName("scale"))?.NVector;
                 if (propPos != null)
                 {
                     Vector3 position = new Vector3((float)propPos.X, (float)propPos.Y, (float)propPos.Z);
@@ -555,7 +590,7 @@ namespace MVS.Helios
             FindObjectById(id).UpdateCustomData(objectInfo);
         }
 
-        public static void NetworkRemoveObject(uint id)
+        internal static void NetworkRemoveObject(uint id)
         {
             _prefabPool.Destroy(id);
         }

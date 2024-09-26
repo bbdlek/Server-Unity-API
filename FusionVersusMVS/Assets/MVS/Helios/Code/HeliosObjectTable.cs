@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
+using MVS.Realtime;
 
 namespace MVS.Helios
 {
     [Serializable]
     public class HeliosObjectTable
     {
+        [ReadOnly]
         public List<HeliosObject> Prefabs;
 
         public HeliosObject FindPrefabByNetworkId(uint prefabId)
         {
-            HeliosObject target;
             if (Prefabs.Find(x => x.PrefabId == prefabId) != null)
                 return Prefabs.Find(x => x.PrefabId == prefabId);
 

@@ -1,5 +1,9 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CProgram_0020Files_005CUnity_005CHub_005CEditor_005C6000_002E0_002E11f1_005CEditor_005CUnity_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUnity_0020Projects_005Cunityservertest_005CFusionRealtime_005CFusionRealtime_005Cbin_005CRelease_005CHeliosRealtime_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUnity_0020Projects_005Cunityservertest_005CFusionVersusMVS_005CLibrary_005CPackageCache_005Ccom_002Eunity_002Enuget_002Enewtonsoft_002Djson_00403_002E2_002E1_005CRuntime_005CNewtonsoft_002EJson_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUnity_0020Projects_005Cunityservertest_005CFusionVersusMVS_005CLibrary_005CPackageCache_005Ccom_002Eunity_002Evisualscripting_00401_002E8_002E0_005CRuntime_005CVisualScripting_002ECore_005CCloning_005CCloner_002Ecs/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005Cbbdlek_005CDownloads_005CUnity_002EVisualScripting_002ECore_002EEditor_005Fx86_005CUnity_002EVisualScripting_002ECore_002EEditor_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002Fhome_002Fbbdlek_002FRiderProjects_002FFusionRealtime_002FFusionRealtime_002Fbin_002FRelease_002FFusionRealtime_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002Fhome_002Fbbdlek_002FRiderProjects_002FFusionRealtime_002FFusionRealtime_002Fbin_002FRelease_002FGoogle_002EProtobuf_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002Fhome_002Fbbdlek_002FRiderProjects_002FFusionRealtime_002FFusionRealtime_002Fbin_002FRelease_002FHeliosRealtime_002Edll/@EntryIndexedValue">True</s:Boolean>
@@ -15,9 +19,11 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002Fhome_002Fbbdlek_002FUnity_002FHub_002FEditor_002F2022_002E3_002E3f1_002FEditor_002FData_002FUnityReferenceAssemblies_002Funity_002D4_002E8_002Dapi_002FFacades_002FSystem_002EBuffers_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002Fhome_002Fbbdlek_002FUnity_002FHub_002FEditor_002F2022_002E3_002E3f1_002FEditor_002FData_002FUnityReferenceAssemblies_002Funity_002D4_002E8_002Dapi_002FFacades_002FSystem_002EMemory_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002Fhome_002Fbbdlek_002FUnity_002FHub_002FEditor_002F2022_002E3_002E3f1_002FEditor_002FData_002FUnityReferenceAssemblies_002Funity_002D4_002E8_002Dapi_002Fmscorlib_002Edll/@EntryIndexedValue">True</s:Boolean>
-	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;
-  &lt;Assembly Path="/home/bbdlek/RiderProjects/FusionRealtime/FusionRealtime/bin/Release/FusionRealtime.dll" /&gt;
-  &lt;Assembly Path="/usr/lib/mono/4.8-api/System.Core.dll" /&gt;
-  &lt;Assembly Path="/usr/lib/mono/4.8-api/System.Xml.dll" /&gt;
-  &lt;Assembly Path="/home/bbdlek/RiderProjects/MVSRealtime/MVSRealtime/bin/Release/websocket-sharp.dll" /&gt;
+	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
+  &lt;Assembly Path="\home\bbdlek\RiderProjects\FusionRealtime\FusionRealtime\bin\Release\FusionRealtime.dll" /&gt;&#xD;
+  &lt;Assembly Path="\usr\lib\mono\4.8-api\System.Core.dll" /&gt;&#xD;
+  &lt;Assembly Path="\usr\lib\mono\4.8-api\System.Xml.dll" /&gt;&#xD;
+  &lt;Assembly Path="\home\bbdlek\RiderProjects\MVSRealtime\MVSRealtime\bin\Release\websocket-sharp.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Xml.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\bbdlek\Downloads\Unity.VisualScripting.Core.Editor_x86\Unity.VisualScripting.Core.Editor.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>

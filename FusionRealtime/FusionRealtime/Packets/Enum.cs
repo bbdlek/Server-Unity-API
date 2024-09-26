@@ -24,30 +24,32 @@ namespace Protocol {
     static EnumReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgpFbnVtLnByb3RvEghQcm90b2NvbCq8AwoGUmVzdWx0EgsKB1NVQ0NFU1MQ",
+            "CgpFbnVtLnByb3RvEghQcm90b2NvbCqJBAoGUmVzdWx0EgsKB1NVQ0NFU1MQ",
             "ABIKCgZGQUlMRUQQARIXChNTVUNDRVNTX1JPT01fQ1JFQVRFEAISFwoTU1VD",
             "Q0VTU19ST09NX0pPSU5FRBADEhgKFFNVQ0NFU1NfR1JPVVBfQ1JFQVRFEAQS",
             "GAoUU1VDQ0VTU19HUk9VUF9KT0lORUQQBRIfChtGQUlMRURfUk9PTV9OT1Rf",
             "RVhJU1RTX1JPT00QChIjCh9GQUlMRURfUk9PTV9BTFJFQURZX0VYSVNUU19S",
-            "T09NEAsSGwoXRkFJTEVEX1JPT01fTk9UX0lOX1JPT00QDBIhCh1GQUlMRURf",
-            "R1JPVVBfTk9UX0VYSVNUU19HUk9VUBAUEh0KGUZBSUxFRF9HUk9VUF9OT1Rf",
-            "SU5fR1JPVVAQFRIlCiFGQUlMRURfR1JPVVBfQUxSRUFEWV9FWElTVFNfR1JP",
-            "VVAQFhIbChdGQUlMRURfR1JPVVBfU0FNRV9HUk9VUBAXEiIKHkZBSUxFRF9H",
-            "Uk9VUF9OT1RfRVhJU1RTX1BMQVlFUhAYEiYKIkZBSUxFRF9HUk9VUF9BTFJF",
-            "QURZX0VYSVNUU19QTEFZRVIQGSphCgdQcm9wc0lEEhIKDk1WX1BST1BTX1NU",
-            "QVJUEAASDwoLUE9TSVRJT05fM0QQARIPCgtST1RBVElPTl8zRBACEgwKCFND",
-            "QUxFXzNEEAMSEgoMTVZfUFJPUFNfRU5EEKCNBipPCg5PYmplY3RTeW5jVHlw",
-            "ZRIQCgxQRVJTT05BTF9PV04QABINCglHUk9VUF9PV04QARIMCghST09NX09X",
-            "ThACEg4KCkdMT0JBTF9PV04QAyq8AQoNT3BlcmF0aW9uQ29kZRIOCgpIRUFS",
-            "VF9CRUFUEAASFwoTUk9PTV9KT0lOX09SX0NSRUFURRABEg4KClJPT01fTEVB",
-            "VkUQAhINCglST09NX0xJU1QQAxINCglQTEFZRVJfSUQQBBIOCgpHUk9VUF9M",
-            "SVNUEAUSDgoKR1JPVVBfSk9JThAGEg8KC0dST1VQX0xFQVZFEAcSDwoLUkFJ",
-            "U0VfRVZFTlQQCBISCg5JTklUX1ZBUklBQkxFUxAJKq0BCglFdmVudENvZGUS",
-            "FwoTT1RIRVJfQ0xJRU5UX0pPSU5FRBAAEhMKD0lOSVRJQUxfT0JKRUNUUxAB",
-            "EhcKE0FERF9ORVRXT1JLX09CSkVDVFMQAhIaChZSRU1PVkVfTkVUV09SS19P",
-            "QkpFQ1RTEAMSGgoWVVBEQVRFX05FVFdPUktfT0JKRUNUUxAEEhgKFENIQU5H",
-            "RV9PQkpFQ1RTX09XTkVSEAUSBwoDUlBDEAYqMQoIUGFyYW1LZXkSDAoIUE9T",
-            "SVRJT04QABIMCghST1RBVElPThABEgkKBVNDQUxFEAJiBnByb3RvMw=="));
+            "T09NEAsSGwoXRkFJTEVEX1JPT01fTk9UX0lOX1JPT00QDBIkCiBGQUlMRURf",
+            "Uk9PTV9VU0VSU19MSU1JVF9FWENFRURFRBANEiEKHUZBSUxFRF9HUk9VUF9O",
+            "T1RfRVhJU1RTX0dST1VQEBQSHQoZRkFJTEVEX0dST1VQX05PVF9JTl9HUk9V",
+            "UBAVEiUKIUZBSUxFRF9HUk9VUF9BTFJFQURZX0VYSVNUU19HUk9VUBAWEhsK",
+            "F0ZBSUxFRF9HUk9VUF9TQU1FX0dST1VQEBcSIgoeRkFJTEVEX0dST1VQX05P",
+            "VF9FWElTVFNfUExBWUVSEBgSJgoiRkFJTEVEX0dST1VQX0FMUkVBRFlfRVhJ",
+            "U1RTX1BMQVlFUhAZEiUKIUZBSUxFRF9PQkpFQ1RfVE9UQUxfU0laRV9PVkVS",
+            "RkxPVxAaKmEKB1Byb3BzSUQSEgoOTVZfUFJPUFNfU1RBUlQQABIPCgtQT1NJ",
+            "VElPTl8zRBABEg8KC1JPVEFUSU9OXzNEEAISDAoIU0NBTEVfM0QQAxISCgxN",
+            "Vl9QUk9QU19FTkQQoI0GKjEKDk9iamVjdFN5bmNUeXBlEhAKDFBFUlNPTkFM",
+            "X09XThAAEg0KCUdST1VQX09XThABKrQBCg1PcGVyYXRpb25Db2RlEg4KCkhF",
+            "QVJUX0JFQVQQABIXChNST09NX0pPSU5fT1JfQ1JFQVRFEAESDgoKUk9PTV9M",
+            "RUFWRRACEhwKGE9USEVSX0NMSUVOVF9ST09NX0pPSU5FRBADEhsKF09USEVS",
+            "X0NMSUVOVF9ST09NX0xFQVZFEAQSDgoKR1JPVVBfTElTVBAFEg4KCkdST1VQ",
+            "X0pPSU4QBhIPCgtSQUlTRV9FVkVOVBAHKs8BCglFdmVudENvZGUSFgoSQ0hB",
+            "TkdFX0dST1VQX09XTkVSEAASHQoZT1RIRVJfQ0xJRU5UX0dST1VQX0pPSU5F",
+            "RBABEhwKGE9USEVSX0NMSUVOVF9HUk9VUF9MRUFWRRACEhMKD0lOSVRJQUxf",
+            "T0JKRUNUUxADEhcKE0FERF9ORVRXT1JLX09CSkVDVFMQBBIaChZSRU1PVkVf",
+            "TkVUV09SS19PQkpFQ1RTEAUSGgoWVVBEQVRFX05FVFdPUktfT0JKRUNUUxAG",
+            "EgcKA1JQQxAHKjEKCFBhcmFtS2V5EgwKCFBPU0lUSU9OEAASDAoIUk9UQVRJ",
+            "T04QARIJCgVTQ0FMRRACYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protocol.Result), typeof(global::Protocol.PropsID), typeof(global::Protocol.ObjectSyncType), typeof(global::Protocol.OperationCode), typeof(global::Protocol.EventCode), typeof(global::Protocol.ParamKey), }, null, null));
@@ -83,6 +85,10 @@ namespace Protocol {
     /// </summary>
     [pbr::OriginalName("FAILED_ROOM_NOT_IN_ROOM")] FailedRoomNotInRoom = 12,
     /// <summary>
+    /// 유저 수 제한 초과, 심각한 오류
+    /// </summary>
+    [pbr::OriginalName("FAILED_ROOM_USERS_LIMIT_EXCEEDED")] FailedRoomUsersLimitExceeded = 13,
+    /// <summary>
     /// Group 관련 에러
     /// </summary>
     [pbr::OriginalName("FAILED_GROUP_NOT_EXISTS_GROUP")] FailedGroupNotExistsGroup = 20,
@@ -103,6 +109,10 @@ namespace Protocol {
     /// 추가하려는 플레이어가 이미 존재
     /// </summary>
     [pbr::OriginalName("FAILED_GROUP_ALREADY_EXISTS_PLAYER")] FailedGroupAlreadyExistsPlayer = 25,
+    /// <summary>
+    /// Object 관련 에러
+    /// </summary>
+    [pbr::OriginalName("FAILED_OBJECT_TOTAL_SIZE_OVERFLOW")] FailedObjectTotalSizeOverflow = 26,
   }
 
   public enum PropsID {
@@ -116,34 +126,31 @@ namespace Protocol {
   public enum ObjectSyncType {
     [pbr::OriginalName("PERSONAL_OWN")] PersonalOwn = 0,
     /// <summary>
-    /// 여기에 해당하는 ObjectMap이 Group이랑 Room에 추가되어야 함. 이거 움직일 수 있는 사람은 MasterClient만
+    /// 이것을 움직일 수 있는 사람은 MasterClient
     /// </summary>
     [pbr::OriginalName("GROUP_OWN")] GroupOwn = 1,
-    [pbr::OriginalName("ROOM_OWN")] RoomOwn = 2,
-    [pbr::OriginalName("GLOBAL_OWN")] GlobalOwn = 3,
   }
 
   public enum OperationCode {
     [pbr::OriginalName("HEART_BEAT")] HeartBeat = 0,
     [pbr::OriginalName("ROOM_JOIN_OR_CREATE")] RoomJoinOrCreate = 1,
     [pbr::OriginalName("ROOM_LEAVE")] RoomLeave = 2,
-    [pbr::OriginalName("ROOM_LIST")] RoomList = 3,
-    [pbr::OriginalName("PLAYER_ID")] PlayerId = 4,
+    [pbr::OriginalName("OTHER_CLIENT_ROOM_JOINED")] OtherClientRoomJoined = 3,
+    [pbr::OriginalName("OTHER_CLIENT_ROOM_LEAVE")] OtherClientRoomLeave = 4,
     [pbr::OriginalName("GROUP_LIST")] GroupList = 5,
     [pbr::OriginalName("GROUP_JOIN")] GroupJoin = 6,
-    [pbr::OriginalName("GROUP_LEAVE")] GroupLeave = 7,
-    [pbr::OriginalName("RAISE_EVENT")] RaiseEvent = 8,
-    [pbr::OriginalName("INIT_VARIABLES")] InitVariables = 9,
+    [pbr::OriginalName("RAISE_EVENT")] RaiseEvent = 7,
   }
 
   public enum EventCode {
-    [pbr::OriginalName("OTHER_CLIENT_JOINED")] OtherClientJoined = 0,
-    [pbr::OriginalName("INITIAL_OBJECTS")] InitialObjects = 1,
-    [pbr::OriginalName("ADD_NETWORK_OBJECTS")] AddNetworkObjects = 2,
-    [pbr::OriginalName("REMOVE_NETWORK_OBJECTS")] RemoveNetworkObjects = 3,
-    [pbr::OriginalName("UPDATE_NETWORK_OBJECTS")] UpdateNetworkObjects = 4,
-    [pbr::OriginalName("CHANGE_OBJECTS_OWNER")] ChangeObjectsOwner = 5,
-    [pbr::OriginalName("RPC")] Rpc = 6,
+    [pbr::OriginalName("CHANGE_GROUP_OWNER")] ChangeGroupOwner = 0,
+    [pbr::OriginalName("OTHER_CLIENT_GROUP_JOINED")] OtherClientGroupJoined = 1,
+    [pbr::OriginalName("OTHER_CLIENT_GROUP_LEAVE")] OtherClientGroupLeave = 2,
+    [pbr::OriginalName("INITIAL_OBJECTS")] InitialObjects = 3,
+    [pbr::OriginalName("ADD_NETWORK_OBJECTS")] AddNetworkObjects = 4,
+    [pbr::OriginalName("REMOVE_NETWORK_OBJECTS")] RemoveNetworkObjects = 5,
+    [pbr::OriginalName("UPDATE_NETWORK_OBJECTS")] UpdateNetworkObjects = 6,
+    [pbr::OriginalName("RPC")] Rpc = 7,
   }
 
   public enum ParamKey {

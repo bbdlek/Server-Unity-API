@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4449138515005478289}
   - component: {fileID: 5808998708978907606}
   - component: {fileID: 4520983366914065623}
+  - component: {fileID: 1020471132256078773}
   - component: {fileID: 8508066451922919660}
   - component: {fileID: -2500174006590929170}
-  - component: {fileID: 1020471132256078773}
   - component: {fileID: 7551403675085834006}
   - component: {fileID: -5747347219559409451}
   m_Layer: 0
@@ -110,6 +110,38 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1020471132256078773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8931026403998881570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cc5c69ee5d4a37058037d623abd4036, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializedHeliosAttributes:
+  - key: 3
+    fieldName: score2
+    fieldType: System.Int32
+  serializedHeliosAttributeCallbacks:
+  - key: 3
+    methodName: OnChangeScore2
+    owner: {fileID: 1020471132256078773}
+  serializedAttributeMonoBehaviors:
+  - key: 3
+    monoBehavior: {fileID: 1020471132256078773}
+  serializedInitialHeliosValues:
+  - key: 3
+    value: 7b2274797065223a2253797374656d2e496e7433322c206d73636f726c69622c2056657273696f6e3d342e302e302e302c2043756c747572653d6e65757472616c2c205075626c69634b6579546f6b656e3d62373761356335363139333465303839222c226a736f6e223a2233227d
+  serializedRPCMethods:
+  - hash: 2011470102581987836
+    methodName: AddScore
+    owner: {fileID: 1020471132256078773}
+  score: 1
+  score2: 3
 --- !u!114 &8508066451922919660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,9 +154,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30e3e9e8305b4750ba301bdfe5e2dd78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializedHeliosAttributes: []
+  serializedHeliosAttributeCallbacks: []
+  serializedAttributeMonoBehaviors: []
+  serializedInitialHeliosValues: []
+  serializedRPCMethods: []
   _prefabId: 5
-  _instanceId: 11
-  _clientInstanceId: 0
   heliosTransform: {fileID: 0}
 --- !u!54 &-2500174006590929170
 Rigidbody:
@@ -153,20 +188,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1020471132256078773
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8931026403998881570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cc5c69ee5d4a37058037d623abd4036, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  score: 1
-  score2: 3
 --- !u!114 &7551403675085834006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,6 +200,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af6d28e9808043349288f7352e4b25bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializedHeliosAttributes: []
+  serializedHeliosAttributeCallbacks: []
+  serializedAttributeMonoBehaviors: []
+  serializedInitialHeliosValues: []
+  serializedRPCMethods: []
   positionTolerance: 0.01
   rotationTolerance: 1
   scaleTolerance: 0.01
@@ -188,7 +214,7 @@ MonoBehaviour:
   syncPosition: 1
   syncRotation: 1
   syncScale: 1
-  smoothness: 10
+  smoothness: 50
 --- !u!114 &-5747347219559409451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,6 +227,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab4e044b65acd63568eb1cf76ec423bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializedHeliosAttributes:
+  - key: 4
+    fieldName: testFloat
+    fieldType: System.Single
+  - key: 5
+    fieldName: testFloat2
+    fieldType: System.Single
+  - key: 6
+    fieldName: testVec1
+    fieldType: UnityEngine.Vector2
+  - key: 7
+    fieldName: testVec2
+    fieldType: UnityEngine.Vector2
+  - key: 8
+    fieldName: testBool
+    fieldType: System.Boolean
+  serializedHeliosAttributeCallbacks: []
+  serializedAttributeMonoBehaviors:
+  - key: 4
+    monoBehavior: {fileID: -5747347219559409451}
+  - key: 5
+    monoBehavior: {fileID: -5747347219559409451}
+  - key: 6
+    monoBehavior: {fileID: -5747347219559409451}
+  - key: 7
+    monoBehavior: {fileID: -5747347219559409451}
+  - key: 8
+    monoBehavior: {fileID: -5747347219559409451}
+  serializedInitialHeliosValues:
+  - key: 4
+    value: 7b2274797065223a2253797374656d2e53696e676c652c206d73636f726c69622c2056657273696f6e3d342e302e302e302c2043756c747572653d6e65757472616c2c205075626c69634b6579546f6b656e3d62373761356335363139333465303839222c226a736f6e223a22302e30227d
+  - key: 5
+    value: 7b2274797065223a2253797374656d2e53696e676c652c206d73636f726c69622c2056657273696f6e3d342e302e302e302c2043756c747572653d6e65757472616c2c205075626c69634b6579546f6b656e3d62373761356335363139333465303839222c226a736f6e223a22302e30227d
+  - key: 6
+    value: 7b2274797065223a22556e697479456e67696e652e566563746f72322c20556e697479456e67696e652e436f72654d6f64756c652c2056657273696f6e3d302e302e302e302c2043756c747572653d6e65757472616c2c205075626c69634b6579546f6b656e3d6e756c6c222c226a736f6e223a227b5c2224747970655c223a5c22556e697479456e67696e652e566563746f72322c20556e697479456e67696e652e436f72654d6f64756c655c222c5c22785c223a302e302c5c22795c223a302e302c5c226d61676e69747564655c223a302e302c5c227371724d61676e69747564655c223a302e307d227d
+  - key: 7
+    value: 7b2274797065223a22556e697479456e67696e652e566563746f72322c20556e697479456e67696e652e436f72654d6f64756c652c2056657273696f6e3d302e302e302e302c2043756c747572653d6e65757472616c2c205075626c69634b6579546f6b656e3d6e756c6c222c226a736f6e223a227b5c2224747970655c223a5c22556e697479456e67696e652e566563746f72322c20556e697479456e67696e652e436f72654d6f64756c655c222c5c22785c223a312e302c5c22795c223a312e302c5c226e6f726d616c697a65645c223a7b5c2224747970655c223a5c22556e697479456e67696e652e566563746f72322c20556e697479456e67696e652e436f72654d6f64756c655c222c5c22785c223a302e3730373130363736392c5c22795c223a302e3730373130363736392c5c226d61676e69747564655c223a312e302c5c227371724d61676e69747564655c223a302e39393939393939347d2c5c226d61676e69747564655c223a312e34313432313335342c5c227371724d61676e69747564655c223a322e307d227d
+  - key: 8
+    value: 7b2274797065223a2253797374656d2e426f6f6c65616e2c206d73636f726c69622c2056657273696f6e3d342e302e302e302c2043756c747572653d6e65757472616c2c205075626c69634b6579546f6b656e3d62373761356335363139333465303839222c226a736f6e223a2266616c7365227d
+  serializedRPCMethods: []
   testFloat: 0
   testFloat2: 0
   testVec1: {x: 0, y: 0}

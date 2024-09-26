@@ -1,6 +1,11 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using MVS.Helios.Utility;
 using MVS.Realtime;
 using Protocol;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 using EventCode = MVS.Realtime.EventCode;
 using OperationCode = MVS.Realtime.OperationCode;
 
@@ -10,9 +15,35 @@ namespace MVS.Helios
     {
         public static List<HeliosMonoBehavior> HeliosObjectList = new List<HeliosMonoBehavior>();
 
+        public static List<string> LoadedScene = new List<string>();
+
+        public static bool IsLoadedScene()
+        {
+            return LoadedScene.Contains(SceneManager.GetActiveScene().name);
+        }
+        
+        public static bool IsInHeliosObjectList(string scriptName)
+        {
+            // heliosObject가 지정된 이름의 스크립트인지 확인
+            foreach (var heliosMonoBehavior in HeliosObjectList)
+            {
+                if (heliosMonoBehavior.GetType().Name == scriptName)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public static HeliosMonoBehavior FindObjectById(uint id)
         {
             return HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.InstanceID == (int)id);
+        }
+
+        public static HeliosMonoBehavior FindObjectByClientID(uint id)
+        {
+            return HeliosObjectList.Find(x => x.ObjectInfo.ObjectID.ClientInstanceID == (int)id && x.IsMine);
         }
         
         public static void AddCallbackTarget(object target)
@@ -56,11 +87,12 @@ namespace MVS.Helios
                             case ObjectSyncType.PersonalOwn:
                                 NetworkInstantiate(objectInfo);
                                 break;
-                            case ObjectSyncType.GlobalOwn:
+                            case ObjectSyncType.GroupOwn:
                                 var obj = HeliosObjectList.Find(x =>
                                     x.ObjectInfo.ObjectID.ClientInstanceID == objectInfo.ObjectID.ClientInstanceID);
-                                // obj.ObjectInfo = objectInfo;
+                                if(obj == null) continue;
                                 obj.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
+                                Debug.Log(obj.gameObject.name);
                                 obj.UpdateCustomData(objectInfo);
                                 break;
                         }
@@ -71,7 +103,7 @@ namespace MVS.Helios
                     var data = Packs.Parser.ParseFrom(eventData.FixedData).SAddNetworkObjects;
                     foreach (var objectInfo in data.ObjectInfos)
                     {
-                        if (objectInfo.SyncType == ObjectSyncType.GlobalOwn)
+                        if (objectInfo.SyncType == ObjectSyncType.GroupOwn)
                         {
                             var obj = HeliosObjectList.Find(x =>
                                 x.ObjectInfo.ObjectID.ClientInstanceID ==
@@ -91,13 +123,17 @@ namespace MVS.Helios
                                 var obj = HeliosObjectList.Find(x =>
                                     x.ObjectInfo.ObjectID.ClientInstanceID ==
                                     (int)objectInfo.ObjectID.ClientInstanceID);
-                                obj.GetComponent<HeliosObject>().InstanceId = objectInfo.ObjectID.InstanceID;
-                                // obj.GetComponent<HeliosObject>().hasInstanceId = true;
+                                obj.GetComponentInSelfOrParent<HeliosObject>().InstanceId = objectInfo.ObjectID.InstanceID;
+                                // obj.GetComponentInSelfOrParent<HeliosObject>().hasInstanceId = true;
                                 foreach (var heliosMonoBehavior in obj.GetComponentsInChildren<HeliosMonoBehavior>())
                                 {
                                     heliosMonoBehavior.ObjectInfo.ObjectID.InstanceID = objectInfo.ObjectID.InstanceID;
                                     // heliosMonoBehavior.hasInstanceId = true;
                                 }
+                                
+                                bool isActive = _prefabPool.GetPrefabPoolActive(objectInfo.ObjectID.PrefabID);;
+                                obj.gameObject.SetActive(isActive);
+                                RealtimeClient.OnObjectInstantiated(objectInfo);
                             }   
                         }
                     }
@@ -122,8 +158,29 @@ namespace MVS.Helios
                     break;
                 case (int)Protocol.EventCode.Rpc:
                     var dataRpc = Packs.Parser.ParseFrom(eventData.FixedData).CRpc;
-                    var rpcObj = FindObjectById(dataRpc.ObjectID.InstanceID);
-                    rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());
+                    if (eventData.Sender == LocalPlayer.UserId)
+                    {
+                        if (dataRpc.ObjectID.InstanceID == 0)
+                        {
+                            var rpcObj = FindObjectByClientID(dataRpc.ObjectID.ClientInstanceID);
+                            rpcObj.RPC(rpcObj.RPCMethods[dataRpc.MethodName].Item1.Name, dataRpc.Receivers.ToArray(), HeliosUtility.DeserializeParameters(dataRpc.MethodArgs.ToByteArray()));
+                        }
+                        else
+                        {
+                            var rpcObj = FindObjectById(dataRpc.ObjectID.InstanceID);
+                            if(rpcObj == null) return;
+                            rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());    
+                        }
+                        
+                    }
+                    else
+                    {
+                        // TODO : InstanceID 다른 방법
+                        
+                        var rpcObj = FindObjectById(dataRpc.ObjectID.InstanceID);
+                        if(rpcObj == null) return;
+                        rpcObj.ExecuteRpc(dataRpc.MethodName, dataRpc.MethodArgs.ToByteArray());
+                    }
                     break;
             }
         }
@@ -144,14 +201,12 @@ namespace MVS.Helios
                         foreach (var obj in HeliosObjectList)
                         {
                             if(obj.ObjectInfo.SyncType == ObjectSyncType.PersonalOwn) continue;
-                            obj.ObjectInfo.SyncType = ObjectSyncType.GlobalOwn;
+                            obj.ObjectInfo.SyncType = ObjectSyncType.GroupOwn;
                             obj.ObjectInfo.OwnerPlayerID = 0;
                             pkt.ObjectInfos.Add(obj.ObjectInfo);
                         }
                         RaiseEvent(EventCode.PKT_C_ADD_NETWORK_OBJECTS, pkt);
                     }
-                    break;
-                case OperationCode.PLAYER_ID:
                     break;
             }
         }
@@ -175,10 +230,36 @@ namespace MVS.Helios
 
         public static void RemoveMyObjects()
         {
-            foreach (var obj in HeliosObjectList)
+            List<HeliosMonoBehavior> removeObjects = new List<HeliosMonoBehavior>(HeliosObjectList);
+            
+            foreach (var obj in removeObjects)
             {
-                if(obj.GetComponent<HeliosObject>().IsMine)
+                if (obj == null)
+                {
+                    continue;
+                }
+                if(obj.GetComponentInSelfOrParent<HeliosObject>())
+                {
+                    if (obj.GetComponentInSelfOrParent<HeliosObject>().IsMine)
+                        NetworkRemoveObject(obj.ObjectInfo.ObjectID.InstanceID);
+                }
+            }
+        }
+
+        public static void RemoveAllObjects()
+        {
+            List<HeliosMonoBehavior> removeObjects = new List<HeliosMonoBehavior>(HeliosObjectList);
+            
+            foreach (var obj in removeObjects)
+            {
+                if (obj == null)
+                {
+                    continue;
+                }
+                if(obj.GetComponentInSelfOrParent<HeliosObject>())
+                {
                     NetworkRemoveObject(obj.ObjectInfo.ObjectID.InstanceID);
+                }
             }
         }
     }

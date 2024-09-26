@@ -13,5 +13,6 @@ namespace MVS.Helios
 
         void Destroy(GameObject gameObject);
         void Destroy(uint id);
+        bool GetPrefabPoolActive(uint prefabId);
     }
 }

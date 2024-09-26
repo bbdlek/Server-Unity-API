@@ -55,7 +55,13 @@ namespace MVS.Realtime
             
             try
             {
-                _socket = WebSocketFactory.CreateInstance("ws://" + ConnectAddress);
+                string protocol = "ws";
+                if (peerBase.Protocol == ConnectionProtocol.WebSocketSecure)
+                {
+                    protocol = "wss";
+                }
+                
+                _socket = WebSocketFactory.CreateInstance($"{protocol}://" + ConnectAddress);
                 
                 _socket.OnMessage += (byte[] msg) =>
                 {
